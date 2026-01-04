@@ -3,7 +3,7 @@ import unittest
 from unittest.mock import MagicMock, mock_open, patch
 
 # Import functions from main.py
-from main import (Config, Sequence, Timer, _mps_to_kmh, configure_logging,get_add_from_pos, get_coordinates, latlon_to_grid)
+from main import (Config, Sequence, Timer, SmartBeaconing, _mps_to_kmh, configure_logging,get_add_from_pos, get_coordinates, latlon_to_grid)
 
 
 class TestLatLonToGrid(unittest.TestCase):
@@ -102,6 +102,131 @@ class TestTimer(unittest.TestCase):
     with patch('builtins.open', mock_open()):
       next_val = tmr.next()
     self.assertEqual(next_val, 101)
+
+
+class TestSmartBeaconing(unittest.TestCase):
+  """Test SmartBeaconing class."""
+
+  def setUp(self):
+    self.env_patcher = patch.dict(os.environ, {
+      'SMARTBEACONING_FASTSPEED': '100',
+      'SMARTBEACONING_SLOWSPEED': '10',
+      'SMARTBEACONING_FASTRATE': '60',
+      'SMARTBEACONING_SLOWRATE': '600',
+      'SMARTBEACONING_MINTURNANGLE': '28',
+      'SMARTBEACONING_TURNSLOPE': '255',
+      'SMARTBEACONING_MINTURNTIME': '5'
+    })
+    self.env_patcher.start()
+    self.sb = SmartBeaconing()
+
+  def tearDown(self):
+    self.env_patcher.stop()
+
+  def test_init(self):
+    """Test initialization loads config."""
+    self.assertEqual(self.sb.fast_speed, 100)
+    self.assertEqual(self.sb.slow_speed, 10)
+
+  def test_should_send_no_data(self):
+    """Test should_send with no GPS data."""
+    self.assertFalse(self.sb.should_send(None))
+
+  @patch('main.time.time')
+  def test_should_send_rate_expired_slow(self, mock_time):
+    """Test sending when slow rate expired."""
+    mock_time.return_value = 1000
+    self.sb.last_beacon_time = 300  # 700s ago, > 600s
+    # gps_data: (utc, lat, lon, alt, spd, cse)
+    # spd = 0 m/s -> 0 km/h (< 10 km/h slow_speed) -> rate = 600
+    gps_data = (None, 0, 0, 0, 0, 0)
+
+    self.assertTrue(self.sb.should_send(gps_data))
+    self.assertEqual(self.sb.last_beacon_time, 1000)
+
+  @patch('main.time.time')
+  def test_should_send_rate_expired_fast(self, mock_time):
+    """Test sending when fast rate expired."""
+    mock_time.return_value = 1000
+    self.sb.last_beacon_time = 900  # 100s ago, > 60s
+    # spd = 30 m/s -> 108 km/h (> 100 km/h fast_speed) -> rate = 60
+    gps_data = (None, 0, 0, 0, 30, 0)
+
+    self.assertTrue(self.sb.should_send(gps_data))
+
+  @patch('main.time.time')
+  def test_should_send_turn_detected(self, mock_time):
+    """Test sending when turn detected."""
+    mock_time.return_value = 1000
+    self.sb.last_beacon_time = 990  # 10s ago (> 5s min_turn_time)
+    self.sb.last_course = 0
+
+    # spd = 20 m/s -> 72 km/h.
+    # turn_threshold = 28 + 255/72 = ~31.5 degrees.
+    # heading_change = 40 degrees (> 31.5).
+    gps_data = (None, 0, 0, 0, 20, 40)
+
+    self.assertTrue(self.sb.should_send(gps_data))
+    self.assertEqual(self.sb.last_course, 40)
+
+  @patch('main.time.time')
+  def test_should_send_turn_too_soon(self, mock_time):
+    """Test not sending when turn detected but too soon."""
+    mock_time.return_value = 1000
+    self.sb.last_beacon_time = 998  # 2s ago (< 5s min_turn_time)
+    self.sb.last_course = 0
+
+    # Turn detected
+    gps_data = (None, 0, 0, 0, 20, 40)
+
+    self.assertFalse(self.sb.should_send(gps_data))
+
+  @patch('main.time.time')
+  def test_should_send_no_turn_not_expired(self, mock_time):
+    """Test not sending when no turn and rate not expired."""
+    mock_time.return_value = 1000
+    self.sb.last_beacon_time = 990  # 10s ago
+    self.sb.last_course = 0
+
+    # spd = 20 m/s -> 72 km/h. Rate interpolated between 60 and 600.
+    # Definitely > 10s.
+    gps_data = (None, 0, 0, 0, 20, 0)  # No course change
+
+    self.assertFalse(self.sb.should_send(gps_data))
+
+  @patch('main.time.time')
+  def test_should_send_turn_low_speed(self, mock_time):
+    """Test turn detection ignored at low speed."""
+    mock_time.return_value = 1000
+    self.sb.last_beacon_time = 900
+    self.sb.last_course = 0
+
+    # spd = 1 m/s -> 3.6 km/h (< 5 km/h threshold for turn detection in code)
+    gps_data = (None, 0, 0, 0, 1, 90)
+
+    # Rate for slow speed is 600. 100s elapsed. Should be False.
+    self.assertFalse(self.sb.should_send(gps_data))
+
+  @patch('main.time.time')
+  def test_heading_change_wraparound(self, mock_time):
+    """Test heading change calculation across 0/360 boundary."""
+    mock_time.return_value = 1000
+    self.sb.last_beacon_time = 990
+    self.sb.last_course = 350
+
+    # New course 10. Diff is 20 (crossing 0).
+    # abs(10 - 350) = 340. > 180 -> 360 - 340 = 20.
+    # spd = 20 m/s -> 72 km/h. Threshold ~31.5.
+    # 20 < 31.5, so no turn detected.
+    gps_data = (None, 0, 0, 0, 20, 10)
+    self.assertFalse(self.sb.should_send(gps_data))
+
+    # Make it a sharp turn
+    # New course 50. Diff 60.
+    # abs(50 - 350) = 300. > 180 -> 360 - 300 = 60.
+    # 60 > 31.5. Turn detected.
+    gps_data_turn = (None, 0, 0, 0, 20, 50)
+    self.assertTrue(self.sb.should_send(gps_data_turn))
 
 
 class TestConfig(unittest.TestCase):
