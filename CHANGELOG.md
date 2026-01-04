@@ -2,16 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (Sun,  4-Jan-2026, 00:48:21, +08)
+## [beta5] - (Mon,  5-Jan-2026, 01:46:31, +08)
 
-- 51 commit(s) contributed to the release.
-- 3 day(s) passed between the first and last commit.
+- 53 commit(s) contributed to the release.
+- 4 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
-- 3 day(s) passed between releases.
+- 4 day(s) passed between releases.
 
 ### 🚀 Features in beta5
 
+- [2b3e69d](https://github.com/HafiziRuslan/RasPiAPRS/commit/2b3e69de7fe18e4d1fcc11e8bec08be16be7d850) feat(aprs): implement smart beaconing logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-05T01:46:31+08:00*
 - [d29ca30](https://github.com/HafiziRuslan/RasPiAPRS/commit/d29ca30f2141964e349e531140cd74ff615e6d85) feat(gps): return detailed used and unused satellite counts *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-04T00:43:59+08:00*
 - [51bd574](https://github.com/HafiziRuslan/RasPiAPRS/commit/51bd5745ea65ec7de1187fc16211b7fb45e2993b) feat(config): add smartbeaconing parameters for turn detection *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-02T22:03:59+08:00*
 - [e840ba0](https://github.com/HafiziRuslan/RasPiAPRS/commit/e840ba0e293e6d2d7bdda88152cb56af811fc1f5) feat(telegram): include accuracy and heading in location reports *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-02T03:58:20+08:00*
@@ -71,6 +72,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🧪 Testing in beta5
 
+- [f30eab4](https://github.com/HafiziRuslan/RasPiAPRS/commit/f30eab42e31cd367a41219b07ac595bd69060608) test(unit): add comprehensive unit tests for main utilities *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-05T01:13:31+08:00*
 - [626f3dd](https://github.com/HafiziRuslan/RasPiAPRS/commit/626f3dd590547fe9fac3c6dc77c1ff409a14acc2) test(gps): use correct python length function *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-04T00:48:21+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta5
@@ -760,4 +762,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff at Sun,  4-Jan-2026, 00:48:46.721, +08
+generated using git-cliff at Mon,  5-Jan-2026, 01:47:14.210, +08
