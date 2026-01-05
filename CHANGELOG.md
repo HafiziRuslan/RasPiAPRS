@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-06T02:48:36+08:00)
+## [beta5] - (2026-01-06T03:01:01+08:00)
 
-- 57 commit(s) contributed to the release.
+- 61 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
@@ -46,6 +46,9 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta5
 
+- [347334f](https://github.com/HafiziRuslan/RasPiAPRS/commit/347334f00c98256e468999ea6a026b8e96a667f4) refactor(main): use critical level for top level exceptions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T03:01:01+08:00*
+- [d16e628](https://github.com/HafiziRuslan/RasPiAPRS/commit/d16e6284782de76f9add97bd63a8fe9976219472) refactor(main): remove unused imports *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T02:59:31+08:00*
+- [a460b1e](https://github.com/HafiziRuslan/RasPiAPRS/commit/a460b1ead674ee34915f466d472de989dfabb524) refactor(beaconing): rename position update flag *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T02:57:06+08:00*
 - [790da33](https://github.com/HafiziRuslan/RasPiAPRS/commit/790da33f410b2a33546052a7b6c894b1c67bcf56) refactor(gps): standardize gps status terminology *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-03T06:19:38+08:00*
 - [5a37be9](https://github.com/HafiziRuslan/RasPiAPRS/commit/5a37be9bcb8185397864323d0ca08d3436d4e75d) refactor(telemetry): use binary units for size reporting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-03T06:14:30+08:00*
 - [eea7adf](https://github.com/HafiziRuslan/RasPiAPRS/commit/eea7adf0fd12f6d990a3e1e73fae452080bd4836) refactor(telemetry): standardize memory usage reporting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-03T06:13:24+08:00*
@@ -70,6 +73,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🎨 Styling in beta5
 
+- [023d396](https://github.com/HafiziRuslan/RasPiAPRS/commit/023d3968a5a8bfb86bd0982e4bfd5636ff951aaa) style(gps): simplify boolean usage check in tests *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T02:59:17+08:00*
 - [d2c4845](https://github.com/HafiziRuslan/RasPiAPRS/commit/d2c48450c75310cb9712953b3fe894da8480f063) style(formatting): standardize python code style *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-03T21:00:49+08:00*
 - [fbd0acf](https://github.com/HafiziRuslan/RasPiAPRS/commit/fbd0acf18d72a804cedad0e663fa59973522f12c) style(output): shorten status output labels *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-01T02:09:27+08:00*
 
@@ -766,4 +770,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-06T02:49:05.379982227+08:00
+generated using git-cliff on 2026-01-06T03:01:46.347658448+08:00
