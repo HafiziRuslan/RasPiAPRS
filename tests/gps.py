@@ -39,7 +39,7 @@ def get_gpsd_sat():
 					nSat = result.get('nSat', 0)
 					sats = result.get('satellites', [])
 					for sat in sats:
-						if sat.get('used') == True:
+						if sat.get('used'):
 							uSats = len(sat)
 						else:
 							nSats = len(sats)
