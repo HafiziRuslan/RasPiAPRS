@@ -268,28 +268,21 @@ class SmartBeaconing(object):
 		"""Determine if a beacon should be sent based on GPS data."""
 		if not gps_data:
 			return False
-
 		cur_spd = gps_data[4]
 		cur_cse = gps_data[5]
 		spd_kmh = int(cur_spd * 3.6) if cur_spd else 0
-
 		if spd_kmh > self.fast_speed:
 			rate = self.fast_rate
-		elif spd_kmh < self.slow_speed and spd_kmh > 0:
+		elif spd_kmh < self.slow_speed:
 			rate = self.slow_rate
-		elif spd_kmh == 0:
-			rate = 900
 		else:
 			rate = int(self.slow_rate - ((spd_kmh - self.slow_speed) * (self.slow_rate - self.fast_rate) / (self.fast_speed - self.slow_speed)))
-
 		turn_threshold = self.min_turn_angle + (self.turn_slope / (spd_kmh if spd_kmh > 0 else 1))
 		heading_change = abs(cur_cse - self.last_course)
 		if heading_change > 180:
 			heading_change = 360 - heading_change
-
 		turn_detected = spd_kmh > 5 and heading_change > turn_threshold
 		time_since_last = time.time() - self.last_beacon_time
-
 		should_send = False
 		if turn_detected and time_since_last > self.min_turn_time:
 			logging.debug('SmartBeaconing: Turn detected (Head diff: %d, Thresh: %d)', heading_change, turn_threshold)
@@ -297,11 +290,9 @@ class SmartBeaconing(object):
 		elif time_since_last > rate:
 			logging.debug('SmartBeaconing: Rate expired (Rate: %d, Spd: %d)', rate, spd_kmh)
 			should_send = True
-
 		if should_send:
 			self.last_beacon_time = time.time()
 			self.last_course = cur_cse
-
 		return should_send
 
 
@@ -370,24 +361,20 @@ def latlon_to_grid(lat, lon, precision=6):
 	# Shift coordinates to positive values
 	lon += 180
 	lat += 90
-
 	# First pair: Fields (A-R)
 	field_lon = int(lon // 20)
 	field_lat = int(lat // 10)
 	grid = chr(field_lon + ord('A')) + chr(field_lat + ord('A'))
-
 	if precision >= 4:
 		# Second pair: Squares (0-9)
 		square_lon = int((lon % 20) // 2)
 		square_lat = int((lat % 10) // 1)
 		grid += str(square_lon) + str(square_lat)
-
 	if precision >= 6:
-		# Third pair: Sub-squares (a-x)
+		# Third pair: Sub-squares (A-X)
 		subsq_lon = int(((lon % 2) / 2) * 24)
 		subsq_lat = int(((lat % 1) / 1) * 24)
 		grid += chr(subsq_lon + ord('A')) + chr(subsq_lat + ord('A'))
-
 	return grid
 
 
@@ -613,7 +600,6 @@ async def send_position(ais, cfg, gps_data=None):
 		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = get_gpspos()
 	else:
 		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = None, 0, 0, 0, 0, 0
-
 	if os.getenv('GPSD_ENABLE') or gps_data:
 		if cur_lat == 0 and cur_lon == 0 and cur_alt == 0:
 			cur_lat = os.getenv('APRS_LATITUDE', cfg.latitude)
@@ -625,7 +611,6 @@ async def send_position(ais, cfg, gps_data=None):
 		cur_alt = os.getenv('APRS_ALTITUDE', cfg.altitude)
 		cur_spd = 0
 		cur_cse = 0
-
 	latstr = _lat_to_aprs(float(cur_lat))
 	lonstr = _lon_to_aprs(float(cur_lon))
 	altstr = _alt_to_aprs(float(cur_alt))
@@ -645,7 +630,6 @@ async def send_position(ais, cfg, gps_data=None):
 	timestamp = cur_time.strftime('%d%H%Mz') if cur_time is not None else ztime.strftime('%d%H%Mz')
 	symbt = cfg.symbol_table
 	symb = cfg.symbol
-
 	if os.getenv('SMARTBEACONING_ENABLE'):
 		sspd = int(os.getenv('SMARTBEACONING_SLOWSPEED'))
 		fspd = int(os.getenv('SMARTBEACONING_FASTSPEED'))
@@ -659,7 +643,6 @@ async def send_position(ais, cfg, gps_data=None):
 		if kmhspd > 0 and kmhspd <= sspd:
 			symbt = '/'
 			symb = '('
-
 	payload = f'/{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
 	posit = f'{cfg.call}>APP642:{payload}'
 	tgpos = f'<u>{cfg.call} Position</u>\n\nTime: <b>{timestamp}</b>\nPosition:\n\tLatitude: <b>{cur_lat}</b>\n\tLongitude: <b>{cur_lon}</b>\n\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\nComment: <b>{comment}</b>'
@@ -758,8 +741,6 @@ async def send_status(ais, cfg):
 		await logs_to_telegram(tgstat)
 	except APRSConnectionError as err:
 		logging.error('APRS connection error at status: %s', err)
-		# ais = ais_connect(cfg)
-		# await send_status(ais, cfg)
 
 
 def ais_connect(cfg):
@@ -786,14 +767,17 @@ async def main():
 	"""Main function to run the APRS reporting loop."""
 	cfg = Config()
 	ais = ais_connect(cfg)
-	sb = SmartBeaconing()
 	for tmr in Timer():
 		gps_data = None
 		should_send = False
 		if os.getenv('GPSD_ENABLE'):
 			gps_data = get_gpspos()
 			if os.getenv('SMARTBEACONING_ENABLE'):
-				if sb.should_send(gps_data):
+				sb = SmartBeaconing()
+				if gps_data[4] == 0:
+					if tmr % 900 == 1:
+						should_send = True
+				elif sb.should_send(gps_data):
 					should_send = True
 		else:
 			if tmr % 1800 == 1:
