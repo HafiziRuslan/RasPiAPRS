@@ -630,7 +630,12 @@ async def send_position(ais, cfg, gps_data=None):
 	spdstr = _spd_to_aprs(float(cur_spd))
 	csestr = _cse_to_aprs(float(cur_cse))
 	spdkmh = _mps_to_kmh(float(cur_spd))
-	extdatstr = f'{csestr}/{spdstr}'
+	if cur_spd != 0:
+		tgposmoving = f'\n\tSpeed: <b>{int(cur_spd)}m/s</b> | <b>{int(spdkmh)}km/h</b> | <b>{int(spdstr)}kn</b>\n\tCourse: <b>{int(cur_cse)}°</b>'
+		extdatstr = f'{csestr}/{spdstr}'
+	else:
+		tgposmoving = ''
+		extdatstr = ''
 	mmdvminfo = get_mmdvminfo()
 	osinfo = get_osinfo()
 	comment = f'{mmdvminfo}{osinfo} https://github.com/HafiziRuslan/RasPiAPRS'
@@ -655,7 +660,7 @@ async def send_position(ais, cfg, gps_data=None):
 
 	payload = f'/{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
 	posit = f'{cfg.call}>APP642:{payload}'
-	tgpos = f'<u>{cfg.call} Position</u>\n\nTime: <b>{timestamp}</b>\nPosition:\n\tLatitude: <b>{cur_lat}</b>\n\tLongitude: <b>{cur_lon}</b>\n\tAltitude: <b>{cur_alt}m</b>\n\tSpeed: <b>{int(cur_spd)}m/s</b> | <b>{int(spdkmh)}km/h</b> | <b>{int(spdstr)}kn</b>\n\tCourse: <b>{int(cur_cse)}°</b>\nComment: <b>{comment}</b>'
+	tgpos = f'<u>{cfg.call} Position</u>\n\nTime: <b>{timestamp}</b>\nPosition:\n\tLatitude: <b>{cur_lat}</b>\n\tLongitude: <b>{cur_lon}</b>\n\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\nComment: <b>{comment}</b>'
 	try:
 		ais.sendall(posit)
 		logging.info(posit)
