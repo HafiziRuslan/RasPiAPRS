@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file.
 # See https://keats.github.io/tera/docs/#introduction
 body = """
 {% if version %}\
-  \n## [{{ version | trim_start_matches(pat="v") }}] - ({{ timestamp | date(format="%a, %v, %T, %Z", timezone="Asia/Kuala_Lumpur") }})
+  \n## [{{ version | trim_start_matches(pat="v") }}] - ({{ timestamp | date(format="%+", timezone="Asia/Kuala_Lumpur") }})
 {% else %}\
   \n## [unreleased]
 {% endif %}
@@ -48,7 +48,7 @@ body = """
 # A Tera template to be rendered at the end of the changelog.
 # See https://keats.github.io/tera/docs/#introduction
 footer = """
-\ngenerated using git-cliff at {{ now() | date(format="%a, %v, %T%.3f, %Z", timezone="Asia/Kuala_Lumpur", locale="en_MY") }}
+\ngenerated using git-cliff on {{ now() | date(format="%+", timezone="Asia/Kuala_Lumpur", locale="en_MY") }}
 """
 # Remove leading and trailing whitespaces from the changelog's body.
 trim = true
