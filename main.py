@@ -6,6 +6,7 @@ import asyncio
 import datetime as dt
 import json
 import logging
+
 # import logging.config
 # import logging.handlers
 import os
@@ -769,20 +770,20 @@ async def main():
 	ais = ais_connect(cfg)
 	for tmr in Timer():
 		gps_data = None
-		should_send = False
+		posUpdate = False
 		if os.getenv('GPSD_ENABLE'):
 			gps_data = get_gpspos()
 			if os.getenv('SMARTBEACONING_ENABLE'):
 				sb = SmartBeaconing()
 				if gps_data[4] == 0:
 					if tmr % 900 == 1:
-						should_send = True
+						posUpdate = True
 				elif sb.should_send(gps_data):
-					should_send = True
+					posUpdate = True
 		else:
 			if tmr % 1800 == 1:
-				should_send = True
-		if should_send:
+				posUpdate = True
+		if posUpdate:
 			await send_position(ais, cfg, gps_data=gps_data)
 		if tmr % 3000 == 1:
 			send_header(ais, cfg)
