@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (Tue,  6-Jan-2026, 00:56:26, +08)
+## [beta5] - (2026-01-06T01:01:54+08:00)
 
-- 54 commit(s) contributed to the release.
+- 55 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
@@ -78,6 +78,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta5
 
+- [37581d2](https://github.com/HafiziRuslan/RasPiAPRS/commit/37581d2fdbb65ee925b3826143347819cd9b7602) chore(changelog): use iso 8601 format for timestamps *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T01:01:54+08:00*
 - [df47789](https://github.com/HafiziRuslan/RasPiAPRS/commit/df47789cddea2a7ec6cc137fe59f7b0eb89ea2ae) chore(beaconing): adjust inactive rate and enhance debug logs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-02T14:09:14+08:00*
 - [8607dbb](https://github.com/HafiziRuslan/RasPiAPRS/commit/8607dbb34f254ce7e1ab1b0d94b74f33677509dc) chore(licensing): change license to bsd-3-clause *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-01T01:34:43+08:00*
 - [ae5d33d](https://github.com/HafiziRuslan/RasPiAPRS/commit/ae5d33dc963e570f34d78dde9f5fc97877991c99) ci(release): remove redundant workflow_run trigger *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-01T01:22:24+08:00*
@@ -87,7 +88,7 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [beta4] - (Wed, 31-Dec-2025, 17:03:49, +08)
+## [beta4] - (2025-12-31T17:03:49+08:00)
 
 - 130 commit(s) contributed to the release.
 - 9 day(s) passed between the first and last commit.
@@ -252,7 +253,7 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [beta] - (Mon, 22-Dec-2025, 19:26:39, +08)
+## [beta] - (2025-12-22T19:26:39+08:00)
 
 - 486 commit(s) contributed to the release.
 - 2048 day(s) passed between the first and last commit.
@@ -763,4 +764,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff at Tue,  6-Jan-2026, 00:57:02.860, +08
+generated using git-cliff on 2026-01-06T01:02:31.986768171+08:00
