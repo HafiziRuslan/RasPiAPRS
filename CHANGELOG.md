@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-06T01:01:54+08:00)
+## [beta5] - (2026-01-06T02:35:45+08:00)
 
-- 55 commit(s) contributed to the release.
+- 56 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta5
 
+- [83bffc2](https://github.com/HafiziRuslan/RasPiAPRS/commit/83bffc24738512594a98ee031b5b382346d40f7c) fix(smartbeaconing): ensure correct rate calculation when speed is zero *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T02:35:45+08:00*
 - [f532d0f](https://github.com/HafiziRuslan/RasPiAPRS/commit/f532d0f3f44b0381c22a4c0f6a8ebdd9395ba759) fix(aprs): exclude movement data if speed is zero *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T00:56:26+08:00*
 - [043c1ac](https://github.com/HafiziRuslan/RasPiAPRS/commit/043c1acfa1832ce901169699c5325310ecd8148a) test(gps): use proper python boolean constant *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-04T00:47:08+08:00*
 - [9b72e26](https://github.com/HafiziRuslan/RasPiAPRS/commit/9b72e264bb8090c6bf4e92dd45a23cff0a7e5cdb) fix(connection): remove unnecessary await on recursive call *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-03T21:09:55+08:00*
@@ -764,4 +765,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-06T01:02:31.986768171+08:00
+generated using git-cliff on 2026-01-06T02:36:27.283678317+08:00
