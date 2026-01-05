@@ -2,13 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (Mon,  5-Jan-2026, 01:46:31, +08)
+## [beta5] - (Tue,  6-Jan-2026, 00:56:26, +08)
 
-- 53 commit(s) contributed to the release.
-- 4 day(s) passed between the first and last commit.
+- 54 commit(s) contributed to the release.
+- 5 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
-- 4 day(s) passed between releases.
+- 5 day(s) passed between releases.
 
 ### 🚀 Features in beta5
 
@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta5
 
+- [f532d0f](https://github.com/HafiziRuslan/RasPiAPRS/commit/f532d0f3f44b0381c22a4c0f6a8ebdd9395ba759) fix(aprs): exclude movement data if speed is zero *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T00:56:26+08:00*
 - [043c1ac](https://github.com/HafiziRuslan/RasPiAPRS/commit/043c1acfa1832ce901169699c5325310ecd8148a) test(gps): use proper python boolean constant *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-04T00:47:08+08:00*
 - [9b72e26](https://github.com/HafiziRuslan/RasPiAPRS/commit/9b72e264bb8090c6bf4e92dd45a23cff0a7e5cdb) fix(connection): remove unnecessary await on recursive call *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-03T21:09:55+08:00*
 - [41bb00f](https://github.com/HafiziRuslan/RasPiAPRS/commit/41bb00f951df165174a2d318f94e8514a1767983) fix(aprs): retry sending data after connection loss *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-03T20:56:28+08:00*
@@ -762,4 +763,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff at Mon,  5-Jan-2026, 01:47:14.210, +08
+generated using git-cliff at Tue,  6-Jan-2026, 00:57:02.860, +08
