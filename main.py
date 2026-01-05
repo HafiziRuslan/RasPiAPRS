@@ -275,8 +275,10 @@ class SmartBeaconing(object):
 
 		if spd_kmh > self.fast_speed:
 			rate = self.fast_rate
-		elif spd_kmh < self.slow_speed:
+		elif spd_kmh < self.slow_speed and spd_kmh > 0:
 			rate = self.slow_rate
+		elif spd_kmh == 0:
+			rate = 900
 		else:
 			rate = int(self.slow_rate - ((spd_kmh - self.slow_speed) * (self.slow_rate - self.fast_rate) / (self.fast_speed - self.slow_speed)))
 
@@ -788,18 +790,16 @@ async def main():
 	for tmr in Timer():
 		gps_data = None
 		should_send = False
-		if os.getenv('SMARTBEACONING_ENABLE') and os.getenv('GPSD_ENABLE'):
+		if os.getenv('GPSD_ENABLE'):
 			gps_data = get_gpspos()
-			if sb.should_send(gps_data):
-				should_send = True
+			if os.getenv('SMARTBEACONING_ENABLE'):
+				if sb.should_send(gps_data):
+					should_send = True
 		else:
-			rate = cfg.sleep
-			if tmr % rate == 1:
+			if tmr % 1800 == 1:
 				should_send = True
-
 		if should_send:
 			await send_position(ais, cfg, gps_data=gps_data)
-
 		if tmr % 3000 == 1:
 			send_header(ais, cfg)
 		if tmr % cfg.sleep == 1:
