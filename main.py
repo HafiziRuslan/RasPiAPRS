@@ -6,12 +6,9 @@ import asyncio
 import datetime as dt
 import json
 import logging
-
-# import logging.config
 # import logging.handlers
 import os
 import pickle
-import random
 import sys
 import time
 from urllib.request import urlopen
