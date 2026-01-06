@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-06T10:55:04+08:00)
+## [beta5] - (2026-01-06T23:24:07+08:00)
 
-- 63 commit(s) contributed to the release.
+- 64 commit(s) contributed to the release.
 - 6 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
@@ -71,6 +71,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚡ Performance in beta5
 
+- [2887b51](https://github.com/HafiziRuslan/RasPiAPRS/commit/2887b51483a26c4dc701797c08653c0d1708ebe1) perf(loop): initialize beaconing components once *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T23:24:07+08:00*
 - [9196644](https://github.com/HafiziRuslan/RasPiAPRS/commit/91966444b616cdca4d1916d3188e1d241c43917d) perf(runtime): decrease script restart delay *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-02T01:45:15+08:00*
 
 ### 🎨 Styling in beta5
@@ -772,4 +773,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-06T10:55:29.463742872+08:00
+generated using git-cliff on 2026-01-06T23:24:40.301050421+08:00
