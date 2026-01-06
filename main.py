@@ -764,12 +764,12 @@ async def main():
 	"""Main function to run the APRS reporting loop."""
 	cfg = Config()
 	ais = ais_connect(cfg)
-	gps_data = get_gpspos()
 	sb = SmartBeaconing()
 	for tmr in Timer():
 		gps_data = None
 		posUpdate = False
 		if os.getenv('GPSD_ENABLE'):
+			gps_data = get_gpspos()
 			if os.getenv('SMARTBEACONING_ENABLE'):
 				if gps_data[4] == 0 and tmr % 900 == 1:
 					posUpdate = True
