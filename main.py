@@ -704,7 +704,6 @@ async def send_status(ais, cfg):
 	"""Send APRS status information to APRS-IS."""
 	if os.getenv('GPSD_ENABLE'):
 		_, lat, lon, *_ = get_gpspos()
-		# fallback to config if GPS provided invalid coords
 		if not (isinstance(lat, (int, float)) and isinstance(lon, (int, float)) and lat != 0 and lon != 0):
 			lat, lon = cfg.latitude, cfg.longitude
 	else:
@@ -772,9 +771,8 @@ async def main():
 			gps_data = get_gpspos()
 			if os.getenv('SMARTBEACONING_ENABLE'):
 				sb = SmartBeaconing()
-				if gps_data[4] == 0:
-					if tmr % 900 == 1:
-						posUpdate = True
+				if gps_data[4] == 0 and tmr % 900 == 1:
+					posUpdate = True
 				elif sb.should_send(gps_data):
 					posUpdate = True
 		else:
