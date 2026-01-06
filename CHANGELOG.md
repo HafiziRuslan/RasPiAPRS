@@ -2,13 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-06T03:08:10+08:00)
+## [beta5] - (2026-01-06T10:55:04+08:00)
 
-- 62 commit(s) contributed to the release.
-- 5 day(s) passed between the first and last commit.
+- 63 commit(s) contributed to the release.
+- 6 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
-- 5 day(s) passed between releases.
+- 6 day(s) passed between releases.
 
 ### 🚀 Features in beta5
 
@@ -47,6 +47,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta5
 
+- [ed0cfb5](https://github.com/HafiziRuslan/RasPiAPRS/commit/ed0cfb58648bbd71bd995afdcaa0565ade565d3d) refactor(core): simplify position update logic and cleanup comments *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T10:55:04+08:00*
 - [347334f](https://github.com/HafiziRuslan/RasPiAPRS/commit/347334f00c98256e468999ea6a026b8e96a667f4) refactor(main): use critical level for top level exceptions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T03:01:01+08:00*
 - [d16e628](https://github.com/HafiziRuslan/RasPiAPRS/commit/d16e6284782de76f9add97bd63a8fe9976219472) refactor(main): remove unused imports *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T02:59:31+08:00*
 - [a460b1e](https://github.com/HafiziRuslan/RasPiAPRS/commit/a460b1ead674ee34915f466d472de989dfabb524) refactor(beaconing): rename position update flag *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T02:57:06+08:00*
@@ -771,4 +772,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-06T03:08:47.594795711+08:00
+generated using git-cliff on 2026-01-06T10:55:29.463742872+08:00
