@@ -2,13 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-06T23:25:29+08:00)
+## [beta5] - (2026-01-07T19:27:50+08:00)
 
-- 65 commit(s) contributed to the release.
-- 6 day(s) passed between the first and last commit.
+- 66 commit(s) contributed to the release.
+- 7 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
-- 6 day(s) passed between releases.
+- 7 day(s) passed between releases.
 
 ### 🚀 Features in beta5
 
@@ -77,6 +77,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🎨 Styling in beta5
 
+- [ac1e84c](https://github.com/HafiziRuslan/RasPiAPRS/commit/ac1e84c2e5afcb36e7c042a41bd032395c1a9378) style(config): simplify config __repr__ formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-07T19:27:50+08:00*
 - [023d396](https://github.com/HafiziRuslan/RasPiAPRS/commit/023d3968a5a8bfb86bd0982e4bfd5636ff951aaa) style(gps): simplify boolean usage check in tests *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T02:59:17+08:00*
 - [d2c4845](https://github.com/HafiziRuslan/RasPiAPRS/commit/d2c48450c75310cb9712953b3fe894da8480f063) style(formatting): standardize python code style *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-03T21:00:49+08:00*
 - [fbd0acf](https://github.com/HafiziRuslan/RasPiAPRS/commit/fbd0acf18d72a804cedad0e663fa59973522f12c) style(output): shorten status output labels *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-01T02:09:27+08:00*
@@ -774,4 +775,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-06T23:25:58.512846439+08:00
+generated using git-cliff on 2026-01-07T19:28:23.949943617+08:00
