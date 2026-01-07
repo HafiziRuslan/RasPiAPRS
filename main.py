@@ -47,6 +47,7 @@ def configure_logging():
 	formatter = logging.Formatter('%(asctime)s | %(levelname)s | %(name)s.%(funcName)s | %(message)s', datefmt='%Y-%m-%dT%H:%M:%S')
 
 	console_handler = logging.StreamHandler()
+	console_handler.setLevel(logging.ERROR)
 	console_handler.setFormatter(formatter)
 	logger.addHandler(console_handler)
 
