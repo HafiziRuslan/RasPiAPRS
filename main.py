@@ -6,7 +6,7 @@ import asyncio
 import datetime as dt
 import json
 import logging
-# import logging.handlers
+import logging.handlers
 import os
 import pickle
 import sys
@@ -36,18 +36,35 @@ CACHE_FILE = '/tmp/nominatim_cache.pkl'
 
 # Set up logging
 def configure_logging():
-	logging.basicConfig(
-		level=logging.INFO,
-		datefmt='%Y-%m-%dT%H:%M:%S',
-		format='%(asctime)s | %(levelname)s | %(name)s.%(funcName)s | %(message)s',
-	)
-	# logging.handlers.TimedRotatingFileHandler(filename, when='midnight')
-	logging.getLogger('aprslib').setLevel(logging.WARNING)
-	logging.getLogger('asyncio').setLevel(logging.WARNING)
-	logging.getLogger('hpack').setLevel(logging.WARNING)
-	logging.getLogger('httpx').setLevel(logging.WARNING)
-	logging.getLogger('telegram').setLevel(logging.WARNING)
-	logging.getLogger('urllib3').setLevel(logging.WARNING)
+	log_dir = '/log/raspiaprs'
+	if not os.path.exists(log_dir) or not os.access(log_dir, os.W_OK):
+		log_dir = 'logs'
+	if not os.path.exists(log_dir):
+		os.makedirs(log_dir)
+
+	logger = logging.getLogger()
+	logger.setLevel(logging.INFO)
+	formatter = logging.Formatter('%(asctime)s | %(levelname)s | %(name)s.%(funcName)s | %(message)s', datefmt='%Y-%m-%dT%H:%M:%S')
+
+	console_handler = logging.StreamHandler()
+	console_handler.setFormatter(formatter)
+	logger.addHandler(console_handler)
+
+	levels = {
+		logging.DEBUG: 'debug.log',
+		logging.INFO: 'info.log',
+		logging.WARNING: 'warning.log',
+		logging.ERROR: 'error.log',
+		logging.CRITICAL: 'critical.log',
+	}
+	for level, filename in levels.items():
+		try:
+			handler = logging.handlers.RotatingFileHandler(os.path.join(log_dir, filename), maxBytes=5 * 1024 * 1024, backupCount=5)
+			handler.setLevel(level)
+			handler.setFormatter(formatter)
+			logger.addHandler(handler)
+		except (OSError, PermissionError) as e:
+			logging.error('Failed to create %s: %s', filename, e)
 
 
 # Configuration class to handle settings

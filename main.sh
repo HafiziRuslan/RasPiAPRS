@@ -3,11 +3,18 @@ set -e
 date=$(date +'%FT%T')
 dir_own=$(stat -c '%U' .)
 
-# echo "$date - Mark directory as safe"
-# git config --global --add safe.directory .
-
 echo "$date | Updating files"
 sudo -u $dir_own git pull --autostash -q
+
+if [ ! -d "/tmp/raspiaprs" ]; then
+  mkdir -p /tmp/raspiaprs
+  chown -hR $dir_own /tmp/raspiaprs
+fi
+
+if [ ! -d "/log/raspiaprs" ]; then
+  mkdir -p /log/raspiaprs
+  chown -hR $dir_own /log/raspiaprs
+fi
 
 command_exists() {
   command -v "$1" >/dev/null 2>&1
