@@ -11,9 +11,9 @@ if [ ! -d "/tmp/raspiaprs" ]; then
   chown -hR $dir_own /tmp/raspiaprs
 fi
 
-if [ ! -d "/log/raspiaprs" ]; then
-  mkdir -p /log/raspiaprs
-  chown -hR $dir_own /log/raspiaprs
+if [ ! -d "/var/log/raspiaprs" ]; then
+  mkdir -p /var/log/raspiaprs
+  chown -hR $dir_own /var/log/raspiaprs
 fi
 
 command_exists() {

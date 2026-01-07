@@ -29,14 +29,14 @@ PISTAR_RELEASE_FILE = '/etc/pistar-release'
 WPSD_RELEASE_FILE = '/etc/WPSD-release'
 MMDVMHOST_FILE = '/etc/mmdvmhost'
 # Temporary files path
-SEQUENCE_FILE = '/tmp/raspiaprs.seq'
-TIMER_FILE = '/tmp/raspiaprs.tmr'
-CACHE_FILE = '/tmp/nominatim_cache.pkl'
+SEQUENCE_FILE = '/tmp/raspiaprs/sequence.tmp'
+TIMER_FILE = '/tmp/raspiaprs/timer.tmp'
+CACHE_FILE = '/tmp/raspiaprs/nominatim_cache.pkl'
 
 
 # Set up logging
 def configure_logging():
-	log_dir = '/log/raspiaprs'
+	log_dir = '/var/log/raspiaprs'
 	if not os.path.exists(log_dir) or not os.access(log_dir, os.W_OK):
 		log_dir = 'logs'
 	if not os.path.exists(log_dir):
