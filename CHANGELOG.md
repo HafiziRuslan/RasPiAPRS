@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-07T21:14:13+08:00)
+## [beta5] - (2026-01-07T21:18:48+08:00)
 
-- 68 commit(s) contributed to the release.
+- 69 commit(s) contributed to the release.
 - 7 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
@@ -91,6 +91,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta5
 
+- [1399435](https://github.com/HafiziRuslan/RasPiAPRS/commit/1399435cb061c4026b9061af80407669157a72e5) chore(config): update paths to adhere to fhs standards *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-07T21:18:48+08:00*
 - [37581d2](https://github.com/HafiziRuslan/RasPiAPRS/commit/37581d2fdbb65ee925b3826143347819cd9b7602) chore(changelog): use iso 8601 format for timestamps *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T01:01:54+08:00*
 - [df47789](https://github.com/HafiziRuslan/RasPiAPRS/commit/df47789cddea2a7ec6cc137fe59f7b0eb89ea2ae) chore(beaconing): adjust inactive rate and enhance debug logs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-02T14:09:14+08:00*
 - [8607dbb](https://github.com/HafiziRuslan/RasPiAPRS/commit/8607dbb34f254ce7e1ab1b0d94b74f33677509dc) chore(licensing): change license to bsd-3-clause *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-01T01:34:43+08:00*
@@ -777,4 +778,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-07T21:15:03.486564234+08:00
+generated using git-cliff on 2026-01-07T21:19:24.463626875+08:00
