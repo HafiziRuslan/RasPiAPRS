@@ -88,9 +88,7 @@ class Config(object):
 			self.passcode = aprslib.passcode(call)
 
 	def __repr__(self):
-		return ('<Config> call: {0.call}, passcode: {0.passcode} - {0.latitude}/{0.longitude}/{0.altitude}').format(
-			self
-		)
+		return ('<Config> call: {0.call}, passcode: {0.passcode} - {0.latitude}/{0.longitude}/{0.altitude}').format(self)
 
 	@property
 	def call(self):
