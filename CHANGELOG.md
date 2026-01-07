@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-07T21:18:48+08:00)
+## [beta5] - (2026-01-07T21:32:02+08:00)
 
-- 69 commit(s) contributed to the release.
+- 70 commit(s) contributed to the release.
 - 7 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
@@ -91,6 +91,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta5
 
+- [cb62672](https://github.com/HafiziRuslan/RasPiAPRS/commit/cb62672d231589d0c1f6453f21b73c696d9c0ad4) chore(logging): set console log level to error *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-07T21:32:02+08:00*
 - [1399435](https://github.com/HafiziRuslan/RasPiAPRS/commit/1399435cb061c4026b9061af80407669157a72e5) chore(config): update paths to adhere to fhs standards *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-07T21:18:48+08:00*
 - [37581d2](https://github.com/HafiziRuslan/RasPiAPRS/commit/37581d2fdbb65ee925b3826143347819cd9b7602) chore(changelog): use iso 8601 format for timestamps *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T01:01:54+08:00*
 - [df47789](https://github.com/HafiziRuslan/RasPiAPRS/commit/df47789cddea2a7ec6cc137fe59f7b0eb89ea2ae) chore(beaconing): adjust inactive rate and enhance debug logs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-02T14:09:14+08:00*
@@ -778,4 +779,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-07T21:19:24.463626875+08:00
+generated using git-cliff on 2026-01-07T21:33:44.444075898+08:00
