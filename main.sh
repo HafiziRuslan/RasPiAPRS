@@ -3,9 +3,6 @@ set -e
 date=$(date +'%FT%T')
 dir_own=$(stat -c '%U' .)
 
-echo "$date | Updating files"
-sudo -u $dir_own git pull --autostash -q
-
 if [ ! -d "/tmp/raspiaprs" ]; then
   mkdir -p /tmp/raspiaprs
   chown -hR $dir_own /tmp/raspiaprs
@@ -16,9 +13,31 @@ if [ ! -d "/var/log/raspiaprs" ]; then
   chown -hR $dir_own /var/log/raspiaprs
 fi
 
+echo "$date | Updating RaspiAPRS repository"
+sudo -u $dir_own git pull --autostash -q
+
+ensure_apt_packages() {
+  local missing_packages=()
+  for pkg in "$@"; do
+    if ! dpkg -s "$pkg" >/dev/null 2>&1; then
+      missing_packages+=("$pkg")
+    fi
+  done
+
+  if [ ${#missing_packages[@]} -eq 0 ]; then
+    echo "$date | ✅ Packages are installed: $*."
+  else
+    echo -n "$date | ❌ Missing packages: ${missing_packages[*]}."
+    echo " -> Installing missing packages"
+    apt-get update -q && apt-get install -y -q "$@"
+  fi
+}
+
 command_exists() {
   command -v "$1" >/dev/null 2>&1
 }
+
+ensure_apt_packages gcc git python3-dev
 
 if command_exists uv; then
   echo "$date | ✅ uv is installed."
@@ -29,23 +48,23 @@ else
 fi
 
 if [ ! -d ".venv" ]; then
-  echo "$date | Virtual environment not found, creating one."
+  echo "$date | RasPiAPRS environment not found, creating one."
   uv venv
-  echo "$date | Activating virtual environment"
+  echo "$date | Activating RasPiAPRS environment"
   source .venv/bin/activate
-  echo "$date | Installing dependencies"
+  echo "$date | Installing RasPiAPRS dependencies"
   uv sync
 else
-  echo -n "$date | Virtual environment already exists."
-  echo " -> Activating virtual environment"
+  echo -n "$date | RasPiAPRS environment already exists."
+  echo " -> Activating RasPiAPRS environment"
   source .venv/bin/activate
-  echo "$date | Updating dependencies"
+  echo "$date | Updating RasPiAPRS dependencies"
   uv sync -q
 fi
 
-echo "$date | Running main.py"
+echo "$date | Running RasPiAPRS"
 while true; do
   uv run -s ./main.py
-  echo "$date | Script exited. Re-running in 30 seconds."
+  echo "$date | RasPiAPRS exited. Re-run in 30 seconds."
   sleep 30
 done
