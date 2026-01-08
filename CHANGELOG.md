@@ -2,13 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-07T21:53:15+08:00)
+## [beta5] - (2026-01-08T23:02:01+08:00)
 
-- 75 commit(s) contributed to the release.
-- 7 day(s) passed between the first and last commit.
+- 76 commit(s) contributed to the release.
+- 8 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
-- 7 day(s) passed between releases.
+- 8 day(s) passed between releases.
 
 ### 🚀 Features in beta5
 
@@ -91,6 +91,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta5
 
+- [2463517](https://github.com/HafiziRuslan/RasPiAPRS/commit/246351748866674d0e2d3bb67f3733a702560054) chore(scripts): manage system dependencies and update logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-08T23:02:01+08:00*
 - [114ef57](https://github.com/HafiziRuslan/RasPiAPRS/commit/114ef578badb465abb685f9145d00ff50ee92b93) build(deps): update python dependencies and build metadata *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-07T21:53:15+08:00*
 - [cb62672](https://github.com/HafiziRuslan/RasPiAPRS/commit/cb62672d231589d0c1f6453f21b73c696d9c0ad4) chore(logging): set console log level to error *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-07T21:32:02+08:00*
 - [1399435](https://github.com/HafiziRuslan/RasPiAPRS/commit/1399435cb061c4026b9061af80407669157a72e5) chore(config): update paths to adhere to fhs standards *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-07T21:18:48+08:00*
@@ -782,4 +783,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-07T21:53:48.939450413+08:00
+generated using git-cliff on 2026-01-08T23:02:37.330145568+08:00
