@@ -82,14 +82,14 @@ class Config(object):
 		self.symbol_table = os.getenv('APRS_SYMBOL_TABLE', '/')
 		self.symbol = os.getenv('APRS_SYMBOL', 'n')
 
-		lat = os.getenv('APRS_LATITUDE', '0.0')
-		lon = os.getenv('APRS_LONGITUDE', '0.0')
-		alt = os.getenv('APRS_ALTITUDE', '0.0')
+		lat = os.getenv('APRS_LATITUDE', 0)
+		lon = os.getenv('APRS_LONGITUDE', 0)
+		alt = os.getenv('APRS_ALTITUDE', 0)
 
 		if os.getenv('GPSD_ENABLE'):
 			self.timestamp, self.latitude, self.longitude, self.altitude, self.speed, self.course = get_gpspos()
 		else:
-			if lat == '0.0' and lon == '0.0':
+			if lat == 0 and lon == 0:
 				self.latitude, self.longitude = get_coordinates()
 				self.altitude = alt
 			else:
