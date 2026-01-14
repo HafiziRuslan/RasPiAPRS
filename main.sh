@@ -5,12 +5,12 @@ dir_own=$(stat -c '%U' .)
 
 if [ ! -d "/tmp/raspiaprs" ]; then
   mkdir -p /tmp/raspiaprs
-  chown -hR $dir_own /tmp/raspiaprs
+  chown -hR $dir_own:$dir_own /tmp/raspiaprs
 fi
 
 if [ ! -d "/var/log/raspiaprs" ]; then
   mkdir -p /var/log/raspiaprs
-  chown -hR $dir_own /var/log/raspiaprs
+  chown -hR $dir_own:$dir_own /var/log/raspiaprs
 fi
 
 echo "$date | Updating RaspiAPRS repository"
