@@ -2,13 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-12T17:06:41+08:00)
+## [beta5] - (2026-01-15T00:12:30+08:00)
 
-- 77 commit(s) contributed to the release.
-- 12 day(s) passed between the first and last commit.
+- 78 commit(s) contributed to the release.
+- 14 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
-- 12 day(s) passed between releases.
+- 14 day(s) passed between releases.
 
 ### 🚀 Features in beta5
 
@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta5
 
+- [f85f24c](https://github.com/HafiziRuslan/RasPiAPRS/commit/f85f24c27d698e9e43b05561727972c7ff77fc2f) fix(config): prevent appending -0 ssid to aprs call *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-15T00:12:30+08:00*
 - [92f60cb](https://github.com/HafiziRuslan/RasPiAPRS/commit/92f60cbe306c88e113a84a83da535af501957ce4) fix(gps): fetch gps position only if enabled *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T23:25:29+08:00*
 - [dd0ae0f](https://github.com/HafiziRuslan/RasPiAPRS/commit/dd0ae0f0fce8a7f2f0c0c6e741d01031e9e63a2c) fix(position): correctly check for positive speed *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T03:08:10+08:00*
 - [2390086](https://github.com/HafiziRuslan/RasPiAPRS/commit/2390086d4f298bfb751e96c39c3129aa56be9b2f) fix(beaconing): ensure stationary beacon is sent periodically *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T02:48:36+08:00*
@@ -784,4 +785,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-12T17:07:39.021508368+08:00
+generated using git-cliff on 2026-01-15T00:13:04.717859832+08:00
