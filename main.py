@@ -77,7 +77,7 @@ class Config(object):
 
 		call = os.getenv('APRS_CALL', 'N0CALL')
 		ssid = os.getenv('APRS_SSID', '0')
-		self.call = f'{call}-{ssid}'
+		self.call = call if ssid == '0' else f'{call}-{ssid}'
 		self.sleep = int(os.getenv('SLEEP', 600))
 		self.symbol_table = os.getenv('APRS_SYMBOL_TABLE', '/')
 		self.symbol = os.getenv('APRS_SYMBOL', 'n')
