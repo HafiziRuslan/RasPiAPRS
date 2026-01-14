@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-15T00:12:30+08:00)
+## [beta5] - (2026-01-15T00:25:12+08:00)
 
-- 78 commit(s) contributed to the release.
+- 79 commit(s) contributed to the release.
 - 14 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
@@ -72,6 +72,7 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation in beta5
 
+- [69274bb](https://github.com/HafiziRuslan/RasPiAPRS/commit/69274bb9c916d9e5ededf589a6464e78eb7b45ad) docs(aprs): add symbol table reference pdf *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-15T00:25:12+08:00*
 - [fe22bf6](https://github.com/HafiziRuslan/RasPiAPRS/commit/fe22bf6efef70cee20f38bc98ac84554b7e0e299) docs(policy): add security policy document *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-01T03:45:59+08:00*
 
 ### ⚡ Performance in beta5
@@ -785,4 +786,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-15T00:13:04.717859832+08:00
+generated using git-cliff on 2026-01-15T00:29:49.654328913+08:00
