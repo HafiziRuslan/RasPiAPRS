@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-15T00:33:00+08:00)
+## [beta5] - (2026-01-15T00:49:09+08:00)
 
-- 80 commit(s) contributed to the release.
+- 81 commit(s) contributed to the release.
 - 14 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta5
 
+- [2d8b364](https://github.com/HafiziRuslan/RasPiAPRS/commit/2d8b3648110d944e326d68c7fd167e3ed2a533de) fix(aprs): pad callsign in header messages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-15T00:49:09+08:00*
 - [f85f24c](https://github.com/HafiziRuslan/RasPiAPRS/commit/f85f24c27d698e9e43b05561727972c7ff77fc2f) fix(config): prevent appending -0 ssid to aprs call *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-15T00:12:30+08:00*
 - [92f60cb](https://github.com/HafiziRuslan/RasPiAPRS/commit/92f60cbe306c88e113a84a83da535af501957ce4) fix(gps): fetch gps position only if enabled *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T23:25:29+08:00*
 - [dd0ae0f](https://github.com/HafiziRuslan/RasPiAPRS/commit/dd0ae0f0fce8a7f2f0c0c6e741d01031e9e63a2c) fix(position): correctly check for positive speed *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T03:08:10+08:00*
@@ -787,4 +788,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-15T00:33:48.487062759+08:00
+generated using git-cliff on 2026-01-15T00:49:42.312986310+08:00
