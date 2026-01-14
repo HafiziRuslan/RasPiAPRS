@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-15T00:25:12+08:00)
+## [beta5] - (2026-01-15T00:33:00+08:00)
 
-- 79 commit(s) contributed to the release.
+- 80 commit(s) contributed to the release.
 - 14 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
@@ -49,6 +49,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta5
 
+- [f5466e6](https://github.com/HafiziRuslan/RasPiAPRS/commit/f5466e6bf01a1c993667d2f15842ae3fb2440f5a) refactor(aprs): simplify aprs header formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-15T00:33:00+08:00*
 - [ed25fef](https://github.com/HafiziRuslan/RasPiAPRS/commit/ed25fef3318ccac2f16c2397ddf118163d7f274d) refactor(config): standardize default coordinate values *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-12T17:06:41+08:00*
 - [76e0f4b](https://github.com/HafiziRuslan/RasPiAPRS/commit/76e0f4b2591d46d337c8fde53c608bd4468d1622) refactor(gps): restructure stalled gps check *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-07T21:14:13+08:00*
 - [5e82f3c](https://github.com/HafiziRuslan/RasPiAPRS/commit/5e82f3c69bb17fc4d95cc664846b9cbd2e9f1b71) refactor(logging): implement robust file and rotating logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-07T21:03:34+08:00*
@@ -786,4 +787,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-15T00:29:49.654328913+08:00
+generated using git-cliff on 2026-01-15T00:33:48.487062759+08:00
