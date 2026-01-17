@@ -3,7 +3,7 @@ APRS Symbol Definitions
 Source: symbolsX.txt (25 Nov 2015), symbols-new.txt (17 Mar 2021)
 """
 
-APRS_SYMBOLS = {
+SYMBOLS = {
 	# Primary Symbol Table (/)
 	'/!': 'Police, Sheriff',
 	'/"': 'reserved (was rain)',
@@ -197,7 +197,7 @@ APRS_SYMBOLS = {
 }
 
 
-def get_symbol_description(table, symbol):
+def get_desc(table, symbol):
 	"""Get the description of an APRS symbol."""
 	key = f'{table}{symbol}'
-	return APRS_SYMBOLS.get(key, 'Unknown')
+	return SYMBOLS.get(key, 'Unknown')
