@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-17T11:36:06+08:00)
+## [beta5] - (2026-01-17T12:00:17+08:00)
 
-- 83 commit(s) contributed to the release.
+- 84 commit(s) contributed to the release.
 - 17 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚀 Features in beta5
 
+- [78f38f1](https://github.com/HafiziRuslan/RasPiAPRS/commit/78f38f10f516e170317c6d13a20d3baa23eddb1c) feat(reporting): include aprs symbol in telegram message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T12:00:17+08:00*
 - [2b3e69d](https://github.com/HafiziRuslan/RasPiAPRS/commit/2b3e69de7fe18e4d1fcc11e8bec08be16be7d850) feat(aprs): implement smart beaconing logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-05T01:46:31+08:00*
 - [d29ca30](https://github.com/HafiziRuslan/RasPiAPRS/commit/d29ca30f2141964e349e531140cd74ff615e6d85) feat(gps): return detailed used and unused satellite counts *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-04T00:43:59+08:00*
 - [51bd574](https://github.com/HafiziRuslan/RasPiAPRS/commit/51bd5745ea65ec7de1187fc16211b7fb45e2993b) feat(config): add smartbeaconing parameters for turn detection *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-02T22:03:59+08:00*
@@ -790,4 +791,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-17T11:37:09.125458915+08:00
+generated using git-cliff on 2026-01-17T12:00:45.039540412+08:00
