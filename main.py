@@ -399,7 +399,12 @@ class TelegramLogger(object):
 							elif self.topic_id:
 								edit_kwargs['message_thread_id'] = self.topic_id
 							eloc = await tgbot.edit_message_live_location(**edit_kwargs)
-							logging.info('Edited location in Telegram: %s/%s/%s', eloc.chat_id, eloc.message_thread_id, eloc.message_id)
+							logging.info(
+								'Edited location in Telegram: %s/%s/%s',
+								eloc.chat_id,
+								eloc.message_thread_id,
+								eloc.message_id,
+							)
 							sent_location = True
 						except Exception as e:
 							if 'message is not modified' in str(e):
@@ -419,7 +424,9 @@ class TelegramLogger(object):
 						elif self.topic_id:
 							loc_kwargs['message_thread_id'] = self.topic_id
 						loc = await tgbot.send_location(**loc_kwargs)
-						logging.info('Sent location to Telegram: %s/%s/%s', loc.chat_id, loc.message_thread_id, loc.message_id)
+						logging.info(
+							'Sent location to Telegram: %s/%s/%s', loc.chat_id, loc.message_thread_id, loc.message_id
+						)
 						try:
 							with open(LOCATION_ID_FILE, 'w') as f:
 								f.write(str(loc.message_id))
