@@ -49,7 +49,7 @@ jobs:
         uses: svenstaro/upload-release-action@master
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: modules/symbols.py
+          file: src/symbols.py
           asset_name: symbols.py
           release_name: v0.1-beta.5
           tag: beta5
@@ -61,7 +61,8 @@ jobs:
         uses: svenstaro/upload-release-action@master
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: main.py
+          file: src/main.py
+          asset_name: main.py
           release_name: v0.1-beta.5
           tag: beta5
           overwrite: true

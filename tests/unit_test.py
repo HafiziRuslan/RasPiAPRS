@@ -1,14 +1,13 @@
-import unittest
-import sys
 import os
-import time
-from unittest.mock import patch, mock_open, MagicMock
+import sys
+import unittest
+from unittest.mock import MagicMock, mock_open, patch
 
 # Adjust path to import modules from parent directory
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-import aprs_symbols
-import main
+from ..src.main import main
+from ..src.symbols import symbols as aprs_symbols
 
 
 class TestAprsSymbols(unittest.TestCase):

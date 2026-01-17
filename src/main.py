@@ -17,13 +17,13 @@ import aprslib
 import dotenv
 import humanize
 import psutil
+import symbols
 import telegram
 from aprslib.exceptions import ConnectionError as APRSConnectionError
 from dotenv import set_key
 from geopy.geocoders import Nominatim
 from gpsdclient import GPSDClient
 
-from .modules.symbols import symbols
 
 # Default paths for system files
 OS_RELEASE_FILE = '/etc/os-release'

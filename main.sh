@@ -165,7 +165,7 @@ MAX_DELAY=300
 while true; do
   START_TIME=$(date +%s)
   set +e
-  uv run -s ./main.py
+  uv run -s ./src/main.py
   exit_code=$?
   set -e
   END_TIME=$(date +%s)
