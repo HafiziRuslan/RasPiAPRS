@@ -183,7 +183,7 @@ APRS_SYMBOLS = {
     "\\p": "AVAIL (Partly Cloudy => ( overlay P)",
     "\\q": "AVAIL",
     "\\r": "Restrooms",
-    "\\s": "Ship/Boat (6=Shipwreck, B=Pleasure, C=Cargo, D=Diving, E=Emergency, F=Fishing, H=High-speed, J=Jet Ski, L=Law, M=Military, O=Oil Rig, P=Pilot, Q=Torpedo, S=SAR, T=Tug, U=Underwater/Sub, W=WIG/Hovercraft, X=Passenger, Y=Sailing)",
+    "\\s": "Ship/Boat (6=Shipwreck, B=Pleasure, C=Cargo, D=Diving, E=Emergency, F=Fishing, H=High-speed, J=Jet Ski, L=Law, M=Military, O=Oil Rig, P=Pilot, Q=Torpedo, S=SAR, T=Tug, U=Underwater/Submarine, W=WIG/Hovercraft, X=Passenger, Y=Sailing)",
     "\\t": "Tornado",
     "\\u": "Truck (B=Bulldozer, G=Gas, P=Plow, T=Tanker, C=Chlorine Tanker, H=Hazardous)",
     "\\v": "OVERLAYED Van",
