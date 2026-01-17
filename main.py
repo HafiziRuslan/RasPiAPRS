@@ -572,9 +572,9 @@ def get_gpssat():
 def get_cpuload():
 	"""Get CPU load as a percentage of total capacity."""
 	try:
-		load5 = psutil.getloadavg()[1]
-		corecount = psutil.cpu_count()
-		return int((load5 / corecount) * 100 * 1000)
+		load = psutil.getloadavg()[2]
+		core = psutil.cpu_count()
+		return int((load / core) * 100 * 1000)
 	except Exception as e:
 		logging.error('Unexpected error: %s', e)
 		return 0

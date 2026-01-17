@@ -2,14 +2,15 @@
 
 With this simple python program you can monitor your Pi-Star / WPSD / AllStarLink health using APRS metrics.
 
-You can see an example of the metrics logged by my Pi-Star node [9W4GPA-2](https://aprs.fi/telemetry/a/9W4GPA-2?range=day).
+You can see an example of the metrics logged by my Pi-Star node [9W4GPA](https://aprs.fi/telemetry/a/9W4GPA?range=day).
 
 The metrics are:-
 
-1. CPU Temperature
-2. CPU load average per 5 min
+1. CPU temperature
+2. CPU load (average 15 minutes)
 3. Memory used
 4. Disk usage
+5. GPS used (optional)
 
 ## Installation (Pi-Star / WPSD / AllStarLink)
 
