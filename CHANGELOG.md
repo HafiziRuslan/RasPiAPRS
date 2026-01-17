@@ -2,13 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-15T00:52:34+08:00)
+## [beta5] - (2026-01-17T11:36:06+08:00)
 
-- 82 commit(s) contributed to the release.
-- 14 day(s) passed between the first and last commit.
+- 83 commit(s) contributed to the release.
+- 17 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
-- 14 day(s) passed between releases.
+- 17 day(s) passed between releases.
 
 ### 🚀 Features in beta5
 
@@ -50,6 +50,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta5
 
+- [a73e559](https://github.com/HafiziRuslan/RasPiAPRS/commit/a73e559349e8b7c98672ca8bc40f2f86c13798fa) refactor(speed): replace speed comparison > 0 with != 0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T11:36:06+08:00*
 - [f5466e6](https://github.com/HafiziRuslan/RasPiAPRS/commit/f5466e6bf01a1c993667d2f15842ae3fb2440f5a) refactor(aprs): simplify aprs header formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-15T00:33:00+08:00*
 - [ed25fef](https://github.com/HafiziRuslan/RasPiAPRS/commit/ed25fef3318ccac2f16c2397ddf118163d7f274d) refactor(config): standardize default coordinate values *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-12T17:06:41+08:00*
 - [76e0f4b](https://github.com/HafiziRuslan/RasPiAPRS/commit/76e0f4b2591d46d337c8fde53c608bd4468d1622) refactor(gps): restructure stalled gps check *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-07T21:14:13+08:00*
@@ -789,4 +790,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-15T00:53:08.939491874+08:00
+generated using git-cliff on 2026-01-17T11:37:09.125458915+08:00
