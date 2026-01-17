@@ -2,12 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-18T00:30:45+08:00)
+## [beta5] - (2026-01-18T00:41:33+08:00)
 
-- 101 commit(s) contributed to the release.
+- 102 commit(s) contributed to the release.
 - 17 day(s) passed between the first and last commit.
-- 0 commit(s) parsed as conventional.
-- 0 linked issue(s) detected in commits.
 - 17 day(s) passed between releases.
 
 ### 🚀 Features in beta5
@@ -113,6 +111,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta5
 
+- [4576feb](https://github.com/HafiziRuslan/RasPiAPRS/commit/4576febb211a4880658e9f69cb21749a1a432d27) chore(changelog): hide zero count statistics in changelog *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T00:41:33+08:00*
 - [677fe4e](https://github.com/HafiziRuslan/RasPiAPRS/commit/677fe4e602edfab82abdd9c37d4f603766d069a4) ci(release): upload aprs_symbols.py artifact *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T23:04:32+08:00*
 - [250da73](https://github.com/HafiziRuslan/RasPiAPRS/commit/250da73a9cfdc8b11fc33fa5654abfc1daa9e675) chore(scripts): clarify update warning message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T13:48:15+08:00*
 - [6e74b35](https://github.com/HafiziRuslan/RasPiAPRS/commit/6e74b353402658298ddc25a0902d37b15fd67cc4) chore(scripts): explicitly set group ownership *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-15T00:52:34+08:00*
@@ -136,8 +135,6 @@ All notable changes to this project will be documented in this file.
 
 - 130 commit(s) contributed to the release.
 - 9 day(s) passed between the first and last commit.
-- 0 commit(s) parsed as conventional.
-- 0 linked issue(s) detected in commits.
 - 9 day(s) passed between releases.
 
 ### 🚀 Features in beta4
@@ -301,8 +298,6 @@ All notable changes to this project will be documented in this file.
 
 - 486 commit(s) contributed to the release.
 - 2048 day(s) passed between the first and last commit.
-- 0 commit(s) parsed as conventional.
-- 0 linked issue(s) detected in commits.
 
 ### 🚀 Features in beta
 
@@ -808,4 +803,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-18T00:31:32.809731094+08:00
+generated using git-cliff on 2026-01-18T00:42:00.949319787+08:00
