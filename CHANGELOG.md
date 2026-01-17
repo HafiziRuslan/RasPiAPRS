@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-17T22:50:35+08:00)
+## [beta5] - (2026-01-17T23:01:39+08:00)
 
-- 95 commit(s) contributed to the release.
+- 96 commit(s) contributed to the release.
 - 17 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
@@ -56,6 +56,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta5
 
+- [0da5333](https://github.com/HafiziRuslan/RasPiAPRS/commit/0da5333e8eec45099c0d121e131b47b599e6cf27) refactor(symbols): simplify symbol key generation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T23:01:39+08:00*
 - [539accd](https://github.com/HafiziRuslan/RasPiAPRS/commit/539accd3bac6104418b37a7a61cb3cee15cbed8d) test(unit): refactor and modernize unit test suite *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T22:50:35+08:00*
 - [7331724](https://github.com/HafiziRuslan/RasPiAPRS/commit/733172408d6d205beff5629663a8f05921a1d7d4) refactor(aprs): group speed-dependent logic in send_position *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T19:40:12+08:00*
 - [a73e559](https://github.com/HafiziRuslan/RasPiAPRS/commit/a73e559349e8b7c98672ca8bc40f2f86c13798fa) refactor(speed): replace speed comparison > 0 with != 0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T11:36:06+08:00*
@@ -802,4 +803,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-17T22:51:41.869979735+08:00
+generated using git-cliff on 2026-01-17T23:02:09.263672794+08:00
