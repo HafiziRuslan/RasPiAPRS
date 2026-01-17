@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-17T13:46:24+08:00)
+## [beta5] - (2026-01-17T13:48:15+08:00)
 
-- 85 commit(s) contributed to the release.
+- 86 commit(s) contributed to the release.
 - 17 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
@@ -99,6 +99,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta5
 
+- [250da73](https://github.com/HafiziRuslan/RasPiAPRS/commit/250da73a9cfdc8b11fc33fa5654abfc1daa9e675) chore(scripts): clarify update warning message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T13:48:15+08:00*
 - [6e74b35](https://github.com/HafiziRuslan/RasPiAPRS/commit/6e74b353402658298ddc25a0902d37b15fd67cc4) chore(scripts): explicitly set group ownership *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-15T00:52:34+08:00*
 - [2463517](https://github.com/HafiziRuslan/RasPiAPRS/commit/246351748866674d0e2d3bb67f3733a702560054) chore(scripts): manage system dependencies and update logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-08T23:02:01+08:00*
 - [114ef57](https://github.com/HafiziRuslan/RasPiAPRS/commit/114ef578badb465abb685f9145d00ff50ee92b93) build(deps): update python dependencies and build metadata *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-07T21:53:15+08:00*
@@ -792,4 +793,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-17T13:46:57.024022589+08:00
+generated using git-cliff on 2026-01-17T13:48:47.210116580+08:00
