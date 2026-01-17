@@ -199,5 +199,5 @@ APRS_SYMBOLS = {
 
 def get_symbol_description(table, symbol):
 	"""Get the description of an APRS symbol."""
-	key = f'{table}{symbol}'.split('(')[0].strip()
-	return APRS_SYMBOLS.get(key, 'Unknown Symbol')
+	key = f'{table}{symbol}'
+	return APRS_SYMBOLS.get(key, 'Unknown')
