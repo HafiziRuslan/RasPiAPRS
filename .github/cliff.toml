@@ -18,9 +18,11 @@ body = """
 {% endif %}
 - {{ statistics.commit_count }} commit(s) contributed to the release.
 - {{ statistics.commits_timespan | default(value=0) }} day(s) passed between the first and last commit.
-- {{ statistics.conventional_commit_count }} commit(s) parsed as conventional.
-- {{ statistics.links | length }} linked issue(s) detected in commits.
+{%- if statistics.conventional_commit_count > 0 %}
+  - {{ statistics.conventional_commit_count }} commit(s) parsed as conventional.
+{%- endif %}
 {%- if statistics.links | length > 0 %}
+  - {{ statistics.links | length }} linked issue(s) detected in commits.
 	{%- for link in statistics.links %}
     {{ "  " }}- [{{ link.text }}]({{ link.href }}) (referenced {{ link.count }} time(s))
 	{%- endfor %}
