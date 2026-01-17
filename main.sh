@@ -161,6 +161,8 @@ fi
 log_msg INFO "Running RasPiAPRS"
 RESTART_DELAY=5
 MAX_DELAY=300
+MAX_RETRIES=10
+RETRY_COUNT=0
 
 while true; do
   START_TIME=$(date +%s)
@@ -172,17 +174,25 @@ while true; do
 
   if [ $((END_TIME - START_TIME)) -gt 60 ]; then
     RESTART_DELAY=5
+    RETRY_COUNT=0
   fi
 
   if [ $exit_code -ne 0 ]; then
-    log_msg ERROR "RasPiAPRS exited with code $exit_code. Re-run in ${RESTART_DELAY} seconds."
-  else
-    log_msg INFO "RasPiAPRS exited with code $exit_code. Re-run in ${RESTART_DELAY} seconds."
-  fi
-  sleep $RESTART_DELAY
+    RETRY_COUNT=$((RETRY_COUNT + 1))
+    if [ "$RETRY_COUNT" -gt "$MAX_RETRIES" ]; then
+      log_msg ERROR "Maximum retries ($MAX_RETRIES) reached. Exiting."
+      exit 1
+    fi
 
-  RESTART_DELAY=$((RESTART_DELAY * 2))
-  if [ "$RESTART_DELAY" -gt "$MAX_DELAY" ]; then
-    RESTART_DELAY=$MAX_DELAY
+    log_msg ERROR "RasPiAPRS exited with code $exit_code. Retry $RETRY_COUNT/$MAX_RETRIES. Re-run in ${RESTART_DELAY} seconds."
+    sleep $RESTART_DELAY
+
+    RESTART_DELAY=$((RESTART_DELAY * 2))
+    if [ "$RESTART_DELAY" -gt "$MAX_DELAY" ]; then
+      RESTART_DELAY=$MAX_DELAY
+    fi
+  else
+    log_msg INFO "RasPiAPRS exited. Stopping."
+    break
   fi
 done
