@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-17T19:40:12+08:00)
+## [beta5] - (2026-01-17T21:25:41+08:00)
 
-- 87 commit(s) contributed to the release.
+- 88 commit(s) contributed to the release.
 - 17 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚀 Features in beta5
 
+- [ce357ee](https://github.com/HafiziRuslan/RasPiAPRS/commit/ce357ee4d68677d0c25709e0c63aafac81122161) feat(aprs): expose aprs symbol descriptions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T21:25:41+08:00*
 - [cb5db0a](https://github.com/HafiziRuslan/RasPiAPRS/commit/cb5db0afc382bc05187c9d99435563e4867116df) feat(scripts): enhance robustness and update mechanism *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T13:46:24+08:00*
 - [78f38f1](https://github.com/HafiziRuslan/RasPiAPRS/commit/78f38f10f516e170317c6d13a20d3baa23eddb1c) feat(reporting): include aprs symbol in telegram message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T12:00:17+08:00*
 - [2b3e69d](https://github.com/HafiziRuslan/RasPiAPRS/commit/2b3e69de7fe18e4d1fcc11e8bec08be16be7d850) feat(aprs): implement smart beaconing logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-05T01:46:31+08:00*
@@ -794,4 +795,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-17T19:40:45.582063743+08:00
+generated using git-cliff on 2026-01-17T21:26:08.183590572+08:00
