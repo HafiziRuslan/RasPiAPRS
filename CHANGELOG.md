@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-17T13:48:15+08:00)
+## [beta5] - (2026-01-17T19:40:12+08:00)
 
-- 86 commit(s) contributed to the release.
+- 87 commit(s) contributed to the release.
 - 17 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
@@ -52,6 +52,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta5
 
+- [7331724](https://github.com/HafiziRuslan/RasPiAPRS/commit/733172408d6d205beff5629663a8f05921a1d7d4) refactor(aprs): group speed-dependent logic in send_position *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T19:40:12+08:00*
 - [a73e559](https://github.com/HafiziRuslan/RasPiAPRS/commit/a73e559349e8b7c98672ca8bc40f2f86c13798fa) refactor(speed): replace speed comparison > 0 with != 0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T11:36:06+08:00*
 - [f5466e6](https://github.com/HafiziRuslan/RasPiAPRS/commit/f5466e6bf01a1c993667d2f15842ae3fb2440f5a) refactor(aprs): simplify aprs header formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-15T00:33:00+08:00*
 - [ed25fef](https://github.com/HafiziRuslan/RasPiAPRS/commit/ed25fef3318ccac2f16c2397ddf118163d7f274d) refactor(config): standardize default coordinate values *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-12T17:06:41+08:00*
@@ -793,4 +794,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-17T13:48:47.210116580+08:00
+generated using git-cliff on 2026-01-17T19:40:45.582063743+08:00
