@@ -89,7 +89,7 @@ if [ "$INTERNET_AVAILABLE" = true ] && check_disk_space; then
             log_msg ERROR "Repository integrity check failed! Skipping restart."
           fi
         else
-          log_msg WARN "Update completed but HEAD does not match remote. Skipping restart to prevent loop."
+          log_msg WARN "Update completed but HEAD does not match remote. Skipping restart."
         fi
       else
         log_msg WARN "Git pull failed. Skipping restart."
