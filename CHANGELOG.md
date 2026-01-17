@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-17T21:25:41+08:00)
+## [beta5] - (2026-01-17T22:50:35+08:00)
 
-- 88 commit(s) contributed to the release.
+- 95 commit(s) contributed to the release.
 - 17 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚀 Features in beta5
 
+- [16ec5b2](https://github.com/HafiziRuslan/RasPiAPRS/commit/16ec5b2a970782a519c63395c389fc5f582f0885) feat(telegram): implement live location updates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T22:36:02+08:00*
 - [ce357ee](https://github.com/HafiziRuslan/RasPiAPRS/commit/ce357ee4d68677d0c25709e0c63aafac81122161) feat(aprs): expose aprs symbol descriptions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T21:25:41+08:00*
 - [cb5db0a](https://github.com/HafiziRuslan/RasPiAPRS/commit/cb5db0afc382bc05187c9d99435563e4867116df) feat(scripts): enhance robustness and update mechanism *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T13:46:24+08:00*
 - [78f38f1](https://github.com/HafiziRuslan/RasPiAPRS/commit/78f38f10f516e170317c6d13a20d3baa23eddb1c) feat(reporting): include aprs symbol in telegram message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T12:00:17+08:00*
@@ -25,6 +26,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta5
 
+- [2a59cc4](https://github.com/HafiziRuslan/RasPiAPRS/commit/2a59cc46e7c62ca4004983cb857f52ecb792cd65) fix(aprs_symbols): correct typo in rail symbol description *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T21:49:13+08:00*
+- [32e8a7e](https://github.com/HafiziRuslan/RasPiAPRS/commit/32e8a7e94acb0ac6e6e0c240d052abd1ef6b653f) fix(aprs): handle symbols with parenthetical descriptors *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T21:43:00+08:00*
 - [2d8b364](https://github.com/HafiziRuslan/RasPiAPRS/commit/2d8b3648110d944e326d68c7fd167e3ed2a533de) fix(aprs): pad callsign in header messages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-15T00:49:09+08:00*
 - [f85f24c](https://github.com/HafiziRuslan/RasPiAPRS/commit/f85f24c27d698e9e43b05561727972c7ff77fc2f) fix(config): prevent appending -0 ssid to aprs call *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-15T00:12:30+08:00*
 - [92f60cb](https://github.com/HafiziRuslan/RasPiAPRS/commit/92f60cbe306c88e113a84a83da535af501957ce4) fix(gps): fetch gps position only if enabled *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T23:25:29+08:00*
@@ -53,6 +56,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta5
 
+- [539accd](https://github.com/HafiziRuslan/RasPiAPRS/commit/539accd3bac6104418b37a7a61cb3cee15cbed8d) test(unit): refactor and modernize unit test suite *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T22:50:35+08:00*
 - [7331724](https://github.com/HafiziRuslan/RasPiAPRS/commit/733172408d6d205beff5629663a8f05921a1d7d4) refactor(aprs): group speed-dependent logic in send_position *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T19:40:12+08:00*
 - [a73e559](https://github.com/HafiziRuslan/RasPiAPRS/commit/a73e559349e8b7c98672ca8bc40f2f86c13798fa) refactor(speed): replace speed comparison > 0 with != 0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T11:36:06+08:00*
 - [f5466e6](https://github.com/HafiziRuslan/RasPiAPRS/commit/f5466e6bf01a1c993667d2f15842ae3fb2440f5a) refactor(aprs): simplify aprs header formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-15T00:33:00+08:00*
@@ -79,6 +83,8 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation in beta5
 
+- [c7bf6a7](https://github.com/HafiziRuslan/RasPiAPRS/commit/c7bf6a74f5783d2bc5ef750184010fee0d3192d9) docs(symbols): clarify submarine overlay description *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T21:48:19+08:00*
+- [3ca7eaf](https://github.com/HafiziRuslan/RasPiAPRS/commit/3ca7eafcbb5c3bbd3ccde42825212987aecece5a) docs(aprs_symbols): clarify symbol descriptions for improved readability *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T21:47:11+08:00*
 - [69274bb](https://github.com/HafiziRuslan/RasPiAPRS/commit/69274bb9c916d9e5ededf589a6464e78eb7b45ad) docs(aprs): add symbol table reference pdf *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-15T00:25:12+08:00*
 - [fe22bf6](https://github.com/HafiziRuslan/RasPiAPRS/commit/fe22bf6efef70cee20f38bc98ac84554b7e0e299) docs(policy): add security policy document *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-01T03:45:59+08:00*
 
@@ -89,6 +95,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🎨 Styling in beta5
 
+- [ce44ba3](https://github.com/HafiziRuslan/RasPiAPRS/commit/ce44ba392a4d193bb8f4dda2c36e2080c5e3a59a) style(formatting): format code for pep8 compliance *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T22:39:50+08:00*
 - [ac1e84c](https://github.com/HafiziRuslan/RasPiAPRS/commit/ac1e84c2e5afcb36e7c042a41bd032395c1a9378) style(config): simplify config __repr__ formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-07T19:27:50+08:00*
 - [023d396](https://github.com/HafiziRuslan/RasPiAPRS/commit/023d3968a5a8bfb86bd0982e4bfd5636ff951aaa) style(gps): simplify boolean usage check in tests *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T02:59:17+08:00*
 - [d2c4845](https://github.com/HafiziRuslan/RasPiAPRS/commit/d2c48450c75310cb9712953b3fe894da8480f063) style(formatting): standardize python code style *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-03T21:00:49+08:00*
@@ -795,4 +802,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-17T21:26:08.183590572+08:00
+generated using git-cliff on 2026-01-17T22:51:41.869979735+08:00
