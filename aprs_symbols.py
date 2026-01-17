@@ -129,7 +129,7 @@ APRS_SYMBOLS = {
     "\\:": "AVAIL (Hail ==> ` overlay H)",
     "\\;": "Portable/Park/Picnic (F=Field Day, I=IOTA, S=SOTA, W=WOTA)",
     "\\<": "ADVISORY (one WX flag)",
-    "\\=": "Rail (B=Bus-rail, C=Commuter, D=Diesel, E=Electric, F=Freight, G=Gondola, H=High Speed, I=Inclined, L=Elevated, M=Monorail, P=Passenger, S=Steam, T=Terminal, U=Subway, X=eXcursion)",
+    "\\=": "Rail (B=Bus-rail, C=Commuter, D=Diesel, E=Electric, F=Freight, G=Gondola, H=High Speed, I=Inclined, L=Elevated, M=Monorail, P=Passenger, S=Steam, T=Terminal, U=Subway, X=Excursion)",
     "\\>": "Car/Vehicle (1-9=numbered, 3=Model 3, B=BEV, D=DIY, E=Ethanol, F=Fuelcell, H=Hybrid, L=Leaf, P=PHEV, S=Solar, T=Tesla, V=Volt, X=Model X)",
     "\\?": "INFO Kiosk (Blue box with ?)",
     "\\@": "HURICANE/Trop-Storm",
