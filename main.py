@@ -46,7 +46,9 @@ def configure_logging():
 
 	logger = logging.getLogger()
 	logger.setLevel(logging.INFO)
-	formatter = logging.Formatter('%(asctime)s | %(levelname)s | %(name)s.%(funcName)s | %(message)s', datefmt='%Y-%m-%dT%H:%M:%S')
+	formatter = logging.Formatter(
+		'%(asctime)s | %(levelname)s | %(name)s.%(funcName)s | %(message)s', datefmt='%Y-%m-%dT%H:%M:%S'
+	)
 
 	console_handler = logging.StreamHandler()
 	console_handler.setLevel(logging.ERROR)
@@ -62,7 +64,9 @@ def configure_logging():
 	}
 	for level, filename in levels.items():
 		try:
-			handler = logging.handlers.RotatingFileHandler(os.path.join(log_dir, filename), maxBytes=5 * 1024 * 1024, backupCount=5)
+			handler = logging.handlers.RotatingFileHandler(
+				os.path.join(log_dir, filename), maxBytes=5 * 1024 * 1024, backupCount=5
+			)
 			handler.setLevel(level)
 			handler.setFormatter(formatter)
 			logger.addHandler(handler)
@@ -112,7 +116,9 @@ class Config(object):
 			self.passcode = aprslib.passcode(call)
 
 	def __repr__(self):
-		return ('<Config> call: {0.call}, passcode: {0.passcode} - {0.latitude}/{0.longitude}/{0.altitude}').format(self)
+		return ('<Config> call: {0.call}, passcode: {0.passcode} - {0.latitude}/{0.longitude}/{0.altitude}').format(
+			self
+		)
 
 	@property
 	def call(self):
@@ -304,7 +310,14 @@ class SmartBeaconing(object):
 		elif spd_kmh < self.slow_speed:
 			rate = self.slow_rate
 		else:
-			rate = int(self.slow_rate - ((spd_kmh - self.slow_speed) * (self.slow_rate - self.fast_rate) / (self.fast_speed - self.slow_speed)))
+			rate = int(
+				self.slow_rate
+				- (
+					(spd_kmh - self.slow_speed)
+					* (self.slow_rate - self.fast_rate)
+					/ (self.fast_speed - self.slow_speed)
+				)
+			)
 		turn_threshold = self.min_turn_angle + (self.turn_slope / (spd_kmh if spd_kmh > 0 else 1))
 		heading_change = abs(cur_cse - self.last_course)
 		if heading_change > 180:
@@ -362,15 +375,14 @@ class TelegramLogger(object):
 					'chat_id': self.chat_id,
 					'text': tg_message,
 					'parse_mode': 'HTML',
-					'link_preview_options': {
-       			'is_disabled': True,
-						'prefer_small_media': True,
-						'show_above_text': True},
+					'link_preview_options': {'is_disabled': True, 'prefer_small_media': True, 'show_above_text': True},
 				}
 				if self.topic_id:
 					msg_kwargs['message_thread_id'] = self.topic_id
 				botmsg = await tgbot.send_message(**msg_kwargs)
-				logging.info('Sent message to Telegram: %s/%s/%s', botmsg.chat_id, botmsg.message_thread_id, botmsg.message_id)
+				logging.info(
+					'Sent message to Telegram: %s/%s/%s', botmsg.chat_id, botmsg.message_thread_id, botmsg.message_id
+				)
 				if lat != 0 and lon != 0:
 					sent_location = False
 					if os.path.exists(LOCATION_ID_FILE):
@@ -389,7 +401,12 @@ class TelegramLogger(object):
 							elif self.topic_id:
 								edit_kwargs['message_thread_id'] = self.topic_id
 							boteditloc = await tgbot.edit_message_live_location(**edit_kwargs)
-							logging.info('Edited location in Telegram: %s/%s/%s', boteditloc.chat_id, boteditloc.message_thread_id, boteditloc.message_id)
+							logging.info(
+								'Edited location in Telegram: %s/%s/%s',
+								boteditloc.chat_id,
+								boteditloc.message_thread_id,
+								boteditloc.message_id,
+							)
 							sent_location = True
 						except Exception as e:
 							if 'message is not modified' in str(e):
@@ -409,7 +426,12 @@ class TelegramLogger(object):
 						elif self.topic_id:
 							loc_kwargs['message_thread_id'] = self.topic_id
 						botloc = await tgbot.send_location(**loc_kwargs)
-						logging.info('Sent location to Telegram: %s/%s/%s', botloc.chat_id, botloc.message_thread_id, botloc.message_id)
+						logging.info(
+							'Sent location to Telegram: %s/%s/%s',
+							botloc.chat_id,
+							botloc.message_thread_id,
+							botloc.message_id,
+						)
 						try:
 							with open(LOCATION_ID_FILE, 'w') as f:
 								f.write(str(botloc.message_id))
@@ -653,7 +675,6 @@ def get_mmdvminfo():
 		shift = f' (+{round(rx - tx, 6)}MHz)'
 	cc = f' CC{color_code}' if dmr_enabled else ''
 	return (str(tx) + 'MHz' + shift + cc) + ','
-
 
 
 async def send_position(ais, cfg, tg_logger, gps_data=None):
