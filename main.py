@@ -33,6 +33,7 @@ MMDVMHOST_FILE = '/etc/mmdvmhost'
 SEQUENCE_FILE = '/tmp/raspiaprs/sequence.tmp'
 TIMER_FILE = '/tmp/raspiaprs/timer.tmp'
 CACHE_FILE = '/tmp/raspiaprs/nominatim_cache.pkl'
+LOCATION_ID_FILE = '/tmp/raspiaprs/location_id.tmp'
 
 
 # Set up logging
@@ -323,6 +324,101 @@ class SmartBeaconing(object):
 		return should_send
 
 
+class TelegramLogger(object):
+	"""Class to handle logging to Telegram."""
+
+	def __init__(self):
+		self.enabled = os.getenv('TELEGRAM_ENABLE')
+		if self.enabled:
+			self.token = os.getenv('TELEGRAM_TOKEN')
+			self.chat_id = os.getenv('TELEGRAM_CHAT_ID')
+			self.topic_id = os.getenv('TELEGRAM_TOPIC_ID')
+			self.loc_topic_id = os.getenv('TELEGRAM_LOC_TOPIC_ID')
+			if not self.token or not self.chat_id:
+				logging.error('Telegram token or chat ID is missing. Disabling Telegram logging.')
+				self.enabled = False
+			if self.topic_id:
+				try:
+					self.topic_id = int(self.topic_id)
+				except (ValueError, TypeError):
+					logging.error('Invalid TELEGRAM_TOPIC_ID. It should be an integer.')
+					self.topic_id = None
+			if self.loc_topic_id:
+				try:
+					self.loc_topic_id = int(self.loc_topic_id)
+				except (ValueError, TypeError):
+					logging.error('Invalid TELEGRAM_LOC_TOPIC_ID. It should be an integer.')
+					self.loc_topic_id = None
+
+	async def log(self, tg_message: str, lat: float = 0, lon: float = 0, cse: float = 0):
+		"""Send log message and optionally location to Telegram channel."""
+		if not self.enabled:
+			return
+
+		tgbot = telegram.Bot(self.token)
+		async with tgbot:
+			try:
+				msg_kwargs = {
+					'chat_id': self.chat_id,
+					'text': tg_message,
+					'parse_mode': 'HTML',
+					'link_preview_options': {
+       			'is_disabled': True,
+						'prefer_small_media': True,
+						'show_above_text': True},
+				}
+				if self.topic_id:
+					msg_kwargs['message_thread_id'] = self.topic_id
+				botmsg = await tgbot.send_message(**msg_kwargs)
+				logging.info('Sent message to Telegram: %s/%s/%s', botmsg.chat_id, botmsg.message_thread_id, botmsg.message_id)
+				if lat != 0 and lon != 0:
+					sent_location = False
+					if os.path.exists(LOCATION_ID_FILE):
+						try:
+							with open(LOCATION_ID_FILE, 'r') as f:
+								location_id = int(f.read())
+							edit_kwargs = {
+								'chat_id': self.chat_id,
+								'message_id': location_id,
+								'latitude': lat,
+								'longitude': lon,
+								'heading': cse if cse > 0 else None,
+							}
+							if self.loc_topic_id:
+								edit_kwargs['message_thread_id'] = self.loc_topic_id
+							elif self.topic_id:
+								edit_kwargs['message_thread_id'] = self.topic_id
+							boteditloc = await tgbot.edit_message_live_location(**edit_kwargs)
+							logging.info('Edited location in Telegram: %s/%s/%s', boteditloc.chat_id, boteditloc.message_thread_id, boteditloc.message_id)
+							sent_location = True
+						except Exception as e:
+							if 'message is not modified' in str(e):
+								sent_location = True
+							else:
+								logging.warning('Failed to edit location in Telegram: %s', e)
+					if not sent_location:
+						loc_kwargs = {
+							'chat_id': self.chat_id,
+							'latitude': lat,
+							'longitude': lon,
+							'heading': cse if cse > 0 else None,
+							'live_period': 86400,
+						}
+						if self.loc_topic_id:
+							loc_kwargs['message_thread_id'] = self.loc_topic_id
+						elif self.topic_id:
+							loc_kwargs['message_thread_id'] = self.topic_id
+						botloc = await tgbot.send_location(**loc_kwargs)
+						logging.info('Sent location to Telegram: %s/%s/%s', botloc.chat_id, botloc.message_thread_id, botloc.message_id)
+						try:
+							with open(LOCATION_ID_FILE, 'w') as f:
+								f.write(str(botloc.message_id))
+						except Exception as e:
+							logging.error('Failed to save location ID: %s', e)
+			except Exception as e:
+				logging.error('Failed to send message to Telegram: %s', e)
+
+
 def get_gpspos():
 	"""Get position from GPSD."""
 	if os.getenv('GPSD_ENABLE'):
@@ -559,34 +655,8 @@ def get_mmdvminfo():
 	return (str(tx) + 'MHz' + shift + cc) + ','
 
 
-async def logs_to_telegram(tg_message: str, lat: float = 0, lon: float = 0, cse: float = 0):
-	"""Send log message to Telegram channel."""
-	if os.getenv('TELEGRAM_ENABLE'):
-		tgbot = telegram.Bot(os.getenv('TELEGRAM_TOKEN'))
-		async with tgbot:
-			try:
-				botmsg = await tgbot.send_message(
-					chat_id=os.getenv('TELEGRAM_CHAT_ID'),
-					message_thread_id=int(os.getenv('TELEGRAM_TOPIC_ID')),
-					text=tg_message,
-					parse_mode='HTML',
-					link_preview_options={'is_disabled': True, 'prefer_small_media': True, 'show_above_text': True},
-				)
-				logging.info('Sent message to Telegram: %s/%s/%s', botmsg.chat_id, botmsg.message_thread_id, botmsg.message_id)
-				if lat != 0 and lon != 0:
-					botloc = await tgbot.send_location(
-						chat_id=os.getenv('TELEGRAM_CHAT_ID'),
-						message_thread_id=int(os.getenv('TELEGRAM_TOPIC_ID')),
-						latitude=lat,
-						longitude=lon,
-						heading=cse,
-					)
-					logging.info('Sent location to Telegram: %s/%s/%s', botloc.chat_id, botloc.message_thread_id, botloc.message_id)
-			except Exception as e:
-				logging.error('Failed to send message to Telegram: %s', e)
 
-
-async def send_position(ais, cfg, gps_data=None):
+async def send_position(ais, cfg, tg_logger, gps_data=None):
 	"""Send APRS position packet to APRS-IS."""
 
 	def _lat_to_aprs(lat):
@@ -682,12 +752,12 @@ async def send_position(ais, cfg, gps_data=None):
 	try:
 		ais.sendall(posit)
 		logging.info(posit)
-		await logs_to_telegram(tgpos, cur_lat, cur_lon, int(csestr))
-		await send_status(ais, cfg)
+		await tg_logger.log(tgpos, cur_lat, cur_lon, int(csestr))
+		await send_status(ais, cfg, tg_logger)
 	except APRSConnectionError as err:
 		logging.error('APRS connection error at position: %s', err)
 		ais = ais_connect(cfg)
-		await send_position(ais, cfg, gps_data)
+		await send_position(ais, cfg, tg_logger, gps_data)
 
 
 def send_header(ais, cfg):
@@ -709,7 +779,7 @@ def send_header(ais, cfg):
 		send_header(ais, cfg)
 
 
-async def send_telemetry(ais, cfg):
+async def send_telemetry(ais, cfg, tg_logger):
 	"""Send APRS telemetry information to APRS-IS."""
 	seq = Sequence().next()
 	temp = get_temp()
@@ -727,15 +797,15 @@ async def send_telemetry(ais, cfg):
 	try:
 		ais.sendall(telem)
 		logging.info(telem)
-		await logs_to_telegram(tgtel)
-		await send_status(ais, cfg)
+		await tg_logger.log(tgtel)
+		await send_status(ais, cfg, tg_logger)
 	except APRSConnectionError as err:
 		logging.error('APRS connection error at telemetry: %s', err)
 		ais = ais_connect(cfg)
-		await send_telemetry(ais, cfg)
+		await send_telemetry(ais, cfg, tg_logger)
 
 
-async def send_status(ais, cfg):
+async def send_status(ais, cfg, tg_logger):
 	"""Send APRS status information to APRS-IS."""
 	if os.getenv('GPSD_ENABLE'):
 		_, lat, lon, *_ = get_gpspos()
@@ -770,7 +840,7 @@ async def send_status(ais, cfg):
 	try:
 		ais.sendall(status)
 		logging.info(status)
-		await logs_to_telegram(tgstat)
+		await tg_logger.log(tgstat)
 	except APRSConnectionError as err:
 		logging.error('APRS connection error at status: %s', err)
 
@@ -799,6 +869,7 @@ async def main():
 	"""Main function to run the APRS reporting loop."""
 	cfg = Config()
 	ais = ais_connect(cfg)
+	tg_logger = TelegramLogger()
 	sb = SmartBeaconing()
 	for tmr in Timer():
 		gps_data = None
@@ -815,11 +886,11 @@ async def main():
 			if tmr % 1800 == 1:
 				posUpdate = True
 		if posUpdate:
-			await send_position(ais, cfg, gps_data=gps_data)
+			await send_position(ais, cfg, tg_logger, gps_data=gps_data)
 		if tmr % 3000 == 1:
 			send_header(ais, cfg)
 		if tmr % cfg.sleep == 1:
-			await send_telemetry(ais, cfg)
+			await send_telemetry(ais, cfg, tg_logger)
 		time.sleep(1)
 
 
