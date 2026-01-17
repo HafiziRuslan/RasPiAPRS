@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-18T00:41:33+08:00)
+## [beta5] - (2026-01-18T03:32:42+08:00)
 
-- 102 commit(s) contributed to the release.
+- 103 commit(s) contributed to the release.
 - 17 day(s) passed between the first and last commit.
 - 17 day(s) passed between releases.
 
@@ -55,6 +55,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta5
 
+- [fbab8eb](https://github.com/HafiziRuslan/RasPiAPRS/commit/fbab8eb1fcc8aef9473e149224754324f5d19705) refactor(symbols): move symbol handler into modules directory *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T03:32:42+08:00*
 - [9081ce9](https://github.com/HafiziRuslan/RasPiAPRS/commit/9081ce9075f953bde2c66280b8cc41ac855702ef) refactor(aprs): standardize aprs symbol description parsing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T00:30:45+08:00*
 - [e9ab05b](https://github.com/HafiziRuslan/RasPiAPRS/commit/e9ab05be61fcb173945afde1f41162d0c7af09e0) refactor(logger): shorten variable names in telegram calls *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T23:43:43+08:00*
 - [0da5333](https://github.com/HafiziRuslan/RasPiAPRS/commit/0da5333e8eec45099c0d121e131b47b599e6cf27) refactor(symbols): simplify symbol key generation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T23:01:39+08:00*
@@ -803,4 +804,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-18T00:42:00.949319787+08:00
+generated using git-cliff on 2026-01-18T03:33:15.633440716+08:00
