@@ -45,6 +45,17 @@ jobs:
           prerelease: true
           make_latest: false
 
+      - name: Upload aprs_symbols.py
+        uses: svenstaro/upload-release-action@master
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: aprs_symbols.py
+          release_name: v0.1-beta.5
+          tag: beta5
+          overwrite: true
+          prerelease: true
+          make_latest: false
+
       - name: Upload main.py
         uses: svenstaro/upload-release-action@master
         with:
