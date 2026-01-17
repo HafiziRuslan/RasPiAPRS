@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-18T00:12:45+08:00)
+## [beta5] - (2026-01-18T00:30:45+08:00)
 
-- 100 commit(s) contributed to the release.
+- 101 commit(s) contributed to the release.
 - 17 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
@@ -57,6 +57,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta5
 
+- [9081ce9](https://github.com/HafiziRuslan/RasPiAPRS/commit/9081ce9075f953bde2c66280b8cc41ac855702ef) refactor(aprs): standardize aprs symbol description parsing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T00:30:45+08:00*
 - [e9ab05b](https://github.com/HafiziRuslan/RasPiAPRS/commit/e9ab05be61fcb173945afde1f41162d0c7af09e0) refactor(logger): shorten variable names in telegram calls *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T23:43:43+08:00*
 - [0da5333](https://github.com/HafiziRuslan/RasPiAPRS/commit/0da5333e8eec45099c0d121e131b47b599e6cf27) refactor(symbols): simplify symbol key generation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T23:01:39+08:00*
 - [539accd](https://github.com/HafiziRuslan/RasPiAPRS/commit/539accd3bac6104418b37a7a61cb3cee15cbed8d) test(unit): refactor and modernize unit test suite *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T22:50:35+08:00*
@@ -807,4 +808,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-18T00:13:21.039037797+08:00
+generated using git-cliff on 2026-01-18T00:31:32.809731094+08:00
