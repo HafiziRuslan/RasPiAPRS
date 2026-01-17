@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-17T23:04:32+08:00)
+## [beta5] - (2026-01-18T00:12:45+08:00)
 
-- 97 commit(s) contributed to the release.
+- 100 commit(s) contributed to the release.
 - 17 day(s) passed between the first and last commit.
 - 0 commit(s) parsed as conventional.
 - 0 linked issue(s) detected in commits.
@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta5
 
+- [a2f0fe2](https://github.com/HafiziRuslan/RasPiAPRS/commit/a2f0fe267abf98d8f7b59fbed50fe7b22365f7ba) fix(metrics): use 15 minute average for cpu load *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T00:12:45+08:00*
 - [2a59cc4](https://github.com/HafiziRuslan/RasPiAPRS/commit/2a59cc46e7c62ca4004983cb857f52ecb792cd65) fix(aprs_symbols): correct typo in rail symbol description *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T21:49:13+08:00*
 - [32e8a7e](https://github.com/HafiziRuslan/RasPiAPRS/commit/32e8a7e94acb0ac6e6e0c240d052abd1ef6b653f) fix(aprs): handle symbols with parenthetical descriptors *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T21:43:00+08:00*
 - [2d8b364](https://github.com/HafiziRuslan/RasPiAPRS/commit/2d8b3648110d944e326d68c7fd167e3ed2a533de) fix(aprs): pad callsign in header messages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-15T00:49:09+08:00*
@@ -56,6 +57,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta5
 
+- [e9ab05b](https://github.com/HafiziRuslan/RasPiAPRS/commit/e9ab05be61fcb173945afde1f41162d0c7af09e0) refactor(logger): shorten variable names in telegram calls *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T23:43:43+08:00*
 - [0da5333](https://github.com/HafiziRuslan/RasPiAPRS/commit/0da5333e8eec45099c0d121e131b47b599e6cf27) refactor(symbols): simplify symbol key generation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T23:01:39+08:00*
 - [539accd](https://github.com/HafiziRuslan/RasPiAPRS/commit/539accd3bac6104418b37a7a61cb3cee15cbed8d) test(unit): refactor and modernize unit test suite *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T22:50:35+08:00*
 - [7331724](https://github.com/HafiziRuslan/RasPiAPRS/commit/733172408d6d205beff5629663a8f05921a1d7d4) refactor(aprs): group speed-dependent logic in send_position *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T19:40:12+08:00*
@@ -96,6 +98,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🎨 Styling in beta5
 
+- [0f315df](https://github.com/HafiziRuslan/RasPiAPRS/commit/0f315dff12371729652719e9e3b86b4837883434) style(formatting): improve readability of logging calls *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T23:51:35+08:00*
 - [ce44ba3](https://github.com/HafiziRuslan/RasPiAPRS/commit/ce44ba392a4d193bb8f4dda2c36e2080c5e3a59a) style(formatting): format code for pep8 compliance *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T22:39:50+08:00*
 - [ac1e84c](https://github.com/HafiziRuslan/RasPiAPRS/commit/ac1e84c2e5afcb36e7c042a41bd032395c1a9378) style(config): simplify config __repr__ formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-07T19:27:50+08:00*
 - [023d396](https://github.com/HafiziRuslan/RasPiAPRS/commit/023d3968a5a8bfb86bd0982e4bfd5636ff951aaa) style(gps): simplify boolean usage check in tests *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T02:59:17+08:00*
@@ -804,4 +807,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-17T23:05:11.881752606+08:00
+generated using git-cliff on 2026-01-18T00:13:21.039037797+08:00
