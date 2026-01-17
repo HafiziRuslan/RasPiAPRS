@@ -631,7 +631,7 @@ async def send_position(ais, cfg, gps_data=None):
 	spdstr = _spd_to_aprs(float(cur_spd))
 	csestr = _cse_to_aprs(float(cur_cse))
 	spdkmh = _mps_to_kmh(float(cur_spd))
-	if int(cur_spd) > 0:
+	if int(cur_spd) != 0:
 		tgposmoving = f'\n\tSpeed: <b>{int(cur_spd)}m/s</b> | <b>{int(spdkmh)}km/h</b> | <b>{int(spdstr)}kn</b>\n\tCourse: <b>{int(cur_cse)}°</b>'
 		extdatstr = f'{csestr}/{spdstr}'
 	else:
@@ -654,7 +654,7 @@ async def send_position(ais, cfg, gps_data=None):
 		if kmhspd > sspd and kmhspd <= fspd:
 			symbt = '/'
 			symb = '>'
-		if kmhspd > 0 and kmhspd <= sspd:
+		if kmhspd != 0 and kmhspd <= sspd:
 			symbt = '/'
 			symb = '('
 	payload = f'/{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
