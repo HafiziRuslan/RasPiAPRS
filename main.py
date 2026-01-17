@@ -379,10 +379,8 @@ class TelegramLogger(object):
 				}
 				if self.topic_id:
 					msg_kwargs['message_thread_id'] = self.topic_id
-				botmsg = await tgbot.send_message(**msg_kwargs)
-				logging.info(
-					'Sent message to Telegram: %s/%s/%s', botmsg.chat_id, botmsg.message_thread_id, botmsg.message_id
-				)
+				msg = await tgbot.send_message(**msg_kwargs)
+				logging.info('Sent message to Telegram: %s/%s/%s', msg.chat_id, msg.message_thread_id, msg.message_id)
 				if lat != 0 and lon != 0:
 					sent_location = False
 					if os.path.exists(LOCATION_ID_FILE):
@@ -400,13 +398,8 @@ class TelegramLogger(object):
 								edit_kwargs['message_thread_id'] = self.loc_topic_id
 							elif self.topic_id:
 								edit_kwargs['message_thread_id'] = self.topic_id
-							boteditloc = await tgbot.edit_message_live_location(**edit_kwargs)
-							logging.info(
-								'Edited location in Telegram: %s/%s/%s',
-								boteditloc.chat_id,
-								boteditloc.message_thread_id,
-								boteditloc.message_id,
-							)
+							eloc = await tgbot.edit_message_live_location(**edit_kwargs)
+							logging.info('Edited location in Telegram: %s/%s/%s', eloc.chat_id, eloc.message_thread_id, eloc.message_id)
 							sent_location = True
 						except Exception as e:
 							if 'message is not modified' in str(e):
@@ -425,16 +418,11 @@ class TelegramLogger(object):
 							loc_kwargs['message_thread_id'] = self.loc_topic_id
 						elif self.topic_id:
 							loc_kwargs['message_thread_id'] = self.topic_id
-						botloc = await tgbot.send_location(**loc_kwargs)
-						logging.info(
-							'Sent location to Telegram: %s/%s/%s',
-							botloc.chat_id,
-							botloc.message_thread_id,
-							botloc.message_id,
-						)
+						loc = await tgbot.send_location(**loc_kwargs)
+						logging.info('Sent location to Telegram: %s/%s/%s', loc.chat_id, loc.message_thread_id, loc.message_id)
 						try:
 							with open(LOCATION_ID_FILE, 'w') as f:
-								f.write(str(botloc.message_id))
+								f.write(str(loc.message_id))
 						except Exception as e:
 							logging.error('Failed to save location ID: %s', e)
 			except Exception as e:
