@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-18T03:56:22+08:00)
+## [beta5] - (2026-01-18T04:05:00+08:00)
 
-- 104 commit(s) contributed to the release.
+- 105 commit(s) contributed to the release.
 - 17 day(s) passed between the first and last commit.
 - 17 day(s) passed between releases.
 
 ### 🚀 Features in beta5
 
+- [b421339](https://github.com/HafiziRuslan/RasPiAPRS/commit/b421339da4af507c315c94c48e643957c0ffa1c2) feat(runner): implement max retry limit for failures *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T04:05:00+08:00*
 - [16ec5b2](https://github.com/HafiziRuslan/RasPiAPRS/commit/16ec5b2a970782a519c63395c389fc5f582f0885) feat(telegram): implement live location updates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T22:36:02+08:00*
 - [ce357ee](https://github.com/HafiziRuslan/RasPiAPRS/commit/ce357ee4d68677d0c25709e0c63aafac81122161) feat(aprs): expose aprs symbol descriptions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T21:25:41+08:00*
 - [cb5db0a](https://github.com/HafiziRuslan/RasPiAPRS/commit/cb5db0afc382bc05187c9d99435563e4867116df) feat(scripts): enhance robustness and update mechanism *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T13:46:24+08:00*
@@ -805,4 +806,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-18T03:56:55.709015292+08:00
+generated using git-cliff on 2026-01-18T04:05:28.697815244+08:00
