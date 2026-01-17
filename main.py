@@ -14,6 +14,7 @@ import time
 from urllib.request import urlopen
 
 import aprslib
+import aprs_symbols
 import dotenv
 import humanize
 import psutil
@@ -81,6 +82,10 @@ class Config(object):
 		self.sleep = int(os.getenv('SLEEP', 600))
 		self.symbol_table = os.getenv('APRS_SYMBOL_TABLE', '/')
 		self.symbol = os.getenv('APRS_SYMBOL', 'n')
+		if self.symbol_table not in ['/', '\\']:
+			self.symbol_overlay = self.symbol_table
+		else:
+			self.symbol_overlay = None
 
 		lat = os.getenv('APRS_LATITUDE', 0)
 		lon = os.getenv('APRS_LONGITUDE', 0)
@@ -167,6 +172,14 @@ class Config(object):
 	@symbol_table.setter
 	def symbol_table(self, val):
 		self._symbol_table = str(val)
+
+	@property
+	def symbol_overlay(self):
+		return self._symbol_overlay
+
+	@symbol_overlay.setter
+	def symbol_overlay(self, val):
+		self._symbol_overlay = str(val) if val else None
 
 	@property
 	def server(self):
@@ -638,6 +651,8 @@ async def send_position(ais, cfg, gps_data=None):
 	timestamp = cur_time.strftime('%d%H%Mz') if cur_time is not None else ztime.strftime('%d%H%Mz')
 	symbt = cfg.symbol_table
 	symb = cfg.symbol
+	if cfg.symbol_overlay:
+		symbt = cfg.symbol_overlay
 	if int(cur_spd) > 0:
 		if os.getenv('SMARTBEACONING_ENABLE'):
 			sspd = int(os.getenv('SMARTBEACONING_SLOWSPEED'))
@@ -657,9 +672,13 @@ async def send_position(ais, cfg, gps_data=None):
 	else:
 		tgposmoving = ''
 		extdatstr = ''
+	lookup_table = symbt
+	if symbt not in ['/', '\\']:
+		lookup_table = '\\'
+	sym_desc = aprs_symbols.get_symbol_description(lookup_table, symb)
 	payload = f'/{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
 	posit = f'{cfg.call}>APP642:{payload}'
-	tgpos = f'<u>{cfg.call} Position</u>\n\nTime: <b>{timestamp}</b>\nSymbol: {symbt}{symb}\nPosition:\n\tLatitude: <b>{cur_lat}</b>\n\tLongitude: <b>{cur_lon}</b>\n\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\nComment: <b>{comment}</b>'
+	tgpos = f'<u>{cfg.call} Position</u>\n\nTime: <b>{timestamp}</b>\nSymbol: {symbt}{symb} ({sym_desc})\nPosition:\n\tLatitude: <b>{cur_lat}</b>\n\tLongitude: <b>{cur_lon}</b>\n\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\nComment: <b>{comment}</b>'
 	try:
 		ais.sendall(posit)
 		logging.info(posit)
