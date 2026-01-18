@@ -48,9 +48,7 @@ def configure_logging():
 
 	logger = logging.getLogger()
 	logger.setLevel(logging.INFO)
-	formatter = logging.Formatter(
-		'%(asctime)s | %(levelname)s | %(name)s.%(funcName)s | %(message)s', datefmt='%Y-%m-%dT%H:%M:%S'
-	)
+	formatter = logging.Formatter('%(asctime)s | %(levelname)s | %(name)s.%(funcName)s | %(message)s', datefmt='%Y-%m-%dT%H:%M:%S')
 
 	console_handler = logging.StreamHandler()
 	console_handler.setLevel(logging.ERROR)
@@ -66,9 +64,7 @@ def configure_logging():
 	}
 	for level, filename in levels.items():
 		try:
-			handler = logging.handlers.RotatingFileHandler(
-				os.path.join(log_dir, filename), maxBytes=5 * 1024 * 1024, backupCount=5
-			)
+			handler = logging.handlers.RotatingFileHandler(os.path.join(log_dir, filename), maxBytes=5 * 1024 * 1024, backupCount=5)
 			handler.setLevel(level)
 			handler.setFormatter(formatter)
 			logger.addHandler(handler)
@@ -309,14 +305,7 @@ class SmartBeaconing(object):
 		elif spd_kmh < self.slow_speed:
 			rate = self.slow_rate
 		else:
-			rate = int(
-				self.slow_rate
-				- (
-					(spd_kmh - self.slow_speed)
-					* (self.slow_rate - self.fast_rate)
-					/ (self.fast_speed - self.slow_speed)
-				)
-			)
+			rate = int(self.slow_rate - ((spd_kmh - self.slow_speed) * (self.slow_rate - self.fast_rate) / (self.fast_speed - self.slow_speed)))
 		turn_threshold = self.min_turn_angle + (self.turn_slope / (spd_kmh if spd_kmh > 0 else 1))
 		heading_change = abs(cur_cse - self.last_course)
 		if heading_change > 180:
@@ -394,59 +383,59 @@ class TelegramLogger(object):
 			return
 
 		try:
-				msg_kwargs = {
-					'chat_id': self.chat_id,
-					'text': tg_message,
-					'parse_mode': 'HTML',
-					'link_preview_options': {'is_disabled': True, 'prefer_small_media': True, 'show_above_text': True},
-				}
-				if self.topic_id:
-					msg_kwargs['message_thread_id'] = self.topic_id
-				msg = await self._call_with_retry(self.bot.send_message, **msg_kwargs)
-				logging.info('Sent message to Telegram: %s/%s/%s', msg.chat_id, msg.message_thread_id, msg.message_id)
-				if lat != 0 and lon != 0:
-					sent_location = False
-					if os.path.exists(LOCATION_ID_FILE):
-						try:
-							with open(LOCATION_ID_FILE, 'r') as f:
-								parts = f.read().split(':')
-								location_id = int(parts[0])
-								start_time = float(parts[1]) if len(parts) > 1 else time.time()
-							edit_kwargs = {
-								'chat_id': self.chat_id,
-								'message_id': location_id,
-								'latitude': lat,
-								'longitude': lon,
-								'heading': cse if cse > 0 else None,
-								'live_period': int(time.time() - start_time + 10800),
-							}
-							eloc = await self._call_with_retry(self.bot.edit_message_live_location, **edit_kwargs)
-							logging.info('Edited location in Telegram: %s/%s', eloc.chat_id, eloc.message_id)
-							sent_location = True
-						except Exception as e:
-							if 'message is not modified' in str(e):
-								sent_location = True
-							else:
-								logging.warning('Failed to edit location in Telegram: %s', e)
-					if not sent_location:
-						loc_kwargs = {
+			msg_kwargs = {
+				'chat_id': self.chat_id,
+				'text': tg_message,
+				'parse_mode': 'HTML',
+				'link_preview_options': {'is_disabled': True, 'prefer_small_media': True, 'show_above_text': True},
+			}
+			if self.topic_id:
+				msg_kwargs['message_thread_id'] = self.topic_id
+			msg = await self._call_with_retry(self.bot.send_message, **msg_kwargs)
+			logging.info('Sent message to Telegram: %s/%s/%s', msg.chat_id, msg.message_thread_id, msg.message_id)
+			if lat != 0 and lon != 0:
+				sent_location = False
+				if os.path.exists(LOCATION_ID_FILE):
+					try:
+						with open(LOCATION_ID_FILE, 'r') as f:
+							parts = f.read().split(':')
+							location_id = int(parts[0])
+							start_time = float(parts[1]) if len(parts) > 1 else time.time()
+						edit_kwargs = {
 							'chat_id': self.chat_id,
+							'message_id': location_id,
 							'latitude': lat,
 							'longitude': lon,
 							'heading': cse if cse > 0 else None,
-							'live_period': 10800,
+							'live_period': int(time.time() - start_time + 10800),
 						}
-						if self.loc_topic_id:
-							loc_kwargs['message_thread_id'] = self.loc_topic_id
-						elif self.topic_id:
-							loc_kwargs['message_thread_id'] = self.topic_id
-						loc = await self._call_with_retry(self.bot.send_location, **loc_kwargs)
-						logging.info('Sent location to Telegram: %s/%s/%s', loc.chat_id, loc.message_thread_id, loc.message_id)
-						try:
-							with open(LOCATION_ID_FILE, 'w') as f:
-								f.write(f'{loc.message_id}:{time.time()}')
-						except Exception as e:
-							logging.error('Failed to save location ID: %s', e)
+						eloc = await self._call_with_retry(self.bot.edit_message_live_location, **edit_kwargs)
+						logging.info('Edited location in Telegram: %s/%s', eloc.chat_id, eloc.message_id)
+						sent_location = True
+					except Exception as e:
+						if 'message is not modified' in str(e):
+							sent_location = True
+						else:
+							logging.warning('Failed to edit location in Telegram: %s', e)
+				if not sent_location:
+					loc_kwargs = {
+						'chat_id': self.chat_id,
+						'latitude': lat,
+						'longitude': lon,
+						'heading': cse if cse > 0 else None,
+						'live_period': 10800,
+					}
+					if self.loc_topic_id:
+						loc_kwargs['message_thread_id'] = self.loc_topic_id
+					elif self.topic_id:
+						loc_kwargs['message_thread_id'] = self.topic_id
+					loc = await self._call_with_retry(self.bot.send_location, **loc_kwargs)
+					logging.info('Sent location to Telegram: %s/%s/%s', loc.chat_id, loc.message_thread_id, loc.message_id)
+					try:
+						with open(LOCATION_ID_FILE, 'w') as f:
+							f.write(f'{loc.message_id}:{time.time()}')
+					except Exception as e:
+						logging.error('Failed to save location ID: %s', e)
 		except Exception as e:
 			logging.error('Failed to send message to Telegram: %s', e)
 

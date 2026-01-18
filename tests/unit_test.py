@@ -166,13 +166,7 @@ class TestSystemInfo(unittest.TestCase):
 
 		with patch('builtins.open', mock_open(read_data=mock_os_release)):
 			with patch('os.uname') as mock_uname:
-				mock_uname.return_value = MagicMock(
-					sysname='Linux',
-					release='5.10.17-v7+',
-					version='#1414 SMP Fri Apr 30 13:18:35 BST 2021',
-					machine='armv7l',
-				)
-
+				mock_uname.return_value = MagicMock(sysname='Linux', release='5.10.17-v7+', version='#1414 SMP Fri Apr 30 13:18:35 BST 2021', machine='armv7l')
 				info = main.get_osinfo()
 				self.assertIn('Debian 10.9 (buster)', info)
 				self.assertIn('[Linux 5.10.17-v7+#1414 armv7l]', info)

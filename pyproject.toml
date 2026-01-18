@@ -40,7 +40,7 @@ repository = "https://github.com/HafiziRuslan/raspiaprs"
 changelog = "https://github.com/HafiziRuslan/raspiaprs/blob/master/CHANGELOG.md"
 
 [tool.ruff]
-line-length = 120
+line-length = 150
 
 [tool.ruff.analyze]
 detect-string-imports = true
