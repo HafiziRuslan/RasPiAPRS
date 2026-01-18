@@ -990,7 +990,7 @@ async def main():
 				if os.getenv('GPSD_ENABLE'):
 					gps_data = await get_gpspos()
 					if os.getenv('SMARTBEACONING_ENABLE'):
-						if gps_data[4] == 0:
+						if gps_data[4] < 1:
 							if tmr % 900 == 1:
 								posUpdate = True
 						elif sb.should_send(gps_data):
