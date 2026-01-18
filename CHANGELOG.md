@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-18T10:00:32+08:00)
+## [beta5] - (2026-01-18T12:14:42+08:00)
 
-- 108 commit(s) contributed to the release.
+- 110 commit(s) contributed to the release.
 - 18 day(s) passed between the first and last commit.
 - 18 day(s) passed between releases.
 
 ### 🚀 Features in beta5
 
+- [4b36dc0](https://github.com/HafiziRuslan/RasPiAPRS/commit/4b36dc01c097a6a6b3a650df0ec9b51192af1cd6) feat(telegram): implement asynchronous logging and retry logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T11:40:58+08:00*
 - [b421339](https://github.com/HafiziRuslan/RasPiAPRS/commit/b421339da4af507c315c94c48e643957c0ffa1c2) feat(runner): implement max retry limit for failures *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T04:05:00+08:00*
 - [16ec5b2](https://github.com/HafiziRuslan/RasPiAPRS/commit/16ec5b2a970782a519c63395c389fc5f582f0885) feat(telegram): implement live location updates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T22:36:02+08:00*
 - [ce357ee](https://github.com/HafiziRuslan/RasPiAPRS/commit/ce357ee4d68677d0c25709e0c63aafac81122161) feat(aprs): expose aprs symbol descriptions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T21:25:41+08:00*
@@ -25,6 +26,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta5
 
+- [771093d](https://github.com/HafiziRuslan/RasPiAPRS/commit/771093d5aaa011c86f1727859a35e486fa3ecc7c) chore(config): increase ruff line length limit *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T12:14:42+08:00*
 - [5d24e4a](https://github.com/HafiziRuslan/RasPiAPRS/commit/5d24e4a609c9d0cc4fd35f3ab26dbb47dbd287c9) fix(gpsd): implement connection retry mechanism *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T10:00:32+08:00*
 - [a2f0fe2](https://github.com/HafiziRuslan/RasPiAPRS/commit/a2f0fe267abf98d8f7b59fbed50fe7b22365f7ba) fix(metrics): use 15 minute average for cpu load *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T00:12:45+08:00*
 - [2a59cc4](https://github.com/HafiziRuslan/RasPiAPRS/commit/2a59cc46e7c62ca4004983cb857f52ecb792cd65) fix(aprs_symbols): correct typo in rail symbol description *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T21:49:13+08:00*
@@ -809,4 +811,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-18T10:01:21.587022529+08:00
+generated using git-cliff on 2026-01-18T12:15:16.492715540+08:00
