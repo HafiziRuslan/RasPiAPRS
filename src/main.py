@@ -35,6 +35,7 @@ SEQUENCE_FILE = '/tmp/raspiaprs/sequence.tmp'
 TIMER_FILE = '/tmp/raspiaprs/timer.tmp'
 CACHE_FILE = '/tmp/raspiaprs/nominatim_cache.pkl'
 LOCATION_ID_FILE = '/tmp/raspiaprs/location_id.tmp'
+STATUS_FILE = '/tmp/raspiaprs/status.tmp'
 
 
 # Set up logging
@@ -854,9 +855,21 @@ async def send_status(ais, cfg, tg_logger):
 			sats += uSat
 		status += sats
 		tgstat += f'<b>{sats}</b>'
+	if os.path.exists(STATUS_FILE):
+		try:
+			with open(STATUS_FILE, 'r') as f:
+				if f.read() == status:
+					return
+		except (IOError, OSError):
+			pass
 	try:
 		ais.sendall(status)
 		logging.info(status)
+		try:
+			with open(STATUS_FILE, 'w') as f:
+				f.write(status)
+		except (IOError, OSError):
+			pass
 		await tg_logger.log(tgstat)
 	except APRSConnectionError as err:
 		logging.error('APRS connection error at status: %s', err)
