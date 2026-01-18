@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-18T09:43:02+08:00)
+## [beta5] - (2026-01-18T10:00:32+08:00)
 
-- 107 commit(s) contributed to the release.
+- 108 commit(s) contributed to the release.
 - 18 day(s) passed between the first and last commit.
 - 18 day(s) passed between releases.
 
@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta5
 
+- [5d24e4a](https://github.com/HafiziRuslan/RasPiAPRS/commit/5d24e4a609c9d0cc4fd35f3ab26dbb47dbd287c9) fix(gpsd): implement connection retry mechanism *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T10:00:32+08:00*
 - [a2f0fe2](https://github.com/HafiziRuslan/RasPiAPRS/commit/a2f0fe267abf98d8f7b59fbed50fe7b22365f7ba) fix(metrics): use 15 minute average for cpu load *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T00:12:45+08:00*
 - [2a59cc4](https://github.com/HafiziRuslan/RasPiAPRS/commit/2a59cc46e7c62ca4004983cb857f52ecb792cd65) fix(aprs_symbols): correct typo in rail symbol description *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T21:49:13+08:00*
 - [32e8a7e](https://github.com/HafiziRuslan/RasPiAPRS/commit/32e8a7e94acb0ac6e6e0c240d052abd1ef6b653f) fix(aprs): handle symbols with parenthetical descriptors *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T21:43:00+08:00*
@@ -808,4 +809,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-18T09:43:38.879749997+08:00
+generated using git-cliff on 2026-01-18T10:01:21.587022529+08:00
