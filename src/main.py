@@ -86,7 +86,9 @@ class Config(object):
 		call = os.getenv('APRS_CALL', 'N0CALL')
 		ssid = os.getenv('APRS_SSID', '0')
 		self.call = call if ssid == '0' else f'{call}-{ssid}'
+
 		self.sleep = int(os.getenv('SLEEP', 600))
+
 		self.symbol_table = os.getenv('APRS_SYMBOL_TABLE', '/')
 		self.symbol = os.getenv('APRS_SYMBOL', 'n')
 		if self.symbol_table not in ['/', '\\']:
@@ -97,15 +99,12 @@ class Config(object):
 		lat = os.getenv('APRS_LATITUDE', 0)
 		lon = os.getenv('APRS_LONGITUDE', 0)
 		alt = os.getenv('APRS_ALTITUDE', 0)
-
-		if os.getenv('GPSD_ENABLE'):
-			self.timestamp, self.latitude, self.longitude, self.altitude, self.speed, self.course = get_gpspos()
+		if lat == 0 and lon == 0:
+			self.latitude, self.longitude = get_coordinates()
+			self.altitude = alt
 		else:
-			if lat == 0 and lon == 0:
-				self.latitude, self.longitude = get_coordinates()
-				self.altitude = alt
-			else:
-				self.latitude, self.longitude, self.altitude = lat, lon, alt
+			self.latitude, self.longitude, self.altitude = lat, lon, alt
+
 		self.server = os.getenv('APRSIS_SERVER', 'rotate.aprs2.net')
 		self.port = int(os.getenv('APRSIS_PORT', 14580))
 		self.filter = os.getenv('APRSIS_FILTER', 'm/10')
@@ -118,9 +117,7 @@ class Config(object):
 			self.passcode = aprslib.passcode(call)
 
 	def __repr__(self):
-		return ('<Config> call: {0.call}, passcode: {0.passcode} - {0.latitude}/{0.longitude}/{0.altitude}').format(
-			self
-		)
+		return ('<Config> call: {0.call}, passcode: {0.passcode} - {0.latitude}/{0.longitude}/{0.altitude}').format(self)
 
 	@property
 	def call(self):
@@ -344,6 +341,7 @@ class TelegramLogger(object):
 
 	def __init__(self):
 		self.enabled = os.getenv('TELEGRAM_ENABLE')
+		self.bot = None
 		if self.enabled:
 			self.token = os.getenv('TELEGRAM_TOKEN')
 			self.chat_id = os.getenv('TELEGRAM_CHAT_ID')
@@ -352,6 +350,8 @@ class TelegramLogger(object):
 			if not self.token or not self.chat_id:
 				logging.error('Telegram token or chat ID is missing. Disabling Telegram logging.')
 				self.enabled = False
+			else:
+				self.bot = telegram.Bot(self.token)
 			if self.topic_id:
 				try:
 					self.topic_id = int(self.topic_id)
@@ -365,14 +365,35 @@ class TelegramLogger(object):
 					logging.error('Invalid TELEGRAM_LOC_TOPIC_ID. It should be an integer.')
 					self.loc_topic_id = None
 
+	async def __aenter__(self):
+		if self.bot:
+			await self.bot.initialize()
+		return self
+
+	async def __aexit__(self, exc_type, exc_val, exc_tb):
+		if self.bot:
+			await self.bot.shutdown()
+
+	async def _call_with_retry(self, func, *args, **kwargs):
+		"""Retry Telegram API calls with exponential backoff."""
+		max_retries = 3
+		delay = 1
+		for attempt in range(max_retries):
+			try:
+				return await func(*args, **kwargs)
+			except (telegram.error.NetworkError, telegram.error.TimedOut) as e:
+				if attempt == max_retries - 1:
+					raise e
+				logging.warning('Telegram API error (attempt %d/%d): %s. Retrying in %ds...', attempt + 1, max_retries, e, delay)
+				await asyncio.sleep(delay)
+				delay *= 2
+
 	async def log(self, tg_message: str, lat: float = 0, lon: float = 0, cse: float = 0):
 		"""Send log message and optionally location to Telegram channel."""
-		if not self.enabled:
+		if not self.enabled or not self.bot:
 			return
 
-		tgbot = telegram.Bot(self.token)
-		async with tgbot:
-			try:
+		try:
 				msg_kwargs = {
 					'chat_id': self.chat_id,
 					'text': tg_message,
@@ -381,23 +402,25 @@ class TelegramLogger(object):
 				}
 				if self.topic_id:
 					msg_kwargs['message_thread_id'] = self.topic_id
-				msg = await tgbot.send_message(**msg_kwargs)
+				msg = await self._call_with_retry(self.bot.send_message, **msg_kwargs)
 				logging.info('Sent message to Telegram: %s/%s/%s', msg.chat_id, msg.message_thread_id, msg.message_id)
 				if lat != 0 and lon != 0:
 					sent_location = False
 					if os.path.exists(LOCATION_ID_FILE):
 						try:
 							with open(LOCATION_ID_FILE, 'r') as f:
-								location_id = int(f.read())
+								parts = f.read().split(':')
+								location_id = int(parts[0])
+								start_time = float(parts[1]) if len(parts) > 1 else time.time()
 							edit_kwargs = {
 								'chat_id': self.chat_id,
 								'message_id': location_id,
 								'latitude': lat,
 								'longitude': lon,
 								'heading': cse if cse > 0 else None,
-								'live_period': 10800,
+								'live_period': int(time.time() - start_time + 10800),
 							}
-							eloc = await tgbot.edit_message_live_location(**edit_kwargs)
+							eloc = await self._call_with_retry(self.bot.edit_message_live_location, **edit_kwargs)
 							logging.info('Edited location in Telegram: %s/%s', eloc.chat_id, eloc.message_id)
 							sent_location = True
 						except Exception as e:
@@ -417,52 +440,92 @@ class TelegramLogger(object):
 							loc_kwargs['message_thread_id'] = self.loc_topic_id
 						elif self.topic_id:
 							loc_kwargs['message_thread_id'] = self.topic_id
-						loc = await tgbot.send_location(**loc_kwargs)
+						loc = await self._call_with_retry(self.bot.send_location, **loc_kwargs)
 						logging.info('Sent location to Telegram: %s/%s/%s', loc.chat_id, loc.message_thread_id, loc.message_id)
 						try:
 							with open(LOCATION_ID_FILE, 'w') as f:
-								f.write(str(loc.message_id))
+								f.write(f'{loc.message_id}:{time.time()}')
 						except Exception as e:
 							logging.error('Failed to save location ID: %s', e)
+		except Exception as e:
+			logging.error('Failed to send message to Telegram: %s', e)
+
+	async def stop_location(self):
+		"""Stop live location sharing."""
+		if not self.enabled or not self.bot:
+			return
+
+		if os.path.exists(LOCATION_ID_FILE):
+			try:
+				with open(LOCATION_ID_FILE, 'r') as f:
+					parts = f.read().split(':')
+					location_id = int(parts[0])
+
+				try:
+					await self._call_with_retry(self.bot.stop_message_live_location, chat_id=self.chat_id, message_id=location_id)
+					logging.info('Stopped live location in Telegram: %s/%s', self.chat_id, location_id)
+				except Exception as e:
+					logging.warning('Failed to stop live location in Telegram: %s', e)
 			except Exception as e:
-				logging.error('Failed to send message to Telegram: %s', e)
+				logging.error('Error stopping live location: %s', e)
+			finally:
+				if os.path.exists(LOCATION_ID_FILE):
+					try:
+						os.remove(LOCATION_ID_FILE)
+					except OSError:
+						pass
 
 
-def get_gpspos():
+async def get_gpspos():
 	"""Get position from GPSD."""
 	if os.getenv('GPSD_ENABLE'):
 		timestamp = dt.datetime.now(dt.timezone.utc)
 		logging.debug('Trying to figure out position using GPS')
 		max_retries = 5
 		retry_delay = 1
-		for attempt in range(max_retries):
+		loop = asyncio.get_running_loop()
+
+		def _gps_worker():
 			try:
 				with GPSDClient(os.getenv('GPSD_HOST', 'localhost'), int(os.getenv('GPSD_PORT', 2947)), 15) as client:
 					for result in client.dict_stream(convert_datetime=True, filter=['TPV']):
-						if result['class'] == 'TPV' and (result['mode'] != 0 or result['mode'] != 1):
-							logging.debug('GPS fix acquired')
-							utc = result.get('time', timestamp)
-							lat = result.get('lat', 0)
-							lon = result.get('lon', 0)
-							alt = result.get('alt', 0)
-							spd = result.get('speed', 0)
-							cse = result.get('magtrack', 0) or result.get('track', 0)
-							if lat != 0 and lon != 0 and alt != 0:
-								logging.debug('%s | GPS Position: %s, %s, %s, %s, %s', utc, lat, lon, alt, spd, cse)
-								set_key('.env', 'APRS_LATITUDE', lat, quote_mode='never')
-								set_key('.env', 'APRS_LONGITUDE', lon, quote_mode='never')
-								set_key('.env', 'APRS_ALTITUDE', alt, quote_mode='never')
-								Config.latitude = lat
-								Config.longitude = lon
-								Config.altitude = alt
-								return utc, lat, lon, alt, spd, cse
+						if result['class'] == 'TPV' and (result.get('mode', 0) != 0 or result.get('mode', 0) != 1):
+							return result
 						else:
-							logging.warning('GPS Position unavailable')
-							return (timestamp, 0, 0, 0, 0, 0)
+							return None
+			except Exception as e:
+				return e
+
+		for attempt in range(max_retries):
+			try:
+				result = await loop.run_in_executor(None, _gps_worker)
+				if isinstance(result, Exception):
+					raise result
+
+				if result:
+					logging.debug('GPS fix acquired')
+					utc = result.get('time', timestamp)
+					lat = result.get('lat', 0)
+					lon = result.get('lon', 0)
+					alt = result.get('alt', 0)
+					spd = result.get('speed', 0)
+					cse = result.get('magtrack', 0) or result.get('track', 0)
+					if lat != 0 and lon != 0 and alt != 0:
+						logging.debug('%s | GPS Position: %s, %s, %s, %s, %s', utc, lat, lon, alt, spd, cse)
+						set_key('.env', 'APRS_LATITUDE', lat, quote_mode='never')
+						set_key('.env', 'APRS_LONGITUDE', lon, quote_mode='never')
+						set_key('.env', 'APRS_ALTITUDE', alt, quote_mode='never')
+						Config.latitude = lat
+						Config.longitude = lon
+						Config.altitude = alt
+						return utc, lat, lon, alt, spd, cse
+				else:
+					logging.warning('GPS Position unavailable')
+					return (timestamp, 0, 0, 0, 0, 0)
 			except OSError as e:
 				logging.warning('GPSD connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
 				if attempt < max_retries - 1:
-					time.sleep(retry_delay)
+					await asyncio.sleep(retry_delay)
 					retry_delay *= 2
 			except Exception as e:
 				logging.error('Error getting GPS data: %s', e)
@@ -548,30 +611,45 @@ def get_add_from_pos(lat, lon):
 		return None
 
 
-def get_gpssat():
+async def get_gpssat():
 	"""Get satellite from GPSD."""
 	if os.getenv('GPSD_ENABLE'):
 		timestamp = dt.datetime.now(dt.timezone.utc)
 		logging.debug('Trying to figure out satellite using GPS')
 		max_retries = 5
 		retry_delay = 1
-		for attempt in range(max_retries):
+		loop = asyncio.get_running_loop()
+
+		def _gps_worker():
 			try:
 				with GPSDClient(os.getenv('GPSD_HOST', 'localhost'), int(os.getenv('GPSD_PORT', 2947)), 15) as client:
 					for result in client.dict_stream(convert_datetime=True, filter=['SKY']):
 						if result['class'] == 'SKY':
-							logging.debug('GPS Satellite acquired')
-							utc = result.get('time', timestamp)
-							uSat = result.get('uSat', 0)
-							nSat = result.get('nSat', 0)
-							return utc, uSat, nSat
+							return result
 						else:
-							logging.warning('GPS Satellite unavailable')
-							return (timestamp, 0, 0)
+							return None
+			except Exception as e:
+				return e
+
+		for attempt in range(max_retries):
+			try:
+				result = await loop.run_in_executor(None, _gps_worker)
+				if isinstance(result, Exception):
+					raise result
+
+				if result:
+					logging.debug('GPS Satellite acquired')
+					utc = result.get('time', timestamp)
+					uSat = result.get('uSat', 0)
+					nSat = result.get('nSat', 0)
+					return utc, uSat, nSat
+				else:
+					logging.warning('GPS Satellite unavailable')
+					return (timestamp, 0, 0)
 			except OSError as e:
 				logging.warning('GPSD connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
 				if attempt < max_retries - 1:
-					time.sleep(retry_delay)
+					await asyncio.sleep(retry_delay)
 					retry_delay *= 2
 			except Exception as e:
 				logging.error('Error getting GPS data: %s', e)
@@ -720,7 +798,7 @@ async def send_position(ais, cfg, tg_logger, gps_data=None):
 	if gps_data:
 		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = gps_data
 	elif os.getenv('GPSD_ENABLE'):
-		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = get_gpspos()
+		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = await get_gpspos()
 	else:
 		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = None, 0, 0, 0, 0, 0
 	if os.getenv('GPSD_ENABLE') or gps_data:
@@ -782,11 +860,12 @@ async def send_position(ais, cfg, tg_logger, gps_data=None):
 		await send_status(ais, cfg, tg_logger)
 	except APRSConnectionError as err:
 		logging.error('APRS connection error at position: %s', err)
-		ais = ais_connect(cfg)
-		await send_position(ais, cfg, tg_logger, gps_data)
+		ais = await ais_connect(cfg)
+		ais = await send_position(ais, cfg, tg_logger, gps_data)
+	return ais
 
 
-def send_header(ais, cfg):
+async def send_header(ais, cfg):
 	"""Send APRS header information to APRS-IS."""
 	parm = '{0}>APP642::{0:9s}:PARM.CPUTemp,CPULoad,RAMUsed,DiskUsed'.format(cfg.call)
 	unit = '{0}>APP642::{0:9s}:UNIT.deg.C,pcnt,GB,GB'.format(cfg.call)
@@ -801,8 +880,9 @@ def send_header(ais, cfg):
 		ais.sendall(eqns)
 	except APRSConnectionError as err:
 		logging.error('APRS connection error at header: %s', err)
-		ais = ais_connect(cfg)
-		send_header(ais, cfg)
+		ais = await ais_connect(cfg)
+		ais = await send_header(ais, cfg)
+	return ais
 
 
 async def send_telemetry(ais, cfg, tg_logger):
@@ -817,7 +897,7 @@ async def send_telemetry(ais, cfg, tg_logger):
 	telem = '{}>APP642:T#{:03d},{:d},{:d},{:d},{:d}'.format(cfg.call, seq, temp, cpuload, telemmemused, telemdiskused)
 	tgtel = f'<u>{cfg.call} Telemetry</u>\n\nSequence: <b>#{seq}</b>\nCPU Temp: <b>{temp / 10:.1f} °C</b>\nCPU Load: <b>{cpuload / 1000:.1f}%</b>\nRAM Used: <b>{humanize.naturalsize(memused, binary=True)}</b>\nDisk Used: <b>{humanize.naturalsize(diskused, binary=True)}</b>'
 	if os.getenv('GPSD_ENABLE'):
-		_, uSat, nSat = get_gpssat()
+		_, uSat, nSat = await get_gpssat()
 		telem += ',{:d}'.format(uSat)
 		tgtel += f'\nGPS Lock: <b>{uSat}</b>\nGPS Seen: <b>{nSat}</b>'
 	try:
@@ -827,14 +907,15 @@ async def send_telemetry(ais, cfg, tg_logger):
 		await send_status(ais, cfg, tg_logger)
 	except APRSConnectionError as err:
 		logging.error('APRS connection error at telemetry: %s', err)
-		ais = ais_connect(cfg)
-		await send_telemetry(ais, cfg, tg_logger)
+		ais = await ais_connect(cfg)
+		ais = await send_telemetry(ais, cfg, tg_logger)
+	return ais
 
 
 async def send_status(ais, cfg, tg_logger):
 	"""Send APRS status information to APRS-IS."""
 	if os.getenv('GPSD_ENABLE'):
-		_, lat, lon, *_ = get_gpspos()
+		_, lat, lon, *_ = await get_gpspos()
 		if not (isinstance(lat, (int, float)) and isinstance(lon, (int, float)) and lat != 0 and lon != 0):
 			lat, lon = cfg.latitude, cfg.longitude
 	else:
@@ -855,7 +936,7 @@ async def send_status(ais, cfg, tg_logger):
 	tgstat = f'<u>{cfg.call} Status</u>\n<b>{statustext}</b>'
 	if os.getenv('GPSD_ENABLE'):
 		sats = ', gps: '
-		timez, uSat, nSat = get_gpssat()
+		timez, uSat, nSat = await get_gpssat()
 		if uSat != 0:
 			timestamp = timez if timez is not None else ztime.strftime('%d%H%Mz')
 			sats += f'{uSat}/{nSat}'
@@ -883,20 +964,20 @@ async def send_status(ais, cfg, tg_logger):
 		logging.error('APRS connection error at status: %s', err)
 
 
-def ais_connect(cfg):
+async def ais_connect(cfg):
 	"""Establish connection to APRS-IS with retries."""
 	logging.info('Connecting to APRS-IS server %s:%d as %s', cfg.server, cfg.port, cfg.call)
 	ais = aprslib.IS(cfg.call, passwd=cfg.passcode, host=cfg.server, port=cfg.port)
-	# if ais._connected is False:
+	loop = asyncio.get_running_loop()
 	for _ in range(5):
 		try:
-			ais.connect()
+			await loop.run_in_executor(None, ais.connect)
 		except APRSConnectionError as err:
 			logging.warning('APRS connection error: %s', err)
-			time.sleep(20)
+			await asyncio.sleep(20)
 			continue
 		else:
-			# ais.set_filter(cfg.filter)
+			ais.set_filter(cfg.filter)
 			logging.info('Connected to APRS-IS server %s:%d as %s', cfg.server, cfg.port, cfg.call)
 			return ais
 	logging.error('Connection error, exiting')
@@ -906,30 +987,37 @@ def ais_connect(cfg):
 async def main():
 	"""Main function to run the APRS reporting loop."""
 	cfg = Config()
-	ais = ais_connect(cfg)
+	if os.getenv('GPSD_ENABLE'):
+		gps_data = await get_gpspos()
+		cfg.timestamp, cfg.latitude, cfg.longitude, cfg.altitude, cfg.speed, cfg.course = gps_data
+	ais = await ais_connect(cfg)
 	tg_logger = TelegramLogger()
 	sb = SmartBeaconing()
-	for tmr in Timer():
-		gps_data = None
-		posUpdate = False
-		if os.getenv('GPSD_ENABLE'):
-			gps_data = get_gpspos()
-			if os.getenv('SMARTBEACONING_ENABLE'):
-				if gps_data[4] == 0:
-					if tmr % 900 == 1:
+	async with tg_logger:
+		try:
+			for tmr in Timer():
+				gps_data = None
+				posUpdate = False
+				if os.getenv('GPSD_ENABLE'):
+					gps_data = await get_gpspos()
+					if os.getenv('SMARTBEACONING_ENABLE'):
+						if gps_data[4] == 0:
+							if tmr % 900 == 1:
+								posUpdate = True
+						elif sb.should_send(gps_data):
+							posUpdate = True
+				else:
+					if tmr % 1800 == 1:
 						posUpdate = True
-				elif sb.should_send(gps_data):
-					posUpdate = True
-		else:
-			if tmr % 1800 == 1:
-				posUpdate = True
-		if posUpdate:
-			await send_position(ais, cfg, tg_logger, gps_data=gps_data)
-		if tmr % 3000 == 1:
-			send_header(ais, cfg)
-		if tmr % cfg.sleep == 1:
-			await send_telemetry(ais, cfg, tg_logger)
-		time.sleep(1)
+				if posUpdate:
+					ais = await send_position(ais, cfg, tg_logger, gps_data=gps_data)
+				if tmr % 3000 == 1:
+					ais = await send_header(ais, cfg)
+				if tmr % cfg.sleep == 1:
+					ais = await send_telemetry(ais, cfg, tg_logger)
+				await asyncio.sleep(1)
+		finally:
+			await tg_logger.stop_location()
 
 
 if __name__ == '__main__':
