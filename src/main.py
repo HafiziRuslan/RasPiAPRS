@@ -314,10 +314,10 @@ class SmartBeaconing(object):
 		time_since_last = time.time() - self.last_beacon_time
 		should_send = False
 		if turn_detected and time_since_last > self.min_turn_time:
-			logging.debug('SmartBeaconing: Turn detected (Head diff: %d, Thresh: %d)', heading_change, turn_threshold)
+			logging.debug('SmartBeaconing: Turn detected (Heading difference: %d, Threshold: %d)', heading_change, turn_threshold)
 			should_send = True
 		elif time_since_last > rate:
-			logging.debug('SmartBeaconing: Rate expired (Rate: %d, Spd: %d)', rate, spd_kmh)
+			logging.debug('SmartBeaconing: Rate expired (Rate: %d, Speed: %d)', rate, spd_kmh)
 			should_send = True
 		if should_send:
 			self.last_beacon_time = time.time()
