@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-18T12:14:42+08:00)
+## [beta5] - (2026-01-18T13:39:36+08:00)
 
-- 110 commit(s) contributed to the release.
+- 112 commit(s) contributed to the release.
 - 18 day(s) passed between the first and last commit.
 - 18 day(s) passed between releases.
 
@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta5
 
+- [1183822](https://github.com/HafiziRuslan/RasPiAPRS/commit/1183822e068664ac31c99e689b4823abcc91d9bc) fix(gps): improve stationary detection logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T13:37:15+08:00*
 - [771093d](https://github.com/HafiziRuslan/RasPiAPRS/commit/771093d5aaa011c86f1727859a35e486fa3ecc7c) chore(config): increase ruff line length limit *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T12:14:42+08:00*
 - [5d24e4a](https://github.com/HafiziRuslan/RasPiAPRS/commit/5d24e4a609c9d0cc4fd35f3ab26dbb47dbd287c9) fix(gpsd): implement connection retry mechanism *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T10:00:32+08:00*
 - [a2f0fe2](https://github.com/HafiziRuslan/RasPiAPRS/commit/a2f0fe267abf98d8f7b59fbed50fe7b22365f7ba) fix(metrics): use 15 minute average for cpu load *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T00:12:45+08:00*
@@ -59,6 +60,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta5
 
+- [ce7e411](https://github.com/HafiziRuslan/RasPiAPRS/commit/ce7e411d6b4a5fd87d54102597109b75ede12f59) refactor(beacon): improve log message clarity *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T13:39:36+08:00*
 - [698e357](https://github.com/HafiziRuslan/RasPiAPRS/commit/698e357313df811a81e8b5d725bff1d0f886c9ab) refactor(telegram): adjust live location period *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T09:43:02+08:00*
 - [53e343b](https://github.com/HafiziRuslan/RasPiAPRS/commit/53e343bed081ca93b1d3b4537d370360f7a158df) refactor(structure): move core files into src directory *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T03:56:22+08:00*
 - [fbab8eb](https://github.com/HafiziRuslan/RasPiAPRS/commit/fbab8eb1fcc8aef9473e149224754324f5d19705) refactor(symbols): move symbol handler into modules directory *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T03:32:42+08:00*
@@ -811,4 +813,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-18T12:15:16.492715540+08:00
+generated using git-cliff on 2026-01-18T13:41:24.611160557+08:00
