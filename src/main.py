@@ -433,32 +433,41 @@ def get_gpspos():
 	if os.getenv('GPSD_ENABLE'):
 		timestamp = dt.datetime.now(dt.timezone.utc)
 		logging.debug('Trying to figure out position using GPS')
-		try:
-			with GPSDClient(os.getenv('GPSD_HOST', 'localhost'), int(os.getenv('GPSD_PORT', 2947)), 15) as client:
-				for result in client.dict_stream(convert_datetime=True, filter=['TPV']):
-					if result['class'] == 'TPV' and (result['mode'] != 0 or result['mode'] != 1):
-						logging.debug('GPS fix acquired')
-						utc = result.get('time', timestamp)
-						lat = result.get('lat', 0)
-						lon = result.get('lon', 0)
-						alt = result.get('alt', 0)
-						spd = result.get('speed', 0)
-						cse = result.get('magtrack', 0) or result.get('track', 0)
-						if lat != 0 and lon != 0 and alt != 0:
-							logging.debug('%s | GPS Position: %s, %s, %s, %s, %s', utc, lat, lon, alt, spd, cse)
-							set_key('.env', 'APRS_LATITUDE', lat, quote_mode='never')
-							set_key('.env', 'APRS_LONGITUDE', lon, quote_mode='never')
-							set_key('.env', 'APRS_ALTITUDE', alt, quote_mode='never')
-							Config.latitude = lat
-							Config.longitude = lon
-							Config.altitude = alt
-							return utc, lat, lon, alt, spd, cse
-					else:
-						logging.warning('GPS Position unavailable')
-						return (timestamp, 0, 0, 0, 0, 0)
-		except Exception as e:
-			logging.error('Error getting GPS data: %s', e)
-			return (timestamp, 0, 0, 0, 0, 0)
+		max_retries = 5
+		retry_delay = 1
+		for attempt in range(max_retries):
+			try:
+				with GPSDClient(os.getenv('GPSD_HOST', 'localhost'), int(os.getenv('GPSD_PORT', 2947)), 15) as client:
+					for result in client.dict_stream(convert_datetime=True, filter=['TPV']):
+						if result['class'] == 'TPV' and (result['mode'] != 0 or result['mode'] != 1):
+							logging.debug('GPS fix acquired')
+							utc = result.get('time', timestamp)
+							lat = result.get('lat', 0)
+							lon = result.get('lon', 0)
+							alt = result.get('alt', 0)
+							spd = result.get('speed', 0)
+							cse = result.get('magtrack', 0) or result.get('track', 0)
+							if lat != 0 and lon != 0 and alt != 0:
+								logging.debug('%s | GPS Position: %s, %s, %s, %s, %s', utc, lat, lon, alt, spd, cse)
+								set_key('.env', 'APRS_LATITUDE', lat, quote_mode='never')
+								set_key('.env', 'APRS_LONGITUDE', lon, quote_mode='never')
+								set_key('.env', 'APRS_ALTITUDE', alt, quote_mode='never')
+								Config.latitude = lat
+								Config.longitude = lon
+								Config.altitude = alt
+								return utc, lat, lon, alt, spd, cse
+						else:
+							logging.warning('GPS Position unavailable')
+							return (timestamp, 0, 0, 0, 0, 0)
+			except OSError as e:
+				logging.warning('GPSD connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
+				if attempt < max_retries - 1:
+					time.sleep(retry_delay)
+					retry_delay *= 2
+			except Exception as e:
+				logging.error('Error getting GPS data: %s', e)
+				return (timestamp, 0, 0, 0, 0, 0)
+		return (timestamp, 0, 0, 0, 0, 0)
 
 
 def _mps_to_kmh(spd):
@@ -544,21 +553,30 @@ def get_gpssat():
 	if os.getenv('GPSD_ENABLE'):
 		timestamp = dt.datetime.now(dt.timezone.utc)
 		logging.debug('Trying to figure out satellite using GPS')
-		try:
-			with GPSDClient(os.getenv('GPSD_HOST', 'localhost'), int(os.getenv('GPSD_PORT', 2947)), 15) as client:
-				for result in client.dict_stream(convert_datetime=True, filter=['SKY']):
-					if result['class'] == 'SKY':
-						logging.debug('GPS Satellite acquired')
-						utc = result.get('time', timestamp)
-						uSat = result.get('uSat', 0)
-						nSat = result.get('nSat', 0)
-						return utc, uSat, nSat
-					else:
-						logging.warning('GPS Satellite unavailable')
-						return (timestamp, 0, 0)
-		except Exception as e:
-			logging.error('Error getting GPS data: %s', e)
-			return (timestamp, 0, 0)
+		max_retries = 5
+		retry_delay = 1
+		for attempt in range(max_retries):
+			try:
+				with GPSDClient(os.getenv('GPSD_HOST', 'localhost'), int(os.getenv('GPSD_PORT', 2947)), 15) as client:
+					for result in client.dict_stream(convert_datetime=True, filter=['SKY']):
+						if result['class'] == 'SKY':
+							logging.debug('GPS Satellite acquired')
+							utc = result.get('time', timestamp)
+							uSat = result.get('uSat', 0)
+							nSat = result.get('nSat', 0)
+							return utc, uSat, nSat
+						else:
+							logging.warning('GPS Satellite unavailable')
+							return (timestamp, 0, 0)
+			except OSError as e:
+				logging.warning('GPSD connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
+				if attempt < max_retries - 1:
+					time.sleep(retry_delay)
+					retry_delay *= 2
+			except Exception as e:
+				logging.error('Error getting GPS data: %s', e)
+				return (timestamp, 0, 0)
+		return (timestamp, 0, 0)
 
 
 def get_cpuload():
