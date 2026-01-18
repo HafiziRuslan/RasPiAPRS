@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-18T04:05:00+08:00)
+## [beta5] - (2026-01-18T08:43:21+08:00)
 
-- 105 commit(s) contributed to the release.
-- 17 day(s) passed between the first and last commit.
-- 17 day(s) passed between releases.
+- 106 commit(s) contributed to the release.
+- 18 day(s) passed between the first and last commit.
+- 18 day(s) passed between releases.
 
 ### 🚀 Features in beta5
 
@@ -95,6 +95,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚡ Performance in beta5
 
+- [18256f6](https://github.com/HafiziRuslan/RasPiAPRS/commit/18256f6f5412c003ada9317a8b104ebd60acf9c3) perf(status): prevent sending duplicate status updates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T08:43:21+08:00*
 - [2887b51](https://github.com/HafiziRuslan/RasPiAPRS/commit/2887b51483a26c4dc701797c08653c0d1708ebe1) perf(loop): initialize beaconing components once *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T23:24:07+08:00*
 - [9196644](https://github.com/HafiziRuslan/RasPiAPRS/commit/91966444b616cdca4d1916d3188e1d241c43917d) perf(runtime): decrease script restart delay *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-02T01:45:15+08:00*
 
@@ -806,4 +807,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-18T04:05:28.697815244+08:00
+generated using git-cliff on 2026-01-18T08:46:54.769914010+08:00
