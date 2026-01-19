@@ -19,9 +19,15 @@ git clone https://github.com/HafiziRuslan/RasPiAPRS.git ./raspiaprs
 cd raspiaprs
 ```
 
+Mirror Repositories (delayed daily update):
+
+- GitLab: <https://gitlab.com/hafiziruslan/RasPiAPRS>
+- Codeberg: <https://codeberg.org/hafiziruslan/RasPiAPRS>
+- Gitea: <https://gitea.com/HafiziRuslan/RasPiAPRS>
+
 ## Configurations
 
-Copy the file `.env.SAMPLE` into `.env`, and edit the informations using your favorite editor.
+Copy the file `default.env` into `.env`, and edit the informations using your favorite editor.
 
 ```bash
 cp default.env .env
