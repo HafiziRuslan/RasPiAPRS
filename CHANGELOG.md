@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-19T14:34:55+08:00)
+## [beta5] - (2026-01-20T02:35:07+08:00)
 
-- 121 commit(s) contributed to the release.
+- 122 commit(s) contributed to the release.
 - 19 day(s) passed between the first and last commit.
 - 19 day(s) passed between releases.
 
 ### 🚀 Features in beta5
 
+- [db3c104](https://github.com/HafiziRuslan/RasPiAPRS/commit/db3c104d81743875cdf555aa3cd36eac6c759c67) feat(sync): rename workflow file and adjust trigger *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T02:35:07+08:00*
 - [1f1b04d](https://github.com/HafiziRuslan/RasPiAPRS/commit/1f1b04dd8c3bb472b23212545924a4426c2179cf) feat(header): add tg_logger support to header sending *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-19T12:05:57+08:00*
 - [460ef5e](https://github.com/HafiziRuslan/RasPiAPRS/commit/460ef5e0d0fa3c6552f540cdeb530f33d13f35d5) feat(main): update APRS header labels for clarity *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-19T11:26:02+08:00*
 - [4b36dc0](https://github.com/HafiziRuslan/RasPiAPRS/commit/4b36dc01c097a6a6b3a650df0ec9b51192af1cd6) feat(telegram): implement asynchronous logging and retry logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T11:40:58+08:00*
@@ -822,4 +823,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-19T14:35:27.568575353+08:00
+generated using git-cliff on 2026-01-20T02:35:36.921727330+08:00
