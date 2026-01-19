@@ -860,13 +860,17 @@ async def send_header(ais, cfg, tg_logger):
 	parm = f'{caller}PARM.CPUTemp,CPULoad,RAMUsed,DiskUsed'
 	unit = f'{caller}UNIT.deg.C,%,GB,GB'
 	eqns = f'{caller}EQNS.0,0.1,0,0,0.001,0,0,0.001,0,0,0.001,0'
+
+	def subfield(text):
+		return f'{text.split(":")[-1].split(".")[1]}'
+
 	try:
 		if os.getenv('GPSD_ENABLE'):
 			parm += ',GPSUsed'
 			unit += ',sats'
 			eqns += ',0,1,0'
 		head = f'{parm}\r\n{unit}\r\n{eqns}'
-		tghead = f'<u>{cfg.call} Header</u>\n\nParameters: <b>{parm.split(":")[-1].split(".")[1]}</b>\nUnits: <b>{unit.split(":")[-1].split(".")[1]}</b>\nEquations: <b>{eqns.split(":")[-1].split(".")[1]}</b>\n\nValue: <b>[a,b,c] = [a × v²] + [b × v] + [c]</b>'
+		tghead = f'<u>{cfg.call} Header</u>\n\nParameters: <b>{subfield(parm)}</b>\nUnits: <b>{subfield(unit)}</b>\nEquations: <b>{subfield(eqns)}</b>\n\nValue: <code>[a,b,c] = [a × v²] + [b × v] + [c]</code>'
 		ais.sendall(head)
 		logging.info(head)
 		await tg_logger.log(tghead)
