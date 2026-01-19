@@ -862,7 +862,7 @@ async def send_header(ais, cfg, tg_logger):
 	eqns = f'{caller}EQNS.0,0.1,0,0,0.001,0,0,0.001,0,0,0.001,0'
 
 	def subfield(text):
-		return f'{text.split(":")[-1].split(".")[1]}'
+		return f'{text.split(":")[-1].split(".",1)[1]}'
 
 	try:
 		if os.getenv('GPSD_ENABLE'):
