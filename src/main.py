@@ -854,23 +854,27 @@ async def send_position(ais, cfg, tg_logger, gps_data=None):
 	return ais
 
 
-async def send_header(ais, cfg):
+async def send_header(ais, cfg, tg_logger):
 	"""Send APRS header information to APRS-IS."""
-	parm = '{0}>APP642::{0:9s}:PARM.CPU Temp,CPU Load,RAM Used,Disk Used'.format(cfg.call)
-	unit = '{0}>APP642::{0:9s}:UNIT.deg.C,%,GB,GB'.format(cfg.call)
-	eqns = '{0}>APP642::{0:9s}:EQNS.0,0.1,0,0,0.001,0,0,0.001,0,0,0.001,0'.format(cfg.call)
+	caller = '{0}>APP642::{0:9s}:'.format(cfg.call)
+	parm = f'{caller}PARM.CPUTemp,CPULoad,RAMUsed,DiskUsed'
+	unit = f'{caller}UNIT.deg.C,%,GB,GB'
+	eqns = f'{caller}EQNS.0,0.1,0,0,0.001,0,0,0.001,0,0,0.001,0'
 	try:
 		if os.getenv('GPSD_ENABLE'):
-			parm += ',GPS Used'
+			parm += ',GPSUsed'
 			unit += ',sats'
 			eqns += ',0,1,0'
-		ais.sendall(parm)
-		ais.sendall(unit)
-		ais.sendall(eqns)
+		head = f'{parm}\r\n{unit}\r\n{eqns}'
+		tghead = f'<u>{cfg.call} Header</u>\n\nParameters: <b>{parm.split(":")[-1]}</b>\nUnits: <b>{unit.split(":")[-1]}</b>\nEquations: <b>{eqns.split(":")[-1]}</b>\n\nValue: <b>[a,b,c] = [a × v²] + [b × v] + [c]</b>'
+		ais.sendall(head)
+		logging.info(head)
+		await tg_logger.log(tghead)
+		await send_status(ais, cfg, tg_logger)
 	except APRSConnectionError as err:
 		logging.error('APRS connection error at header: %s', err)
 		ais = await ais_connect(cfg)
-		ais = await send_header(ais, cfg)
+		ais = await send_header(ais, cfg, tg_logger)
 	return ais
 
 
@@ -1001,7 +1005,7 @@ async def main():
 				if posUpdate:
 					ais = await send_position(ais, cfg, tg_logger, gps_data=gps_data)
 				if tmr % 3000 == 1:
-					ais = await send_header(ais, cfg)
+					ais = await send_header(ais, cfg, tg_logger)
 				if tmr % cfg.sleep == 1:
 					ais = await send_telemetry(ais, cfg, tg_logger)
 				await asyncio.sleep(1)
