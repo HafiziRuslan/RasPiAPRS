@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-18T13:39:36+08:00)
+## [beta5] - (2026-01-19T11:26:02+08:00)
 
-- 112 commit(s) contributed to the release.
-- 18 day(s) passed between the first and last commit.
-- 18 day(s) passed between releases.
+- 114 commit(s) contributed to the release.
+- 19 day(s) passed between the first and last commit.
+- 19 day(s) passed between releases.
 
 ### 🚀 Features in beta5
 
+- [460ef5e](https://github.com/HafiziRuslan/RasPiAPRS/commit/460ef5e0d0fa3c6552f540cdeb530f33d13f35d5) feat(main): update APRS header labels for clarity *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-19T11:26:02+08:00*
 - [4b36dc0](https://github.com/HafiziRuslan/RasPiAPRS/commit/4b36dc01c097a6a6b3a650df0ec9b51192af1cd6) feat(telegram): implement asynchronous logging and retry logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T11:40:58+08:00*
 - [b421339](https://github.com/HafiziRuslan/RasPiAPRS/commit/b421339da4af507c315c94c48e643957c0ffa1c2) feat(runner): implement max retry limit for failures *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T04:05:00+08:00*
 - [16ec5b2](https://github.com/HafiziRuslan/RasPiAPRS/commit/16ec5b2a970782a519c63395c389fc5f582f0885) feat(telegram): implement live location updates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T22:36:02+08:00*
@@ -26,6 +27,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta5
 
+- [20bd3a6](https://github.com/HafiziRuslan/RasPiAPRS/commit/20bd3a6c42c8592cf447e9ba0f021d8ae4fa3fcd) fix(main): adjust status message spacing in telegram status update *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-19T11:23:18+08:00*
 - [1183822](https://github.com/HafiziRuslan/RasPiAPRS/commit/1183822e068664ac31c99e689b4823abcc91d9bc) fix(gps): improve stationary detection logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T13:37:15+08:00*
 - [771093d](https://github.com/HafiziRuslan/RasPiAPRS/commit/771093d5aaa011c86f1727859a35e486fa3ecc7c) chore(config): increase ruff line length limit *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T12:14:42+08:00*
 - [5d24e4a](https://github.com/HafiziRuslan/RasPiAPRS/commit/5d24e4a609c9d0cc4fd35f3ab26dbb47dbd287c9) fix(gpsd): implement connection retry mechanism *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T10:00:32+08:00*
@@ -813,4 +815,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-18T13:41:24.611160557+08:00
+generated using git-cliff on 2026-01-19T11:27:01.865152033+08:00
