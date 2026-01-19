@@ -1,13 +1,11 @@
-name: 'Sync Repo'
+name: 'Push Out Repo'
+
 permissions:
   contents: read
 
 on:
-  workflow_run:
-    workflows:
-      - Changelog
-    types:
-      - completed
+  schedule:
+    - cron: '0 0 * * *'
 
 jobs:
   codeberg:
@@ -33,7 +31,13 @@ jobs:
 
   gitlab:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
+      - name: 'Checkout'
+        uses: actions/checkout@main
+        with:
+          fetch-depth: 0
+
       - name: 'push to GitLab'
         uses: keninkujovic/gitlab-sync@main
         with:
