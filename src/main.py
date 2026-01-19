@@ -959,6 +959,9 @@ async def send_status(ais, cfg, tg_logger):
 		await tg_logger.log(tgstat)
 	except APRSConnectionError as err:
 		logging.error('APRS connection error at status: %s', err)
+		ais = await ais_connect(cfg)
+		ais = await send_status(ais, cfg, tg_logger)
+	return ais
 
 
 async def ais_connect(cfg):
