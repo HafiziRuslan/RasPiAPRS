@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-19T12:14:08+08:00)
+## [beta5] - (2026-01-19T12:17:17+08:00)
 
-- 117 commit(s) contributed to the release.
+- 118 commit(s) contributed to the release.
 - 19 day(s) passed between the first and last commit.
 - 19 day(s) passed between releases.
 
@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta5
 
+- [eb6197f](https://github.com/HafiziRuslan/RasPiAPRS/commit/eb6197f71f48fe373cdfd5efdb0e2a4aff363407) fix(main): adjust header parsing for tg head construction *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-19T12:17:17+08:00*
 - [bc4e1ef](https://github.com/HafiziRuslan/RasPiAPRS/commit/bc4e1efa6135cf78fa0ffa0b195369c582210e14) fix(telegram telemetry): adjust gpssat payload and gps seen handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-19T12:14:08+08:00*
 - [5fe2b52](https://github.com/HafiziRuslan/RasPiAPRS/commit/5fe2b5218f1471818d828c6134a64794bde5126d) fix(main): correct GPS label in telemetry when GPSD enabled *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-19T11:30:31+08:00*
 - [20bd3a6](https://github.com/HafiziRuslan/RasPiAPRS/commit/20bd3a6c42c8592cf447e9ba0f021d8ae4fa3fcd) fix(main): adjust status message spacing in telegram status update *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-19T11:23:18+08:00*
@@ -818,4 +819,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-19T12:14:50.616065853+08:00
+generated using git-cliff on 2026-01-19T12:17:46.960207342+08:00
