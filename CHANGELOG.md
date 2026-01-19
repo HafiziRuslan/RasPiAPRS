@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-19T11:26:02+08:00)
+## [beta5] - (2026-01-19T11:30:31+08:00)
 
-- 114 commit(s) contributed to the release.
+- 115 commit(s) contributed to the release.
 - 19 day(s) passed between the first and last commit.
 - 19 day(s) passed between releases.
 
@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta5
 
+- [5fe2b52](https://github.com/HafiziRuslan/RasPiAPRS/commit/5fe2b5218f1471818d828c6134a64794bde5126d) fix(main): correct GPS label in telemetry when GPSD enabled *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-19T11:30:31+08:00*
 - [20bd3a6](https://github.com/HafiziRuslan/RasPiAPRS/commit/20bd3a6c42c8592cf447e9ba0f021d8ae4fa3fcd) fix(main): adjust status message spacing in telegram status update *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-19T11:23:18+08:00*
 - [1183822](https://github.com/HafiziRuslan/RasPiAPRS/commit/1183822e068664ac31c99e689b4823abcc91d9bc) fix(gps): improve stationary detection logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T13:37:15+08:00*
 - [771093d](https://github.com/HafiziRuslan/RasPiAPRS/commit/771093d5aaa011c86f1727859a35e486fa3ecc7c) chore(config): increase ruff line length limit *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-18T12:14:42+08:00*
@@ -815,4 +816,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-19T11:27:01.865152033+08:00
+generated using git-cliff on 2026-01-19T11:31:00.271900459+08:00
