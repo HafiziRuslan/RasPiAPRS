@@ -856,12 +856,12 @@ async def send_position(ais, cfg, tg_logger, gps_data=None):
 
 async def send_header(ais, cfg):
 	"""Send APRS header information to APRS-IS."""
-	parm = '{0}>APP642::{0:9s}:PARM.CPUTemp,CPULoad,RAMUsed,DiskUsed'.format(cfg.call)
-	unit = '{0}>APP642::{0:9s}:UNIT.deg.C,pcnt,GB,GB'.format(cfg.call)
+	parm = '{0}>APP642::{0:9s}:PARM.CPU Temp,CPU Load,RAM Used,Disk Used'.format(cfg.call)
+	unit = '{0}>APP642::{0:9s}:UNIT.deg.C,%,GB,GB'.format(cfg.call)
 	eqns = '{0}>APP642::{0:9s}:EQNS.0,0.1,0,0,0.001,0,0,0.001,0,0,0.001,0'.format(cfg.call)
 	try:
 		if os.getenv('GPSD_ENABLE'):
-			parm += ',GPSLock'
+			parm += ',GPS Used'
 			unit += ',sats'
 			eqns += ',0,1,0'
 		ais.sendall(parm)
