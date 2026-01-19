@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-19T12:17:17+08:00)
+## [beta5] - (2026-01-19T14:23:50+08:00)
 
-- 118 commit(s) contributed to the release.
+- 119 commit(s) contributed to the release.
 - 19 day(s) passed between the first and last commit.
 - 19 day(s) passed between releases.
 
@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta5
 
+- [211b259](https://github.com/HafiziRuslan/RasPiAPRS/commit/211b259367de4e03551455fba3a237a2ea47b9f1) fix(main): simplify header field extraction for tg message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-19T14:23:50+08:00*
 - [eb6197f](https://github.com/HafiziRuslan/RasPiAPRS/commit/eb6197f71f48fe373cdfd5efdb0e2a4aff363407) fix(main): adjust header parsing for tg head construction *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-19T12:17:17+08:00*
 - [bc4e1ef](https://github.com/HafiziRuslan/RasPiAPRS/commit/bc4e1efa6135cf78fa0ffa0b195369c582210e14) fix(telegram telemetry): adjust gpssat payload and gps seen handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-19T12:14:08+08:00*
 - [5fe2b52](https://github.com/HafiziRuslan/RasPiAPRS/commit/5fe2b5218f1471818d828c6134a64794bde5126d) fix(main): correct GPS label in telemetry when GPSD enabled *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-19T11:30:31+08:00*
@@ -819,4 +820,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-19T12:17:46.960207342+08:00
+generated using git-cliff on 2026-01-19T14:24:23.427753890+08:00
