@@ -870,7 +870,7 @@ async def send_header(ais, cfg, tg_logger):
 			unit += ',sats'
 			eqns += ',0,1,0'
 		head = f'{parm}\r\n{unit}\r\n{eqns}'
-		tghead = f'<u>{cfg.call} Header</u>\n\nParameters: <b>{subfield(parm)}</b>\nUnits: <b>{subfield(unit)}</b>\nEquations: <b>{subfield(eqns)}</b>\n\nValue: <code>[a,b,c] = [a × v²] + [b × v] + [c]</code>'
+		tghead = f'<u>{cfg.call} Header</u>\n\nParameters: <b>{subfield(parm)}</b>\nUnits: <b>{subfield(unit)}</b>\nEquations: <b>{subfield(eqns)}</b>\n\nValue: <code>[a,b,c]=(a×v²)+(b×v)+c</code>'
 		ais.sendall(head)
 		logging.info(head)
 		await tg_logger.log(tghead)
