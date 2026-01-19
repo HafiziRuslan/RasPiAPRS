@@ -888,7 +888,7 @@ async def send_telemetry(ais, cfg, tg_logger):
 	if os.getenv('GPSD_ENABLE'):
 		_, uSat, nSat = await get_gpssat()
 		telem += ',{:d}'.format(uSat)
-		tgtel += f'\nGPS Lock: <b>{uSat}</b>\nGPS Seen: <b>{nSat}</b>'
+		tgtel += f'\nGPS Used: <b>{uSat}</b>\nGPS Seen: <b>{nSat}</b>'
 	try:
 		ais.sendall(telem)
 		logging.info(telem)
