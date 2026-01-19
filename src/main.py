@@ -922,7 +922,7 @@ async def send_status(ais, cfg, tg_logger):
 	uptime = get_uptime()
 	statustext = f'{timestamp}[{gridsquare}]{nearAdd} {uptime}'
 	status = '{}>APP642:>{}'.format(cfg.call, statustext)
-	tgstat = f'<u>{cfg.call} Status</u>\n<b>{statustext}</b>'
+	tgstat = f'<u>{cfg.call} Status</u>\n\n<b>{statustext}</b>'
 	if os.getenv('GPSD_ENABLE'):
 		sats = ', gps: '
 		timez, uSat, nSat = await get_gpssat()
