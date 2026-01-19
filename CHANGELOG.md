@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-20T02:35:07+08:00)
+## [beta5] - (2026-01-20T03:21:48+08:00)
 
-- 122 commit(s) contributed to the release.
+- 123 commit(s) contributed to the release.
 - 19 day(s) passed between the first and last commit.
 - 19 day(s) passed between releases.
 
@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta5
 
+- [15e66ee](https://github.com/HafiziRuslan/RasPiAPRS/commit/15e66ee9484a6cb43887ae651592f09f698960ee) fix(module): retry ais connection on status error *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T03:21:48+08:00*
 - [033456b](https://github.com/HafiziRuslan/RasPiAPRS/commit/033456b2f167c5bc58c5e7d4d20b5fe95ce053fa) fix(main): adjust telegram header formatting for math inline spacing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-19T14:34:55+08:00*
 - [ff08da0](https://github.com/HafiziRuslan/RasPiAPRS/commit/ff08da0ae36a5748a42bddfd3c79c6adab089767) fix(main): correct subfield extraction in send_header *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-19T14:32:45+08:00*
 - [211b259](https://github.com/HafiziRuslan/RasPiAPRS/commit/211b259367de4e03551455fba3a237a2ea47b9f1) fix(main): simplify header field extraction for tg message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-19T14:23:50+08:00*
@@ -823,4 +824,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-20T02:35:36.921727330+08:00
+generated using git-cliff on 2026-01-20T03:22:29.399285586+08:00
