@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta6] - (2026-01-20T20:45:24+08:00)
+## [beta6] - (2026-01-20T20:59:17+08:00)
 
-- 6 commit(s) contributed to the release.
+- 7 commit(s) contributed to the release.
 - 0 day(s) passed between the first and last commit.
 
 ### 🚀 Features in beta6
 
+- [4b07442](https://github.com/HafiziRuslan/RasPiAPRS/commit/4b074421bfe0710652accb58ee1f1e963826ef65) feat(main): add level-based log file filtering *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:59:17+08:00*
 - [3d5e5d2](https://github.com/HafiziRuslan/RasPiAPRS/commit/3d5e5d2eb0f15ea9b2182d1cb82553f4242befd5) feat(main): add lock, notifications, and restart logic to script *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:45:24+08:00*
 - [f52bd06](https://github.com/HafiziRuslan/RasPiAPRS/commit/f52bd06c47ef121a819b22c67e5a42b1dc64abd5) feat(workflows): enable scheduled releases and publish on push *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T19:52:03+08:00*
 
@@ -849,4 +850,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-20T20:45:52.063083087+08:00
+generated using git-cliff on 2026-01-20T20:59:43.105845286+08:00
