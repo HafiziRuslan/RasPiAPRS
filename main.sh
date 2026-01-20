@@ -124,7 +124,7 @@ command_exists() {
   command -v "$1" >/dev/null 2>&1
 }
 
-ensure_apt_packages gcc git python3-dev
+ensure_apt_packages gcc git python3-dev wget
 
 if command_exists uv; then
   log_msg INFO "✅ uv is installed."
