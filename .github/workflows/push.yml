@@ -39,9 +39,34 @@ jobs:
           fetch-depth: 0
 
       - name: 'push to GitLab'
-        uses: keninkujovic/gitlab-sync@main
+        uses: cssnr/mirror-repository-action@latest
         with:
-          gitlab_url: 'https://gitlab.com/hafiziruslan/RasPiAPRS.git'
+          host: https://gitlab.com
+          owner: hafiziruslan
+          repo: RasPiAPRS
+          create: false
           username: hafiziruslan
-          gitlab_pat: ${{ secrets.GITLAB_TOKEN }}
-          force_push: true
+          password: ${{ secrets.GITLAB_TOKEN }}
+          summary: false
+          private: false
+
+  gitea:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@main
+        with:
+          fetch-depth: 0
+
+      - name: 'push to Gitea'
+        uses: cssnr/mirror-repository-action@latest
+        with:
+          host: https://gitea.com
+          owner: hafiziruslan
+          repo: RasPiAPRS
+          create: false
+          username: hafiziruslan
+          password: ${{ secrets.GITEA_TOKEN }}
+          summary: false
+          private: false
