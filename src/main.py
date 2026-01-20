@@ -55,6 +55,13 @@ def configure_logging():
 	console_handler.setFormatter(formatter)
 	logger.addHandler(console_handler)
 
+	class LevelFilter(logging.Filter):
+		def __init__(self, level):
+			self.level = level
+
+		def filter(self, record):
+			return record.levelno == self.level
+
 	levels = {
 		logging.DEBUG: 'debug.log',
 		logging.INFO: 'info.log',
@@ -66,6 +73,7 @@ def configure_logging():
 		try:
 			handler = logging.handlers.RotatingFileHandler(os.path.join(log_dir, filename), maxBytes=5 * 1024 * 1024, backupCount=5)
 			handler.setLevel(level)
+			handler.addFilter(LevelFilter(level))
 			handler.setFormatter(formatter)
 			logger.addHandler(handler)
 		except (OSError, PermissionError) as e:
