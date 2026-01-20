@@ -6,6 +6,9 @@ permissions:
 on:
   schedule:
     - cron: '0 0 * * *'
+  release:
+    types:
+      - published
 
 jobs:
   codeberg:

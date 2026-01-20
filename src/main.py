@@ -582,7 +582,7 @@ def get_add_from_pos(lat, lon):
 	if coord_key in cache:
 		logging.debug('Address found in cache for requested coordinates')
 		return cache[coord_key]
-	geolocator = Nominatim(user_agent='raspiaprs0.1b5')
+	geolocator = Nominatim(user_agent='raspiaprs0.1b6')
 	try:
 		location = geolocator.reverse((lat, lon), exactly_one=True, namedetails=True, addressdetails=True)
 		if location:

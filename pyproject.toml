@@ -1,6 +1,6 @@
 [project]
 name = "RasPiAPRS"
-version = "0.1-beta.5"
+version = "0.1-beta.6"
 description = "APRS telemetry for Pi-Star/WPSD/AllStarLink"
 keywords = [
   "amateur-radio",
@@ -36,8 +36,8 @@ dependencies = [
 ]
 
 [project.urls]
-repository = "https://github.com/HafiziRuslan/raspiaprs"
-changelog = "https://github.com/HafiziRuslan/raspiaprs/blob/master/CHANGELOG.md"
+repository = "https://github.com/HafiziRuslan/RasPiAPRS"
+changelog = "https://github.com/HafiziRuslan/RasPiAPRS/blob/master/CHANGELOG.md"
 
 [tool.ruff]
 line-length = 150

@@ -4,71 +4,36 @@ on:
   push:
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@main
-
-      - name: Upload default.env
-        uses: svenstaro/upload-release-action@master
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: default.env
-          release_name: v0.1-beta.5
-          tag: beta5
-          overwrite: true
-          prerelease: true
-          make_latest: false
+          fetch-depth: 0
 
-      - name: Upload requirements.txt
-        uses: svenstaro/upload-release-action@master
+      - name: Archive Release
+        uses: thedoctor0/zip-release@main
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: requirements.txt
-          release_name: v0.1-beta.5
-          tag: beta5
-          overwrite: true
-          prerelease: true
-          make_latest: false
+          type: 'zip'
+          filename: 'raspiaprs-0.1b6.zip'
+          exclusions: '*.git* /.git* LICENSE /tests* *lock* sbom* *.md /misc*'
+          recursive_exclusions: '*.md'
 
-      - name: Upload main.sh
-        uses: svenstaro/upload-release-action@master
+      - name: Upload Release
+        uses: ncipollo/release-action@main
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: main.sh
-          release_name: v0.1-beta.5
-          tag: beta5
-          overwrite: true
-          prerelease: true
-          make_latest: false
-
-      - name: Upload symbols.py
-        uses: svenstaro/upload-release-action@master
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: src/symbols.py
-          asset_name: symbols.py
-          release_name: v0.1-beta.5
-          tag: beta5
-          overwrite: true
-          prerelease: true
-          make_latest: false
-
-      - name: Upload main.py
-        uses: svenstaro/upload-release-action@master
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: src/main.py
-          asset_name: main.py
-          release_name: v0.1-beta.5
-          tag: beta5
-          overwrite: true
-          prerelease: true
-          make_latest: false
+          allowUpdates: true
+          artifacts: 'raspiaprs-0.1b6.zip'
           body: "${{ github.event.head_commit.message }}\n\nby: ${{ github.event.head_commit.author.username }} on ${{ github.event.head_commit.timestamp }}"
+          commit: ${{ github.event.head_commit.id }}
+          name: 0.1b6
+          prerelease: true
+          replacesArtifacts: true
+          tag: beta6
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -78,6 +43,6 @@ jobs:
       - name: Update Tag
         uses: richardsimko/update-tag@latest
         with:
-          tag_name: beta5
+          tag_name: beta6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

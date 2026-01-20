@@ -168,7 +168,7 @@ wheels = [
 
 [[package]]
 name = "raspiaprs"
-version = "0.1b5"
+version = "0.1b6"
 source = { virtual = "." }
 dependencies = [
     { name = "aprslib" },
