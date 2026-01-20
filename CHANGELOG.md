@@ -2,14 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta6] - (2026-01-20T19:52:03+08:00)
+## [beta6] - (2026-01-20T20:06:26+08:00)
 
-- 1 commit(s) contributed to the release.
+- 3 commit(s) contributed to the release.
 - 0 day(s) passed between the first and last commit.
 
 ### 🚀 Features in beta6
 
 - [f52bd06](https://github.com/HafiziRuslan/RasPiAPRS/commit/f52bd06c47ef121a819b22c67e5a42b1dc64abd5) feat(workflows): enable scheduled releases and publish on push *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T19:52:03+08:00*
+
+### 🐛 Bug Fixes in beta6
+
+- [d0ee483](https://github.com/HafiziRuslan/RasPiAPRS/commit/d0ee483163ebf3e92300465de730af8a7101e28a) fix(main): comment out forced filter during ais connect *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:06:26+08:00*
+- [877c20d](https://github.com/HafiziRuslan/RasPiAPRS/commit/877c20daa71ab5e9478ecb2d85f0bc1182e243b9) fix(timeline): adjust live_period values in telegram location updates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:05:49+08:00*
 
 ---
 
@@ -841,4 +846,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-20T19:52:32.722676519+08:00
+generated using git-cliff on 2026-01-20T20:07:03.710710086+08:00
