@@ -407,7 +407,7 @@ class TelegramLogger(object):
 							'latitude': lat,
 							'longitude': lon,
 							'heading': cse if cse > 0 else None,
-							'live_period': int(time.time() - start_time + 10800),
+							'live_period': int(time.time() - start_time + 86400),
 						}
 						eloc = await self._call_with_retry(self.bot.edit_message_live_location, **edit_kwargs)
 						logging.info('Edited location in Telegram: %s/%s', eloc.chat_id, eloc.message_id)
@@ -423,7 +423,7 @@ class TelegramLogger(object):
 						'latitude': lat,
 						'longitude': lon,
 						'heading': cse if cse > 0 else None,
-						'live_period': 10800,
+						'live_period': '0x7FFFFFFF',
 					}
 					if self.loc_topic_id:
 						loc_kwargs['message_thread_id'] = self.loc_topic_id
