@@ -423,7 +423,7 @@ class TelegramLogger(object):
 						'latitude': lat,
 						'longitude': lon,
 						'heading': cse if cse > 0 else None,
-						'live_period': '0x7FFFFFFF',
+						'live_period': 86400,
 					}
 					if self.loc_topic_id:
 						loc_kwargs['message_thread_id'] = self.loc_topic_id
