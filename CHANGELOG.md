@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [beta6] - (2026-01-20T19:52:03+08:00)
+
+- 1 commit(s) contributed to the release.
+- 0 day(s) passed between the first and last commit.
+
+### 🚀 Features in beta6
+
+- [f52bd06](https://github.com/HafiziRuslan/RasPiAPRS/commit/f52bd06c47ef121a819b22c67e5a42b1dc64abd5) feat(workflows): enable scheduled releases and publish on push *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T19:52:03+08:00*
+
+---
+
 ## [beta5] - (2026-01-20T08:43:15+08:00)
 
 - 129 commit(s) contributed to the release.
@@ -830,4 +841,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-20T08:43:51.691275139+08:00
+generated using git-cliff on 2026-01-20T19:52:32.722676519+08:00
