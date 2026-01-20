@@ -2,14 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-20T03:21:48+08:00)
+## [beta5] - (2026-01-20T08:03:07+08:00)
 
-- 123 commit(s) contributed to the release.
-- 19 day(s) passed between the first and last commit.
-- 19 day(s) passed between releases.
+- 125 commit(s) contributed to the release.
+- 20 day(s) passed between the first and last commit.
+- 20 day(s) passed between releases.
 
 ### 🚀 Features in beta5
 
+- [d777910](https://github.com/HafiziRuslan/RasPiAPRS/commit/d777910748ac5dceb3e498abda818cb3ac8cef04) feat(github): add gitea mirror job to push to Gitea in workflows *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T08:03:07+08:00*
+- [0fbf026](https://github.com/HafiziRuslan/RasPiAPRS/commit/0fbf026c190901ec8ecf02f3097f47e60909266b) feat(readme): update mirror repos and env file guidance *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T07:57:34+08:00*
 - [db3c104](https://github.com/HafiziRuslan/RasPiAPRS/commit/db3c104d81743875cdf555aa3cd36eac6c759c67) feat(sync): rename workflow file and adjust trigger *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T02:35:07+08:00*
 - [1f1b04d](https://github.com/HafiziRuslan/RasPiAPRS/commit/1f1b04dd8c3bb472b23212545924a4426c2179cf) feat(header): add tg_logger support to header sending *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-19T12:05:57+08:00*
 - [460ef5e](https://github.com/HafiziRuslan/RasPiAPRS/commit/460ef5e0d0fa3c6552f540cdeb530f33d13f35d5) feat(main): update APRS header labels for clarity *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-19T11:26:02+08:00*
@@ -824,4 +826,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-20T03:22:29.399285586+08:00
+generated using git-cliff on 2026-01-20T08:04:49.730158525+08:00
