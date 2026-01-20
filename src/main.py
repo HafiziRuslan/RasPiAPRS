@@ -399,11 +399,11 @@ class TelegramLogger(object):
 					try:
 						with open(LOCATION_ID_FILE, 'r') as f:
 							parts = f.read().split(':')
-							location_id = int(parts[0])
+							loc_msg_id = int(parts[0])
 							start_time = float(parts[1]) if len(parts) > 1 else time.time()
 						edit_kwargs = {
 							'chat_id': self.chat_id,
-							'message_id': location_id,
+							'message_id': loc_msg_id,
 							'latitude': lat,
 							'longitude': lon,
 							'heading': cse if cse > 0 else None,
