@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta6] - (2026-01-20T20:17:30+08:00)
+## [beta6] - (2026-01-20T20:20:12+08:00)
 
-- 4 commit(s) contributed to the release.
+- 5 commit(s) contributed to the release.
 - 0 day(s) passed between the first and last commit.
 
 ### 🚀 Features in beta6
@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta6
 
+- [e0b7dfc](https://github.com/HafiziRuslan/RasPiAPRS/commit/e0b7dfcd447dafd2b6cbf0a1201760d664d9c861) fix(main): rename location_id to loc_msg_id in telegram logger *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:20:12+08:00*
 - [e44f604](https://github.com/HafiziRuslan/RasPiAPRS/commit/e44f604f3cd5c755889d5e17028d72709086bf2d) fix(module): correct live_period type in telegram logger *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:17:30+08:00*
 - [d0ee483](https://github.com/HafiziRuslan/RasPiAPRS/commit/d0ee483163ebf3e92300465de730af8a7101e28a) fix(main): comment out forced filter during ais connect *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:06:26+08:00*
 - [877c20d](https://github.com/HafiziRuslan/RasPiAPRS/commit/877c20daa71ab5e9478ecb2d85f0bc1182e243b9) fix(timeline): adjust live_period values in telegram location updates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:05:49+08:00*
@@ -847,4 +848,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-20T20:18:01.502593560+08:00
+generated using git-cliff on 2026-01-20T20:20:38.162698347+08:00
