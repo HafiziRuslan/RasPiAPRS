@@ -977,7 +977,7 @@ async def ais_connect(cfg):
 			await asyncio.sleep(20)
 			continue
 		else:
-			ais.set_filter(cfg.filter)
+			# ais.set_filter(cfg.filter)
 			logging.info('Connected to APRS-IS server %s:%d as %s', cfg.server, cfg.port, cfg.call)
 			return ais
 	logging.error('Connection error, exiting')
