@@ -6,12 +6,48 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
+LOCK_FILE="/var/run/raspiaprs.pid"
+if [ -e "$LOCK_FILE" ]; then
+  PID=$(cat "$LOCK_FILE")
+  if ps -p "$PID" > /dev/null 2>&1; then
+    echo "$(date +'%FT%T') | INFO | Script is already running with PID $PID. Exiting."
+    exit 0
+  else
+    echo "$(date +'%FT%T') | WARN | Found stale lock file for PID $PID. Removing."
+    rm -f "$LOCK_FILE"
+  fi
+fi
+echo $$ > "$LOCK_FILE"
+trap 'rm -f -- "$LOCK_FILE"' EXIT
+
 dir_own=$(stat -c '%U' .)
 
 log_msg() {
   local level=$1
   shift
   echo "$(date +'%FT%T') | $level | $*"
+}
+
+send_notification() {
+  local message="⚠️ RasPiAPRS Alert: $1"
+  local log_file="/var/log/raspiaprs/error.log"
+
+  if [ -f "$log_file" ]; then
+    local log_tail=$(tail -n 10 "$log_file")
+    if [ -n "$log_tail" ]; then
+      message="$message"$'\n\n'"Last 10 error log lines:"$'\n'"$log_tail"
+    fi
+  fi
+
+  if [ -f .env ]; then
+    local token=$(grep "^TELEGRAM_TOKEN=" .env | cut -d '=' -f2- | cut -d '#' -f1 | sed 's/^"//;s/"$//;s/^'"'"'//;s/'"'"'$//' | tr -d '[:space:]')
+    local chat_id=$(grep "^TELEGRAM_CHAT_ID=" .env | cut -d '=' -f2- | cut -d '#' -f1 | sed 's/^"//;s/"$//;s/^'"'"'//;s/'"'"'$//' | tr -d '[:space:]')
+
+    if [ -n "$token" ] && [ -n "$chat_id" ]; then
+      local encoded_message=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$message")
+      wget -qO- --post-data "chat_id=$chat_id&text=$encoded_message" "https://api.telegram.org/bot$token/sendMessage" >/dev/null 2>&1
+    fi
+  fi
 }
 
 check_internet() {
@@ -40,7 +76,7 @@ cleanup() {
   rm -rf /tmp/raspiaprs
   rm -rf /var/log/raspiaprs
 }
-trap cleanup EXIT
+cleanup
 
 if [ ! -d "/tmp/raspiaprs" ]; then
   mkdir -p /tmp/raspiaprs
@@ -79,20 +115,27 @@ if [ "$INTERNET_AVAILABLE" = true ] && check_disk_space; then
 
     if [ "$LOCAL" != "$REMOTE" ]; then
       log_msg INFO "Updating RaspiAPRS repository"
+      UPDATE_SUCCESS=false
       if sudo -u $dir_own timeout 60 git pull --autostash -q; then
-        if [ "$(sudo -u $dir_own git rev-parse HEAD)" = "$REMOTE" ]; then
-          log_msg INFO "Verifying repository integrity..."
-          if sudo -u $dir_own git fsck --full >/dev/null 2>&1; then
-            log_msg INFO "Update applied and verified. Restarting script..."
-            exec "$0" "$@"
-          else
-            log_msg ERROR "Repository integrity check failed! Skipping restart."
-          fi
+        UPDATE_SUCCESS=true
+      else
+        log_msg WARN "Git pull failed. Attempting to resolve conflicts by resetting to remote..."
+        if sudo -u $dir_own git reset --hard @{u}; then
+          UPDATE_SUCCESS=true
+          log_msg INFO "Reset to remote successful."
+        fi
+      fi
+
+      if [ "$UPDATE_SUCCESS" = true ] && [ "$(sudo -u $dir_own git rev-parse HEAD)" = "$REMOTE" ]; then
+        log_msg INFO "Verifying repository integrity..."
+        if sudo -u $dir_own git fsck --full >/dev/null 2>&1; then
+          log_msg INFO "Update applied and verified. Restarting script..."
+          exec "$0" "$@"
         else
-          log_msg WARN "Update completed but HEAD does not match remote. Skipping restart."
+          log_msg ERROR "Repository integrity check failed! Skipping restart."
         fi
       else
-        log_msg WARN "Git pull failed. Skipping restart."
+        log_msg WARN "Update failed or HEAD does not match remote. Skipping restart."
       fi
     else
       log_msg INFO "Repository is up to date."
@@ -177,10 +220,23 @@ while true; do
     RETRY_COUNT=0
   fi
 
-  if [ $exit_code -ne 0 ]; then
+  # Define exit codes that trigger a restart
+  # 1: General error (e.g. Exception)
+  # 137: SIGKILL (e.g. OOM)
+  RESTART_CODES="1 137"
+  should_restart=false
+  for code in $RESTART_CODES; do
+    if [ "$exit_code" -eq "$code" ]; then
+      should_restart=true
+      break
+    fi
+  done
+
+  if [ "$should_restart" = true ]; then
     RETRY_COUNT=$((RETRY_COUNT + 1))
     if [ "$RETRY_COUNT" -gt "$MAX_RETRIES" ]; then
       log_msg ERROR "Maximum retries ($MAX_RETRIES) reached. Exiting."
+      send_notification "Maximum retries ($MAX_RETRIES) reached. Service stopping."
       exit 1
     fi
 
@@ -191,8 +247,12 @@ while true; do
     if [ "$RESTART_DELAY" -gt "$MAX_DELAY" ]; then
       RESTART_DELAY=$MAX_DELAY
     fi
-  else
-    log_msg INFO "RasPiAPRS exited. Stopping."
+    elif [ "$exit_code" -eq 0 ]; then
+    log_msg INFO "RasPiAPRS exited normally. Stopping."
     break
+  else
+    log_msg ERROR "RasPiAPRS exited with unrecoverable code $exit_code. Stopping."
+    send_notification "Script exited with unrecoverable code $exit_code. Service stopping."
+    exit "$exit_code"
   fi
 done
