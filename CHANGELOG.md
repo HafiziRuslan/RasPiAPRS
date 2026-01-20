@@ -2,14 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta5] - (2026-01-20T08:03:07+08:00)
+## [beta5] - (2026-01-20T08:43:15+08:00)
 
-- 125 commit(s) contributed to the release.
+- 129 commit(s) contributed to the release.
 - 20 day(s) passed between the first and last commit.
 - 20 day(s) passed between releases.
 
 ### 🚀 Features in beta5
 
+- [1b9689c](https://github.com/HafiziRuslan/RasPiAPRS/commit/1b9689c78a6a50cefbdff98e7bf5ef2b6e258014) feat(main): update apt package list to include wget *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T08:41:29+08:00*
+- [94f2885](https://github.com/HafiziRuslan/RasPiAPRS/commit/94f288522e66e1d8ea4ea46f51727e732c68b05f) feat(metrics): include updated metrics diagram *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T08:41:19+08:00*
 - [d777910](https://github.com/HafiziRuslan/RasPiAPRS/commit/d777910748ac5dceb3e498abda818cb3ac8cef04) feat(github): add gitea mirror job to push to Gitea in workflows *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T08:03:07+08:00*
 - [0fbf026](https://github.com/HafiziRuslan/RasPiAPRS/commit/0fbf026c190901ec8ecf02f3097f47e60909266b) feat(readme): update mirror repos and env file guidance *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T07:57:34+08:00*
 - [db3c104](https://github.com/HafiziRuslan/RasPiAPRS/commit/db3c104d81743875cdf555aa3cd36eac6c759c67) feat(sync): rename workflow file and adjust trigger *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T02:35:07+08:00*
@@ -31,6 +33,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta5
 
+- [156f98b](https://github.com/HafiziRuslan/RasPiAPRS/commit/156f98b0d899d5a0ee64e0032b1615c6160b6082) docs(Readme): adjust metrics example and add installation notes *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T08:43:15+08:00*
 - [15e66ee](https://github.com/HafiziRuslan/RasPiAPRS/commit/15e66ee9484a6cb43887ae651592f09f698960ee) fix(module): retry ais connection on status error *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T03:21:48+08:00*
 - [033456b](https://github.com/HafiziRuslan/RasPiAPRS/commit/033456b2f167c5bc58c5e7d4d20b5fe95ce053fa) fix(main): adjust telegram header formatting for math inline spacing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-19T14:34:55+08:00*
 - [ff08da0](https://github.com/HafiziRuslan/RasPiAPRS/commit/ff08da0ae36a5748a42bddfd3c79c6adab089767) fix(main): correct subfield extraction in send_header *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-19T14:32:45+08:00*
@@ -107,6 +110,7 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation in beta5
 
+- [3f11dff](https://github.com/HafiziRuslan/RasPiAPRS/commit/3f11dffa8eb8b927819f88e51784d948c8211f16) chore(misc): remove deprecated APRS symbol tables PDF *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T08:39:02+08:00*
 - [c7bf6a7](https://github.com/HafiziRuslan/RasPiAPRS/commit/c7bf6a74f5783d2bc5ef750184010fee0d3192d9) docs(symbols): clarify submarine overlay description *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T21:48:19+08:00*
 - [3ca7eaf](https://github.com/HafiziRuslan/RasPiAPRS/commit/3ca7eafcbb5c3bbd3ccde42825212987aecece5a) docs(aprs_symbols): clarify symbol descriptions for improved readability *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T21:47:11+08:00*
 - [69274bb](https://github.com/HafiziRuslan/RasPiAPRS/commit/69274bb9c916d9e5ededf589a6464e78eb7b45ad) docs(aprs): add symbol table reference pdf *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-15T00:25:12+08:00*
@@ -826,4 +830,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-20T08:04:49.730158525+08:00
+generated using git-cliff on 2026-01-20T08:43:51.691275139+08:00
