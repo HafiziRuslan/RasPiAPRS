@@ -37,7 +37,7 @@ sudo apt update && sudo apt install uv
 ## Installation (Pi-Star / WPSD / AllStarLink)
 
 ```bash
-git clone https://github.com/HafiziRuslan/RasPiAPRS.git ./raspiaprs
+git clone https://github.com/HafiziRuslan/RasPiAPRS.git raspiaprs
 cd raspiaprs
 ```
 
