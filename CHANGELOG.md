@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta6] - (2026-01-23T01:21:13+08:00)
+## [beta6] - (2026-01-23T03:28:05+08:00)
 
-- 11 commit(s) contributed to the release.
+- 12 commit(s) contributed to the release.
 - 2 day(s) passed between the first and last commit.
 - 2 day(s) passed between releases.
 
@@ -24,6 +24,10 @@ All notable changes to this project will be documented in this file.
 - [e44f604](https://github.com/HafiziRuslan/RasPiAPRS/commit/e44f604f3cd5c755889d5e17028d72709086bf2d) fix(module): correct live_period type in telegram logger *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:17:30+08:00*
 - [d0ee483](https://github.com/HafiziRuslan/RasPiAPRS/commit/d0ee483163ebf3e92300465de730af8a7101e28a) fix(main): comment out forced filter during ais connect *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:06:26+08:00*
 - [877c20d](https://github.com/HafiziRuslan/RasPiAPRS/commit/877c20daa71ab5e9478ecb2d85f0bc1182e243b9) fix(timeline): adjust live_period values in telegram location updates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:05:49+08:00*
+
+### ⚙️ Miscellaneous Tasks in beta6
+
+- [ede0894](https://github.com/HafiziRuslan/RasPiAPRS/commit/ede08940ad592b247acaea07c452e0db4baa2e92) chore(main): remove stale lock handling from startup script *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-23T03:28:05+08:00*
 
 ---
 
@@ -855,4 +859,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-23T01:22:05.016680372+08:00
+generated using git-cliff on 2026-01-23T03:28:37.846885517+08:00
