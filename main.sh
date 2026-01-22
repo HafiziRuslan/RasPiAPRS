@@ -6,20 +6,6 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-LOCK_FILE="/var/run/raspiaprs.pid"
-if [ -e "$LOCK_FILE" ]; then
-  PID=$(cat "$LOCK_FILE")
-  if ps -p "$PID" > /dev/null 2>&1; then
-    echo "$(date +'%FT%T') | INFO | Script is already running with PID $PID. Exiting."
-    exit 0
-  else
-    echo "$(date +'%FT%T') | WARN | Found stale lock file for PID $PID. Removing."
-    rm -f "$LOCK_FILE"
-  fi
-fi
-echo $$ > "$LOCK_FILE"
-trap 'rm -f -- "$LOCK_FILE"' EXIT
-
 dir_own=$(stat -c '%U' .)
 
 log_msg() {
