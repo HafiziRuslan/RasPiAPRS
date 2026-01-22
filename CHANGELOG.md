@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta6] - (2026-01-22T04:02:38+08:00)
+## [beta6] - (2026-01-23T01:21:13+08:00)
 
-- 8 commit(s) contributed to the release.
-- 1 day(s) passed between the first and last commit.
-- 1 day(s) passed between releases.
+- 11 commit(s) contributed to the release.
+- 2 day(s) passed between the first and last commit.
+- 2 day(s) passed between releases.
 
 ### 🚀 Features in beta6
 
+- [538e7a1](https://github.com/HafiziRuslan/RasPiAPRS/commit/538e7a14039a7d3d4a901ae33053357f93c651fd) feat(config): migrate python formatting improvements in main.py *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-23T01:17:28+08:00*
 - [01ca9f9](https://github.com/HafiziRuslan/RasPiAPRS/commit/01ca9f99e14fb6fc0ca98902d633f5b58c78979a) feat(readme): standardize clone command path *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-22T04:02:38+08:00*
 - [4b07442](https://github.com/HafiziRuslan/RasPiAPRS/commit/4b074421bfe0710652accb58ee1f1e963826ef65) feat(main): add level-based log file filtering *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:59:17+08:00*
 - [3d5e5d2](https://github.com/HafiziRuslan/RasPiAPRS/commit/3d5e5d2eb0f15ea9b2182d1cb82553f4242befd5) feat(main): add lock, notifications, and restart logic to script *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:45:24+08:00*
@@ -17,6 +18,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta6
 
+- [e3cfd46](https://github.com/HafiziRuslan/RasPiAPRS/commit/e3cfd46b1de2619020aba85b1683a2f0a26150e6) fix(tests): adjust mocking in unit test for osinfo output *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-23T01:21:13+08:00*
+- [3ec30e2](https://github.com/HafiziRuslan/RasPiAPRS/commit/3ec30e24038d13e2947bd34f697befdf25ed8738) fix(osinfo): adjust osinfo formatting for ID_LIKE, DEBIAN_VERSION_FULL, and kernel string *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-23T01:08:32+08:00*
 - [e0b7dfc](https://github.com/HafiziRuslan/RasPiAPRS/commit/e0b7dfcd447dafd2b6cbf0a1201760d664d9c861) fix(main): rename location_id to loc_msg_id in telegram logger *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:20:12+08:00*
 - [e44f604](https://github.com/HafiziRuslan/RasPiAPRS/commit/e44f604f3cd5c755889d5e17028d72709086bf2d) fix(module): correct live_period type in telegram logger *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:17:30+08:00*
 - [d0ee483](https://github.com/HafiziRuslan/RasPiAPRS/commit/d0ee483163ebf3e92300465de730af8a7101e28a) fix(main): comment out forced filter during ais connect *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:06:26+08:00*
@@ -852,4 +855,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-22T04:03:34.404385772+08:00
+generated using git-cliff on 2026-01-23T01:22:05.016680372+08:00
