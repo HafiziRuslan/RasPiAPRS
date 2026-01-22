@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-'''RasPiAPRS: Send APRS position and telemetry from Raspberry Pi to APRS-IS.'''
+"""RasPiAPRS: Send APRS position and telemetry from Raspberry Pi to APRS-IS."""
 
 import asyncio
 import datetime as dt
@@ -51,11 +51,14 @@ def configure_logging():
 	console_handler.setLevel(logging.ERROR)
 	console_handler.setFormatter(formatter)
 	logger.addHandler(console_handler)
+
 	class LevelFilter(logging.Filter):
 		def __init__(self, level):
 			self.level = level
+
 		def filter(self, record):
 			return record.levelno == self.level
+
 	levels = {
 		logging.DEBUG: 'debug.log',
 		logging.INFO: 'info.log',
@@ -207,8 +210,10 @@ class Config(object):
 
 
 class Sequence(object):
-	'''Class to manage APRS sequence.'''
+	"""Class to manage APRS sequence."""
+
 	_count = 0
+
 	def __init__(self):
 		self.sequence_file = SEQUENCE_FILE
 		try:
@@ -237,8 +242,10 @@ class Sequence(object):
 
 
 class Timer(object):
-	'''Class to manage APRS timer.'''
+	"""Class to manage APRS timer."""
+
 	_count = 0
+
 	def __init__(self):
 		self.timer_file = TIMER_FILE
 		try:
@@ -267,7 +274,8 @@ class Timer(object):
 
 
 class SmartBeaconing(object):
-	'''Class to handle SmartBeaconing logic.'''
+	"""Class to handle SmartBeaconing logic."""
+
 	def __init__(self):
 		self.last_beacon_time = 0
 		self.last_course = 0
@@ -283,7 +291,7 @@ class SmartBeaconing(object):
 		self.min_turn_time = int(os.getenv('SMARTBEACONING_MINTURNTIME', 5))
 
 	def should_send(self, gps_data):
-		'''Determine if a beacon should be sent based on GPS data.'''
+		"""Determine if a beacon should be sent based on GPS data."""
 		if not gps_data:
 			return False
 		cur_spd = gps_data[4]
@@ -315,7 +323,8 @@ class SmartBeaconing(object):
 
 
 class TelegramLogger(object):
-	'''Class to handle logging to Telegram.'''
+	"""Class to handle logging to Telegram."""
+
 	def __init__(self):
 		self.enabled = os.getenv('TELEGRAM_ENABLE')
 		self.bot = None
@@ -352,7 +361,7 @@ class TelegramLogger(object):
 			await self.bot.shutdown()
 
 	async def _call_with_retry(self, func, *args, **kwargs):
-		'''Retry Telegram API calls with exponential backoff.'''
+		"""Retry Telegram API calls with exponential backoff."""
 		max_retries = 3
 		delay = 1
 		for attempt in range(max_retries):
@@ -366,7 +375,7 @@ class TelegramLogger(object):
 				delay *= 2
 
 	async def log(self, tg_message: str, lat: float = 0, lon: float = 0, cse: float = 0):
-		'''Send log message and optionally location to Telegram channel.'''
+		"""Send log message and optionally location to Telegram channel."""
 		if not self.enabled or not self.bot:
 			return
 		try:
@@ -427,7 +436,7 @@ class TelegramLogger(object):
 			logging.error('Failed to send message to Telegram: %s', e)
 
 	async def stop_location(self):
-		'''Stop live location sharing.'''
+		"""Stop live location sharing."""
 		if not self.enabled or not self.bot:
 			return
 		if os.path.exists(LOCATION_ID_FILE):
@@ -451,7 +460,7 @@ class TelegramLogger(object):
 
 
 async def get_gpspos():
-	'''Get position from GPSD.'''
+	"""Get position from GPSD."""
 	if os.getenv('GPSD_ENABLE'):
 		timestamp = dt.datetime.now(dt.timezone.utc)
 		logging.debug('Trying to figure out position using GPS')
@@ -514,7 +523,7 @@ def _mps_to_kmh(spd):
 
 
 def get_coordinates():
-	'''Get approximate latitude and longitude using IP address lookup.'''
+	"""Get approximate latitude and longitude using IP address lookup."""
 	logging.debug('Trying to figure out the coordinate using your IP address')
 	url = 'http://ip-api.com/json/'
 	try:
@@ -534,7 +543,7 @@ def get_coordinates():
 
 
 def latlon_to_grid(lat, lon, precision=6):
-	'''Convert position to grid square.'''
+	"""Convert position to grid square."""
 	lon += 180
 	lat += 90
 	field_lon = int(lon // 20)
@@ -552,7 +561,7 @@ def latlon_to_grid(lat, lon, precision=6):
 
 
 def get_add_from_pos(lat, lon):
-	'''Get address from coordinates, using a local cache.'''
+	"""Get address from coordinates, using a local cache."""
 	if os.path.exists(CACHE_FILE):
 		with open(CACHE_FILE, 'rb') as cache_file:
 			cache = pickle.load(cache_file)
@@ -581,7 +590,7 @@ def get_add_from_pos(lat, lon):
 
 
 async def get_gpssat():
-	'''Get satellite from GPSD.'''
+	"""Get satellite from GPSD."""
 	if os.getenv('GPSD_ENABLE'):
 		timestamp = dt.datetime.now(dt.timezone.utc)
 		logging.debug('Trying to figure out satellite using GPS')
@@ -627,7 +636,7 @@ async def get_gpssat():
 
 
 def get_cpuload():
-	'''Get CPU load as a percentage of total capacity.'''
+	"""Get CPU load as a percentage of total capacity."""
 	try:
 		load = psutil.getloadavg()[2]
 		core = psutil.cpu_count()
@@ -638,7 +647,7 @@ def get_cpuload():
 
 
 def get_memused():
-	'''Get used memory in bits.'''
+	"""Get used memory in bits."""
 	try:
 		totalVmem = psutil.virtual_memory().total
 		freeVmem = psutil.virtual_memory().free
@@ -651,7 +660,7 @@ def get_memused():
 
 
 def get_diskused():
-	'''Get used disk space in bits.'''
+	"""Get used disk space in bits."""
 	try:
 		diskused = psutil.disk_usage('/').used
 		return diskused
@@ -661,7 +670,7 @@ def get_diskused():
 
 
 def get_temp():
-	'''Get CPU temperature in degC.'''
+	"""Get CPU temperature in degC."""
 	try:
 		temperature = psutil.sensors_temperatures()['cpu_thermal'][0].current
 		return int(temperature * 10)
@@ -671,7 +680,7 @@ def get_temp():
 
 
 def get_uptime():
-	'''Get system uptime in a human-readable format.'''
+	"""Get system uptime in a human-readable format."""
 	try:
 		uptime_seconds = dt.datetime.now(dt.timezone.utc).timestamp() - psutil.boot_time()
 		uptime = dt.timedelta(seconds=uptime_seconds)
@@ -682,7 +691,7 @@ def get_uptime():
 
 
 def get_osinfo():
-	'''Get operating system information.'''
+	"""Get operating system information."""
 	osname = ''
 	try:
 		with open(OS_RELEASE_FILE) as osr:
@@ -699,14 +708,14 @@ def get_osinfo():
 	kernelver = ''
 	try:
 		kernel = os.uname()
-		kernelver = f'[{kernel.sysname} {kernel.release.split('+')[0]}]'
+		kernelver = f'[{kernel.sysname} {kernel.release.split("+")[0]}]'
 	except Exception as e:
 		logging.error('Unexpected error: %s', e)
 	return f' {osname} {kernelver}'
 
 
 def get_mmdvminfo():
-	'''Get MMDVM configured frequency and color code.'''
+	"""Get MMDVM configured frequency and color code."""
 	rx_freq, tx_freq, color_code, dmr_enabled = 0, 0, 0, False
 	with open(MMDVMHOST_FILE, 'r') as mmh:
 		for line in mmh:
@@ -730,7 +739,7 @@ def get_mmdvminfo():
 
 
 async def send_position(ais, cfg, tg_logger, gps_data=None):
-	'''Send APRS position packet to APRS-IS.'''
+	"""Send APRS position packet to APRS-IS."""
 
 	def _lat_to_aprs(lat):
 		ns = 'N' if lat >= 0 else 'S'
@@ -835,14 +844,14 @@ async def send_position(ais, cfg, tg_logger, gps_data=None):
 
 
 async def send_header(ais, cfg, tg_logger):
-	'''Send APRS header information to APRS-IS.'''
+	"""Send APRS header information to APRS-IS."""
 	caller = '{0}>APP642::{0:9s}:'.format(cfg.call)
 	parm = f'{caller}PARM.CPUTemp,CPULoad,RAMUsed,DiskUsed'
 	unit = f'{caller}UNIT.deg.C,%,GB,GB'
 	eqns = f'{caller}EQNS.0,0.1,0,0,0.001,0,0,0.001,0,0,0.001,0'
 
 	def subfield(text):
-		return f'{text.split(":")[-1].split(".",1)[1]}'
+		return f'{text.split(":")[-1].split(".", 1)[1]}'
 
 	try:
 		if os.getenv('GPSD_ENABLE'):
@@ -863,7 +872,7 @@ async def send_header(ais, cfg, tg_logger):
 
 
 async def send_telemetry(ais, cfg, tg_logger):
-	'''Send APRS telemetry information to APRS-IS.'''
+	"""Send APRS telemetry information to APRS-IS."""
 	seq = Sequence().next()
 	temp = get_temp()
 	cpuload = get_cpuload()
@@ -890,7 +899,7 @@ async def send_telemetry(ais, cfg, tg_logger):
 
 
 async def send_status(ais, cfg, tg_logger):
-	'''Send APRS status information to APRS-IS.'''
+	"""Send APRS status information to APRS-IS."""
 	if os.getenv('GPSD_ENABLE'):
 		_, lat, lon, *_ = await get_gpspos()
 		if not (isinstance(lat, (int, float)) and isinstance(lon, (int, float)) and lat != 0 and lon != 0):
@@ -945,7 +954,7 @@ async def send_status(ais, cfg, tg_logger):
 
 
 async def ais_connect(cfg):
-	'''Establish connection to APRS-IS with retries.'''
+	"""Establish connection to APRS-IS with retries."""
 	logging.info('Connecting to APRS-IS server %s:%d as %s', cfg.server, cfg.port, cfg.call)
 	ais = aprslib.IS(cfg.call, passwd=cfg.passcode, host=cfg.server, port=cfg.port)
 	loop = asyncio.get_running_loop()
@@ -965,7 +974,7 @@ async def ais_connect(cfg):
 
 
 async def main():
-	'''Main function to run the APRS reporting loop.'''
+	"""Main function to run the APRS reporting loop."""
 	cfg = Config()
 	if os.getenv('GPSD_ENABLE'):
 		gps_data = await get_gpspos()
