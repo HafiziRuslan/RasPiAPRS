@@ -53,7 +53,7 @@ def configure_logging():
 	logging.getLogger('urllib3').setLevel(logging.DEBUG)
 
 	logger = logging.getLogger()
-	logger.setLevel(logging.INFO)
+	logger.setLevel(logging.DEBUG)
 	formatter = logging.Formatter('%(asctime)s | %(levelname)s | %(name)s.%(funcName)s | %(message)s', datefmt='%Y-%m-%dT%H:%M:%S')
 	console_handler = logging.StreamHandler()
 	console_handler.setLevel(logging.ERROR)
