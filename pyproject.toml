@@ -32,7 +32,7 @@ dependencies = [
   "humanize>=4.15.0",
   "psutil>=7.2.1",
   "python-dotenv>=1.2.1",
-  "python-telegram-bot>=22.5",
+  "python-telegram-bot>=22.6",
 ]
 
 [project.urls]
