@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta6] - (2026-01-23T03:28:05+08:00)
+## [beta6] - (2026-01-26T15:35:18+08:00)
 
-- 12 commit(s) contributed to the release.
-- 2 day(s) passed between the first and last commit.
-- 2 day(s) passed between releases.
+- 13 commit(s) contributed to the release.
+- 6 day(s) passed between the first and last commit.
+- 6 day(s) passed between releases.
 
 ### 🚀 Features in beta6
 
+- [bd97f23](https://github.com/HafiziRuslan/RasPiAPRS/commit/bd97f23c178c1fdafd6c937fc17e6743b42ecdf1) feat(pylock): update python-telegram-bot to 22.6 across repos *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-26T15:35:18+08:00*
 - [538e7a1](https://github.com/HafiziRuslan/RasPiAPRS/commit/538e7a14039a7d3d4a901ae33053357f93c651fd) feat(config): migrate python formatting improvements in main.py *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-23T01:17:28+08:00*
 - [01ca9f9](https://github.com/HafiziRuslan/RasPiAPRS/commit/01ca9f99e14fb6fc0ca98902d633f5b58c78979a) feat(readme): standardize clone command path *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-22T04:02:38+08:00*
 - [4b07442](https://github.com/HafiziRuslan/RasPiAPRS/commit/4b074421bfe0710652accb58ee1f1e963826ef65) feat(main): add level-based log file filtering *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:59:17+08:00*
@@ -859,4 +860,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-23T03:28:37.846885517+08:00
+generated using git-cliff on 2026-01-26T15:35:50.458223506+08:00
