@@ -44,6 +44,14 @@ def configure_logging():
 		log_dir = 'logs'
 	if not os.path.exists(log_dir):
 		os.makedirs(log_dir)
+
+	logging.getLogger('aprslib').setLevel(logging.DEBUG)
+	logging.getLogger('asyncio').setLevel(logging.DEBUG)
+	logging.getLogger('hpack').setLevel(logging.DEBUG)
+	logging.getLogger('httpx').setLevel(logging.DEBUG)
+	logging.getLogger('telegram').setLevel(logging.DEBUG)
+	logging.getLogger('urllib3').setLevel(logging.DEBUG)
+
 	logger = logging.getLogger()
 	logger.setLevel(logging.INFO)
 	formatter = logging.Formatter('%(asctime)s | %(levelname)s | %(name)s.%(funcName)s | %(message)s', datefmt='%Y-%m-%dT%H:%M:%S')
