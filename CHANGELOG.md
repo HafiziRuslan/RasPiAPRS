@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta6] - (2026-01-27T02:21:18+08:00)
+## [beta6] - (2026-01-29T00:26:38+08:00)
 
-- 17 commit(s) contributed to the release.
-- 6 day(s) passed between the first and last commit.
-- 6 day(s) passed between releases.
+- 18 commit(s) contributed to the release.
+- 8 day(s) passed between the first and last commit.
+- 8 day(s) passed between releases.
 
 ### 🚀 Features in beta6
 
@@ -29,6 +29,10 @@ All notable changes to this project will be documented in this file.
 - [e44f604](https://github.com/HafiziRuslan/RasPiAPRS/commit/e44f604f3cd5c755889d5e17028d72709086bf2d) fix(module): correct live_period type in telegram logger *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:17:30+08:00*
 - [d0ee483](https://github.com/HafiziRuslan/RasPiAPRS/commit/d0ee483163ebf3e92300465de730af8a7101e28a) fix(main): comment out forced filter during ais connect *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:06:26+08:00*
 - [877c20d](https://github.com/HafiziRuslan/RasPiAPRS/commit/877c20daa71ab5e9478ecb2d85f0bc1182e243b9) fix(timeline): adjust live_period values in telegram location updates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:05:49+08:00*
+
+### 📚 Documentation in beta6
+
+- [4db6e22](https://github.com/HafiziRuslan/RasPiAPRS/commit/4db6e227c17685e4b301bfab3d70f1dd68ec7c2d) docs(readme): update dependencies and script usage *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-29T00:26:38+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta6
 
@@ -864,4 +868,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-27T02:21:44.637736563+08:00
+generated using git-cliff on 2026-01-29T00:38:31.200654785+08:00
