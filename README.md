@@ -19,7 +19,7 @@ The following packages are required:
 - `gcc`
 - `git`
 - `python3-dev`
-- `wget`
+- `curl`
 - `uv`
 
 The startup script will attempt to install them automatically if they are missing.

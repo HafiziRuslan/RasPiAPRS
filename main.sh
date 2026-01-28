@@ -28,10 +28,15 @@ send_notification() {
   if [ -f .env ]; then
     local token=$(grep "^TELEGRAM_TOKEN=" .env | cut -d '=' -f2- | cut -d '#' -f1 | sed 's/^"//;s/"$//;s/^'"'"'//;s/'"'"'$//' | tr -d '[:space:]')
     local chat_id=$(grep "^TELEGRAM_CHAT_ID=" .env | cut -d '=' -f2- | cut -d '#' -f1 | sed 's/^"//;s/"$//;s/^'"'"'//;s/'"'"'$//' | tr -d '[:space:]')
+    local topic_id=$(grep "^TELEGRAM_TOPIC_ID=" .env | cut -d '=' -f2- | cut -d '#' -f1 | sed 's/^"//;s/"$//;s/^'"'"'//;s/'"'"'$//' | tr -d '[:space:]')
 
     if [ -n "$token" ] && [ -n "$chat_id" ]; then
       local encoded_message=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$message")
-      wget -qO- --post-data "chat_id=$chat_id&text=$encoded_message" "https://api.telegram.org/bot$token/sendMessage" >/dev/null 2>&1
+      local data="chat_id=$chat_id&text=$encoded_message"
+      if [ -n "$topic_id" ]; then
+        data="$data&message_thread_id=$topic_id"
+      fi
+      curl -s --data "$data" "https://api.telegram.org/bot$token/sendMessage" >/dev/null 2>&1
     fi
   fi
 }
@@ -153,14 +158,14 @@ command_exists() {
   command -v "$1" >/dev/null 2>&1
 }
 
-ensure_apt_packages gcc git python3-dev wget
+ensure_apt_packages gcc git python3-dev curl
 
 if command_exists uv; then
   log_msg INFO "✅ uv is installed."
 else
   if [ "$INTERNET_AVAILABLE" = true ]; then
     log_msg WARN "❌ uv is NOT installed. -> Installing uv"
-    wget -qO- https://astral.sh/uv/install.sh | sh
+    curl -LsSf https://astral.sh/uv/install.sh | sh
   else
     log_msg ERROR "❌ uv is NOT installed and cannot be installed without internet."
     exit 1
