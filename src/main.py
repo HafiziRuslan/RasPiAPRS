@@ -919,7 +919,7 @@ async def send_status(ais, cfg, tg_logger):
 	if address:
 		area = address.get('suburb') or address.get('town') or address.get('city') or address.get('district') or ''
 		cc = address['country_code'].upper()
-		nearAdd = f' near {area} ({cc}),'
+		nearAdd = f' near {area} [{cc}],'
 	else:
 		nearAdd = ''
 	ztime = dt.datetime.now(dt.timezone.utc)
