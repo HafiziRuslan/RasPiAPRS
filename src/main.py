@@ -597,7 +597,7 @@ def get_add_from_pos(lat, lon):
 		return None
 
 
-def format_address(address):
+def format_address(address, include_flag=False):
 	"""Format address dictionary into a string."""
 	if address:
 		area = address.get('suburb') or address.get('town') or address.get('city') or address.get('district') or ''
@@ -606,8 +606,10 @@ def format_address(address):
 		cc = address.get('country_code')
 		if cc:
 			cc = cc.upper()
-			flag = ''.join(chr(ord(c) + 127397) for c in cc)
-			return f' near {full_area} [{flag} {cc}],'
+			if include_flag:
+				flag = ''.join(chr(ord(c) + 127397) for c in cc)
+				return f' near {full_area} [{flag} {cc}],'
+			return f' near {full_area} ({cc}),'
 		return f' near {full_area},'
 	return ''
 
@@ -932,12 +934,14 @@ async def send_status(ais, cfg, tg_logger):
 	gridsquare = latlon_to_grid(lat, lon)
 	address = get_add_from_pos(lat, lon)
 	nearAdd = format_address(address)
+	nearAddTg = format_address(address, True)
 	ztime = dt.datetime.now(dt.timezone.utc)
 	timestamp = ztime.strftime('%d%H%Mz')
 	uptime = get_uptime()
 	statustext = f'{timestamp}[{gridsquare}]{nearAdd} {uptime}'
-	status = '{}>APP642:>{}'.format(cfg.call, statustext)
-	tgstat = f'<u>{cfg.call} Status</u>\n\n<b>{statustext}</b>'
+	aprsstat = '{}>APP642:>{}'.format(cfg.call, statustext)
+	statustextTg = f'{timestamp}[{gridsquare}]{nearAddTg} {uptime}'
+	tgstat = f'<u>{cfg.call} Status</u>\n\n<b>{statustextTg}</b>'
 	if os.getenv('GPSD_ENABLE'):
 		sats = ', gps: '
 		timez, uSat, nSat = await get_gpssat()
@@ -946,21 +950,21 @@ async def send_status(ais, cfg, tg_logger):
 			sats += f'{uSat}/{nSat}'
 		else:
 			sats += uSat
-		status += sats
+		aprsstat += sats
 		tgstat += f'<b>{sats}</b>'
 	if os.path.exists(STATUS_FILE):
 		try:
 			with open(STATUS_FILE, 'r') as f:
-				if f.read() == status:
+				if f.read() == aprsstat:
 					return
 		except (IOError, OSError):
 			pass
 	try:
-		ais.sendall(status)
-		logging.info(status)
+		ais.sendall(aprsstat)
+		logging.info(aprsstat)
 		try:
 			with open(STATUS_FILE, 'w') as f:
-				f.write(status)
+				f.write(aprsstat)
 		except (IOError, OSError):
 			pass
 		await tg_logger.log(tgstat)
