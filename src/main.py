@@ -597,6 +597,21 @@ def get_add_from_pos(lat, lon):
 		return None
 
 
+def format_address(address):
+	"""Format address dictionary into a string."""
+	if address:
+		area = address.get('suburb') or address.get('town') or address.get('city') or address.get('district') or ''
+		state = address.get('state') or address.get('region') or address.get('province') or ''
+		full_area = ', '.join(filter(None, [area, state]))
+		cc = address.get('country_code')
+		if cc:
+			cc = cc.upper()
+			flag = ''.join(chr(ord(c) + 127397) for c in cc)
+			return f' near {full_area} [{flag} {cc}],'
+		return f' near {full_area},'
+	return ''
+
+
 async def get_gpssat():
 	"""Get satellite from GPSD."""
 	if os.getenv('GPSD_ENABLE'):
@@ -916,12 +931,7 @@ async def send_status(ais, cfg, tg_logger):
 		lat, lon = cfg.latitude, cfg.longitude
 	gridsquare = latlon_to_grid(lat, lon)
 	address = get_add_from_pos(lat, lon)
-	if address:
-		area = address.get('suburb') or address.get('town') or address.get('city') or address.get('district') or ''
-		cc = address['country_code'].upper()
-		nearAdd = f' near {area} [{cc}],'
-	else:
-		nearAdd = ''
+	nearAdd = format_address(address)
 	ztime = dt.datetime.now(dt.timezone.utc)
 	timestamp = ztime.strftime('%d%H%Mz')
 	uptime = get_uptime()
