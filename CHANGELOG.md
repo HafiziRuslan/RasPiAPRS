@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta6] - (2026-01-29T00:26:38+08:00)
+## [beta6] - (2026-01-29T10:41:57+08:00)
 
-- 18 commit(s) contributed to the release.
-- 8 day(s) passed between the first and last commit.
-- 8 day(s) passed between releases.
+- 20 commit(s) contributed to the release.
+- 9 day(s) passed between the first and last commit.
+- 9 day(s) passed between releases.
 
 ### 🚀 Features in beta6
 
@@ -20,6 +20,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta6
 
+- [048aebc](https://github.com/HafiziRuslan/RasPiAPRS/commit/048aebc0d1fc9093c73e799c2c1dad4292c65b05) fix(add-address-format): refactor address formatting for status messages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-29T10:41:57+08:00*
+- [352945e](https://github.com/HafiziRuslan/RasPiAPRS/commit/352945e982d9ea3c8365712af10d0a72c96882d9) fix(endpoint): adjust near address formatting in send_status *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-29T10:23:23+08:00*
 - [278945b](https://github.com/HafiziRuslan/RasPiAPRS/commit/278945b7e41973a427902647c0f93296964aa1b5) fix(print): adjust log level in console handler *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-27T02:21:18+08:00*
 - [3a059aa](https://github.com/HafiziRuslan/RasPiAPRS/commit/3a059aabde3f96b7ec5b50ac3720045755fb1aa8) fix(logging): reduce verbosity in main.py *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-27T02:20:27+08:00*
 - [7cf9267](https://github.com/HafiziRuslan/RasPiAPRS/commit/7cf926758c956a25e02cf70f8388b34aacd949f9) fix(logging): raise log level to debug in main.py *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-27T02:05:03+08:00*
@@ -868,4 +870,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-29T00:38:31.200654785+08:00
+generated using git-cliff on 2026-01-29T10:42:38.839192697+08:00
