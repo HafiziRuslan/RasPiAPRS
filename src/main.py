@@ -599,19 +599,20 @@ def get_add_from_pos(lat, lon):
 
 def format_address(address, include_flag=False):
 	"""Format address dictionary into a string."""
-	if address:
-		area = address.get('suburb') or address.get('town') or address.get('city') or address.get('district') or ''
-		state = address.get('state') or address.get('region') or address.get('province') or ''
-		full_area = ', '.join(filter(None, [area, state]))
-		cc = address.get('country_code')
-		if cc:
-			cc = cc.upper()
-			if include_flag:
-				flag = ''.join(chr(ord(c) + 127397) for c in cc)
-				return f' near {full_area} [{flag} {cc}],'
-			return f' near {full_area} ({cc}),'
-		return f' near {full_area},'
-	return ''
+	if not address:
+		return ''
+	area = address.get('suburb') or address.get('town') or address.get('city') or address.get('district') or ''
+	state = address.get('state') or address.get('region') or address.get('province') or ''
+	full_area = ', '.join(filter(None, [area, state]))
+	cc_str = ''
+	if cc := address.get('country_code'):
+		cc = cc.upper()
+		if include_flag:
+			flag = ''.join(chr(ord(c) + 127397) for c in cc)
+			cc_str = f' [{flag} {cc}]'
+		else:
+			cc_str = f' ({cc})'
+	return f' near {full_area}{cc_str},'
 
 
 async def get_gpssat():
