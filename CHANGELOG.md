@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta6] - (2026-01-29T10:41:57+08:00)
+## [beta6] - (2026-01-29T11:47:11+08:00)
 
-- 20 commit(s) contributed to the release.
+- 22 commit(s) contributed to the release.
 - 9 day(s) passed between the first and last commit.
 - 9 day(s) passed between releases.
 
 ### 🚀 Features in beta6
 
+- [6f212a7](https://github.com/HafiziRuslan/RasPiAPRS/commit/6f212a796edb5520b7d0896d0eba49f137bc4d80) feat(main): add address format option and tg-friendly output *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-29T11:41:17+08:00*
 - [567f3fb](https://github.com/HafiziRuslan/RasPiAPRS/commit/567f3fb682c30fdda1ae5cb22a922be8eb8e59d1) feat(config): enable verbose logs for key libs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-27T02:03:15+08:00*
 - [bd97f23](https://github.com/HafiziRuslan/RasPiAPRS/commit/bd97f23c178c1fdafd6c937fc17e6743b42ecdf1) feat(pylock): update python-telegram-bot to 22.6 across repos *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-26T15:35:18+08:00*
 - [538e7a1](https://github.com/HafiziRuslan/RasPiAPRS/commit/538e7a14039a7d3d4a901ae33053357f93c651fd) feat(config): migrate python formatting improvements in main.py *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-23T01:17:28+08:00*
@@ -31,6 +32,10 @@ All notable changes to this project will be documented in this file.
 - [e44f604](https://github.com/HafiziRuslan/RasPiAPRS/commit/e44f604f3cd5c755889d5e17028d72709086bf2d) fix(module): correct live_period type in telegram logger *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:17:30+08:00*
 - [d0ee483](https://github.com/HafiziRuslan/RasPiAPRS/commit/d0ee483163ebf3e92300465de730af8a7101e28a) fix(main): comment out forced filter during ais connect *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:06:26+08:00*
 - [877c20d](https://github.com/HafiziRuslan/RasPiAPRS/commit/877c20daa71ab5e9478ecb2d85f0bc1182e243b9) fix(timeline): adjust live_period values in telegram location updates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-20T20:05:49+08:00*
+
+### 🚜 Refactor in beta6
+
+- [1b906d1](https://github.com/HafiziRuslan/RasPiAPRS/commit/1b906d11b746b1dc5111300760f1333da078a2b8) refactor(main): simplify and guard format_address *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-29T11:47:11+08:00*
 
 ### 📚 Documentation in beta6
 
@@ -870,4 +875,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-29T10:42:38.839192697+08:00
+generated using git-cliff on 2026-01-29T11:47:44.183132422+08:00
