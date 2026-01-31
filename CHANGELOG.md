@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta6] - (2026-02-01T03:01:33+08:00)
+## [beta6] - (2026-02-01T03:13:02+08:00)
 
-- 23 commit(s) contributed to the release.
+- 24 commit(s) contributed to the release.
 - 11 day(s) passed between the first and last commit.
 - 11 day(s) passed between releases.
 
 ### 🚀 Features in beta6
 
+- [979f2ff](https://github.com/HafiziRuslan/RasPiAPRS/commit/979f2ff8b5d1490adece7ec0ed67ec474c5b5854) feat(main): support gps env fallback on gps failure *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-01T03:13:02+08:00*
 - [6f212a7](https://github.com/HafiziRuslan/RasPiAPRS/commit/6f212a796edb5520b7d0896d0eba49f137bc4d80) feat(main): add address format option and tg-friendly output *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-29T11:41:17+08:00*
 - [567f3fb](https://github.com/HafiziRuslan/RasPiAPRS/commit/567f3fb682c30fdda1ae5cb22a922be8eb8e59d1) feat(config): enable verbose logs for key libs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-27T02:03:15+08:00*
 - [bd97f23](https://github.com/HafiziRuslan/RasPiAPRS/commit/bd97f23c178c1fdafd6c937fc17e6743b42ecdf1) feat(pylock): update python-telegram-bot to 22.6 across repos *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-26T15:35:18+08:00*
@@ -876,4 +877,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-01T03:04:12.668521755+08:00
+generated using git-cliff on 2026-02-01T03:13:24.867985989+08:00
