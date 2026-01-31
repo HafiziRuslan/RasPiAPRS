@@ -511,7 +511,7 @@ async def get_gpspos():
 						return utc, lat, lon, alt, spd, cse
 				else:
 					logging.warning('GPS Position unavailable')
-					return (timestamp, 0, 0, 0, 0, 0)
+					return timestamp, 0, 0, 0, 0, 0
 			except OSError as e:
 				logging.warning('GPSD connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
 				if attempt < max_retries - 1:
@@ -519,8 +519,8 @@ async def get_gpspos():
 					retry_delay *= 2
 			except Exception as e:
 				logging.error('Error getting GPS data: %s', e)
-				return (timestamp, 0, 0, 0, 0, 0)
-		return (timestamp, 0, 0, 0, 0, 0)
+				return timestamp, 0, 0, 0, 0, 0
+		return timestamp, 0, 0, 0, 0, 0
 
 
 def _mps_to_kmh(spd):
@@ -540,14 +540,14 @@ def get_coordinates():
 			data = json.loads(_data.decode())
 	except Exception as err:
 		logging.error('Failed to fetch coordinates from %s: %s', url, err)
-		return (0, 0)
+		return 0, 0
 	else:
 		try:
 			logging.debug('IP-Position: %f, %f', data['lat'], data['lon'])
 			return data['lat'], data['lon']
 		except (KeyError, TypeError) as err:
 			logging.error('Unexpected response format: %s', err)
-			return (0, 0)
+			return 0, 0
 
 
 def latlon_to_grid(lat, lon, precision=6):
@@ -649,7 +649,7 @@ async def get_gpssat():
 					return utc, uSat, nSat
 				else:
 					logging.warning('GPS Satellite unavailable')
-					return (timestamp, 0, 0)
+					return timestamp, 0, 0
 			except OSError as e:
 				logging.warning('GPSD connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
 				if attempt < max_retries - 1:
@@ -657,8 +657,8 @@ async def get_gpssat():
 					retry_delay *= 2
 			except Exception as e:
 				logging.error('Error getting GPS data: %s', e)
-				return (timestamp, 0, 0)
-		return (timestamp, 0, 0)
+				return timestamp, 0, 0
+		return timestamp, 0, 0
 
 
 def get_cpuload():
