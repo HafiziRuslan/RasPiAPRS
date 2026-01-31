@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta6] - (2026-01-29T11:47:11+08:00)
+## [beta6] - (2026-02-01T03:01:33+08:00)
 
-- 22 commit(s) contributed to the release.
-- 9 day(s) passed between the first and last commit.
-- 9 day(s) passed between releases.
+- 23 commit(s) contributed to the release.
+- 11 day(s) passed between the first and last commit.
+- 11 day(s) passed between releases.
 
 ### 🚀 Features in beta6
 
@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta6
 
+- [542fbe9](https://github.com/HafiziRuslan/RasPiAPRS/commit/542fbe9806f5c6bb3da0d5f4a646d61049491e3e) refactor(main): normalize return types to tuples consistently *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-01T03:01:33+08:00*
 - [048aebc](https://github.com/HafiziRuslan/RasPiAPRS/commit/048aebc0d1fc9093c73e799c2c1dad4292c65b05) fix(add-address-format): refactor address formatting for status messages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-29T10:41:57+08:00*
 - [352945e](https://github.com/HafiziRuslan/RasPiAPRS/commit/352945e982d9ea3c8365712af10d0a72c96882d9) fix(endpoint): adjust near address formatting in send_status *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-29T10:23:23+08:00*
 - [278945b](https://github.com/HafiziRuslan/RasPiAPRS/commit/278945b7e41973a427902647c0f93296964aa1b5) fix(print): adjust log level in console handler *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-27T02:21:18+08:00*
@@ -875,4 +876,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-01-29T11:47:44.183132422+08:00
+generated using git-cliff on 2026-02-01T03:04:12.668521755+08:00
