@@ -476,6 +476,13 @@ async def get_gpspos():
 		retry_delay = 1
 		loop = asyncio.get_running_loop()
 
+		try:
+			env_lat = float(os.getenv('APRS_LATITUDE', 0))
+			env_lon = float(os.getenv('APRS_LONGITUDE', 0))
+			env_alt = float(os.getenv('APRS_ALTITUDE', 0))
+		except ValueError:
+			env_lat, env_lon, env_alt = 0, 0, 0
+
 		def _gps_worker():
 			try:
 				with GPSDClient(os.getenv('GPSD_HOST', 'localhost'), int(os.getenv('GPSD_PORT', 2947)), 15) as client:
@@ -511,7 +518,7 @@ async def get_gpspos():
 						return utc, lat, lon, alt, spd, cse
 				else:
 					logging.warning('GPS Position unavailable')
-					return timestamp, 0, 0, 0, 0, 0
+					return timestamp, env_lat, env_lon, env_alt, 0, 0
 			except OSError as e:
 				logging.warning('GPSD connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
 				if attempt < max_retries - 1:
@@ -519,8 +526,8 @@ async def get_gpspos():
 					retry_delay *= 2
 			except Exception as e:
 				logging.error('Error getting GPS data: %s', e)
-				return timestamp, 0, 0, 0, 0, 0
-		return timestamp, 0, 0, 0, 0, 0
+				return timestamp, env_lat, env_lon, env_alt, 0, 0
+		return timestamp, env_lat, env_lon, env_alt, 0, 0
 
 
 def _mps_to_kmh(spd):
