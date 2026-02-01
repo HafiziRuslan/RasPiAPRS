@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta6] - (2026-02-01T03:13:02+08:00)
+## [beta6] - (2026-02-01T23:38:37+08:00)
 
-- 24 commit(s) contributed to the release.
-- 11 day(s) passed between the first and last commit.
-- 11 day(s) passed between releases.
+- 25 commit(s) contributed to the release.
+- 12 day(s) passed between the first and last commit.
+- 12 day(s) passed between releases.
 
 ### 🚀 Features in beta6
 
+- [226b05f](https://github.com/HafiziRuslan/RasPiAPRS/commit/226b05f3d1a51a862dd719105da1608bce3f0227) feat(logging): enable verbose app logging and adjust rotation policy *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-01T23:38:37+08:00*
 - [979f2ff](https://github.com/HafiziRuslan/RasPiAPRS/commit/979f2ff8b5d1490adece7ec0ed67ec474c5b5854) feat(main): support gps env fallback on gps failure *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-01T03:13:02+08:00*
 - [6f212a7](https://github.com/HafiziRuslan/RasPiAPRS/commit/6f212a796edb5520b7d0896d0eba49f137bc4d80) feat(main): add address format option and tg-friendly output *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-29T11:41:17+08:00*
 - [567f3fb](https://github.com/HafiziRuslan/RasPiAPRS/commit/567f3fb682c30fdda1ae5cb22a922be8eb8e59d1) feat(config): enable verbose logs for key libs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-27T02:03:15+08:00*
@@ -877,4 +878,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-01T03:13:24.867985989+08:00
+generated using git-cliff on 2026-02-01T23:39:12.916643870+08:00
