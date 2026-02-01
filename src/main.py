@@ -524,6 +524,7 @@ async def get_gpspos():
 				if attempt < max_retries - 1:
 					await asyncio.sleep(retry_delay)
 					retry_delay *= 2
+				return timestamp, env_lat, env_lon, env_alt, 0, 0
 			except Exception as e:
 				logging.error('Error getting GPS data: %s', e)
 				return timestamp, env_lat, env_lon, env_alt, 0, 0
@@ -662,6 +663,7 @@ async def get_gpssat():
 				if attempt < max_retries - 1:
 					await asyncio.sleep(retry_delay)
 					retry_delay *= 2
+				return timestamp, 0, 0
 			except Exception as e:
 				logging.error('Error getting GPS data: %s', e)
 				return timestamp, 0, 0
