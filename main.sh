@@ -32,10 +32,11 @@ send_notification() {
 
     if [ -n "$token" ] && [ -n "$chat_id" ]; then
       local encoded_message=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$message")
-      local data="chat_id=$chat_id&text=$encoded_message"
+      local data="chat_id=$chat_id"
       if [ -n "$topic_id" ]; then
         data="$data&message_thread_id=$topic_id"
       fi
+      local data="$data&text=$encoded_message"
       curl -s --data "$data" "https://api.telegram.org/bot$token/sendMessage" >/dev/null 2>&1
     fi
   fi
@@ -65,7 +66,7 @@ check_disk_space() {
 
 cleanup() {
   rm -rf /tmp/raspiaprs
-  rm -rf /var/log/raspiaprs
+  # rm -rf /var/log/raspiaprs
 }
 cleanup
 
@@ -211,17 +212,12 @@ while true; do
     RETRY_COUNT=0
   fi
 
-  # Define exit codes that trigger a restart
-  # 1: General error (e.g. Exception)
-  # 137: SIGKILL (e.g. OOM)
-  RESTART_CODES="1 137"
-  should_restart=false
-  for code in $RESTART_CODES; do
-    if [ "$exit_code" -eq "$code" ]; then
-      should_restart=true
-      break
-    fi
-  done
+  # Restart on any error code except 0 (success), 130 (SIGINT), 143 (SIGTERM)
+  if [ "$exit_code" -ne 0 ] && [ "$exit_code" -ne 130 ] && [ "$exit_code" -ne 143 ]; then
+    should_restart=true
+  else
+    should_restart=false
+  fi
 
   if [ "$should_restart" = true ]; then
     RETRY_COUNT=$((RETRY_COUNT + 1))
@@ -232,6 +228,7 @@ while true; do
     fi
 
     log_msg ERROR "RasPiAPRS exited with code $exit_code. Retry $RETRY_COUNT/$MAX_RETRIES. Re-run in ${RESTART_DELAY} seconds."
+    send_notification "RasPiAPRS exited with code $exit_code. Restarting (Retry $RETRY_COUNT/$MAX_RETRIES)..."
     sleep $RESTART_DELAY
 
     RESTART_DELAY=$((RESTART_DELAY * 2))
