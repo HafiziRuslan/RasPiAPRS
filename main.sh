@@ -185,7 +185,7 @@ else
 fi
 
 if [ ! -f .env ]; then
-  log_msg ERROR "❌ .env file not found! Please copy default.env to .env and configure it."
+  log_msg ERROR "❌ .env file not found! Please copy .env.sample to .env and configure it."
   exit 1
 fi
 

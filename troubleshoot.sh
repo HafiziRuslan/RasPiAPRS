@@ -201,8 +201,8 @@ if [ -f ".env" ]; then
   fi
 else
   echo "[FAIL] .env configuration file NOT found."
-  echo "       Please copy default.env to .env and configure it."
-  echo "       Command: cp default.env .env"
+  echo "       Please copy .env.sample to .env and configure it."
+  echo "       Command: cp .env.sample .env"
 fi
 
 # Check for main.sh executable

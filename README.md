@@ -49,10 +49,10 @@ Mirror Repositories (delayed daily update):
 
 ## Configurations
 
-Copy the file `default.env` into `.env`, and edit the configuration using your favorite editor.
+Copy the file `.env.sample` into `.env`, and edit the configuration using your favorite editor.
 
 ```bash
-cp default.env .env
+cp .env.sample .env
 nano .env
 ```
 
