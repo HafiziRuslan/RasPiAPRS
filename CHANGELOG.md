@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta6] - (2026-02-01T23:38:37+08:00)
+## [beta6] - (2026-02-01T23:55:54+08:00)
 
-- 25 commit(s) contributed to the release.
+- 27 commit(s) contributed to the release.
 - 12 day(s) passed between the first and last commit.
 - 12 day(s) passed between releases.
 
@@ -23,6 +23,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta6
 
+- [c98b797](https://github.com/HafiziRuslan/RasPiAPRS/commit/c98b7976f73349a470820dc1b1eac6aee6cecb8b) fix(main): simplify telegram message data construction *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-01T23:55:54+08:00*
+- [e57e975](https://github.com/HafiziRuslan/RasPiAPRS/commit/e57e9751e75507eca2eacc59899f77785574b807) fix(main): ensure gps functions return default values on failure *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-01T23:44:46+08:00*
 - [542fbe9](https://github.com/HafiziRuslan/RasPiAPRS/commit/542fbe9806f5c6bb3da0d5f4a646d61049491e3e) refactor(main): normalize return types to tuples consistently *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-01T03:01:33+08:00*
 - [048aebc](https://github.com/HafiziRuslan/RasPiAPRS/commit/048aebc0d1fc9093c73e799c2c1dad4292c65b05) fix(add-address-format): refactor address formatting for status messages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-29T10:41:57+08:00*
 - [352945e](https://github.com/HafiziRuslan/RasPiAPRS/commit/352945e982d9ea3c8365712af10d0a72c96882d9) fix(endpoint): adjust near address formatting in send_status *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-29T10:23:23+08:00*
@@ -878,4 +880,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-01T23:39:12.916643870+08:00
+generated using git-cliff on 2026-02-01T23:56:22.291187686+08:00
