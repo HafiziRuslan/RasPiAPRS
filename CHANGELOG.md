@@ -2,14 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta6] - (2026-02-01T23:55:54+08:00)
+## [beta6] - (2026-02-02T00:51:18+08:00)
 
-- 27 commit(s) contributed to the release.
+- 32 commit(s) contributed to the release.
 - 12 day(s) passed between the first and last commit.
 - 12 day(s) passed between releases.
 
 ### 🚀 Features in beta6
 
+- [1e1b4d8](https://github.com/HafiziRuslan/RasPiAPRS/commit/1e1b4d8a22b3d2c81336052d8f7426dfe4e326ce) feat(config): update env sample references to .env.sample *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-02T00:51:18+08:00*
+- [a98740b](https://github.com/HafiziRuslan/RasPiAPRS/commit/a98740b057b40e68657951330e173aeadd543364) feat(troubleshoot): add raspi aprs troubleshooting script *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-02T00:38:55+08:00*
 - [226b05f](https://github.com/HafiziRuslan/RasPiAPRS/commit/226b05f3d1a51a862dd719105da1608bce3f0227) feat(logging): enable verbose app logging and adjust rotation policy *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-01T23:38:37+08:00*
 - [979f2ff](https://github.com/HafiziRuslan/RasPiAPRS/commit/979f2ff8b5d1490adece7ec0ed67ec474c5b5854) feat(main): support gps env fallback on gps failure *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-01T03:13:02+08:00*
 - [6f212a7](https://github.com/HafiziRuslan/RasPiAPRS/commit/6f212a796edb5520b7d0896d0eba49f137bc4d80) feat(main): add address format option and tg-friendly output *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-29T11:41:17+08:00*
@@ -23,6 +25,9 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta6
 
+- [c1cb5ad](https://github.com/HafiziRuslan/RasPiAPRS/commit/c1cb5adbbfedf09385eac0ce5724efc15bf656e3) fix(main): enhance env handling and startup checks *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-02T00:49:42+08:00*
+- [09968ec](https://github.com/HafiziRuslan/RasPiAPRS/commit/09968eca6fa04a3691f0aa4ce1525725a5d59ffd) fix(troubleshoot): improve env var parsing from .env *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-02T00:49:22+08:00*
+- [3a3166b](https://github.com/HafiziRuslan/RasPiAPRS/commit/3a3166bf58f4e8812a2995ede133d78778ff58ea) fix(toml): remove unused deps and update psutil version *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-02T00:14:39+08:00*
 - [c98b797](https://github.com/HafiziRuslan/RasPiAPRS/commit/c98b7976f73349a470820dc1b1eac6aee6cecb8b) fix(main): simplify telegram message data construction *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-01T23:55:54+08:00*
 - [e57e975](https://github.com/HafiziRuslan/RasPiAPRS/commit/e57e9751e75507eca2eacc59899f77785574b807) fix(main): ensure gps functions return default values on failure *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-01T23:44:46+08:00*
 - [542fbe9](https://github.com/HafiziRuslan/RasPiAPRS/commit/542fbe9806f5c6bb3da0d5f4a646d61049491e3e) refactor(main): normalize return types to tuples consistently *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-01T03:01:33+08:00*
@@ -880,4 +885,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-01T23:56:22.291187686+08:00
+generated using git-cliff on 2026-02-02T00:51:51.653984502+08:00
