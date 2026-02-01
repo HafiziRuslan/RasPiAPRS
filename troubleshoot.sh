@@ -14,7 +14,22 @@ fi
 get_env_var() {
   local var_name="$1"
   if [ -f .env ]; then
-    grep "^${var_name}=" .env | cut -d '=' -f2- | cut -d '#' -f1 | sed 's/^"//;s/"$//;s/^'"'"'//;s/'"'"'$//'
+    local val
+    val=$(grep "^${var_name}=" .env | head -n 1 | cut -d '=' -f2-)
+    # Trim leading whitespace
+    val="${val#"${val%%[![:space:]]*}"}"
+
+    if [[ "$val" == \"* ]]; then
+      val="${val#\"}"
+      val="${val%%\"*}"
+    elif [[ "$val" == \'* ]]; then
+      val="${val#\'}"
+      val="${val%%\'*}"
+    else
+      val="${val%%#*}"
+      val="${val%"${val##*[![:space:]]}"}"
+    fi
+    echo "$val"
   fi
 }
 
