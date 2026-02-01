@@ -14,7 +14,18 @@ log_msg() {
   echo "$(date +'%FT%T') | $level | $*"
 }
 
+get_env_var() {
+  local var_name="$1"
+  if [ -f .env ]; then
+    grep "^${var_name}=" .env | cut -d '=' -f2- | cut -d '#' -f1 | sed 's/^"//;s/"$//;s/^'"'"'//;s/'"'"'$//'
+  fi
+}
+
 send_notification() {
+  if [ "$(get_env_var "TELEGRAM_ENABLE" | tr -d '[:space:]')" != "true" ]; then
+    return
+  fi
+
   local message="⚠️ RasPiAPRS Alert: $1"
   local log_file="/var/log/raspiaprs/error.log"
 
@@ -26,9 +37,9 @@ send_notification() {
   fi
 
   if [ -f .env ]; then
-    local token=$(grep "^TELEGRAM_TOKEN=" .env | cut -d '=' -f2- | cut -d '#' -f1 | sed 's/^"//;s/"$//;s/^'"'"'//;s/'"'"'$//' | tr -d '[:space:]')
-    local chat_id=$(grep "^TELEGRAM_CHAT_ID=" .env | cut -d '=' -f2- | cut -d '#' -f1 | sed 's/^"//;s/"$//;s/^'"'"'//;s/'"'"'$//' | tr -d '[:space:]')
-    local topic_id=$(grep "^TELEGRAM_TOPIC_ID=" .env | cut -d '=' -f2- | cut -d '#' -f1 | sed 's/^"//;s/"$//;s/^'"'"'//;s/'"'"'$//' | tr -d '[:space:]')
+    local token=$(get_env_var "TELEGRAM_TOKEN" | tr -d '[:space:]')
+    local chat_id=$(get_env_var "TELEGRAM_CHAT_ID" | tr -d '[:space:]')
+    local topic_id=$(get_env_var "TELEGRAM_TOPIC_ID" | tr -d '[:space:]')
 
     if [ -n "$token" ] && [ -n "$chat_id" ]; then
       local encoded_message=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$message")
@@ -173,24 +184,39 @@ else
   fi
 fi
 
+if [ ! -f .env ]; then
+  log_msg ERROR "❌ .env file not found! Please copy default.env to .env and configure it."
+  exit 1
+fi
+
+UV_ARGS=""
+if [ "$(get_env_var "GPSD_ENABLE" | tr -d '[:space:]')" = "true" ]; then
+  UV_ARGS="$UV_ARGS --group gps"
+fi
+if [ "$(get_env_var "TELEGRAM_ENABLE" | tr -d '[:space:]')" = "true" ]; then
+  UV_ARGS="$UV_ARGS --group telegram"
+fi
+
+sync_dependencies() {
+  local action=$1
+  if [ "$INTERNET_AVAILABLE" = true ]; then
+    log_msg INFO "$action RasPiAPRS dependencies"
+    uv sync -q $UV_ARGS
+  elif [ "$action" = "Installing" ]; then
+    log_msg WARN "Internet unavailable. Skipping dependency installation."
+  fi
+}
+
 if [ ! -d ".venv" ]; then
   log_msg INFO "RasPiAPRS environment not found, creating one."
   uv venv
   log_msg INFO "Activating RasPiAPRS environment"
   source .venv/bin/activate
-  if [ "$INTERNET_AVAILABLE" = true ]; then
-    log_msg INFO "Installing RasPiAPRS dependencies"
-    uv sync -q
-  else
-    log_msg WARN "Internet unavailable. Skipping dependency installation."
-  fi
+  sync_dependencies "Installing"
 else
-  log_msg INFO "RasPiAPRS environment already exists. -> Activating RasPiAPRS environment"
+  log_msg INFO "RasPiAPRS environment exists. -> Activating RasPiAPRS environment"
   source .venv/bin/activate
-  if [ "$INTERNET_AVAILABLE" = true ]; then
-    log_msg INFO "Updating RasPiAPRS dependencies"
-    uv sync -q
-  fi
+  sync_dependencies "Updating"
 fi
 
 log_msg INFO "Running RasPiAPRS"
@@ -200,6 +226,12 @@ MAX_RETRIES=10
 RETRY_COUNT=0
 
 while true; do
+  if [ ! -f .env ]; then
+    log_msg ERROR "❌ .env file not found! Cannot start RasPiAPRS. Exiting."
+    send_notification ".env file not found! Service stopping."
+    exit 1
+  fi
+
   START_TIME=$(date +%s)
   set +e
   uv run -s ./src/main.py
