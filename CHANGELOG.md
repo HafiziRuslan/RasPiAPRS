@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta6] - (2026-02-04T08:46:19+08:00)
+## [beta6] - (2026-02-04T08:56:02+08:00)
 
-- 34 commit(s) contributed to the release.
+- 36 commit(s) contributed to the release.
 - 15 day(s) passed between the first and last commit.
 - 15 day(s) passed between releases.
 
@@ -25,6 +25,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta6
 
+- [464bb9e](https://github.com/HafiziRuslan/RasPiAPRS/commit/464bb9e4439928a89396ab3f8ed1b3a89b9fb346) fix(main): adjust timing for header transmission *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-04T08:56:02+08:00*
+- [f353ae7](https://github.com/HafiziRuslan/RasPiAPRS/commit/f353ae77f28a71bcb6e8c5cae08c8f80aba7d94b) fix(data): adjust timer wrap to 86400 seconds *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-04T08:55:19+08:00*
 - [d210904](https://github.com/HafiziRuslan/RasPiAPRS/commit/d210904988f46bbb1fdd6f8e3350567959d4d2f6) fix(gps): broaden exception handling in gps data fetch *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-04T08:46:19+08:00*
 - [eda33ec](https://github.com/HafiziRuslan/RasPiAPRS/commit/eda33ec828c441a2b0d9b680824375c19807ddc2) fix: make troubleshoot executeable *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-02T00:57:08+08:00*
 - [c1cb5ad](https://github.com/HafiziRuslan/RasPiAPRS/commit/c1cb5adbbfedf09385eac0ce5724efc15bf656e3) fix(main): enhance env handling and startup checks *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-02T00:49:42+08:00*
@@ -887,4 +889,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-04T08:46:52.046658055+08:00
+generated using git-cliff on 2026-02-04T08:57:23.865711965+08:00
