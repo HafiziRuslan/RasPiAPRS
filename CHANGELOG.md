@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta6] - (2026-02-02T00:57:08+08:00)
+## [beta6] - (2026-02-04T08:46:19+08:00)
 
-- 33 commit(s) contributed to the release.
-- 12 day(s) passed between the first and last commit.
-- 12 day(s) passed between releases.
+- 34 commit(s) contributed to the release.
+- 15 day(s) passed between the first and last commit.
+- 15 day(s) passed between releases.
 
 ### 🚀 Features in beta6
 
@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta6
 
+- [d210904](https://github.com/HafiziRuslan/RasPiAPRS/commit/d210904988f46bbb1fdd6f8e3350567959d4d2f6) fix(gps): broaden exception handling in gps data fetch *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-04T08:46:19+08:00*
 - [eda33ec](https://github.com/HafiziRuslan/RasPiAPRS/commit/eda33ec828c441a2b0d9b680824375c19807ddc2) fix: make troubleshoot executeable *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-02T00:57:08+08:00*
 - [c1cb5ad](https://github.com/HafiziRuslan/RasPiAPRS/commit/c1cb5adbbfedf09385eac0ce5724efc15bf656e3) fix(main): enhance env handling and startup checks *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-02T00:49:42+08:00*
 - [09968ec](https://github.com/HafiziRuslan/RasPiAPRS/commit/09968eca6fa04a3691f0aa4ce1525725a5d59ffd) fix(troubleshoot): improve env var parsing from .env *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-02T00:49:22+08:00*
@@ -886,4 +887,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-02T01:03:52.801653367+08:00
+generated using git-cliff on 2026-02-04T08:46:52.046658055+08:00
