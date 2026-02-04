@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta6] - (2026-02-04T19:02:35+08:00)
+## [beta6] - (2026-02-04T21:40:34+08:00)
 
-- 39 commit(s) contributed to the release.
+- 41 commit(s) contributed to the release.
 - 15 day(s) passed between the first and last commit.
 - 15 day(s) passed between releases.
 
@@ -25,6 +25,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta6
 
+- [51d7b68](https://github.com/HafiziRuslan/RasPiAPRS/commit/51d7b6896c996ccb58e1ddcf2288df59ba65e5dd) fix(main): propagate gps_data through status flow and gps fetch *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-04T21:40:34+08:00*
+- [c7b6688](https://github.com/HafiziRuslan/RasPiAPRS/commit/c7b66884384ae6c334c70985bc1b5c078757aeeb) fix(**main**): ensure sats is string when appending status *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-04T21:32:47+08:00*
 - [f74af4c](https://github.com/HafiziRuslan/RasPiAPRS/commit/f74af4c3dd69b3f5673386be9080c9f7a4b4f48e) fix(main): improve gpsd client usage and retry behavior *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-04T19:02:35+08:00*
 - [cf87484](https://github.com/HafiziRuslan/RasPiAPRS/commit/cf87484b3b0e74332f6c96a074a9bb039c223e9c) fix(main): clarify gpsd error logs and adjust retry timing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-04T18:51:45+08:00*
 - [0508fbc](https://github.com/HafiziRuslan/RasPiAPRS/commit/0508fbc89b72fc0f3643cfcb89d152caa52e0817) fix(main): enhance logging format and reduce log file size *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-04T18:46:51+08:00*
@@ -892,4 +894,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-04T19:03:14.899145495+08:00
+generated using git-cliff on 2026-02-04T21:41:09.250080088+08:00
