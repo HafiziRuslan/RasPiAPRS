@@ -276,7 +276,7 @@ class Timer(object):
 		return self.__next__()
 
 	def __next__(self):
-		self._count = (1 + self._count) % 3600
+		self._count = (1 + self._count) % 86400
 		self.flush()
 		return self._count
 
