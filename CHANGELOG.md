@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta6] - (2026-02-04T08:56:02+08:00)
+## [beta6] - (2026-02-04T19:02:35+08:00)
 
-- 36 commit(s) contributed to the release.
+- 39 commit(s) contributed to the release.
 - 15 day(s) passed between the first and last commit.
 - 15 day(s) passed between releases.
 
@@ -25,6 +25,9 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta6
 
+- [f74af4c](https://github.com/HafiziRuslan/RasPiAPRS/commit/f74af4c3dd69b3f5673386be9080c9f7a4b4f48e) fix(main): improve gpsd client usage and retry behavior *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-04T19:02:35+08:00*
+- [cf87484](https://github.com/HafiziRuslan/RasPiAPRS/commit/cf87484b3b0e74332f6c96a074a9bb039c223e9c) fix(main): clarify gpsd error logs and adjust retry timing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-04T18:51:45+08:00*
+- [0508fbc](https://github.com/HafiziRuslan/RasPiAPRS/commit/0508fbc89b72fc0f3643cfcb89d152caa52e0817) fix(main): enhance logging format and reduce log file size *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-04T18:46:51+08:00*
 - [464bb9e](https://github.com/HafiziRuslan/RasPiAPRS/commit/464bb9e4439928a89396ab3f8ed1b3a89b9fb346) fix(main): adjust timing for header transmission *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-04T08:56:02+08:00*
 - [f353ae7](https://github.com/HafiziRuslan/RasPiAPRS/commit/f353ae77f28a71bcb6e8c5cae08c8f80aba7d94b) fix(data): adjust timer wrap to 86400 seconds *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-04T08:55:19+08:00*
 - [d210904](https://github.com/HafiziRuslan/RasPiAPRS/commit/d210904988f46bbb1fdd6f8e3350567959d4d2f6) fix(gps): broaden exception handling in gps data fetch *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-04T08:46:19+08:00*
@@ -889,4 +892,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-04T08:57:23.865711965+08:00
+generated using git-cliff on 2026-02-04T19:03:14.899145495+08:00
