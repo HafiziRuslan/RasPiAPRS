@@ -519,16 +519,12 @@ async def get_gpspos():
 				else:
 					logging.warning('GPS Position unavailable')
 					return timestamp, env_lat, env_lon, env_alt, 0, 0
-			except OSError as e:
-				logging.warning('GPSD connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
+			except Exception as e:
+				logging.error('GPSD connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
 				if attempt < max_retries - 1:
 					await asyncio.sleep(retry_delay)
 					retry_delay *= 2
 				return timestamp, env_lat, env_lon, env_alt, 0, 0
-			except Exception as e:
-				logging.error('Error getting GPS data: %s', e)
-				return timestamp, env_lat, env_lon, env_alt, 0, 0
-		return timestamp, env_lat, env_lon, env_alt, 0, 0
 
 
 def _mps_to_kmh(spd):
@@ -658,16 +654,12 @@ async def get_gpssat():
 				else:
 					logging.warning('GPS Satellite unavailable')
 					return timestamp, 0, 0
-			except OSError as e:
-				logging.warning('GPSD connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
+			except Exception as e:
+				logging.error('GPSD connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
 				if attempt < max_retries - 1:
 					await asyncio.sleep(retry_delay)
 					retry_delay *= 2
 				return timestamp, 0, 0
-			except Exception as e:
-				logging.error('Error getting GPS data: %s', e)
-				return timestamp, 0, 0
-		return timestamp, 0, 0
 
 
 def get_cpuload():
