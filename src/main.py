@@ -54,7 +54,7 @@ def configure_logging():
 
 	logger = logging.getLogger()
 	logger.setLevel(logging.DEBUG)
-	formatter = logging.Formatter('%(asctime)s | %(levelname)s | %(name)s.%(funcName)s | %(message)s', datefmt='%Y-%m-%dT%H:%M:%S')
+	formatter = logging.Formatter('%(asctime)s | %(levelname)s | %(threadName)s | %(name)s.%(funcName)s:%(lineno)d | %(message)s', datefmt='%Y-%m-%dT%H:%M:%S')
 	console_handler = logging.StreamHandler()
 	console_handler.setLevel(logging.WARNING)
 	console_handler.setFormatter(formatter)
@@ -76,7 +76,7 @@ def configure_logging():
 	}
 	for level, filename in levels.items():
 		try:
-			handler = logging.handlers.RotatingFileHandler(os.path.join(log_dir, filename), maxBytes=3 * 1024 * 1024, backupCount=5)
+			handler = logging.handlers.RotatingFileHandler(os.path.join(log_dir, filename), maxBytes=1 * 1024 * 1024, backupCount=5)
 			handler.setLevel(level)
 			handler.addFilter(LevelFilter(level))
 			handler.setFormatter(formatter)
