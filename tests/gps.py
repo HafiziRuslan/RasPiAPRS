@@ -16,25 +16,27 @@ def get_gpsd_position():
 	retry_delay = 1
 	for attempt in range(max_retries):
 		try:
-			with GPSDClient(host='localhost', port=2947, timeout=15) as client:
+			with GPSDClient(host='localhost', port=2947, timeout=5) as client:
 				for result in client.dict_stream(convert_datetime=True, filter=['TPV']):
-					if result['class'] == 'TPV':
+					if result['class'] == 'TPV' and result.get('mode', 0) > 1:
 						utc = result.get('time', dt.datetime.now(dt.timezone.utc))
-						lat = result.get('lat', 0)
-						lon = result.get('lon', 0)
-						alt = result.get('alt', 0)
+						lat = result.get('lat', 0.0)
+						lon = result.get('lon', 0.0)
+						alt = result.get('alt', 0.0)
 						spd = result.get('speed', 0)
 						cse = result.get('magtrack', 0) or result.get('track', 0)
 						acc = result.get('sep', 0) or result.get('cep', 0)
 						return utc, lat, lon, alt, spd, cse, acc
-		except OSError as e:
+					logging.info('No GPS fix yet, retrying...')
+		except (OSError, ConnectionRefusedError) as e:
 			logging.warning('GPSD connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
-			if attempt < max_retries - 1:
-				time.sleep(retry_delay)
-				retry_delay *= 2
 		except Exception as e:
 			logging.error('Error getting GPS data: %s', e)
 			break
+		if attempt < max_retries - 1:
+			time.sleep(retry_delay)
+			retry_delay *= 2
+	logging.error('Failed to get GPS position after %d attempts.', max_retries)
 
 
 def get_gpsd_sat():
@@ -44,27 +46,22 @@ def get_gpsd_sat():
 	retry_delay = 1
 	for attempt in range(max_retries):
 		try:
-			with GPSDClient(host='localhost', port=2947, timeout=15) as client:
+			with GPSDClient(host='localhost', port=2947, timeout=5) as client:
 				for result in client.dict_stream(convert_datetime=True, filter=['SKY']):
 					if result['class'] == 'SKY':
 						utc = result.get('time', dt.datetime.now(dt.timezone.utc))
 						uSat = result.get('uSat', 0)
 						nSat = result.get('nSat', 0)
-						sats = result.get('satellites', [])
-						for sat in sats:
-							if sat.get('used'):
-								uSats = len(sat)
-							else:
-								nSats = len(sats)
-						return utc, uSat, nSat, uSats, nSats
-		except OSError as e:
+						return utc, uSat, nSat
+		except (OSError, ConnectionRefusedError) as e:
 			logging.warning('GPSD connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
-			if attempt < max_retries - 1:
-				time.sleep(retry_delay)
-				retry_delay *= 2
 		except Exception as e:
 			logging.error('Error getting GPS data: %s', e)
 			break
+		if attempt < max_retries - 1:
+			time.sleep(retry_delay)
+			retry_delay *= 2
+	logging.error('Failed to get satellite data after %d attempts.', max_retries)
 
 
 if __name__ == '__main__':

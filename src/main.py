@@ -485,12 +485,11 @@ async def get_gpspos():
 
 		def _gps_worker():
 			try:
-				with GPSDClient(os.getenv('GPSD_HOST', 'localhost'), int(os.getenv('GPSD_PORT', 2947)), 15) as client:
+				with GPSDClient(host=os.getenv('GPSD_HOST', 'localhost'), port=int(os.getenv('GPSD_PORT', 2947)), timeout=15) as client:
 					for result in client.dict_stream(convert_datetime=True, filter=['TPV']):
-						if result['class'] == 'TPV' and (result.get('mode', 0) != 0 or result.get('mode', 0) != 1):
+						if result['class'] == 'TPV' and result.get('mode', 0) > 1:
 							return result
-						else:
-							return None
+						return None
 			except Exception as e:
 				return e
 
@@ -499,32 +498,34 @@ async def get_gpspos():
 				result = await loop.run_in_executor(None, _gps_worker)
 				if isinstance(result, Exception):
 					raise result
+
 				if result:
 					logging.debug('GPS fix acquired')
 					utc = result.get('time', timestamp)
-					lat = result.get('lat', 0)
-					lon = result.get('lon', 0)
-					alt = result.get('alt', 0)
+					lat = result.get('lat', 0.0)
+					lon = result.get('lon', 0.0)
+					alt = result.get('alt', 0.0)
 					spd = result.get('speed', 0)
 					cse = result.get('magtrack', 0) or result.get('track', 0)
-					if lat != 0 and lon != 0 and alt != 0:
-						logging.debug('%s | GPS Position: %s, %s, %s, %s, %s', utc, lat, lon, alt, spd, cse)
-						set_key('.env', 'APRS_LATITUDE', lat, quote_mode='never')
-						set_key('.env', 'APRS_LONGITUDE', lon, quote_mode='never')
-						set_key('.env', 'APRS_ALTITUDE', alt, quote_mode='never')
-						Config.latitude = lat
-						Config.longitude = lon
-						Config.altitude = alt
-						return utc, lat, lon, alt, spd, cse
+					logging.debug('%s | GPS Position: %s, %s, %s, %s, %s', utc, lat, lon, alt, spd, cse)
+					set_key('.env', 'APRS_LATITUDE', str(lat), quote_mode='never')
+					set_key('.env', 'APRS_LONGITUDE', str(lon), quote_mode='never')
+					set_key('.env', 'APRS_ALTITUDE', str(alt), quote_mode='never')
+					env_lat = lat
+					env_lon = lon
+					env_alt = alt
+					return utc, lat, lon, alt, spd, cse
 				else:
-					logging.warning('GPS Position unavailable')
-					return timestamp, env_lat, env_lon, env_alt, 0, 0
+					logging.warning('GPS Position unavailable, retrying...')
 			except Exception as e:
 				logging.error('GPSD (pos) connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
-				if attempt < max_retries - 1:
-					await asyncio.sleep(retry_delay)
-					retry_delay *= 5
-				return timestamp, env_lat, env_lon, env_alt, 0, 0
+
+			if attempt < max_retries - 1:
+				await asyncio.sleep(retry_delay)
+				retry_delay *= 5
+
+		logging.warning('Failed to get GPS position after %d attempts.', max_retries)
+		return timestamp, env_lat, env_lon, env_alt, 0, 0
 
 
 def _mps_to_kmh(spd):
@@ -630,12 +631,11 @@ async def get_gpssat():
 
 		def _gps_worker():
 			try:
-				with GPSDClient(os.getenv('GPSD_HOST', 'localhost'), int(os.getenv('GPSD_PORT', 2947)), 15) as client:
+				with GPSDClient(host=os.getenv('GPSD_HOST', 'localhost'), port=int(os.getenv('GPSD_PORT', 2947)), timeout=15) as client:
 					for result in client.dict_stream(convert_datetime=True, filter=['SKY']):
 						if result['class'] == 'SKY':
 							return result
-						else:
-							return None
+						return None
 			except Exception as e:
 				return e
 
@@ -652,15 +652,16 @@ async def get_gpssat():
 					nSat = result.get('nSat', 0)
 					return utc, uSat, nSat
 				else:
-					logging.warning('GPS Satellite unavailable')
-					return timestamp, 0, 0
+					logging.warning('GPS Satellite unavailable. Retrying...')
 			except Exception as e:
 				logging.error('GPSD (sat) connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
-				if attempt < max_retries - 1:
-					await asyncio.sleep(retry_delay)
-					retry_delay *= 5
-				return timestamp, 0, 0
 
+			if attempt < max_retries - 1:
+				await asyncio.sleep(retry_delay)
+				retry_delay *= 5
+
+		logging.warning('Failed to get GPS satellite data after %d attempts.', max_retries)
+		return timestamp, 0, 0
 
 def get_cpuload():
 	"""Get CPU load as a percentage of total capacity."""
