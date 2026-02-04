@@ -520,10 +520,10 @@ async def get_gpspos():
 					logging.warning('GPS Position unavailable')
 					return timestamp, env_lat, env_lon, env_alt, 0, 0
 			except Exception as e:
-				logging.error('GPSD connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
+				logging.error('GPSD (pos) connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
 				if attempt < max_retries - 1:
 					await asyncio.sleep(retry_delay)
-					retry_delay *= 2
+					retry_delay *= 5
 				return timestamp, env_lat, env_lon, env_alt, 0, 0
 
 
@@ -655,10 +655,10 @@ async def get_gpssat():
 					logging.warning('GPS Satellite unavailable')
 					return timestamp, 0, 0
 			except Exception as e:
-				logging.error('GPSD connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
+				logging.error('GPSD (sat) connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
 				if attempt < max_retries - 1:
 					await asyncio.sleep(retry_delay)
-					retry_delay *= 2
+					retry_delay *= 5
 				return timestamp, 0, 0
 
 
