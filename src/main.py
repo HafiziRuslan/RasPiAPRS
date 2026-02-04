@@ -951,7 +951,7 @@ async def send_status(ais, cfg, tg_logger, gps_data=None):
 		sats = ', gps: '
 		timez, uSat, nSat = await get_gpssat()
 		if uSat != 0:
-			timestamp = timez if timez is not None else ztime.strftime('%d%H%Mz')
+			timestamp = timez.strftime('%d%H%Mz')
 			sats += f'{uSat}/{nSat}'
 		else:
 			sats += str(uSat)
