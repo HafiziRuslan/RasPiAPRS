@@ -804,7 +804,8 @@ async def send_position(ais, cfg, tg_logger, gps_data=None):
 	if gps_data:
 		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = gps_data
 	elif os.getenv('GPSD_ENABLE'):
-		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = await get_gpspos()
+		gps_data = await get_gpspos()
+		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = gps_data
 	else:
 		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = None, 0, 0, 0, 0, 0
 	if os.getenv('GPSD_ENABLE') or gps_data:
@@ -863,7 +864,7 @@ async def send_position(ais, cfg, tg_logger, gps_data=None):
 		ais.sendall(posit)
 		logging.info(posit)
 		await tg_logger.log(tgpos, cur_lat, cur_lon, int(csestr))
-		await send_status(ais, cfg, tg_logger)
+		await send_status(ais, cfg, tg_logger, gps_data)
 	except APRSConnectionError as err:
 		logging.error('APRS connection error at position: %s', err)
 		ais = await ais_connect(cfg)
@@ -926,25 +927,26 @@ async def send_telemetry(ais, cfg, tg_logger):
 	return ais
 
 
-async def send_status(ais, cfg, tg_logger):
+async def send_status(ais, cfg, tg_logger, gps_data=None):
 	"""Send APRS status information to APRS-IS."""
-	if os.getenv('GPSD_ENABLE'):
+	if gps_data:
+		_, lat, lon, *_ = gps_data
+	elif os.getenv('GPSD_ENABLE'):
 		_, lat, lon, *_ = await get_gpspos()
 		if not (isinstance(lat, (int, float)) and isinstance(lon, (int, float)) and lat != 0 and lon != 0):
 			lat, lon = cfg.latitude, cfg.longitude
 	else:
 		lat, lon = cfg.latitude, cfg.longitude
+
 	gridsquare = latlon_to_grid(lat, lon)
 	address = get_add_from_pos(lat, lon)
 	nearAdd = format_address(address)
 	nearAddTg = format_address(address, True)
+
 	ztime = dt.datetime.now(dt.timezone.utc)
 	timestamp = ztime.strftime('%d%H%Mz')
-	uptime = get_uptime()
-	statustext = f'{timestamp}[{gridsquare}]{nearAdd} {uptime}'
-	aprsstat = '{}>APP642:>{}'.format(cfg.call, statustext)
-	statustextTg = f'{timestamp}[{gridsquare}]{nearAddTg} {uptime}'
-	tgstat = f'<u>{cfg.call} Status</u>\n\n<b>{statustextTg}</b>'
+
+	sats = ''
 	if os.getenv('GPSD_ENABLE'):
 		sats = ', gps: '
 		timez, uSat, nSat = await get_gpssat()
@@ -953,8 +955,14 @@ async def send_status(ais, cfg, tg_logger):
 			sats += f'{uSat}/{nSat}'
 		else:
 			sats += str(uSat)
-		aprsstat += sats
-		tgstat += f'<b>{sats}</b>'
+
+	uptime = get_uptime()
+	statustext = f'{timestamp}[{gridsquare}]{nearAdd} {uptime}{sats}'
+	aprsstat = f'{cfg.call}>APP642:>{statustext}'
+
+	statustextTg = f'{timestamp}[{gridsquare}]{nearAddTg} {uptime}'
+	tgstat = f'<u>{cfg.call} Status</u>\n\n<b>{statustextTg}{sats}</b>'
+
 	if os.path.exists(STATUS_FILE):
 		try:
 			with open(STATUS_FILE, 'r') as f:
@@ -974,7 +982,7 @@ async def send_status(ais, cfg, tg_logger):
 	except APRSConnectionError as err:
 		logging.error('APRS connection error at status: %s', err)
 		ais = await ais_connect(cfg)
-		ais = await send_status(ais, cfg, tg_logger)
+		ais = await send_status(ais, cfg, tg_logger, gps_data)
 	return ais
 
 
