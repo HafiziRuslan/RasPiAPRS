@@ -952,7 +952,7 @@ async def send_status(ais, cfg, tg_logger):
 			timestamp = timez if timez is not None else ztime.strftime('%d%H%Mz')
 			sats += f'{uSat}/{nSat}'
 		else:
-			sats += uSat
+			sats += str(uSat)
 		aprsstat += sats
 		tgstat += f'<b>{sats}</b>'
 	if os.path.exists(STATUS_FILE):
