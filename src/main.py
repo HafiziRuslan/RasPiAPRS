@@ -1024,7 +1024,7 @@ async def main():
 						posUpdate = True
 				if posUpdate:
 					ais = await send_position(ais, cfg, tg_logger, gps_data=gps_data)
-				if tmr % 3000 == 1:
+				if tmr % 14400 == 1:
 					ais = await send_header(ais, cfg, tg_logger)
 				if tmr % cfg.sleep == 1:
 					ais = await send_telemetry(ais, cfg, tg_logger)
