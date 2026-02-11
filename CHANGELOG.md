@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta6] - (2026-02-04T22:22:28+08:00)
+## [beta6] - (2026-02-11T16:43:41+08:00)
 
-- 42 commit(s) contributed to the release.
-- 15 day(s) passed between the first and last commit.
-- 15 day(s) passed between releases.
+- 43 commit(s) contributed to the release.
+- 22 day(s) passed between the first and last commit.
+- 22 day(s) passed between releases.
 
 ### 🚀 Features in beta6
 
+- [8432229](https://github.com/HafiziRuslan/RasPiAPRS/commit/8432229bce24a9ecf315cf2028c6f6e7279d6100) feat(sbom): update sbom metadata and add root project property *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-11T16:43:41+08:00*
 - [1e1b4d8](https://github.com/HafiziRuslan/RasPiAPRS/commit/1e1b4d8a22b3d2c81336052d8f7426dfe4e326ce) feat(config): update env sample references to .env.sample *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-02T00:51:18+08:00*
 - [a98740b](https://github.com/HafiziRuslan/RasPiAPRS/commit/a98740b057b40e68657951330e173aeadd543364) feat(troubleshoot): add raspi aprs troubleshooting script *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-02T00:38:55+08:00*
 - [226b05f](https://github.com/HafiziRuslan/RasPiAPRS/commit/226b05f3d1a51a862dd719105da1608bce3f0227) feat(logging): enable verbose app logging and adjust rotation policy *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-01T23:38:37+08:00*
@@ -895,4 +896,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-04T22:22:57.682407810+08:00
+generated using git-cliff on 2026-02-11T16:44:16.462158856+08:00
