@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta6] - (2026-02-11T16:43:41+08:00)
+## [beta6] - (2026-02-15T01:59:35+08:00)
 
-- 43 commit(s) contributed to the release.
-- 22 day(s) passed between the first and last commit.
-- 22 day(s) passed between releases.
+- 44 commit(s) contributed to the release.
+- 25 day(s) passed between the first and last commit.
+- 25 day(s) passed between releases.
 
 ### 🚀 Features in beta6
 
+- [3534e13](https://github.com/HafiziRuslan/RasPiAPRS/commit/3534e134888b89a133f7c792086d931725466416) feat(.gitattributes): add python repo attributes and line endings *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-15T01:59:35+08:00*
 - [8432229](https://github.com/HafiziRuslan/RasPiAPRS/commit/8432229bce24a9ecf315cf2028c6f6e7279d6100) feat(sbom): update sbom metadata and add root project property *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-11T16:43:41+08:00*
 - [1e1b4d8](https://github.com/HafiziRuslan/RasPiAPRS/commit/1e1b4d8a22b3d2c81336052d8f7426dfe4e326ce) feat(config): update env sample references to .env.sample *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-02T00:51:18+08:00*
 - [a98740b](https://github.com/HafiziRuslan/RasPiAPRS/commit/a98740b057b40e68657951330e173aeadd543364) feat(troubleshoot): add raspi aprs troubleshooting script *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-02T00:38:55+08:00*
@@ -896,4 +897,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-11T16:44:16.462158856+08:00
+generated using git-cliff on 2026-02-15T02:00:01.028598054+08:00
