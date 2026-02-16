@@ -31,13 +31,7 @@ dependencies = [
   "humanize>=4.15.0",
   "psutil>=7.2.2",
   "python-dotenv>=1.2.1",
-]
-
-[dependency-groups]
-gps = [
   "gpsdclient>=1.3.2",
-]
-telegram = [
   "python-telegram-bot>=22.6",
 ]
 

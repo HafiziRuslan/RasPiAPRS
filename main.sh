@@ -189,20 +189,12 @@ if [ ! -f .env ]; then
   exit 1
 fi
 
-UV_ARGS=""
-if [ "$(get_env_var "GPSD_ENABLE" | tr -d '[:space:]')" = "true" ]; then
-  UV_ARGS="$UV_ARGS --group gps"
-fi
-if [ "$(get_env_var "TELEGRAM_ENABLE" | tr -d '[:space:]')" = "true" ]; then
-  UV_ARGS="$UV_ARGS --group telegram"
-fi
-
 sync_dependencies() {
   local action=$1
   if [ "$INTERNET_AVAILABLE" = true ]; then
     log_msg INFO "$action RasPiAPRS dependencies"
-    uv sync -q $UV_ARGS
-  elif [ "$action" = "Installing" ]; then
+    uv sync -q
+    elif [ "$action" = "Installing" ]; then
     log_msg WARN "Internet unavailable. Skipping dependency installation."
   fi
 }
