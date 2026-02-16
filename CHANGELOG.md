@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta6] - (2026-02-15T01:59:35+08:00)
+## [beta6] - (2026-02-16T12:09:17+08:00)
 
-- 44 commit(s) contributed to the release.
-- 25 day(s) passed between the first and last commit.
-- 25 day(s) passed between releases.
+- 45 commit(s) contributed to the release.
+- 27 day(s) passed between the first and last commit.
+- 27 day(s) passed between releases.
 
 ### 🚀 Features in beta6
 
@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta6
 
+- [c7089ba](https://github.com/HafiziRuslan/RasPiAPRS/commit/c7089bac7003f78c309078acecf6e85ae454d700) fix(main): simplify uv sync args when online *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-16T12:09:17+08:00*
 - [e7a9c22](https://github.com/HafiziRuslan/RasPiAPRS/commit/e7a9c22992713934fbf8e3a15b9a68efa4335dfc) fix(main): ensure timestamp formatting when gps is available *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-04T22:22:28+08:00*
 - [51d7b68](https://github.com/HafiziRuslan/RasPiAPRS/commit/51d7b6896c996ccb58e1ddcf2288df59ba65e5dd) fix(main): propagate gps_data through status flow and gps fetch *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-04T21:40:34+08:00*
 - [c7b6688](https://github.com/HafiziRuslan/RasPiAPRS/commit/c7b66884384ae6c334c70985bc1b5c078757aeeb) fix(**main**): ensure sats is string when appending status *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-04T21:32:47+08:00*
@@ -897,4 +898,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-15T02:00:01.028598054+08:00
+generated using git-cliff on 2026-02-16T12:09:42.478096035+08:00
