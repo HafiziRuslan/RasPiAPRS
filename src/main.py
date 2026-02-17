@@ -36,6 +36,7 @@ LOCATION_ID_FILE = '/tmp/raspiaprs/location_id.tmp'
 STATUS_FILE = '/tmp/raspiaprs/status.tmp'
 GPS_FILE = '/tmp/raspiaprs/gps.json'
 
+
 # Set up logging
 def configure_logging():
 	log_dir = '/var/log/raspiaprs'
@@ -53,7 +54,9 @@ def configure_logging():
 
 	logger = logging.getLogger()
 	logger.setLevel(logging.DEBUG)
-	formatter = logging.Formatter('%(asctime)s | %(levelname)s | %(threadName)s | %(name)s.%(funcName)s:%(lineno)d | %(message)s', datefmt='%Y-%m-%dT%H:%M:%S')
+	formatter = logging.Formatter(
+		'%(asctime)s | %(levelname)s | %(threadName)s | %(name)s.%(funcName)s:%(lineno)d | %(message)s', datefmt='%Y-%m-%dT%H:%M:%S'
+	)
 	console_handler = logging.StreamHandler()
 	console_handler.setLevel(logging.WARNING)
 	console_handler.setFormatter(formatter)
@@ -431,13 +434,7 @@ class TelegramLogger(object):
 					logging.warning('Failed to edit location in Telegram: %s', e)
 
 		if not sent_location:
-			loc_kwargs = {
-				'chat_id': self.chat_id,
-				'latitude': lat,
-				'longitude': lon,
-				'heading': cse if cse > 0 else None,
-				'live_period': 86400,
-			}
+			loc_kwargs = {'chat_id': self.chat_id, 'latitude': lat, 'longitude': lon, 'heading': cse if cse > 0 else None, 'live_period': 86400}
 			if self.loc_topic_id:
 				loc_kwargs['message_thread_id'] = self.loc_topic_id
 			elif self.topic_id:
@@ -493,7 +490,7 @@ async def get_gpspos():
 						return result
 					return None
 		except Exception as e:
-				return e
+			return e
 
 	for attempt in range(max_retries):
 		try:
@@ -724,6 +721,7 @@ async def get_gpssat():
 
 		logging.warning('Failed to get GPS satellite data after %d attempts.', max_retries)
 		return timestamp, 0, 0
+
 
 def get_cpuload():
 	"""Get CPU load as a percentage of total capacity."""

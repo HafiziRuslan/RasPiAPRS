@@ -165,17 +165,12 @@ class TestGPS(unittest.TestCase):
 	def test_get_gpspos_fallback(self, mock_getenv):
 		"""Test get_gpspos returns env vars on GPS failure."""
 		# Mock environment variables
-		env_vars = {
-			'GPSD_ENABLE': '1',
-			'APRS_LATITUDE': '12.3456',
-			'APRS_LONGITUDE': '78.9012',
-			'APRS_ALTITUDE': '123.4'
-		}
+		env_vars = {'GPSD_ENABLE': '1', 'APRS_LATITUDE': '12.3456', 'APRS_LONGITUDE': '78.9012', 'APRS_ALTITUDE': '123.4'}
 		mock_getenv.side_effect = lambda k, d=None: env_vars.get(k, d)
 
 		# Mock GPSDClient to raise an exception (simulate failure)
 		mock_gpsd_client = MagicMock()
-		mock_gpsd_client.side_effect = RuntimeError("GPSD Error")
+		mock_gpsd_client.side_effect = RuntimeError('GPSD Error')
 
 		# Run the async function
 		timestamp, lat, lon, alt, spd, cse = asyncio.run(main.get_gpspos(client_factory=mock_gpsd_client))
