@@ -18,7 +18,6 @@ import humanize
 import psutil
 import telegram
 from aprslib.exceptions import ConnectionError as APRSConnectionError
-from dotenv import set_key
 from geopy.geocoders import Nominatim
 from gpsdclient import GPSDClient
 
@@ -35,7 +34,7 @@ TIMER_FILE = '/tmp/raspiaprs/timer.tmp'
 CACHE_FILE = '/tmp/raspiaprs/nominatim_cache.pkl'
 LOCATION_ID_FILE = '/tmp/raspiaprs/location_id.tmp'
 STATUS_FILE = '/tmp/raspiaprs/status.tmp'
-
+GPS_FILE = '/tmp/raspiaprs/gps.json'
 
 # Set up logging
 def configure_logging():
@@ -469,63 +468,75 @@ class TelegramLogger(object):
 
 async def get_gpspos():
 	"""Get position from GPSD."""
-	if os.getenv('GPSD_ENABLE'):
-		timestamp = dt.datetime.now(dt.timezone.utc)
-		logging.debug('Trying to figure out position using GPS')
-		max_retries = 5
-		retry_delay = 1
-		loop = asyncio.get_running_loop()
+	if not os.getenv('GPSD_ENABLE'):
+		return dt.datetime.now(dt.timezone.utc), 0, 0, 0, 0, 0
 
+	timestamp = dt.datetime.now(dt.timezone.utc)
+	logging.debug('Trying to figure out position using GPS')
+	max_retries = 5
+	retry_delay = 1
+	loop = asyncio.get_running_loop()
+
+	def _gps_worker():
+		try:
+			with GPSDClient(host=os.getenv('GPSD_HOST', 'localhost'), port=int(os.getenv('GPSD_PORT', 2947)), timeout=15) as client:
+				for result in client.dict_stream(convert_datetime=True, filter=['TPV']):
+					if result['class'] == 'TPV' and result.get('mode', 0) > 1:
+						return result
+					return None
+		except Exception as e:
+				return e
+
+	for attempt in range(max_retries):
+		try:
+			result = await loop.run_in_executor(None, _gps_worker)
+			if isinstance(result, Exception):
+				raise result
+
+			if result:
+				logging.debug('GPS fix acquired')
+				utc = result.get('time', timestamp)
+				lat = result.get('lat', 0.0)
+				lon = result.get('lon', 0.0)
+				alt = result.get('alt', 0.0)
+				spd = result.get('speed', 0)
+				cse = result.get('magtrack', 0) or result.get('track', 0)
+				logging.debug('%s | GPS Position: %s, %s, %s, %s, %s', utc, lat, lon, alt, spd, cse)
+				gps_payload = {'lat': lat, 'lon': lon, 'alt': alt}
+				try:
+					with open(GPS_FILE, 'w') as f:
+						json.dump(gps_payload, f)
+				except (IOError, OSError) as e:
+					logging.error('Failed to write GPS data to %s: %s', GPS_FILE, e)
+				return utc, lat, lon, alt, spd, cse
+			else:
+				logging.warning('GPS Position unavailable, retrying...')
+		except Exception as e:
+			logging.error('GPSD (pos) connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
+
+		if attempt < max_retries - 1:
+			await asyncio.sleep(retry_delay)
+			retry_delay *= 5
+
+	logging.warning('Failed to get GPS position after %d attempts. Reading from cache.', max_retries)
+	env_lat, env_lon, env_alt = 0, 0, 0
+	if os.path.exists(GPS_FILE):
+		try:
+			with open(GPS_FILE, 'r') as f:
+				gps_data = json.load(f)
+				env_lat = float(gps_data.get('lat', 0))
+				env_lon = float(gps_data.get('lon', 0))
+				env_alt = float(gps_data.get('alt', 0))
+		except (IOError, OSError, json.JSONDecodeError, ValueError) as e:
+			logging.warning('Could not read or parse GPS file %s: %s', GPS_FILE, e)
+	if env_lat == 0 and env_lon == 0:
 		try:
 			env_lat = float(os.getenv('APRS_LATITUDE', 0))
 			env_lon = float(os.getenv('APRS_LONGITUDE', 0))
 			env_alt = float(os.getenv('APRS_ALTITUDE', 0))
 		except ValueError:
 			env_lat, env_lon, env_alt = 0, 0, 0
-
-		def _gps_worker():
-			try:
-				with GPSDClient(host=os.getenv('GPSD_HOST', 'localhost'), port=int(os.getenv('GPSD_PORT', 2947)), timeout=15) as client:
-					for result in client.dict_stream(convert_datetime=True, filter=['TPV']):
-						if result['class'] == 'TPV' and result.get('mode', 0) > 1:
-							return result
-						return None
-			except Exception as e:
-				return e
-
-		for attempt in range(max_retries):
-			try:
-				result = await loop.run_in_executor(None, _gps_worker)
-				if isinstance(result, Exception):
-					raise result
-
-				if result:
-					logging.debug('GPS fix acquired')
-					utc = result.get('time', timestamp)
-					lat = result.get('lat', 0.0)
-					lon = result.get('lon', 0.0)
-					alt = result.get('alt', 0.0)
-					spd = result.get('speed', 0)
-					cse = result.get('magtrack', 0) or result.get('track', 0)
-					logging.debug('%s | GPS Position: %s, %s, %s, %s, %s', utc, lat, lon, alt, spd, cse)
-					set_key('.env', 'APRS_LATITUDE', str(lat), quote_mode='never')
-					set_key('.env', 'APRS_LONGITUDE', str(lon), quote_mode='never')
-					set_key('.env', 'APRS_ALTITUDE', str(alt), quote_mode='never')
-					env_lat = lat
-					env_lon = lon
-					env_alt = alt
-					return utc, lat, lon, alt, spd, cse
-				else:
-					logging.warning('GPS Position unavailable, retrying...')
-			except Exception as e:
-				logging.error('GPSD (pos) connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
-
-			if attempt < max_retries - 1:
-				await asyncio.sleep(retry_delay)
-				retry_delay *= 5
-
-		logging.warning('Failed to get GPS position after %d attempts.', max_retries)
-		return timestamp, env_lat, env_lon, env_alt, 0, 0
+	return timestamp, env_lat, env_lon, env_alt, 0, 0
 
 
 def _mps_to_kmh(spd):
