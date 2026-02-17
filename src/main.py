@@ -297,19 +297,22 @@ class SmartBeaconing(object):
 		self.turn_slope = int(os.getenv('SMARTBEACONING_TURNSLOPE', 255))
 		self.min_turn_time = int(os.getenv('SMARTBEACONING_MINTURNTIME', 5))
 
+	def _calculate_rate(self, spd_kmh):
+		"""Calculate beacon rate based on speed."""
+		if spd_kmh > self.fast_speed:
+			return self.fast_rate
+		if spd_kmh < self.slow_speed:
+			return self.slow_rate
+		return int(self.slow_rate - ((spd_kmh - self.slow_speed) * (self.slow_rate - self.fast_rate) / (self.fast_speed - self.slow_speed)))
+
 	def should_send(self, gps_data):
 		"""Determine if a beacon should be sent based on GPS data."""
 		if not gps_data:
 			return False
 		cur_spd = gps_data[4]
 		cur_cse = gps_data[5]
-		spd_kmh = int(cur_spd * 3.6) if cur_spd else 0
-		if spd_kmh > self.fast_speed:
-			rate = self.fast_rate
-		elif spd_kmh < self.slow_speed:
-			rate = self.slow_rate
-		else:
-			rate = int(self.slow_rate - ((spd_kmh - self.slow_speed) * (self.slow_rate - self.fast_rate) / (self.fast_speed - self.slow_speed)))
+		spd_kmh = _spd_to_kmh(cur_spd) if cur_spd else 0
+		rate = self._calculate_rate(spd_kmh)
 		turn_threshold = self.min_turn_angle + (self.turn_slope / (spd_kmh if spd_kmh > 0 else 1))
 		heading_change = abs(cur_cse - self.last_course)
 		if heading_change > 180:
@@ -397,50 +400,55 @@ class TelegramLogger(object):
 			msg = await self._call_with_retry(self.bot.send_message, **msg_kwargs)
 			logging.info('Sent message to Telegram: %s/%s/%s', msg.chat_id, msg.message_thread_id, msg.message_id)
 			if lat != 0 and lon != 0:
-				sent_location = False
-				if os.path.exists(LOCATION_ID_FILE):
-					try:
-						with open(LOCATION_ID_FILE, 'r') as f:
-							parts = f.read().split(':')
-							loc_msg_id = int(parts[0])
-							start_time = float(parts[1]) if len(parts) > 1 else time.time()
-						edit_kwargs = {
-							'chat_id': self.chat_id,
-							'message_id': loc_msg_id,
-							'latitude': lat,
-							'longitude': lon,
-							'heading': cse if cse > 0 else None,
-							'live_period': int(time.time() - start_time + 86400),
-						}
-						eloc = await self._call_with_retry(self.bot.edit_message_live_location, **edit_kwargs)
-						logging.info('Edited location in Telegram: %s/%s', eloc.chat_id, eloc.message_id)
-						sent_location = True
-					except Exception as e:
-						if 'message is not modified' in str(e):
-							sent_location = True
-						else:
-							logging.warning('Failed to edit location in Telegram: %s', e)
-				if not sent_location:
-					loc_kwargs = {
-						'chat_id': self.chat_id,
-						'latitude': lat,
-						'longitude': lon,
-						'heading': cse if cse > 0 else None,
-						'live_period': 86400,
-					}
-					if self.loc_topic_id:
-						loc_kwargs['message_thread_id'] = self.loc_topic_id
-					elif self.topic_id:
-						loc_kwargs['message_thread_id'] = self.topic_id
-					loc = await self._call_with_retry(self.bot.send_location, **loc_kwargs)
-					logging.info('Sent location to Telegram: %s/%s/%s', loc.chat_id, loc.message_thread_id, loc.message_id)
-					try:
-						with open(LOCATION_ID_FILE, 'w') as f:
-							f.write(f'{loc.message_id}:{time.time()}')
-					except Exception as e:
-						logging.error('Failed to save location ID: %s', e)
+				await self._update_location(lat, lon, cse)
 		except Exception as e:
 			logging.error('Failed to send message to Telegram: %s', e)
+
+	async def _update_location(self, lat, lon, cse):
+		"""Update or send live location."""
+		sent_location = False
+		if os.path.exists(LOCATION_ID_FILE):
+			try:
+				with open(LOCATION_ID_FILE, 'r') as f:
+					parts = f.read().split(':')
+					loc_msg_id = int(parts[0])
+					start_time = float(parts[1]) if len(parts) > 1 else time.time()
+				edit_kwargs = {
+					'chat_id': self.chat_id,
+					'message_id': loc_msg_id,
+					'latitude': lat,
+					'longitude': lon,
+					'heading': cse if cse > 0 else None,
+					'live_period': int(time.time() - start_time + 86400),
+				}
+				eloc = await self._call_with_retry(self.bot.edit_message_live_location, **edit_kwargs)
+				logging.info('Edited location in Telegram: %s/%s', eloc.chat_id, eloc.message_id)
+				sent_location = True
+			except Exception as e:
+				if 'message is not modified' in str(e):
+					sent_location = True
+				else:
+					logging.warning('Failed to edit location in Telegram: %s', e)
+
+		if not sent_location:
+			loc_kwargs = {
+				'chat_id': self.chat_id,
+				'latitude': lat,
+				'longitude': lon,
+				'heading': cse if cse > 0 else None,
+				'live_period': 86400,
+			}
+			if self.loc_topic_id:
+				loc_kwargs['message_thread_id'] = self.loc_topic_id
+			elif self.topic_id:
+				loc_kwargs['message_thread_id'] = self.topic_id
+			loc = await self._call_with_retry(self.bot.send_location, **loc_kwargs)
+			logging.info('Sent location to Telegram: %s/%s/%s', loc.chat_id, loc.message_thread_id, loc.message_id)
+			try:
+				with open(LOCATION_ID_FILE, 'w') as f:
+					f.write(f'{loc.message_id}:{time.time()}')
+			except Exception as e:
+				logging.error('Failed to save location ID: %s', e)
 
 	async def stop_location(self):
 		"""Stop live location sharing."""
@@ -539,11 +547,54 @@ async def get_gpspos():
 	return timestamp, env_lat, env_lon, env_alt, 0, 0
 
 
-def _mps_to_kmh(spd):
-	spd *= 3.6 if spd else 0  # mps to kmh
-	spd = max(0, spd)
-	spd = min(999, spd)
-	return '{0:03.0f}'.format(spd)
+def _lat_to_aprs(lat):
+	"""Format latitude for APRS."""
+	ns = 'N' if lat >= 0 else 'S'
+	lat = abs(lat)
+	deg = int(lat)
+	minutes = (lat - deg) * 60
+	return f'{deg:02d}{minutes:05.2f}{ns}'
+
+
+def _lon_to_aprs(lon):
+	"""Format longitude for APRS."""
+	ew = 'E' if lon >= 0 else 'W'
+	lon = abs(lon)
+	deg = int(lon)
+	minutes = (lon - deg) * 60
+	return f'{deg:03d}{minutes:05.2f}{ew}'
+
+
+def _alt_to_aprs(alt):
+	"""Format altitude for APRS (meters to feet)."""
+	alt_ft = alt / 0.3048 if alt else 0
+	alt_ft = max(-999999, alt_ft)
+	alt_ft = min(999999, alt_ft)
+	return f'/A={alt_ft:06.0f}'
+
+
+def _spd_to_knots(spd):
+	"""Format speed for APRS (mps to knots)."""
+	spd_knots = spd / 0.51444 if spd else 0
+	spd_knots = max(0, spd_knots)
+	spd_knots = min(999, spd_knots)
+	return f'{spd_knots:03.0f}'
+
+
+def _cse_to_aprs(cse):
+	"""Format course for APRS."""
+	cse = cse % 360 if cse else 0
+	cse = max(0, cse)
+	cse = min(359, cse)
+	return f'{cse:03.0f}'
+
+
+def _spd_to_kmh(spd):
+	"""Format speed for APRS (mps to kmh)."""
+	spd_kmh = spd * 3.6 if spd else 0
+	spd_kmh = max(0, spd_kmh)
+	spd_kmh = min(999, spd_kmh)
+	return f'{spd_kmh:03.0f}'
 
 
 def get_coordinates():
@@ -780,97 +831,71 @@ def get_mmdvminfo():
 async def send_position(ais, cfg, tg_logger, gps_data=None):
 	"""Send APRS position packet to APRS-IS."""
 
-	def _lat_to_aprs(lat):
-		ns = 'N' if lat >= 0 else 'S'
-		lat = abs(lat)
-		deg = int(lat)
-		minutes = (lat - deg) * 60
-		return f'{deg:02d}{minutes:05.2f}{ns}'
-
-	def _lon_to_aprs(lon):
-		ew = 'E' if lon >= 0 else 'W'
-		lon = abs(lon)
-		deg = int(lon)
-		minutes = (lon - deg) * 60
-		return f'{deg:03d}{minutes:05.2f}{ew}'
-
-	def _alt_to_aprs(alt):
-		alt = alt / 0.3048 if alt else 0  # m to ft
-		alt = max(-999999, alt)
-		alt = min(999999, alt)
-		return '/A={0:06.0f}'.format(alt)
-
-	def _spd_to_aprs(spd):
-		spd = spd / 0.51444 if spd else 0  # mps to knots
-		spd = max(0, spd)
-		spd = min(999, spd)
-		return '{0:03.0f}'.format(spd)
-
-	def _cse_to_aprs(cse):
-		cse = cse % 360 if cse else 0
-		cse = max(0, cse)
-		cse = min(359, cse)
-		return '{0:03.0f}'.format(cse)
+	# Get GPS data if not provided
+	if not gps_data and os.getenv('GPSD_ENABLE'):
+		gps_data = await get_gpspos()
 
 	if gps_data:
 		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = gps_data
-	elif os.getenv('GPSD_ENABLE'):
-		gps_data = await get_gpspos()
-		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = gps_data
 	else:
 		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = None, 0, 0, 0, 0, 0
-	if os.getenv('GPSD_ENABLE') or gps_data:
-		if cur_lat == 0 and cur_lon == 0 and cur_alt == 0:
-			cur_lat = os.getenv('APRS_LATITUDE', cfg.latitude)
-			cur_lon = os.getenv('APRS_LONGITUDE', cfg.longitude)
-			cur_alt = os.getenv('APRS_ALTITUDE', cfg.altitude)
-	else:
-		cur_lat = os.getenv('APRS_LATITUDE', cfg.latitude)
-		cur_lon = os.getenv('APRS_LONGITUDE', cfg.longitude)
-		cur_alt = os.getenv('APRS_ALTITUDE', cfg.altitude)
+
+	# Fallback to config/env if GPS data is invalid
+	if not all(isinstance(v, (int, float)) for v in [cur_lat, cur_lon]) or (cur_lat == 0 and cur_lon == 0):
+		cur_lat = float(os.getenv('APRS_LATITUDE', cfg.latitude))
+		cur_lon = float(os.getenv('APRS_LONGITUDE', cfg.longitude))
+		cur_alt = float(os.getenv('APRS_ALTITUDE', cfg.altitude))
 		cur_spd = 0
 		cur_cse = 0
-	latstr = _lat_to_aprs(float(cur_lat))
-	lonstr = _lon_to_aprs(float(cur_lon))
-	altstr = _alt_to_aprs(float(cur_alt))
-	spdstr = _spd_to_aprs(float(cur_spd))
-	csestr = _cse_to_aprs(float(cur_cse))
-	spdkmh = _mps_to_kmh(float(cur_spd))
+		cur_time = None
+
+	# Format data for APRS
+	latstr = _lat_to_aprs(cur_lat)
+	lonstr = _lon_to_aprs(cur_lon)
+	altstr = _alt_to_aprs(cur_alt)
+	spdstr = _spd_to_knots(cur_spd)
+	csestr = _cse_to_aprs(cur_cse)
+	spdkmh = _spd_to_kmh(cur_spd)
+
+	# Build comment
 	mmdvminfo = get_mmdvminfo()
 	osinfo = get_osinfo()
 	comment = f'{mmdvminfo}{osinfo} https://github.com/HafiziRuslan/RasPiAPRS'
+
+	# Determine timestamp
 	ztime = dt.datetime.now(dt.timezone.utc)
-	timestamp = cur_time.strftime('%d%H%Mz') if cur_time is not None else ztime.strftime('%d%H%Mz')
+	timestamp = cur_time.strftime('%d%H%Mz') if cur_time else ztime.strftime('%d%H%Mz')
+
+	# Determine symbol based on speed (SmartBeaconing symbol logic)
 	symbt = cfg.symbol_table
 	symb = cfg.symbol
 	if cfg.symbol_overlay:
 		symbt = cfg.symbol_overlay
-	if int(cur_spd) > 0:
+
+	tgposmoving = ''
+	extdatstr = ''
+	if cur_spd > 0:
+		extdatstr = f'{csestr}/{spdstr}'
+		tgposmoving = f'\n\tSpeed: <b>{int(cur_spd)}m/s</b> | <b>{int(spdkmh)}km/h</b> | <b>{int(spdstr)}kn</b>\n\tCourse: <b>{int(cur_cse)}°</b>'
 		if os.getenv('SMARTBEACONING_ENABLE'):
 			sspd = int(os.getenv('SMARTBEACONING_SLOWSPEED'))
 			fspd = int(os.getenv('SMARTBEACONING_FASTSPEED'))
 			kmhspd = int(spdkmh)
 			if kmhspd > fspd:
-				symbt = '\\'
-				symb = '>'
-			if kmhspd > sspd and kmhspd <= fspd:
-				symbt = '/'
-				symb = '>'
-			if kmhspd != 0 and kmhspd <= sspd:
-				symbt = '/'
-				symb = '('
-		tgposmoving = f'\n\tSpeed: <b>{int(cur_spd)}m/s</b> | <b>{int(spdkmh)}km/h</b> | <b>{int(spdstr)}kn</b>\n\tCourse: <b>{int(cur_cse)}°</b>'
-		extdatstr = f'{csestr}/{spdstr}'
-	else:
-		tgposmoving = ''
-		extdatstr = ''
-	lookup_table = symbt
-	if symbt not in ['/', '\\']:
-		lookup_table = '\\'
+				symbt, symb = '\\', '>'
+			elif sspd < kmhspd <= fspd:
+				symbt, symb = '/', '>'
+			elif 0 < kmhspd <= sspd:
+				symbt, symb = '/', '('
+
+	# Construct payload and messages
+	lookup_table = symbt if symbt in ['/', '\\'] else '\\'
 	sym_desc = symbols.get_desc(lookup_table, symb).split('(')[0].strip()
 	payload = f'/{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
 	posit = f'{cfg.call}>APP642:{payload}'
 	tgpos = f'<u>{cfg.call} Position</u>\n\nTime: <b>{timestamp}</b>\nSymbol: {symbt}{symb} ({sym_desc})\nPosition:\n\tLatitude: <b>{cur_lat}</b>\n\tLongitude: <b>{cur_lon}</b>\n\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\nComment: <b>{comment}</b>'
+
+	# Send data
 	try:
 		ais.sendall(posit)
 		logging.info(posit)
@@ -879,30 +904,29 @@ async def send_position(ais, cfg, tg_logger, gps_data=None):
 	except APRSConnectionError as err:
 		logging.error('APRS connection error at position: %s', err)
 		ais = await ais_connect(cfg)
-		ais = await send_position(ais, cfg, tg_logger, gps_data)
+		ais = await send_position(ais, cfg, tg_logger, gps_data)  # Recursive call on failure
 	return ais
 
 
 async def send_header(ais, cfg, tg_logger):
 	"""Send APRS header information to APRS-IS."""
-	caller = '{0}>APP642::{0:9s}:'.format(cfg.call)
-	parm = f'{caller}PARM.CPUTemp,CPULoad,RAMUsed,DiskUsed'
-	unit = f'{caller}UNIT.deg.C,%,GB,GB'
-	eqns = f'{caller}EQNS.0,0.1,0,0,0.001,0,0,0.001,0,0,0.001,0'
+	caller = f'{cfg.call}>APP642::{cfg.call:9s}:'
+	params = ['CPUTemp', 'CPULoad', 'RAMUsed', 'DiskUsed']
+	units = ['deg.C', '%', 'GB', 'GB']
+	eqns = ['0,0.1,0', '0,0.001,0', '0,0.001,0', '0,0.001,0']
 
-	def subfield(text):
-		return f'{text.split(":")[-1].split(".", 1)[1]}'
+	if os.getenv('GPSD_ENABLE'):
+		params.append('GPSUsed')
+		units.append('sats')
+		eqns.append('0,1,0')
+
+	payload = f'{caller}PARM.{",".join(params)}\r\n{caller}UNIT.{",".join(units)}\r\n{caller}EQNS.{",".join(eqns)}'
+	tg_msg = f'<u>{cfg.call} Header</u>\n\nParameters: <b>{",".join(params)}</b>\nUnits: <b>{",".join(units)}</b>\nEquations: <b>{",".join(eqns)}</b>\n\nValue: <code>[a,b,c]=(a×v²)+(b×v)+c</code>'
 
 	try:
-		if os.getenv('GPSD_ENABLE'):
-			parm += ',GPSUsed'
-			unit += ',sats'
-			eqns += ',0,1,0'
-		head = f'{parm}\r\n{unit}\r\n{eqns}'
-		tghead = f'<u>{cfg.call} Header</u>\n\nParameters: <b>{subfield(parm)}</b>\nUnits: <b>{subfield(unit)}</b>\nEquations: <b>{subfield(eqns)}</b>\n\nValue: <code>[a,b,c]=(a×v²)+(b×v)+c</code>'
-		ais.sendall(head)
-		logging.info(head)
-		await tg_logger.log(tghead)
+		ais.sendall(payload)
+		logging.info(payload)
+		await tg_logger.log(tg_msg)
 		await send_status(ais, cfg, tg_logger)
 	except APRSConnectionError as err:
 		logging.error('APRS connection error at header: %s', err)
@@ -920,12 +944,22 @@ async def send_telemetry(ais, cfg, tg_logger):
 	diskused = get_diskused()
 	telemmemused = int(memused / 1.0000e6)
 	telemdiskused = int(diskused / 1.0000e6)
-	telem = '{}>APP642:T#{:03d},{:d},{:d},{:d},{:d}'.format(cfg.call, seq, temp, cpuload, telemmemused, telemdiskused)
-	tgtel = f'<u>{cfg.call} Telemetry</u>\n\nSequence: <b>#{seq}</b>\nCPU Temp: <b>{temp / 10:.1f} °C</b>\nCPU Load: <b>{cpuload / 1000:.1f}%</b>\nRAM Used: <b>{humanize.naturalsize(memused, binary=True)}</b>\nDisk Used: <b>{humanize.naturalsize(diskused, binary=True)}</b>'
+
+	telem = f'{cfg.call}>APP642:T#{seq:03d},{temp:d},{cpuload:d},{telemmemused:d},{telemdiskused:d}'
+	tgtel = (
+		f'<u>{cfg.call} Telemetry</u>\n\n'
+		f'Sequence: <b>#{seq}</b>\n'
+		f'CPU Temp: <b>{temp / 10:.1f} °C</b>\n'
+		f'CPU Load: <b>{cpuload / 1000:.1f}%</b>\n'
+		f'RAM Used: <b>{humanize.naturalsize(memused, binary=True)}</b>\n'
+		f'Disk Used: <b>{humanize.naturalsize(diskused, binary=True)}</b>'
+	)
+
 	if os.getenv('GPSD_ENABLE'):
 		_, uSat, _ = await get_gpssat()
-		telem += ',{:d}'.format(uSat)
+		telem += f',{uSat:d}'
 		tgtel += f'\nGPS Used: <b>{uSat}</b>'
+
 	try:
 		ais.sendall(telem)
 		logging.info(telem)
@@ -940,56 +974,57 @@ async def send_telemetry(ais, cfg, tg_logger):
 
 async def send_status(ais, cfg, tg_logger, gps_data=None):
 	"""Send APRS status information to APRS-IS."""
+	# Determine coordinates
+	lat, lon = cfg.latitude, cfg.longitude
 	if gps_data:
 		_, lat, lon, *_ = gps_data
 	elif os.getenv('GPSD_ENABLE'):
-		_, lat, lon, *_ = await get_gpspos()
-		if not (isinstance(lat, (int, float)) and isinstance(lon, (int, float)) and lat != 0 and lon != 0):
-			lat, lon = cfg.latitude, cfg.longitude
-	else:
-		lat, lon = cfg.latitude, cfg.longitude
+		_, g_lat, g_lon, *_ = await get_gpspos()
+		if isinstance(g_lat, (int, float)) and isinstance(g_lon, (int, float)) and (g_lat != 0 or g_lon != 0):
+			lat, lon = g_lat, g_lon
 
+	# Get location details
 	gridsquare = latlon_to_grid(lat, lon)
 	address = get_add_from_pos(lat, lon)
-	nearAdd = format_address(address)
-	nearAddTg = format_address(address, True)
+	near_add = format_address(address)
+	near_add_tg = format_address(address, True)
 
+	# Timestamp and Satellite info
 	ztime = dt.datetime.now(dt.timezone.utc)
 	timestamp = ztime.strftime('%d%H%Mz')
+	sats_info = ''
 
-	sats = ''
 	if os.getenv('GPSD_ENABLE'):
-		sats = ', gps: '
-		timez, uSat, nSat = await get_gpssat()
-		if uSat != 0:
+		timez, u_sat, n_sat = await get_gpssat()
+		if u_sat > 0:
 			timestamp = timez.strftime('%d%H%Mz')
-			sats += f'{uSat}/{nSat}'
+			sats_info = f', gps: {u_sat}/{n_sat}'
 		else:
-			sats += str(uSat)
+			sats_info = f', gps: {u_sat}'
 
 	uptime = get_uptime()
-	statustext = f'{timestamp}[{gridsquare}]{nearAdd} {uptime}{sats}'
-	aprsstat = f'{cfg.call}>APP642:>{statustext}'
 
-	statustextTg = f'{timestamp}[{gridsquare}]{nearAddTg} {uptime}'
-	tgstat = f'<u>{cfg.call} Status</u>\n\n<b>{statustextTg}{sats}</b>'
+	# Construct messages
+	status_text = f'{timestamp}[{gridsquare}]{near_add} {uptime}{sats_info}'
+	aprs_packet = f'{cfg.call}>APP642:>{status_text}'
+	tg_msg = f'<u>{cfg.call} Status</u>\n\n<b>{timestamp}[{gridsquare}]{near_add_tg} {uptime}{sats_info}</b>'
 
 	if os.path.exists(STATUS_FILE):
 		try:
 			with open(STATUS_FILE, 'r') as f:
-				if f.read() == aprsstat:
-					return
+				if f.read() == aprs_packet:
+					return ais
 		except (IOError, OSError):
 			pass
 	try:
-		ais.sendall(aprsstat)
-		logging.info(aprsstat)
+		ais.sendall(aprs_packet)
+		logging.info(aprs_packet)
 		try:
 			with open(STATUS_FILE, 'w') as f:
-				f.write(aprsstat)
+				f.write(aprs_packet)
 		except (IOError, OSError):
 			pass
-		await tg_logger.log(tgstat)
+		await tg_logger.log(tg_msg)
 	except APRSConnectionError as err:
 		logging.error('APRS connection error at status: %s', err)
 		ais = await ais_connect(cfg)
@@ -1002,19 +1037,34 @@ async def ais_connect(cfg):
 	logging.info('Connecting to APRS-IS server %s:%d as %s', cfg.server, cfg.port, cfg.call)
 	ais = aprslib.IS(cfg.call, passwd=cfg.passcode, host=cfg.server, port=cfg.port)
 	loop = asyncio.get_running_loop()
-	for _ in range(5):
+	max_retries = 5
+	retry_delay = 5
+
+	for attempt in range(max_retries):
 		try:
 			await loop.run_in_executor(None, ais.connect)
-		except APRSConnectionError as err:
-			logging.warning('APRS connection error: %s', err)
-			await asyncio.sleep(20)
-			continue
-		else:
 			# ais.set_filter(cfg.filter)
 			logging.info('Connected to APRS-IS server %s:%d as %s', cfg.server, cfg.port, cfg.call)
 			return ais
+		except APRSConnectionError as err:
+			logging.warning('APRS connection error (attempt %d/%d): %s', attempt + 1, max_retries, err)
+			if attempt < max_retries - 1:
+				await asyncio.sleep(retry_delay)
+				retry_delay = min(retry_delay * 2, 60)
+
 	logging.error('Connection error, exiting')
 	sys.exit(getattr(os, 'EX_NOHOST', 1))
+
+
+def should_send_position(tmr, sb, gps_data):
+	"""Determine if a position update is needed."""
+	if os.getenv('GPSD_ENABLE'):
+		if not os.getenv('SMARTBEACONING_ENABLE'):
+			return False
+
+		return sb.should_send(gps_data)
+
+	return tmr % 1800 == 1
 
 
 async def main():
@@ -1030,20 +1080,12 @@ async def main():
 		try:
 			for tmr in Timer():
 				gps_data = None
-				posUpdate = False
 				if os.getenv('GPSD_ENABLE'):
 					gps_data = await get_gpspos()
-					if os.getenv('SMARTBEACONING_ENABLE'):
-						if gps_data[4] < 1:
-							if tmr % 900 == 1:
-								posUpdate = True
-						elif sb.should_send(gps_data):
-							posUpdate = True
-				else:
-					if tmr % 1800 == 1:
-						posUpdate = True
-				if posUpdate:
+
+				if should_send_position(tmr, sb, gps_data):
 					ais = await send_position(ais, cfg, tg_logger, gps_data=gps_data)
+
 				if tmr % 14400 == 1:
 					ais = await send_header(ais, cfg, tg_logger)
 				if tmr % cfg.sleep == 1:
