@@ -806,16 +806,18 @@ def get_uptime():
 def get_osinfo():
 	"""Get operating system information."""
 	osname = ''
-	id_like, debian_version_full, version_codename = '', '', ''
 	try:
+		os_info = {}
 		with open(OS_RELEASE_FILE) as osr:
 			for line in osr:
-				if 'ID_LIKE=' in line:
-					id_like = line.split('=', 1)[1].strip().title()
-				elif 'DEBIAN_VERSION_FULL=' in line:
-					debian_version_full = line.split('=', 1)[1].strip()
-				elif 'VERSION_CODENAME=' in line:
-					version_codename = line.split('=', 1)[1].strip()
+				line = line.strip()
+				if '=' in line:
+					key, value = line.split('=', 1)
+					os_info[key] = value.strip().replace('"', '')
+
+		id_like = os_info.get('ID_LIKE', '').title()
+		version_codename = os_info.get('VERSION_CODENAME', '')
+		debian_version_full = os_info.get('DEBIAN_VERSION_FULL') or os_info.get('VERSION_ID', '')
 		osname = f'{id_like}{debian_version_full} ({version_codename})'
 	except (IOError, OSError):
 		logging.warning('OS release file not found: %s', OS_RELEASE_FILE)
@@ -830,17 +832,23 @@ def get_osinfo():
 
 def get_mmdvminfo():
 	"""Get MMDVM configured frequency and color code."""
-	rx_freq, tx_freq, color_code, dmr_enabled = 0, 0, 0, False
-	with open(MMDVMHOST_FILE, 'r') as mmh:
-		for line in mmh:
-			if line.startswith('RXFrequency='):
-				rx_freq = int(line.strip().split('=')[1])
-			elif line.startswith('TXFrequency='):
-				tx_freq = int(line.strip().split('=')[1])
-			elif line.startswith('ColorCode='):
-				color_code = int(line.strip().split('=')[1])
-			elif '[DMR]' in line:
-				dmr_enabled = 'Enable=1' in next(mmh, '')
+	mmdvm_info = {}
+	dmr_enabled = False
+	try:
+		with open(MMDVMHOST_FILE, 'r') as mmh:
+			for line in mmh:
+				if '[DMR]' in line:
+					dmr_enabled = 'Enable=1' in next(mmh, '')
+				elif '=' in line:
+					key, value = line.split('=', 1)
+					mmdvm_info[key.strip()] = value.strip()
+	except (IOError, OSError):
+		logging.warning('MMDVMHost file not found: %s', MMDVMHOST_FILE)
+
+	rx_freq = int(mmdvm_info.get('RXFrequency', 0))
+	tx_freq = int(mmdvm_info.get('TXFrequency', 0))
+	color_code = int(mmdvm_info.get('ColorCode', 0))
+
 	rx = round(rx_freq / 1000000, 6)
 	tx = round(tx_freq / 1000000, 6)
 	shift = ''
