@@ -10,8 +10,8 @@ import os
 import pickle
 import sys
 import time
-from urllib.request import urlopen
 
+import aiohttp
 import aprslib
 import dotenv
 import humanize
@@ -101,14 +101,9 @@ class Config(object):
 			self.symbol_overlay = self.symbol_table
 		else:
 			self.symbol_overlay = None
-		lat = os.getenv('APRS_LATITUDE', 0)
-		lon = os.getenv('APRS_LONGITUDE', 0)
-		alt = os.getenv('APRS_ALTITUDE', 0)
-		if lat == 0 and lon == 0:
-			self.latitude, self.longitude = get_coordinates()
-			self.altitude = alt
-		else:
-			self.latitude, self.longitude, self.altitude = lat, lon, alt
+		self.latitude = os.getenv('APRS_LATITUDE', 0)
+		self.longitude = os.getenv('APRS_LONGITUDE', 0)
+		self.altitude = os.getenv('APRS_ALTITUDE', 0)
 		self.server = os.getenv('APRSIS_SERVER', 'rotate.aprs2.net')
 		self.port = int(os.getenv('APRSIS_PORT', 14580))
 		self.filter = os.getenv('APRSIS_FILTER', 'm/10')
@@ -627,14 +622,14 @@ def _spd_to_kmh(spd):
 	return f'{spd_kmh:03.0f}'
 
 
-def get_coordinates():
+async def get_coordinates():
 	"""Get approximate latitude and longitude using IP address lookup."""
 	logging.debug('Trying to figure out the coordinate using your IP address')
 	url = 'http://ip-api.com/json/'
 	try:
-		with urlopen(url) as response:
-			_data = response.read()
-			data = json.loads(_data.decode())
+		async with aiohttp.ClientSession() as session:
+			async with session.get(url) as response:
+				data = await response.json()
 	except Exception as err:
 		logging.error('Failed to fetch coordinates from %s: %s', url, err)
 		return 0, 0
@@ -1083,6 +1078,8 @@ def should_send_position(tmr, sb, gps_data):
 async def main():
 	"""Main function to run the APRS reporting loop."""
 	cfg = Config()
+	if cfg.latitude == 0 and cfg.longitude == 0:
+		cfg.latitude, cfg.longitude = await get_coordinates()
 	if os.getenv('GPSD_ENABLE'):
 		gps_data = await get_gpspos()
 		cfg.timestamp, cfg.latitude, cfg.longitude, cfg.altitude, cfg.speed, cfg.course = gps_data

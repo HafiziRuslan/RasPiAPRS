@@ -41,13 +41,46 @@ class TestMainUtils(unittest.TestCase):
 		self.assertEqual(main._spd_to_kmh(27.7778), '100')  # ~100 km/h
 
 
+class TestCoordinates(unittest.TestCase):
+	@patch('src.main.aiohttp.ClientSession')
+	def test_get_coordinates_success(self, mock_session_cls):
+		"""Test get_coordinates success."""
+		mock_session = mock_session_cls.return_value
+		mock_response = MagicMock()
+
+		# Setup async context managers
+		mock_session.__aenter__.return_value = mock_session
+		mock_session.__aexit__.return_value = None
+		mock_response.__aenter__.return_value = mock_response
+		mock_response.__aexit__.return_value = None
+
+		# Setup response data
+		f = asyncio.Future()
+		f.set_result({'lat': 1.2, 'lon': 3.4})
+		mock_response.json.return_value = f
+
+		mock_session.get.return_value = mock_response
+
+		lat, lon = asyncio.run(main.get_coordinates())
+		self.assertEqual(lat, 1.2)
+		self.assertEqual(lon, 3.4)
+
+	@patch('src.main.aiohttp.ClientSession')
+	def test_get_coordinates_failure(self, mock_session_cls):
+		"""Test get_coordinates failure."""
+		mock_session = mock_session_cls.return_value
+		mock_session.__aenter__.side_effect = Exception('Connection error')
+
+		lat, lon = asyncio.run(main.get_coordinates())
+		self.assertEqual(lat, 0)
+		self.assertEqual(lon, 0)
+
+
 class TestConfig(unittest.TestCase):
-	@patch('src.main.get_coordinates')
 	@patch('src.main.dotenv.load_dotenv')
 	@patch('os.getenv')
-	def test_config_initialization(self, mock_getenv, mock_load_dotenv, mock_get_coordinates):
+	def test_config_initialization(self, mock_getenv, mock_load_dotenv):
 		"""Test Config object initialization with environment variables."""
-		mock_get_coordinates.return_value = (0, 0)
 		# Setup mock environment
 		env_vars = {'APRS_CALL': 'N0TEST', 'APRS_SSID': '5', 'APRSIS_SERVER': 'test.server', 'APRSIS_PORT': '12345', 'APRS_PASSCODE': '12345'}
 		mock_getenv.side_effect = lambda k, d=None: env_vars.get(k, d)

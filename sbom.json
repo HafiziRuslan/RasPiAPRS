@@ -2,9 +2,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:8f2c5f6d-6cdd-4fb1-aa25-8cb753121238",
+  "serialNumber": "urn:uuid:626d7d6d-0ea6-40b0-8181-03ec12b02acf",
   "metadata": {
-    "timestamp": "2026-02-17T16:44:47.381859500Z",
+    "timestamp": "2026-02-17T19:07:31.847497700Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
@@ -28,185 +28,288 @@
   "components": [
     {
       "type": "library",
-      "bom-ref": "anyio-2@4.12.1",
+      "bom-ref": "aiohappyeyeballs-2@2.6.1",
+      "name": "aiohappyeyeballs",
+      "version": "2.6.1",
+      "purl": "pkg:pypi/aiohappyeyeballs@2.6.1"
+    },
+    {
+      "type": "library",
+      "bom-ref": "aiohttp-3@3.13.3",
+      "name": "aiohttp",
+      "version": "3.13.3",
+      "purl": "pkg:pypi/aiohttp@3.13.3"
+    },
+    {
+      "type": "library",
+      "bom-ref": "aiosignal-4@1.4.0",
+      "name": "aiosignal",
+      "version": "1.4.0",
+      "purl": "pkg:pypi/aiosignal@1.4.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "anyio-5@4.12.1",
       "name": "anyio",
       "version": "4.12.1",
       "purl": "pkg:pypi/anyio@4.12.1"
     },
     {
       "type": "library",
-      "bom-ref": "aprslib-3@0.7.2",
+      "bom-ref": "aprslib-6@0.7.2",
       "name": "aprslib",
       "version": "0.7.2",
       "purl": "pkg:pypi/aprslib@0.7.2"
     },
     {
       "type": "library",
-      "bom-ref": "certifi-4@2026.1.4",
+      "bom-ref": "attrs-7@25.4.0",
+      "name": "attrs",
+      "version": "25.4.0",
+      "purl": "pkg:pypi/attrs@25.4.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "certifi-8@2026.1.4",
       "name": "certifi",
       "version": "2026.1.4",
       "purl": "pkg:pypi/certifi@2026.1.4"
     },
     {
       "type": "library",
-      "bom-ref": "geographiclib-5@2.1",
+      "bom-ref": "frozenlist-9@1.8.0",
+      "name": "frozenlist",
+      "version": "1.8.0",
+      "purl": "pkg:pypi/frozenlist@1.8.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "geographiclib-10@2.1",
       "name": "geographiclib",
       "version": "2.1",
       "purl": "pkg:pypi/geographiclib@2.1"
     },
     {
       "type": "library",
-      "bom-ref": "geopy-6@2.4.1",
+      "bom-ref": "geopy-11@2.4.1",
       "name": "geopy",
       "version": "2.4.1",
       "purl": "pkg:pypi/geopy@2.4.1"
     },
     {
       "type": "library",
-      "bom-ref": "gpsdclient-7@1.3.2",
+      "bom-ref": "gpsdclient-12@1.3.2",
       "name": "gpsdclient",
       "version": "1.3.2",
       "purl": "pkg:pypi/gpsdclient@1.3.2"
     },
     {
       "type": "library",
-      "bom-ref": "h11-8@0.16.0",
+      "bom-ref": "h11-13@0.16.0",
       "name": "h11",
       "version": "0.16.0",
       "purl": "pkg:pypi/h11@0.16.0"
     },
     {
       "type": "library",
-      "bom-ref": "httpcore-9@1.0.9",
+      "bom-ref": "httpcore-14@1.0.9",
       "name": "httpcore",
       "version": "1.0.9",
       "purl": "pkg:pypi/httpcore@1.0.9"
     },
     {
       "type": "library",
-      "bom-ref": "httpx-10@0.28.1",
+      "bom-ref": "httpx-15@0.28.1",
       "name": "httpx",
       "version": "0.28.1",
       "purl": "pkg:pypi/httpx@0.28.1"
     },
     {
       "type": "library",
-      "bom-ref": "humanize-11@4.15.0",
+      "bom-ref": "humanize-16@4.15.0",
       "name": "humanize",
       "version": "4.15.0",
       "purl": "pkg:pypi/humanize@4.15.0"
     },
     {
       "type": "library",
-      "bom-ref": "idna-12@3.11",
+      "bom-ref": "idna-17@3.11",
       "name": "idna",
       "version": "3.11",
       "purl": "pkg:pypi/idna@3.11"
     },
     {
       "type": "library",
-      "bom-ref": "psutil-13@7.2.2",
+      "bom-ref": "multidict-18@6.7.1",
+      "name": "multidict",
+      "version": "6.7.1",
+      "purl": "pkg:pypi/multidict@6.7.1"
+    },
+    {
+      "type": "library",
+      "bom-ref": "propcache-19@0.4.1",
+      "name": "propcache",
+      "version": "0.4.1",
+      "purl": "pkg:pypi/propcache@0.4.1"
+    },
+    {
+      "type": "library",
+      "bom-ref": "psutil-20@7.2.2",
       "name": "psutil",
       "version": "7.2.2",
       "purl": "pkg:pypi/psutil@7.2.2"
     },
     {
       "type": "library",
-      "bom-ref": "python-dotenv-14@1.2.1",
+      "bom-ref": "python-dotenv-21@1.2.1",
       "name": "python-dotenv",
       "version": "1.2.1",
       "purl": "pkg:pypi/python-dotenv@1.2.1"
     },
     {
       "type": "library",
-      "bom-ref": "python-telegram-bot-15@22.6",
+      "bom-ref": "python-telegram-bot-22@22.6",
       "name": "python-telegram-bot",
       "version": "22.6",
       "purl": "pkg:pypi/python-telegram-bot@22.6"
+    },
+    {
+      "type": "library",
+      "bom-ref": "yarl-23@1.22.0",
+      "name": "yarl",
+      "version": "1.22.0",
+      "purl": "pkg:pypi/yarl@1.22.0"
     }
   ],
   "dependencies": [
     {
-      "ref": "anyio-2@4.12.1",
+      "ref": "aiohappyeyeballs-2@2.6.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "aiohttp-3@3.13.3",
       "dependsOn": [
-        "idna-12@3.11"
+        "aiohappyeyeballs-2@2.6.1",
+        "aiosignal-4@1.4.0",
+        "attrs-7@25.4.0",
+        "frozenlist-9@1.8.0",
+        "multidict-18@6.7.1",
+        "propcache-19@0.4.1",
+        "yarl-23@1.22.0"
       ]
     },
     {
-      "ref": "aprslib-3@0.7.2",
-      "dependsOn": []
-    },
-    {
-      "ref": "certifi-4@2026.1.4",
-      "dependsOn": []
-    },
-    {
-      "ref": "geographiclib-5@2.1",
-      "dependsOn": []
-    },
-    {
-      "ref": "geopy-6@2.4.1",
+      "ref": "aiosignal-4@1.4.0",
       "dependsOn": [
-        "geographiclib-5@2.1"
+        "frozenlist-9@1.8.0"
       ]
     },
     {
-      "ref": "gpsdclient-7@1.3.2",
-      "dependsOn": []
-    },
-    {
-      "ref": "h11-8@0.16.0",
-      "dependsOn": []
-    },
-    {
-      "ref": "httpcore-9@1.0.9",
+      "ref": "anyio-5@4.12.1",
       "dependsOn": [
-        "certifi-4@2026.1.4",
-        "h11-8@0.16.0"
+        "idna-17@3.11"
       ]
     },
     {
-      "ref": "httpx-10@0.28.1",
+      "ref": "aprslib-6@0.7.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "attrs-7@25.4.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "certifi-8@2026.1.4",
+      "dependsOn": []
+    },
+    {
+      "ref": "frozenlist-9@1.8.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "geographiclib-10@2.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "geopy-11@2.4.1",
       "dependsOn": [
-        "anyio-2@4.12.1",
-        "certifi-4@2026.1.4",
-        "httpcore-9@1.0.9",
-        "idna-12@3.11"
+        "geographiclib-10@2.1"
       ]
     },
     {
-      "ref": "humanize-11@4.15.0",
+      "ref": "gpsdclient-12@1.3.2",
       "dependsOn": []
     },
     {
-      "ref": "idna-12@3.11",
+      "ref": "h11-13@0.16.0",
       "dependsOn": []
     },
     {
-      "ref": "psutil-13@7.2.2",
-      "dependsOn": []
-    },
-    {
-      "ref": "python-dotenv-14@1.2.1",
-      "dependsOn": []
-    },
-    {
-      "ref": "python-telegram-bot-15@22.6",
+      "ref": "httpcore-14@1.0.9",
       "dependsOn": [
-        "httpcore-9@1.0.9",
-        "httpx-10@0.28.1"
+        "certifi-8@2026.1.4",
+        "h11-13@0.16.0"
+      ]
+    },
+    {
+      "ref": "httpx-15@0.28.1",
+      "dependsOn": [
+        "anyio-5@4.12.1",
+        "certifi-8@2026.1.4",
+        "httpcore-14@1.0.9",
+        "idna-17@3.11"
+      ]
+    },
+    {
+      "ref": "humanize-16@4.15.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "idna-17@3.11",
+      "dependsOn": []
+    },
+    {
+      "ref": "multidict-18@6.7.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "propcache-19@0.4.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "psutil-20@7.2.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "python-dotenv-21@1.2.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "python-telegram-bot-22@22.6",
+      "dependsOn": [
+        "httpcore-14@1.0.9",
+        "httpx-15@0.28.1"
       ]
     },
     {
       "ref": "raspiaprs-1@0.1b7",
       "dependsOn": [
-        "aprslib-3@0.7.2",
-        "geopy-6@2.4.1",
-        "gpsdclient-7@1.3.2",
-        "humanize-11@4.15.0",
-        "psutil-13@7.2.2",
-        "python-dotenv-14@1.2.1",
-        "python-telegram-bot-15@22.6"
+        "aiohttp-3@3.13.3",
+        "aprslib-6@0.7.2",
+        "geopy-11@2.4.1",
+        "gpsdclient-12@1.3.2",
+        "humanize-16@4.15.0",
+        "psutil-20@7.2.2",
+        "python-dotenv-21@1.2.1",
+        "python-telegram-bot-22@22.6"
+      ]
+    },
+    {
+      "ref": "yarl-23@1.22.0",
+      "dependsOn": [
+        "idna-17@3.11",
+        "multidict-18@6.7.1",
+        "propcache-19@0.4.1"
       ]
     }
   ]
