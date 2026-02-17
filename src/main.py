@@ -471,18 +471,50 @@ class TelegramLogger(object):
 						pass
 
 
-def _fetch_gpsd_data():
+def _fetch_from_gpsd(filter_class):
 	"""Worker function to fetch data from GPSD synchronously."""
 	try:
 		host = os.getenv('GPSD_HOST', 'localhost')
 		port = int(os.getenv('GPSD_PORT', 2947))
 		with GPSDClient(host=host, port=port, timeout=15) as client:
-			for result in client.dict_stream(convert_datetime=True, filter=['TPV']):
-				if result['class'] == 'TPV' and result.get('mode', 0) > 1:
+			for result in client.dict_stream(convert_datetime=True, filter=[filter_class]):
+				if result['class'] == filter_class:
 					return result
 				return None
 	except Exception as e:
 		return e
+
+
+async def _retrieve_gpsd_data(filter_class, log_name):
+	"""Retrieve data from GPSD with retries."""
+	if not os.getenv('GPSD_ENABLE'):
+		return None
+
+	logging.debug('Trying to figure out %s using GPS', log_name)
+	max_retries = 5
+	retry_delay = 1
+	loop = asyncio.get_running_loop()
+
+	for attempt in range(max_retries):
+		try:
+			result = await loop.run_in_executor(None, _fetch_from_gpsd, filter_class)
+			if isinstance(result, Exception):
+				raise result
+
+			if result:
+				logging.debug('GPS %s acquired', log_name)
+				return result
+			else:
+				logging.warning('GPS %s unavailable, retrying...', log_name)
+		except Exception as e:
+			logging.error('GPSD (%s) connection error (attempt %d/%d): %s', log_name, attempt + 1, max_retries, e)
+
+		if attempt < max_retries - 1:
+			await asyncio.sleep(retry_delay)
+			retry_delay *= 5
+
+	logging.warning('Failed to get GPS %s data after %d attempts.', log_name, max_retries)
+	return None
 
 
 def _get_fallback_location():
@@ -523,42 +555,24 @@ def _save_gps_cache(lat, lon, alt):
 
 async def get_gpspos():
 	"""Get position from GPSD."""
-	if not os.getenv('GPSD_ENABLE'):
-		return dt.datetime.now(dt.timezone.utc), 0, 0, 0, 0, 0
-
 	timestamp = dt.datetime.now(dt.timezone.utc)
-	logging.debug('Trying to figure out position using GPS')
-	max_retries = 5
-	retry_delay = 1
-	loop = asyncio.get_running_loop()
+	if not os.getenv('GPSD_ENABLE'):
+		return timestamp, 0, 0, 0, 0, 0
 
-	for attempt in range(max_retries):
-		try:
-			result = await loop.run_in_executor(None, _fetch_gpsd_data)
-			if isinstance(result, Exception):
-				raise result
+	result = await _retrieve_gpsd_data('TPV', 'position')
 
-			if result:
-				logging.debug('GPS fix acquired')
-				utc = result.get('time', timestamp)
-				lat = result.get('lat', 0.0)
-				lon = result.get('lon', 0.0)
-				alt = result.get('alt', 0.0)
-				spd = result.get('speed', 0)
-				cse = result.get('magtrack', 0) or result.get('track', 0)
-				logging.debug('%s | GPS Position: %s, %s, %s, %s, %s', utc, lat, lon, alt, spd, cse)
-				_save_gps_cache(lat, lon, alt)
-				return utc, lat, lon, alt, spd, cse
-			else:
-				logging.warning('GPS Position unavailable, retrying...')
-		except Exception as e:
-			logging.error('GPSD (pos) connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
+	if result:
+		utc = result.get('time', timestamp)
+		lat = result.get('lat', 0.0)
+		lon = result.get('lon', 0.0)
+		alt = result.get('alt', 0.0)
+		spd = result.get('speed', 0)
+		cse = result.get('magtrack', 0) or result.get('track', 0)
+		logging.debug('%s | GPS Position: %s, %s, %s, %s, %s', utc, lat, lon, alt, spd, cse)
+		_save_gps_cache(lat, lon, alt)
+		return utc, lat, lon, alt, spd, cse
 
-		if attempt < max_retries - 1:
-			await asyncio.sleep(retry_delay)
-			retry_delay *= 5
-
-	logging.warning('Failed to get GPS position after %d attempts. Reading from cache.', max_retries)
+	logging.warning('Reading from cache.')
 	env_lat, env_lon, env_alt = _get_fallback_location()
 	return timestamp, env_lat, env_lon, env_alt, 0, 0
 
@@ -698,53 +712,20 @@ def format_address(address, include_flag=False):
 	return f' near {full_area}{cc_str},'
 
 
-def _fetch_gpsd_sat_data():
-	"""Worker function to fetch satellite data from GPSD synchronously."""
-	try:
-		host = os.getenv('GPSD_HOST', 'localhost')
-		port = int(os.getenv('GPSD_PORT', 2947))
-		with GPSDClient(host=host, port=port, timeout=15) as client:
-			for result in client.dict_stream(convert_datetime=True, filter=['SKY']):
-				if result['class'] == 'SKY':
-					return result
-				return None
-	except Exception as e:
-		return e
-
-
 async def get_gpssat():
 	"""Get satellite from GPSD."""
-	if not os.getenv('GPSD_ENABLE'):
-		return dt.datetime.now(dt.timezone.utc), 0, 0
-
 	timestamp = dt.datetime.now(dt.timezone.utc)
-	logging.debug('Trying to figure out satellite using GPS')
-	max_retries = 5
-	retry_delay = 1
-	loop = asyncio.get_running_loop()
+	if not os.getenv('GPSD_ENABLE'):
+		return timestamp, 0, 0
 
-	for attempt in range(max_retries):
-		try:
-			result = await loop.run_in_executor(None, _fetch_gpsd_sat_data)
-			if isinstance(result, Exception):
-				raise result
+	result = await _retrieve_gpsd_data('SKY', 'satellite')
 
-			if result:
-				logging.debug('GPS Satellite acquired')
-				utc = result.get('time', timestamp)
-				uSat = result.get('uSat', 0)
-				nSat = result.get('nSat', 0)
-				return utc, uSat, nSat
-			else:
-				logging.warning('GPS Satellite unavailable. Retrying...')
-		except Exception as e:
-			logging.error('GPSD (sat) connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
+	if result:
+		utc = result.get('time', timestamp)
+		uSat = result.get('uSat', 0)
+		nSat = result.get('nSat', 0)
+		return utc, uSat, nSat
 
-		if attempt < max_retries - 1:
-			await asyncio.sleep(retry_delay)
-			retry_delay *= 5
-
-	logging.warning('Failed to get GPS satellite data after %d attempts.', max_retries)
 	return timestamp, 0, 0
 
 

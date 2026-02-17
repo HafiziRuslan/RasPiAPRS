@@ -181,6 +181,46 @@ class TestGPS(unittest.TestCase):
 		self.assertEqual(lon, 78.9012)
 		self.assertEqual(alt, 123.4)
 
+	@patch('src.main._fetch_from_gpsd')
+	@patch('asyncio.sleep')
+	@patch('os.getenv')
+	def test_retrieve_gpsd_data_success(self, mock_getenv, mock_sleep, mock_fetch):
+		"""Test _retrieve_gpsd_data returns data on success."""
+		mock_getenv.side_effect = lambda k, d=None: '1' if k == 'GPSD_ENABLE' else d
+		expected_data = {'class': 'TPV', 'lat': 10.0}
+		mock_fetch.return_value = expected_data
+
+		result = asyncio.run(main._retrieve_gpsd_data('TPV', 'position'))
+		self.assertEqual(result, expected_data)
+		mock_fetch.assert_called()
+
+	@patch('src.main._fetch_from_gpsd')
+	@patch('asyncio.sleep')
+	@patch('os.getenv')
+	def test_retrieve_gpsd_data_retry(self, mock_getenv, mock_sleep, mock_fetch):
+		"""Test _retrieve_gpsd_data retries on failure."""
+		mock_getenv.side_effect = lambda k, d=None: '1' if k == 'GPSD_ENABLE' else d
+		expected_data = {'class': 'TPV', 'lat': 10.0}
+		# Fail twice (None), then succeed
+		mock_fetch.side_effect = [None, None, expected_data]
+
+		result = asyncio.run(main._retrieve_gpsd_data('TPV', 'position'))
+		self.assertEqual(result, expected_data)
+		self.assertEqual(mock_fetch.call_count, 3)
+		self.assertEqual(mock_sleep.call_count, 2)
+
+	@patch('src.main._fetch_from_gpsd')
+	@patch('asyncio.sleep')
+	@patch('os.getenv')
+	def test_retrieve_gpsd_data_fail_max_retries(self, mock_getenv, mock_sleep, mock_fetch):
+		"""Test _retrieve_gpsd_data returns None after max retries."""
+		mock_getenv.side_effect = lambda k, d=None: '1' if k == 'GPSD_ENABLE' else d
+		mock_fetch.return_value = None
+
+		result = asyncio.run(main._retrieve_gpsd_data('TPV', 'position'))
+		self.assertIsNone(result)
+		self.assertEqual(mock_fetch.call_count, 5)
+
 
 class TestSystemInfo(unittest.TestCase):
 	def test_get_osinfo(self):
