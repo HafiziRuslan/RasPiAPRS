@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file.
 
+## [beta7] - (2026-02-18T03:08:24+08:00)
+
+- 11 commit(s) contributed to the release.
+- 0 day(s) passed between the first and last commit.
+- 1 day(s) passed between releases.
+
+### 🚀 Features in beta7
+
+- [ce1c2f6](https://github.com/HafiziRuslan/RasPiAPRS/commit/ce1c2f6e3460cd60bcb44cf4acbec1322ae6bbc0) feat(core): integrate extensive dependency updates and v2.6.1 lockfile overhaul *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T03:08:24+08:00*
+- [7d84c9e](https://github.com/HafiziRuslan/RasPiAPRS/commit/7d84c9e470a4002859e3a0ef30aa9b35227f04a9) feat(src.main): add gpsd data retrieval with retries and async helper *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T03:02:00+08:00*
+- [f0d04e1](https://github.com/HafiziRuslan/RasPiAPRS/commit/f0d04e10d85b4b177e4c748a1b9360bdf97fad37) feat(main): add GPSD data fetching and caching utilities *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T02:23:12+08:00*
+- [aa420b5](https://github.com/HafiziRuslan/RasPiAPRS/commit/aa420b56850ead866f5e8975da8de7e3085d441d) feat(main): minor code cleanup and formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T02:02:28+08:00*
+- [09ed6fc](https://github.com/HafiziRuslan/RasPiAPRS/commit/09ed6fcf41774509409ba4a1d59daca3869f8f84) feat(main): simplify GPS handling and add GPS cache support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T01:12:39+08:00*
+- [eb820aa](https://github.com/HafiziRuslan/RasPiAPRS/commit/eb820aa68140db645ca03c7d1142c99aac0292a6) feat(chore): bump version to 0.1.7 across config and dependencies *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T00:48:01+08:00*
+
+### 🐛 Bug Fixes in beta7
+
+- [b4bb5fe](https://github.com/HafiziRuslan/RasPiAPRS/commit/b4bb5fe66d6193a32303163c5c3346645473b6d5) fix(unit tests): update osinfo expectations for debian 13 and kernel 6.12 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T02:52:57+08:00*
+- [c8c3984](https://github.com/HafiziRuslan/RasPiAPRS/commit/c8c3984f1480b2a893e1885f3cdef0e12df03759) fix(tests): update OS info expectations for new Raspbian 12 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T02:48:32+08:00*
+- [95e9ff5](https://github.com/HafiziRuslan/RasPiAPRS/commit/95e9ff5dc443afdf95c11ab0d16030cc85c4e4c6) fix(main): robust osinfo and mmdvm parsing from config files *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T02:48:05+08:00*
+- [25e17bc](https://github.com/HafiziRuslan/RasPiAPRS/commit/25e17bc0f4c5e4dcd8e5f9406c221ff19460dec5) fix(main): adjust speed and OS parsing logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T02:17:21+08:00*
+
+### 🚜 Refactor in beta7
+
+- [42d0039](https://github.com/HafiziRuslan/RasPiAPRS/commit/42d00393e710684b327b09f5cfb8c71edc10e937) refactor(main): implement APRS/Telegram live location and smarter sending logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T02:01:34+08:00*
+
+---
+
 ## [beta6] - (2026-02-16T12:09:17+08:00)
 
 - 45 commit(s) contributed to the release.
@@ -898,4 +926,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-16T12:09:42.478096035+08:00
+generated using git-cliff on 2026-02-18T03:09:41.005690922+08:00
