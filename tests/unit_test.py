@@ -185,16 +185,16 @@ class TestGPS(unittest.TestCase):
 class TestSystemInfo(unittest.TestCase):
 	def test_get_osinfo(self):
 		"""Test OS info parsing."""
-		mock_os_release = 'PRETTY_NAME="Raspbian GNU/Linux 10 (buster)"\nNAME="Raspbian GNU/Linux"\nVERSION_ID="10"\nVERSION="10 (buster)"\nID=raspbian\nID_LIKE=debian\nHOME_URL="http://www.raspbian.org/"\nSUPPORT_URL="http://www.raspbian.org/RaspbianForums"\nBUG_REPORT_URL="http://www.raspbian.org/RaspbianBugs"\nDEBIAN_VERSION_FULL=10.9\nVERSION_CODENAME=buster\n'
+		mock_os_release = 'PRETTY_NAME="Raspbian GNU/Linux 12 (bookworm)"\nNAME="Raspbian GNU/Linux"\nVERSION_ID="12"\nVERSION="12 (bookworm)"\nID=raspbian\nID_LIKE=debian\nDEBIAN_VERSION_FULL=12.9\nVERSION_CODENAME=bookworm\nHOME_URL="http://www.raspbian.org/"\nSUPPORT_URL="http://www.raspbian.org/RaspbianForums"\nBUG_REPORT_URL="http://www.raspbian.org/RaspbianBugs"\n'
 
 		with patch('builtins.open', mock_open(read_data=mock_os_release)):
 			with patch('os.uname') as mock_uname:
 				mock_uname.return_value = MagicMock(
-					sysname='Linux', release='5.10.17-v7+', version='#1414 SMP Fri Apr 30 13:18:35 BST 2021', machine='armv7l',
+					sysname='Linux', release='6.6.31+rpt-rpi-v8', version='#1 SMP PREEMPT Debian 1:6.6.31-1+rpt1 (2024-05-29)', machine='aarch64'
 				)
 				info = main.get_osinfo()
-				self.assertIn('Debian10.9 (buster)', info)
-				self.assertIn('[Linux 5.10.17-v7]', info)
+				self.assertIn('Debian12.9 (bookworm)', info)
+				self.assertIn('[Linux 6.6.31]', info)
 
 
 if __name__ == '__main__':
