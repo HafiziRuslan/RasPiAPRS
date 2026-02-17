@@ -246,7 +246,7 @@ class Sequence(object):
 		return self.__next__()
 
 	def __next__(self):
-		self._count = (1 + self._count) % 999
+		self._count = (1 + self._count) % 1000
 		self.flush()
 		return self._count
 
@@ -314,7 +314,7 @@ class SmartBeaconing(object):
 			return False
 		cur_spd = gps_data[4]
 		cur_cse = gps_data[5]
-		spd_kmh = _spd_to_kmh(cur_spd) if cur_spd else 0
+		spd_kmh = cur_spd * 3.6 if cur_spd else 0
 		rate = self._calculate_rate(spd_kmh)
 		turn_threshold = self.min_turn_angle + (self.turn_slope / (spd_kmh if spd_kmh > 0 else 1))
 		heading_change = abs(cur_cse - self.last_course)
@@ -781,16 +781,17 @@ def get_uptime():
 def get_osinfo():
 	"""Get operating system information."""
 	osname = ''
+	id_like, debian_version_full, version_codename = '', '', ''
 	try:
 		with open(OS_RELEASE_FILE) as osr:
 			for line in osr:
 				if 'ID_LIKE=' in line:
 					id_like = line.split('=', 1)[1].strip().title()
-				if 'DEBIAN_VERSION_FULL=' in line:
+				elif 'DEBIAN_VERSION_FULL=' in line:
 					debian_version_full = line.split('=', 1)[1].strip()
-				if 'VERSION_CODENAME=' in line:
+				elif 'VERSION_CODENAME=' in line:
 					version_codename = line.split('=', 1)[1].strip()
-			osname = f'{id_like}{debian_version_full} ({version_codename})'
+		osname = f'{id_like}{debian_version_full} ({version_codename})'
 	except (IOError, OSError):
 		logging.warning('OS release file not found: %s', OS_RELEASE_FILE)
 	kernelver = ''

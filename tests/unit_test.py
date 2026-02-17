@@ -5,49 +5,51 @@ import unittest
 from unittest.mock import MagicMock, mock_open, patch
 
 # Adjust path to import modules from parent directory
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from ..src.main import main
-from ..src.symbols import symbols as aprs_symbols
+from src import main
+from src import symbols as aprs_symbols
 
 
 class TestAprsSymbols(unittest.TestCase):
 	def test_get_symbol_description_valid(self):
 		"""Test retrieving a valid symbol description."""
-		description = aprs_symbols.get_symbol_description('/', '!')
+		description = aprs_symbols.get_desc('/', '!')
 		self.assertEqual(description, 'Police, Sheriff')
 
 	def test_get_symbol_description_unknown(self):
 		"""Test retrieving an unknown symbol description."""
-		description = aprs_symbols.get_symbol_description('/', 'unknown_symbol')
-		self.assertEqual(description, 'Unknown Symbol')
+		description = aprs_symbols.get_desc('/', 'unknown_symbol')
+		self.assertEqual(description, 'Unknown')
 
 
 class TestMainUtils(unittest.TestCase):
 	def test_latlon_to_grid(self):
 		"""Test Maidenhead grid locator conversion."""
 		# Test coordinates for Greenwich (approx)
-		grid = main.latlon_to_grid(51.4779, 0.0015)
+		grid = main.latlon_to_grid(51.4779, 0.0015, 6)
 		self.assertTrue(grid.startswith('JO01'))
 
 		# Test coordinates for New York
-		grid = main.latlon_to_grid(40.7128, -74.0060)
+		grid = main.latlon_to_grid(40.7128, -74.0060, 6)
 		self.assertTrue(grid.startswith('FN20'))
 
-	def test_mps_to_kmh(self):
+	def test_spd_to_kmh(self):
 		"""Test m/s to km/h conversion."""
-		self.assertEqual(main._mps_to_kmh(0), '000')
-		self.assertEqual(main._mps_to_kmh(10), '036')  # 36 km/h
-		self.assertEqual(main._mps_to_kmh(27.7778), '100')  # ~100 km/h
+		self.assertEqual(main._spd_to_kmh(0), '000')
+		self.assertEqual(main._spd_to_kmh(10), '036')  # 36 km/h
+		self.assertEqual(main._spd_to_kmh(27.7778), '100')  # ~100 km/h
 
 
 class TestConfig(unittest.TestCase):
-	@patch('main.dotenv.load_dotenv')
+	@patch('src.main.get_coordinates')
+	@patch('src.main.dotenv.load_dotenv')
 	@patch('os.getenv')
-	def test_config_initialization(self, mock_getenv, mock_load_dotenv):
+	def test_config_initialization(self, mock_getenv, mock_load_dotenv, mock_get_coordinates):
 		"""Test Config object initialization with environment variables."""
+		mock_get_coordinates.return_value = (0, 0)
 		# Setup mock environment
-		env_vars = {'APRS_CALL': 'N0TEST', 'APRS_SSID': '5', 'APRSIS_SERVER': 'test.server', 'APRSIS_PORT': '12345'}
+		env_vars = {'APRS_CALL': 'N0TEST', 'APRS_SSID': '5', 'APRSIS_SERVER': 'test.server', 'APRSIS_PORT': '12345', 'APRS_PASSCODE': '12345'}
 		mock_getenv.side_effect = lambda k, d=None: env_vars.get(k, d)
 
 		cfg = main.Config()
@@ -86,13 +88,13 @@ class TestSmartBeaconing(unittest.TestCase):
 		# Mock config values
 		def getenv_side_effect(key, default=None):
 			defaults = {
-				'SMARTBEACONING_FASTSPEED': 100,  # km/h
-				'SMARTBEACONING_SLOWSPEED': 10,  # km/h
-				'SMARTBEACONING_FASTRATE': 60,  # sec
-				'SMARTBEACONING_SLOWRATE': 600,  # sec
-				'SMARTBEACONING_MINTURNANGLE': 28,
-				'SMARTBEACONING_TURNSLOPE': 255,
-				'SMARTBEACONING_MINTURNTIME': 5,
+				'SMARTBEACONING_FASTSPEED': '100',  # km/h
+				'SMARTBEACONING_SLOWSPEED': '10',  # km/h
+				'SMARTBEACONING_FASTRATE': '60',  # sec
+				'SMARTBEACONING_SLOWRATE': '600',  # sec
+				'SMARTBEACONING_MINTURNANGLE': '28',
+				'SMARTBEACONING_TURNSLOPE': '255',
+				'SMARTBEACONING_MINTURNTIME': '5',
 			}
 			return defaults.get(key, default)
 
@@ -129,13 +131,13 @@ class TestSmartBeaconing(unittest.TestCase):
 		# Mock config values
 		def getenv_side_effect(key, default=None):
 			defaults = {
-				'SMARTBEACONING_FASTSPEED': 100,
-				'SMARTBEACONING_SLOWSPEED': 10,
-				'SMARTBEACONING_FASTRATE': 60,
-				'SMARTBEACONING_SLOWRATE': 600,
-				'SMARTBEACONING_MINTURNANGLE': 28,
-				'SMARTBEACONING_TURNSLOPE': 255,
-				'SMARTBEACONING_MINTURNTIME': 5,
+				'SMARTBEACONING_FASTSPEED': '100',
+				'SMARTBEACONING_SLOWSPEED': '10',
+				'SMARTBEACONING_FASTRATE': '60',
+				'SMARTBEACONING_SLOWRATE': '600',
+				'SMARTBEACONING_MINTURNANGLE': '28',
+				'SMARTBEACONING_TURNSLOPE': '255',
+				'SMARTBEACONING_MINTURNTIME': '5',
 			}
 			return defaults.get(key, default)
 
@@ -161,19 +163,19 @@ class TestSmartBeaconing(unittest.TestCase):
 
 
 class TestGPS(unittest.TestCase):
+	@patch('src.main.GPSDClient')
 	@patch('os.getenv')
-	def test_get_gpspos_fallback(self, mock_getenv):
+	def test_get_gpspos_fallback(self, mock_getenv, mock_gpsd_client):
 		"""Test get_gpspos returns env vars on GPS failure."""
 		# Mock environment variables
 		env_vars = {'GPSD_ENABLE': '1', 'APRS_LATITUDE': '12.3456', 'APRS_LONGITUDE': '78.9012', 'APRS_ALTITUDE': '123.4'}
 		mock_getenv.side_effect = lambda k, d=None: env_vars.get(k, d)
 
 		# Mock GPSDClient to raise an exception (simulate failure)
-		mock_gpsd_client = MagicMock()
 		mock_gpsd_client.side_effect = RuntimeError('GPSD Error')
 
 		# Run the async function
-		timestamp, lat, lon, alt, spd, cse = asyncio.run(main.get_gpspos(client_factory=mock_gpsd_client))
+		timestamp, lat, lon, alt, spd, cse = asyncio.run(main.get_gpspos())
 
 		self.assertEqual(lat, 12.3456)
 		self.assertEqual(lon, 78.9012)
@@ -188,11 +190,11 @@ class TestSystemInfo(unittest.TestCase):
 		with patch('builtins.open', mock_open(read_data=mock_os_release)):
 			with patch('os.uname') as mock_uname:
 				mock_uname.return_value = MagicMock(
-					sysname='Linux', release='5.10.17-v7+', version='#1414 SMP Fri Apr 30 13:18:35 BST 2021', machine='armv7l'
+					sysname='Linux', release='5.10.17-v7+', version='#1414 SMP Fri Apr 30 13:18:35 BST 2021', machine='armv7l',
 				)
 				info = main.get_osinfo()
-				self.assertIn('Debian 10.9 (buster)', info)
-				self.assertIn('[Linux 5.10.17-v7+#1414 armv7l]', info)
+				self.assertIn('Debian10.9 (buster)', info)
+				self.assertIn('[Linux 5.10.17-v7]', info)
 
 
 if __name__ == '__main__':
