@@ -1,6 +1,6 @@
 [project]
 name = "RasPiAPRS"
-version = "0.1-beta.6"
+version = "0.1-beta.7"
 description = "APRS telemetry for Pi-Star/WPSD/AllStarLink"
 keywords = [
   "amateur-radio",
