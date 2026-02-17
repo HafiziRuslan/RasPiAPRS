@@ -471,6 +471,56 @@ class TelegramLogger(object):
 						pass
 
 
+def _fetch_gpsd_data():
+	"""Worker function to fetch data from GPSD synchronously."""
+	try:
+		host = os.getenv('GPSD_HOST', 'localhost')
+		port = int(os.getenv('GPSD_PORT', 2947))
+		with GPSDClient(host=host, port=port, timeout=15) as client:
+			for result in client.dict_stream(convert_datetime=True, filter=['TPV']):
+				if result['class'] == 'TPV' and result.get('mode', 0) > 1:
+					return result
+				return None
+	except Exception as e:
+		return e
+
+
+def _get_fallback_location():
+	"""Retrieve location from cache or environment variables."""
+	lat, lon, alt = 0, 0, 0
+
+	# Try cache first
+	if os.path.exists(GPS_FILE):
+		try:
+			with open(GPS_FILE, 'r') as f:
+				gps_data = json.load(f)
+				lat = float(gps_data.get('lat', 0))
+				lon = float(gps_data.get('lon', 0))
+				alt = float(gps_data.get('alt', 0))
+		except (IOError, OSError, json.JSONDecodeError, ValueError) as e:
+			logging.warning('Could not read or parse GPS file %s: %s', GPS_FILE, e)
+
+	# If cache failed or empty, try environment
+	if lat == 0 and lon == 0:
+		try:
+			lat = float(os.getenv('APRS_LATITUDE', 0))
+			lon = float(os.getenv('APRS_LONGITUDE', 0))
+			alt = float(os.getenv('APRS_ALTITUDE', 0))
+		except ValueError:
+			lat, lon, alt = 0, 0, 0
+
+	return lat, lon, alt
+
+
+def _save_gps_cache(lat, lon, alt):
+	"""Save GPS location to cache file."""
+	try:
+		with open(GPS_FILE, 'w') as f:
+			json.dump({'lat': lat, 'lon': lon, 'alt': alt}, f)
+	except (IOError, OSError) as e:
+		logging.error('Failed to write GPS data to %s: %s', GPS_FILE, e)
+
+
 async def get_gpspos():
 	"""Get position from GPSD."""
 	if not os.getenv('GPSD_ENABLE'):
@@ -482,19 +532,9 @@ async def get_gpspos():
 	retry_delay = 1
 	loop = asyncio.get_running_loop()
 
-	def _gps_worker():
-		try:
-			with GPSDClient(host=os.getenv('GPSD_HOST', 'localhost'), port=int(os.getenv('GPSD_PORT', 2947)), timeout=15) as client:
-				for result in client.dict_stream(convert_datetime=True, filter=['TPV']):
-					if result['class'] == 'TPV' and result.get('mode', 0) > 1:
-						return result
-					return None
-		except Exception as e:
-			return e
-
 	for attempt in range(max_retries):
 		try:
-			result = await loop.run_in_executor(None, _gps_worker)
+			result = await loop.run_in_executor(None, _fetch_gpsd_data)
 			if isinstance(result, Exception):
 				raise result
 
@@ -507,12 +547,7 @@ async def get_gpspos():
 				spd = result.get('speed', 0)
 				cse = result.get('magtrack', 0) or result.get('track', 0)
 				logging.debug('%s | GPS Position: %s, %s, %s, %s, %s', utc, lat, lon, alt, spd, cse)
-				gps_payload = {'lat': lat, 'lon': lon, 'alt': alt}
-				try:
-					with open(GPS_FILE, 'w') as f:
-						json.dump(gps_payload, f)
-				except (IOError, OSError) as e:
-					logging.error('Failed to write GPS data to %s: %s', GPS_FILE, e)
+				_save_gps_cache(lat, lon, alt)
 				return utc, lat, lon, alt, spd, cse
 			else:
 				logging.warning('GPS Position unavailable, retrying...')
@@ -524,23 +559,7 @@ async def get_gpspos():
 			retry_delay *= 5
 
 	logging.warning('Failed to get GPS position after %d attempts. Reading from cache.', max_retries)
-	env_lat, env_lon, env_alt = 0, 0, 0
-	if os.path.exists(GPS_FILE):
-		try:
-			with open(GPS_FILE, 'r') as f:
-				gps_data = json.load(f)
-				env_lat = float(gps_data.get('lat', 0))
-				env_lon = float(gps_data.get('lon', 0))
-				env_alt = float(gps_data.get('alt', 0))
-		except (IOError, OSError, json.JSONDecodeError, ValueError) as e:
-			logging.warning('Could not read or parse GPS file %s: %s', GPS_FILE, e)
-	if env_lat == 0 and env_lon == 0:
-		try:
-			env_lat = float(os.getenv('APRS_LATITUDE', 0))
-			env_lon = float(os.getenv('APRS_LONGITUDE', 0))
-			env_alt = float(os.getenv('APRS_ALTITUDE', 0))
-		except ValueError:
-			env_lat, env_lon, env_alt = 0, 0, 0
+	env_lat, env_lon, env_alt = _get_fallback_location()
 	return timestamp, env_lat, env_lon, env_alt, 0, 0
 
 
@@ -679,48 +698,54 @@ def format_address(address, include_flag=False):
 	return f' near {full_area}{cc_str},'
 
 
+def _fetch_gpsd_sat_data():
+	"""Worker function to fetch satellite data from GPSD synchronously."""
+	try:
+		host = os.getenv('GPSD_HOST', 'localhost')
+		port = int(os.getenv('GPSD_PORT', 2947))
+		with GPSDClient(host=host, port=port, timeout=15) as client:
+			for result in client.dict_stream(convert_datetime=True, filter=['SKY']):
+				if result['class'] == 'SKY':
+					return result
+				return None
+	except Exception as e:
+		return e
+
+
 async def get_gpssat():
 	"""Get satellite from GPSD."""
-	if os.getenv('GPSD_ENABLE'):
-		timestamp = dt.datetime.now(dt.timezone.utc)
-		logging.debug('Trying to figure out satellite using GPS')
-		max_retries = 5
-		retry_delay = 1
-		loop = asyncio.get_running_loop()
+	if not os.getenv('GPSD_ENABLE'):
+		return dt.datetime.now(dt.timezone.utc), 0, 0
 
-		def _gps_worker():
-			try:
-				with GPSDClient(host=os.getenv('GPSD_HOST', 'localhost'), port=int(os.getenv('GPSD_PORT', 2947)), timeout=15) as client:
-					for result in client.dict_stream(convert_datetime=True, filter=['SKY']):
-						if result['class'] == 'SKY':
-							return result
-						return None
-			except Exception as e:
-				return e
+	timestamp = dt.datetime.now(dt.timezone.utc)
+	logging.debug('Trying to figure out satellite using GPS')
+	max_retries = 5
+	retry_delay = 1
+	loop = asyncio.get_running_loop()
 
-		for attempt in range(max_retries):
-			try:
-				result = await loop.run_in_executor(None, _gps_worker)
-				if isinstance(result, Exception):
-					raise result
+	for attempt in range(max_retries):
+		try:
+			result = await loop.run_in_executor(None, _fetch_gpsd_sat_data)
+			if isinstance(result, Exception):
+				raise result
 
-				if result:
-					logging.debug('GPS Satellite acquired')
-					utc = result.get('time', timestamp)
-					uSat = result.get('uSat', 0)
-					nSat = result.get('nSat', 0)
-					return utc, uSat, nSat
-				else:
-					logging.warning('GPS Satellite unavailable. Retrying...')
-			except Exception as e:
-				logging.error('GPSD (sat) connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
+			if result:
+				logging.debug('GPS Satellite acquired')
+				utc = result.get('time', timestamp)
+				uSat = result.get('uSat', 0)
+				nSat = result.get('nSat', 0)
+				return utc, uSat, nSat
+			else:
+				logging.warning('GPS Satellite unavailable. Retrying...')
+		except Exception as e:
+			logging.error('GPSD (sat) connection error (attempt %d/%d): %s', attempt + 1, max_retries, e)
 
-			if attempt < max_retries - 1:
-				await asyncio.sleep(retry_delay)
-				retry_delay *= 5
+		if attempt < max_retries - 1:
+			await asyncio.sleep(retry_delay)
+			retry_delay *= 5
 
-		logging.warning('Failed to get GPS satellite data after %d attempts.', max_retries)
-		return timestamp, 0, 0
+	logging.warning('Failed to get GPS satellite data after %d attempts.', max_retries)
+	return timestamp, 0, 0
 
 
 def get_cpuload():
