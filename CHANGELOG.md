@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-20T01:48:22+08:00)
+## [beta7] - (2026-02-20T04:01:41+08:00)
 
-- 13 commit(s) contributed to the release.
+- 14 commit(s) contributed to the release.
 - 2 day(s) passed between the first and last commit.
 - 3 day(s) passed between releases.
 
@@ -29,6 +29,10 @@ All notable changes to this project will be documented in this file.
 ### 🚜 Refactor in beta7
 
 - [42d0039](https://github.com/HafiziRuslan/RasPiAPRS/commit/42d00393e710684b327b09f5cfb8c71edc10e937) refactor(main): implement APRS/Telegram live location and smarter sending logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T02:01:34+08:00*
+
+### ⚙️ Miscellaneous Tasks in beta7
+
+- [4d1940e](https://github.com/HafiziRuslan/RasPiAPRS/commit/4d1940eca11f79059a4f9facc853a385c145e3fc) chore(main): switch temporary dir from /tmp to /var/tmp for raspiaprs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T04:01:41+08:00*
 
 ---
 
@@ -928,4 +932,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-20T01:48:55.373215446+08:00
+generated using git-cliff on 2026-02-20T04:02:13.385287902+08:00
