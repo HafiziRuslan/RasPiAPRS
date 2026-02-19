@@ -76,14 +76,14 @@ check_disk_space() {
 }
 
 cleanup() {
-  rm -rf /tmp/raspiaprs
+  rm -rf /var/tmp/raspiaprs
   # rm -rf /var/log/raspiaprs
 }
 cleanup
 
-if [ ! -d "/tmp/raspiaprs" ]; then
-  mkdir -p /tmp/raspiaprs
-  chown -hR $dir_own:$dir_own /tmp/raspiaprs
+if [ ! -d "/var/tmp/raspiaprs" ]; then
+  mkdir -p /var/tmp/raspiaprs
+  chown -hR $dir_own:$dir_own /var/tmp/raspiaprs
 fi
 
 if [ ! -d "/var/log/raspiaprs" ]; then
