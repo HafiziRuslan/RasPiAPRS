@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-18T03:08:24+08:00)
+## [beta7] - (2026-02-20T01:30:45+08:00)
 
-- 11 commit(s) contributed to the release.
-- 0 day(s) passed between the first and last commit.
-- 1 day(s) passed between releases.
+- 12 commit(s) contributed to the release.
+- 2 day(s) passed between the first and last commit.
+- 3 day(s) passed between releases.
 
 ### 🚀 Features in beta7
 
+- [910a205](https://github.com/HafiziRuslan/RasPiAPRS/commit/910a205a3e5cc635950a2137adae98999c3835f4) feat(readme): adjust sudo permissions note and cron path *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T01:30:45+08:00*
 - [ce1c2f6](https://github.com/HafiziRuslan/RasPiAPRS/commit/ce1c2f6e3460cd60bcb44cf4acbec1322ae6bbc0) feat(core): integrate extensive dependency updates and v2.6.1 lockfile overhaul *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T03:08:24+08:00*
 - [7d84c9e](https://github.com/HafiziRuslan/RasPiAPRS/commit/7d84c9e470a4002859e3a0ef30aa9b35227f04a9) feat(src.main): add gpsd data retrieval with retries and async helper *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T03:02:00+08:00*
 - [f0d04e1](https://github.com/HafiziRuslan/RasPiAPRS/commit/f0d04e10d85b4b177e4c748a1b9360bdf97fad37) feat(main): add GPSD data fetching and caching utilities *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T02:23:12+08:00*
@@ -926,4 +927,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-18T03:09:41.005690922+08:00
+generated using git-cliff on 2026-02-20T01:31:19.780690690+08:00
