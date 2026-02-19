@@ -310,6 +310,9 @@ class SmartBeaconing(object):
 		cur_spd = gps_data[4]
 		cur_cse = gps_data[5]
 		spd_kmh = cur_spd * 3.6 if cur_spd else 0
+		if spd_kmh <= 3:
+			return False
+
 		rate = self._calculate_rate(spd_kmh)
 		turn_threshold = self.min_turn_angle + (self.turn_slope / (spd_kmh if spd_kmh > 0 else 1))
 		heading_change = abs(cur_cse - self.last_course)
