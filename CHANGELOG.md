@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-20T04:01:41+08:00)
+## [beta7] - (2026-02-20T04:04:58+08:00)
 
-- 14 commit(s) contributed to the release.
+- 15 commit(s) contributed to the release.
 - 2 day(s) passed between the first and last commit.
 - 3 day(s) passed between releases.
 
@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta7
 
+- [6404d8b](https://github.com/HafiziRuslan/RasPiAPRS/commit/6404d8b593c11f18ff9aecc73108f77c87228145) fix(troubleshoot): check /var/tmp instead of /tmp for writability *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T04:04:58+08:00*
 - [8656b76](https://github.com/HafiziRuslan/RasPiAPRS/commit/8656b7669db260054e2972316750200621de367b) fix(main): run uv commands as dedicated user *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T01:48:22+08:00*
 - [b4bb5fe](https://github.com/HafiziRuslan/RasPiAPRS/commit/b4bb5fe66d6193a32303163c5c3346645473b6d5) fix(unit tests): update osinfo expectations for debian 13 and kernel 6.12 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T02:52:57+08:00*
 - [c8c3984](https://github.com/HafiziRuslan/RasPiAPRS/commit/c8c3984f1480b2a893e1885f3cdef0e12df03759) fix(tests): update OS info expectations for new Raspbian 12 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T02:48:32+08:00*
@@ -932,4 +933,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-20T04:02:13.385287902+08:00
+generated using git-cliff on 2026-02-20T04:05:34.366849598+08:00
