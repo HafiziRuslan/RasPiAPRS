@@ -867,26 +867,35 @@ def get_mmdvminfo():
 	return (str(tx) + 'MHz' + shift + cc) + ','
 
 
-async def send_position(ais, cfg, tg_logger, gps_data=None):
-	"""Send APRS position packet to APRS-IS."""
+async def _get_current_location_data(cfg, gps_data=None):
+	"""
+	Determines the current location data from GPS or fallback to config.
 
-	# Get GPS data if not provided
+	Returns a tuple of (timestamp, lat, lon, alt, spd, cse).
+	"""
+	# Get GPS data if not provided and GPSD is enabled
 	if not gps_data and os.getenv('GPSD_ENABLE'):
 		gps_data = await get_gpspos()
 
+	# Unpack and validate gps_data if available
 	if gps_data:
-		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = gps_data
-	else:
-		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = None, 0, 0, 0, 0, 0
+		timestamp, lat, lon, alt, spd, cse = gps_data
+		if isinstance(lat, (int, float)) and isinstance(lon, (int, float)) and (lat != 0 or lon != 0):
+			return timestamp, lat, lon, alt, spd, cse
 
-	# Fallback to config/env if GPS data is invalid
-	if not all(isinstance(v, (int, float)) for v in [cur_lat, cur_lon]) or (cur_lat == 0 and cur_lon == 0):
-		cur_lat = float(os.getenv('APRS_LATITUDE', cfg.latitude))
-		cur_lon = float(os.getenv('APRS_LONGITUDE', cfg.longitude))
-		cur_alt = float(os.getenv('APRS_ALTITUDE', cfg.altitude))
-		cur_spd = 0
-		cur_cse = 0
-		cur_time = None
+	# Fallback to config/env if GPS data is invalid or unavailable
+	lat = float(os.getenv('APRS_LATITUDE', cfg.latitude))
+	lon = float(os.getenv('APRS_LONGITUDE', cfg.longitude))
+	alt = float(os.getenv('APRS_ALTITUDE', cfg.altitude))
+
+	return None, lat, lon, alt, 0, 0
+
+
+async def send_position(ais, cfg, tg_logger, gps_data=None):
+	"""Send APRS position packet to APRS-IS."""
+
+	# Determine current location data
+	cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = await _get_current_location_data(cfg, gps_data)
 
 	# Format data for APRS
 	latstr = _lat_to_aprs(cur_lat)
@@ -1014,15 +1023,7 @@ async def send_telemetry(ais, cfg, tg_logger):
 async def send_status(ais, cfg, tg_logger, gps_data=None):
 	"""Send APRS status information to APRS-IS."""
 	# Determine coordinates
-	lat, lon = float(cfg.latitude), float(cfg.longitude)
-	if gps_data:
-		_, g_lat, g_lon, *_ = gps_data
-		if isinstance(g_lat, (int, float)) and isinstance(g_lon, (int, float)) and (g_lat != 0 or g_lon != 0):
-			lat, lon = g_lat, g_lon
-	elif os.getenv('GPSD_ENABLE'):
-		_, g_lat, g_lon, *_ = await get_gpspos()
-		if isinstance(g_lat, (int, float)) and isinstance(g_lon, (int, float)) and (g_lat != 0 or g_lon != 0):
-			lat, lon = g_lat, g_lon
+	_, lat, lon, _, _, _ = await _get_current_location_data(cfg, gps_data)
 
 	# Get location details
 	gridsquare = latlon_to_grid(lat, lon)
