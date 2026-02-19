@@ -29,12 +29,12 @@ PISTAR_RELEASE_FILE = '/etc/pistar-release'
 WPSD_RELEASE_FILE = '/etc/WPSD-release'
 MMDVMHOST_FILE = '/etc/mmdvmhost'
 # Temporary files path
-SEQUENCE_FILE = '/tmp/raspiaprs/sequence.tmp'
-TIMER_FILE = '/tmp/raspiaprs/timer.tmp'
-CACHE_FILE = '/tmp/raspiaprs/nominatim_cache.pkl'
-LOCATION_ID_FILE = '/tmp/raspiaprs/location_id.tmp'
-STATUS_FILE = '/tmp/raspiaprs/status.tmp'
-GPS_FILE = '/tmp/raspiaprs/gps.json'
+SEQUENCE_FILE = "/var/tmp/raspiaprs/sequence.tmp"
+TIMER_FILE = "/var/tmp/raspiaprs/timer.tmp"
+CACHE_FILE = "/var/tmp/raspiaprs/nominatim_cache.pkl"
+LOCATION_ID_FILE = "/var/tmp/raspiaprs/location_id.tmp"
+STATUS_FILE = "/var/tmp/raspiaprs/status.tmp"
+GPS_FILE = "/var/tmp/raspiaprs/gps.json"
 
 
 # Set up logging

@@ -62,14 +62,14 @@ nano .env
 sudo ./main.sh
 ```
 
-note: `sudo` required to access `/tmp` and `/var/log` directories.
+note: `sudo` required for write access on `/var` directories.
 
 ## AutoStart RasPiAPRS
 
 Copy & Paste this line into last line (before blank line) of `/etc/crontab` or any other cron program that you're using.
 
 ```bash
-@reboot pi-star cd /home/pi-star/raspiaprs && ./main.sh > /tmp/raspiaprs.log 2>&1
+@reboot pi-star cd /home/pi-star/raspiaprs && ./main.sh > /var/log/raspiaprs.log 2>&1
 ```
 
 change the `pi-star` username into your username
