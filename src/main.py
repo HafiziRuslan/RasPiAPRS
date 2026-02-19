@@ -8,6 +8,7 @@ import logging
 import logging.handlers
 import os
 import pickle
+import signal
 import sys
 import time
 
@@ -90,11 +91,15 @@ def configure_logging():
 # Handle environment configuration
 class Config(object):
 	def __init__(self):
-		dotenv.load_dotenv('.env')
+		self.reload()
+
+	def reload(self):
+		"""Reload configuration from environment variables."""
+		dotenv.load_dotenv('.env', override=True)
 		call = os.getenv('APRS_CALL', 'N0CALL')
 		ssid = os.getenv('APRS_SSID', '0')
 		self.call = call if ssid == '0' else f'{call}-{ssid}'
-		self.sleep = int(os.getenv('SLEEP', 600))
+		self.sleep = os.getenv('SLEEP', 600)
 		self.symbol_table = os.getenv('APRS_SYMBOL_TABLE', '/')
 		self.symbol = os.getenv('APRS_SYMBOL', 'n')
 		if self.symbol_table not in ['/', '\\']:
@@ -105,7 +110,7 @@ class Config(object):
 		self.longitude = os.getenv('APRS_LONGITUDE', 0)
 		self.altitude = os.getenv('APRS_ALTITUDE', 0)
 		self.server = os.getenv('APRSIS_SERVER', 'rotate.aprs2.net')
-		self.port = int(os.getenv('APRSIS_PORT', 14580))
+		self.port = os.getenv('APRSIS_PORT', 14580)
 		self.filter = os.getenv('APRSIS_FILTER', 'm/10')
 		passcode = os.getenv('APRS_PASSCODE')
 		if passcode:
@@ -1111,43 +1116,78 @@ def should_send_position(tmr, sb, gps_data):
 
 async def main():
 	"""Main function to run the APRS reporting loop."""
+	# Setup reloading mechanism
+	loop = asyncio.get_running_loop()
+	reload_event = asyncio.Event()
+
+	def signal_handler():
+		logging.info('SIGHUP received. Reloading configuration...')
+		reload_event.set()
+
+	try:
+		loop.add_signal_handler(signal.SIGHUP, signal_handler)
+	except (AttributeError, NotImplementedError):
+		logging.debug('Signal handling not supported on this platform.')
+
 	cfg = Config()
-	if cfg.latitude == 0 and cfg.longitude == 0:
-		cfg.latitude, cfg.longitude = await get_coordinates()
-	if os.getenv('GPSD_ENABLE'):
-		gps_data = await get_gpspos()
-		cfg.timestamp, cfg.latitude, cfg.longitude, cfg.altitude, cfg.speed, cfg.course = gps_data
-	ais = await ais_connect(cfg)
-	tg_logger = TelegramLogger()
-	sb = SmartBeaconing()
-	sys_stats = SystemStats()
-	async with tg_logger:
-		await tg_logger.log(f'🚀 <b>{cfg.call}</b> starting up...')
-		# Send initial position
-		gps_data = None
+	while True:
+		reload_event.clear()
+		cfg.reload()
+		if cfg.latitude == 0 and cfg.longitude == 0:
+			cfg.latitude, cfg.longitude = await get_coordinates()
 		if os.getenv('GPSD_ENABLE'):
 			gps_data = await get_gpspos()
-		ais = await send_position(ais, cfg, tg_logger, sys_stats, gps_data=gps_data)
-		sb.last_beacon_time = time.time()
-		if gps_data:
-			sb.last_course = gps_data[5]
-		try:
-			for tmr in Timer():
-				gps_data = None
-				if os.getenv('GPSD_ENABLE'):
-					gps_data = await get_gpspos()
+			cfg.timestamp, cfg.latitude, cfg.longitude, cfg.altitude, cfg.speed, cfg.course = gps_data
+		ais = await ais_connect(cfg)
+		tg_logger = TelegramLogger()
+		sb = SmartBeaconing()
+		sys_stats = SystemStats()
+		async with tg_logger:
+			# Send startup message to Telegram
+			await tg_logger.log(f'🚀 <b>{cfg.call}</b> starting up...')
 
-				if should_send_position(tmr, sb, gps_data):
-					ais = await send_position(ais, cfg, tg_logger, sys_stats, gps_data=gps_data)
+			# Send initial position
+			gps_data = None
+			if os.getenv('GPSD_ENABLE'):
+				gps_data = await get_gpspos()
+			ais = await send_position(ais, cfg, tg_logger, sys_stats, gps_data=gps_data)
+			sb.last_beacon_time = time.time()
+			if gps_data:
+				sb.last_course = gps_data[5]
 
-				if tmr % 14400 == 1:
-					ais = await send_header(ais, cfg, tg_logger, sys_stats)
-				if tmr % cfg.sleep == 1:
-					ais = await send_telemetry(ais, cfg, tg_logger, sys_stats)
-				await asyncio.sleep(1)
-		finally:
-			await tg_logger.log(f'🛑 <b>{cfg.call}</b> shutting down...')
-			await tg_logger.stop_location()
+			try:
+				for tmr in Timer():
+					if reload_event.is_set():
+						break
+
+					gps_data = None
+					if os.getenv('GPSD_ENABLE'):
+						gps_data = await get_gpspos()
+
+					if should_send_position(tmr, sb, gps_data):
+						ais = await send_position(ais, cfg, tg_logger, sys_stats, gps_data=gps_data)
+
+					if tmr % 14400 == 1:
+						ais = await send_header(ais, cfg, tg_logger, sys_stats)
+					if tmr % cfg.sleep == 1:
+						ais = await send_telemetry(ais, cfg, tg_logger, sys_stats)
+					await asyncio.sleep(1)
+			finally:
+				if reload_event.is_set():
+					await tg_logger.log(f'🔄 <b>{cfg.call}</b> reloading configuration...')
+				else:
+					await tg_logger.log(f'🛑 <b>{cfg.call}</b> shutting down...')
+				await tg_logger.stop_location()
+
+				# Close AIS connection
+				if ais:
+					try:
+						ais.close()
+					except Exception:
+						pass
+
+		if not reload_event.is_set():
+			break
 
 
 if __name__ == '__main__':
