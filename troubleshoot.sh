@@ -245,10 +245,10 @@ else
 fi
 
 # Check tmp directory permissions
-if [ -w "/tmp" ]; then
-  echo "[PASS] /tmp is writable."
+if [ -w "/var/tmp" ]; then
+  echo "[PASS] /var/tmp is writable."
 else
-  echo "[FAIL] /tmp is NOT writable."
+  echo "[FAIL] /var/tmp is NOT writable."
 fi
 
 echo "================================"
