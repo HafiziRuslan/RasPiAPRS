@@ -31,7 +31,6 @@ WPSD_RELEASE_FILE = '/etc/WPSD-release'
 MMDVMHOST_FILE = '/etc/mmdvmhost'
 # Temporary files path
 SEQUENCE_FILE = "/var/tmp/raspiaprs/sequence.tmp"
-TIMER_FILE = "/var/tmp/raspiaprs/timer.tmp"
 CACHE_FILE = "/var/tmp/raspiaprs/nominatim_cache.pkl"
 LOCATION_ID_FILE = "/var/tmp/raspiaprs/location_id.tmp"
 STATUS_FILE = "/var/tmp/raspiaprs/status.tmp"
@@ -222,8 +221,6 @@ class Config(object):
 class Sequence(object):
 	"""Class to manage APRS sequence."""
 
-	_count = 0
-
 	def __init__(self):
 		self.sequence_file = SEQUENCE_FILE
 		try:
@@ -232,54 +229,17 @@ class Sequence(object):
 		except (IOError, ValueError):
 			self._count = 0
 
-	def flush(self):
+	def _flush(self):
 		try:
 			with open(self.sequence_file, 'w') as fds:
-				fds.write('{0:d}'.format(self._count))
+				fds.write(f'{self._count:d}')
 		except IOError:
 			pass
 
-	def __iter__(self):
-		return self
-
-	def next(self):
-		return self.__next__()
-
-	def __next__(self):
+	@property
+	def count(self):
 		self._count = (1 + self._count) % 1000
-		self.flush()
-		return self._count
-
-
-class Timer(object):
-	"""Class to manage APRS timer."""
-
-	_count = 0
-
-	def __init__(self):
-		self.timer_file = TIMER_FILE
-		try:
-			with open(self.timer_file) as fds:
-				self._count = int(fds.readline())
-		except (IOError, ValueError):
-			self._count = 0
-
-	def flush(self):
-		try:
-			with open(self.timer_file, 'w') as fds:
-				fds.write('{0:d}'.format(self._count))
-		except IOError:
-			pass
-
-	def __iter__(self):
-		return self
-
-	def next(self):
-		return self.__next__()
-
-	def __next__(self):
-		self._count = (1 + self._count) % 86400
-		self.flush()
+		self._flush()
 		return self._count
 
 
@@ -990,7 +950,7 @@ async def send_header(ais, cfg, tg_logger, sys_stats):
 
 async def send_telemetry(ais, cfg, tg_logger, sys_stats):
 	"""Send APRS telemetry information to APRS-IS."""
-	seq = Sequence().next()
+	seq = Sequence().count
 	temp = sys_stats.cur_temp()
 	cpuload = sys_stats.avg_cpu_load()
 	memused = sys_stats.memory_used()
@@ -1121,13 +1081,13 @@ async def main():
 	reload_event = asyncio.Event()
 
 	def signal_handler():
-		logging.info('SIGHUP received. Reloading configuration...')
+		logging.info("SIGHUP received. Reloading configuration...")
 		reload_event.set()
 
 	try:
 		loop.add_signal_handler(signal.SIGHUP, signal_handler)
 	except (AttributeError, NotImplementedError):
-		logging.debug('Signal handling not supported on this platform.')
+		logging.debug("Signal handling not supported on this platform.")
 
 	cfg = Config()
 	while True:
@@ -1135,33 +1095,35 @@ async def main():
 		cfg.reload()
 		if cfg.latitude == 0 and cfg.longitude == 0:
 			cfg.latitude, cfg.longitude = await get_coordinates()
-		if os.getenv('GPSD_ENABLE'):
+		if os.getenv("GPSD_ENABLE"):
 			gps_data = await get_gpspos()
-			cfg.timestamp, cfg.latitude, cfg.longitude, cfg.altitude, cfg.speed, cfg.course = gps_data
+			cfg.timestamp,cfg.latitude,cfg.longitude,cfg.altitude,cfg.speed,cfg.course = gps_data
 		ais = await ais_connect(cfg)
 		tg_logger = TelegramLogger()
 		sb = SmartBeaconing()
 		sys_stats = SystemStats()
 		async with tg_logger:
 			# Send startup message to Telegram
-			await tg_logger.log(f'🚀 <b>{cfg.call}</b> starting up...')
+			await tg_logger.log(f"🚀 <b>{cfg.call}</b> starting up...")
 
 			# Send initial position
 			gps_data = None
-			if os.getenv('GPSD_ENABLE'):
+			if os.getenv("GPSD_ENABLE"):
 				gps_data = await get_gpspos()
 			ais = await send_position(ais, cfg, tg_logger, sys_stats, gps_data=gps_data)
 			sb.last_beacon_time = time.time()
 			if gps_data:
 				sb.last_course = gps_data[5]
 
+			tmr = 0
 			try:
-				for tmr in Timer():
+				while True:
+					tmr = (tmr + 1) % 86400
 					if reload_event.is_set():
 						break
 
 					gps_data = None
-					if os.getenv('GPSD_ENABLE'):
+					if os.getenv("GPSD_ENABLE"):
 						gps_data = await get_gpspos()
 
 					if should_send_position(tmr, sb, gps_data):
@@ -1174,9 +1136,9 @@ async def main():
 					await asyncio.sleep(1)
 			finally:
 				if reload_event.is_set():
-					await tg_logger.log(f'🔄 <b>{cfg.call}</b> reloading configuration...')
+					await tg_logger.log(f"🔄 <b>{cfg.call}</b> reloading configuration...")
 				else:
-					await tg_logger.log(f'🛑 <b>{cfg.call}</b> shutting down...')
+					await tg_logger.log(f"🛑 <b>{cfg.call}</b> shutting down...")
 				await tg_logger.stop_location()
 
 				# Close AIS connection
