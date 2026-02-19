@@ -1014,9 +1014,11 @@ async def send_telemetry(ais, cfg, tg_logger):
 async def send_status(ais, cfg, tg_logger, gps_data=None):
 	"""Send APRS status information to APRS-IS."""
 	# Determine coordinates
-	lat, lon = cfg.latitude, cfg.longitude
+	lat, lon = float(cfg.latitude), float(cfg.longitude)
 	if gps_data:
-		_, lat, lon, *_ = gps_data
+		_, g_lat, g_lon, *_ = gps_data
+		if isinstance(g_lat, (int, float)) and isinstance(g_lon, (int, float)) and (g_lat != 0 or g_lon != 0):
+			lat, lon = g_lat, g_lon
 	elif os.getenv('GPSD_ENABLE'):
 		_, g_lat, g_lon, *_ = await get_gpspos()
 		if isinstance(g_lat, (int, float)) and isinstance(g_lon, (int, float)) and (g_lat != 0 or g_lon != 0):
