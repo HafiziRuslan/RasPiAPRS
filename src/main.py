@@ -1122,6 +1122,7 @@ async def main():
 	sb = SmartBeaconing()
 	sys_stats = SystemStats()
 	async with tg_logger:
+		await tg_logger.log(f'🚀 <b>{cfg.call}</b> starting up...')
 		# Send initial position
 		gps_data = None
 		if os.getenv('GPSD_ENABLE'):
@@ -1130,7 +1131,6 @@ async def main():
 		sb.last_beacon_time = time.time()
 		if gps_data:
 			sb.last_course = gps_data[5]
-
 		try:
 			for tmr in Timer():
 				gps_data = None
@@ -1146,6 +1146,7 @@ async def main():
 					ais = await send_telemetry(ais, cfg, tg_logger, sys_stats)
 				await asyncio.sleep(1)
 		finally:
+			await tg_logger.log(f'🛑 <b>{cfg.call}</b> shutting down...')
 			await tg_logger.stop_location()
 
 
