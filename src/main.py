@@ -514,7 +514,7 @@ async def _retrieve_gpsd_data(filter_class, log_name):
 
 def _get_fallback_location():
 	"""Retrieve location from cache or environment variables."""
-	lat, lon, alt = 0, 0, 0
+	lat, lon, alt = 0.0, 0.0, 0.0
 
 	# Try cache first
 	if os.path.exists(GPS_FILE):
@@ -528,13 +528,13 @@ def _get_fallback_location():
 			logging.warning('Could not read or parse GPS file %s: %s', GPS_FILE, e)
 
 	# If cache failed or empty, try environment
-	if lat == 0 and lon == 0:
+	if lat == 0.0 and lon == 0.0:
 		try:
 			lat = float(os.getenv('APRS_LATITUDE', 0.0))
 			lon = float(os.getenv('APRS_LONGITUDE', 0.0))
 			alt = float(os.getenv('APRS_ALTITUDE', 0.0))
 		except ValueError:
-			lat, lon, alt = 0, 0, 0
+			lat, lon, alt = 0.0, 0.0, 0.0
 
 	return lat, lon, alt
 
