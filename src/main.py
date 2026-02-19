@@ -1122,6 +1122,15 @@ async def main():
 	sb = SmartBeaconing()
 	sys_stats = SystemStats()
 	async with tg_logger:
+		# Send initial position
+		gps_data = None
+		if os.getenv('GPSD_ENABLE'):
+			gps_data = await get_gpspos()
+		ais = await send_position(ais, cfg, tg_logger, sys_stats, gps_data=gps_data)
+		sb.last_beacon_time = time.time()
+		if gps_data:
+			sb.last_course = gps_data[5]
+
 		try:
 			for tmr in Timer():
 				gps_data = None
