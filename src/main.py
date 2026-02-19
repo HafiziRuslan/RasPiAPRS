@@ -17,12 +17,11 @@ import aprslib
 import dotenv
 import humanize
 import psutil
+import symbols
 import telegram
 from aprslib.exceptions import ConnectionError as APRSConnectionError
 from geopy.geocoders import Nominatim
 from gpsdclient import GPSDClient
-
-import symbols
 
 # Default paths for system files
 OS_RELEASE_FILE = '/etc/os-release'
@@ -30,11 +29,11 @@ PISTAR_RELEASE_FILE = '/etc/pistar-release'
 WPSD_RELEASE_FILE = '/etc/WPSD-release'
 MMDVMHOST_FILE = '/etc/mmdvmhost'
 # Temporary files path
-SEQUENCE_FILE = "/var/tmp/raspiaprs/sequence.tmp"
-CACHE_FILE = "/var/tmp/raspiaprs/nominatim_cache.pkl"
-LOCATION_ID_FILE = "/var/tmp/raspiaprs/location_id.tmp"
-STATUS_FILE = "/var/tmp/raspiaprs/status.tmp"
-GPS_FILE = "/var/tmp/raspiaprs/gps.json"
+SEQUENCE_FILE = '/var/tmp/raspiaprs/sequence.tmp'
+CACHE_FILE = '/var/tmp/raspiaprs/nominatim_cache.pkl'
+LOCATION_ID_FILE = '/var/tmp/raspiaprs/location_id.tmp'
+STATUS_FILE = '/var/tmp/raspiaprs/status.tmp'
+GPS_FILE = '/var/tmp/raspiaprs/gps.json'
 
 
 # Set up logging
@@ -277,7 +276,6 @@ class SmartBeaconing(object):
 		spd_kmh = cur_spd * 3.6 if cur_spd else 0
 		if spd_kmh <= 3:
 			return False
-
 		rate = self._calculate_rate(spd_kmh)
 		turn_threshold = self.min_turn_angle + (self.turn_slope / (spd_kmh if spd_kmh > 0 else 1))
 		heading_change = abs(cur_cse - self.last_course)
@@ -353,7 +351,6 @@ class SystemStats(object):
 
 	def os_info(self):
 		"""Get operating system information."""
-
 		osname = ''
 		try:
 			os_info = {}
@@ -363,14 +360,12 @@ class SystemStats(object):
 					if '=' in line:
 						key, value = line.split('=', 1)
 						os_info[key] = value.strip().replace('"', '')
-
 			id_like = os_info.get('ID_LIKE', '').title()
 			version_codename = os_info.get('VERSION_CODENAME', '')
 			debian_version_full = os_info.get('DEBIAN_VERSION_FULL') or os_info.get('VERSION_ID', '')
 			osname = f'{id_like}{debian_version_full} ({version_codename})'
 		except (IOError, OSError):
 			logging.warning('OS release file not found: %s', OS_RELEASE_FILE)
-
 		kernelver = ''
 		try:
 			kernel = os.uname()
@@ -381,7 +376,6 @@ class SystemStats(object):
 
 	def mmdvm_info(self):
 		"""Get MMDVM configured frequency and color code."""
-
 		mmdvm_info = {}
 		dmr_enabled = False
 		try:
@@ -394,11 +388,9 @@ class SystemStats(object):
 						mmdvm_info[key.strip()] = value.strip()
 		except (IOError, OSError):
 			logging.warning('MMDVMHost file not found: %s', MMDVMHOST_FILE)
-
 		rx_freq = int(mmdvm_info.get('RXFrequency', 0))
 		tx_freq = int(mmdvm_info.get('TXFrequency', 0))
 		color_code = int(mmdvm_info.get('ColorCode', 0))
-
 		rx = round(rx_freq / 1000000, 6)
 		tx = round(tx_freq / 1000000, 6)
 		shift = ''
@@ -419,14 +411,12 @@ class TelegramLogger(object):
 		self.location_id_file = location_id_file
 		if not self.enabled:
 			return
-
 		self.token = os.getenv('TELEGRAM_TOKEN')
 		self.chat_id = os.getenv('TELEGRAM_CHAT_ID')
 		if not self.token or not self.chat_id:
 			logging.error('Telegram token or chat ID is missing. Disabling Telegram logging.')
 			self.enabled = False
 			return
-
 		self.bot = telegram.Bot(self.token)
 		self.topic_id = self._parse_topic_id_from_env('TELEGRAM_TOPIC_ID')
 		self.loc_topic_id = self._parse_topic_id_from_env('TELEGRAM_LOC_TOPIC_ID')
@@ -592,18 +582,15 @@ async def _retrieve_gpsd_data(filter_class, log_name):
 	"""Retrieve data from GPSD with retries."""
 	if not os.getenv('GPSD_ENABLE'):
 		return None
-
 	logging.debug('Trying to figure out %s using GPS', log_name)
 	max_retries = 5
 	retry_delay = 1
 	loop = asyncio.get_running_loop()
-
 	for attempt in range(max_retries):
 		try:
 			result = await loop.run_in_executor(None, _fetch_from_gpsd, filter_class)
 			if isinstance(result, Exception):
 				raise result
-
 			if result:
 				logging.debug('GPS %s acquired', log_name)
 				return result
@@ -611,11 +598,9 @@ async def _retrieve_gpsd_data(filter_class, log_name):
 				logging.warning('GPS %s unavailable, retrying...', log_name)
 		except Exception as e:
 			logging.error('GPSD (%s) connection error (attempt %d/%d): %s', log_name, attempt + 1, max_retries, e)
-
 		if attempt < max_retries - 1:
 			await asyncio.sleep(retry_delay)
 			retry_delay *= 5
-
 	logging.warning('Failed to get GPS %s data after %d attempts.', log_name, max_retries)
 	return None
 
@@ -623,7 +608,6 @@ async def _retrieve_gpsd_data(filter_class, log_name):
 def _get_fallback_location():
 	"""Retrieve location from cache or environment variables."""
 	lat, lon, alt = 0.0, 0.0, 0.0
-
 	# Try cache first
 	if os.path.exists(GPS_FILE):
 		try:
@@ -634,7 +618,6 @@ def _get_fallback_location():
 				alt = float(gps_data.get('alt', 0.0))
 		except (IOError, OSError, json.JSONDecodeError, ValueError) as e:
 			logging.warning('Could not read or parse GPS file %s: %s', GPS_FILE, e)
-
 	# If cache failed or empty, try environment
 	if lat == 0.0 and lon == 0.0:
 		try:
@@ -643,7 +626,6 @@ def _get_fallback_location():
 			alt = float(os.getenv('APRS_ALTITUDE', 0.0))
 		except ValueError:
 			lat, lon, alt = 0.0, 0.0, 0.0
-
 	return lat, lon, alt
 
 
@@ -661,9 +643,7 @@ async def get_gpspos():
 	timestamp = dt.datetime.now(dt.timezone.utc)
 	if not os.getenv('GPSD_ENABLE'):
 		return timestamp, 0, 0, 0, 0, 0
-
 	result = await _retrieve_gpsd_data('TPV', 'position')
-
 	if result:
 		utc = result.get('time', timestamp)
 		lat = result.get('lat', 0.0)
@@ -674,7 +654,6 @@ async def get_gpspos():
 		logging.debug('%s | GPS Position: %s, %s, %s, %s, %s', utc, lat, lon, alt, spd, cse)
 		_save_gps_cache(lat, lon, alt)
 		return utc, lat, lon, alt, spd, cse
-
 	logging.warning('Reading from cache.')
 	env_lat, env_lon, env_alt = _get_fallback_location()
 	return timestamp, env_lat, env_lon, env_alt, 0, 0
@@ -820,34 +799,25 @@ async def get_gpssat():
 	timestamp = dt.datetime.now(dt.timezone.utc)
 	if not os.getenv('GPSD_ENABLE'):
 		return timestamp, 0, 0
-
 	result = await _retrieve_gpsd_data('SKY', 'satellite')
-
 	if result:
 		utc = result.get('time', timestamp)
 		uSat = result.get('uSat', 0)
 		nSat = result.get('nSat', 0)
 		return utc, uSat, nSat
-
 	return timestamp, 0, 0
 
 
 async def _get_current_location_data(cfg, gps_data=None):
-	"""
-	Determines the current location data from GPS or fallback to config.
-
-	Returns a tuple of (timestamp, lat, lon, alt, spd, cse).
-	"""
+	"""Determines the current location data from GPS or fallback to config.Returns a tuple of (timestamp, lat, lon, alt, spd, cse)."""
 	# Get GPS data if not provided and GPSD is enabled
 	if not gps_data and os.getenv('GPSD_ENABLE'):
 		gps_data = await get_gpspos()
-
 	# Unpack and validate gps_data if available
 	if gps_data:
 		timestamp, lat, lon, alt, spd, cse = gps_data
 		if isinstance(lat, (int, float)) and isinstance(lon, (int, float)) and (lat != 0 or lon != 0):
 			return timestamp, lat, lon, alt, spd, cse
-
 	# Fallback to config/env if GPS data is invalid or unavailable
 	lat = float(os.getenv('APRS_LATITUDE', cfg.latitude))
 	lon = float(os.getenv('APRS_LONGITUDE', cfg.longitude))
@@ -858,10 +828,8 @@ async def _get_current_location_data(cfg, gps_data=None):
 
 async def send_position(ais, cfg, tg_logger, sys_stats, gps_data=None):
 	"""Send APRS position packet to APRS-IS."""
-
 	# Determine current location data
 	cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = await _get_current_location_data(cfg, gps_data)
-
 	# Format data for APRS
 	latstr = _lat_to_aprs(cur_lat)
 	lonstr = _lon_to_aprs(cur_lon)
@@ -869,22 +837,18 @@ async def send_position(ais, cfg, tg_logger, sys_stats, gps_data=None):
 	spdstr = _spd_to_knots(cur_spd)
 	csestr = _cse_to_aprs(cur_cse)
 	spdkmh = _spd_to_kmh(cur_spd)
-
 	# Build comment
 	mmdvminfo = sys_stats.mmdvm_info()
 	osinfo = sys_stats.os_info()
 	comment = f'{mmdvminfo}{osinfo} https://github.com/HafiziRuslan/RasPiAPRS'
-
 	# Determine timestamp
 	ztime = dt.datetime.now(dt.timezone.utc)
 	timestamp = cur_time.strftime('%d%H%Mz') if cur_time else ztime.strftime('%d%H%Mz')
-
 	# Determine symbol based on speed (SmartBeaconing symbol logic)
 	symbt = cfg.symbol_table
 	symb = cfg.symbol
 	if cfg.symbol_overlay:
 		symbt = cfg.symbol_overlay
-
 	tgposmoving = ''
 	extdatstr = ''
 	if cur_spd > 0:
@@ -900,14 +864,12 @@ async def send_position(ais, cfg, tg_logger, sys_stats, gps_data=None):
 				symbt, symb = '/', '>'
 			elif 0 < kmhspd <= sspd:
 				symbt, symb = '/', '('
-
 	# Construct payload and messages
 	lookup_table = symbt if symbt in ['/', '\\'] else '\\'
 	sym_desc = symbols.get_desc(lookup_table, symb).split('(')[0].strip()
 	payload = f'/{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
 	posit = f'{cfg.call}>APP642:{payload}'
 	tgpos = f'<u>{cfg.call} Position</u>\n\nTime: <b>{timestamp}</b>\nSymbol: {symbt}{symb} ({sym_desc})\nPosition:\n\tLatitude: <b>{cur_lat}</b>\n\tLongitude: <b>{cur_lon}</b>\n\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\nComment: <b>{comment}</b>'
-
 	# Send data
 	try:
 		ais.sendall(posit)
@@ -927,15 +889,12 @@ async def send_header(ais, cfg, tg_logger, sys_stats):
 	params = ['CPUTemp', 'CPULoad', 'RAMUsed', 'DiskUsed']
 	units = ['deg.C', '%', 'GB', 'GB']
 	eqns = ['0,0.1,0', '0,0.001,0', '0,0.001,0', '0,0.001,0']
-
 	if os.getenv('GPSD_ENABLE'):
 		params.append('GPSUsed')
 		units.append('sats')
 		eqns.append('0,1,0')
-
 	payload = f'{caller}PARM.{",".join(params)}\r\n{caller}UNIT.{",".join(units)}\r\n{caller}EQNS.{",".join(eqns)}'
 	tg_msg = f'<u>{cfg.call} Header</u>\n\nParameters: <b>{",".join(params)}</b>\nUnits: <b>{",".join(units)}</b>\nEquations: <b>{",".join(eqns)}</b>\n\nValue: <code>[a,b,c]=(a×v²)+(b×v)+c</code>'
-
 	try:
 		ais.sendall(payload)
 		logging.info(payload)
@@ -957,7 +916,6 @@ async def send_telemetry(ais, cfg, tg_logger, sys_stats):
 	diskused = sys_stats.storage_used()
 	telemmemused = int(memused / 1.0000e6)
 	telemdiskused = int(diskused / 1.0000e6)
-
 	telem = f'{cfg.call}>APP642:T#{seq:03d},{temp:d},{cpuload:d},{telemmemused:d},{telemdiskused:d}'
 	tgtel = (
 		f'<u>{cfg.call} Telemetry</u>\n\n'
@@ -967,12 +925,10 @@ async def send_telemetry(ais, cfg, tg_logger, sys_stats):
 		f'RAM Used: <b>{humanize.naturalsize(memused, binary=True)}</b>\n'
 		f'Disk Used: <b>{humanize.naturalsize(diskused, binary=True)}</b>'
 	)
-
 	if os.getenv('GPSD_ENABLE'):
 		_, uSat, _ = await get_gpssat()
 		telem += f',{uSat:d}'
 		tgtel += f'\nGPS Used: <b>{uSat}</b>'
-
 	try:
 		ais.sendall(telem)
 		logging.info(telem)
@@ -989,18 +945,15 @@ async def send_status(ais, cfg, tg_logger, sys_stats, gps_data=None):
 	"""Send APRS status information to APRS-IS."""
 	# Determine coordinates
 	_, lat, lon, _, _, _ = await _get_current_location_data(cfg, gps_data)
-
 	# Get location details
 	gridsquare = latlon_to_grid(lat, lon)
 	address = get_add_from_pos(lat, lon)
 	near_add = format_address(address)
 	near_add_tg = format_address(address, True)
-
 	# Timestamp and Satellite info
 	ztime = dt.datetime.now(dt.timezone.utc)
 	timestamp = ztime.strftime('%d%H%Mz')
 	sats_info = ''
-
 	if os.getenv('GPSD_ENABLE'):
 		timez, u_sat, n_sat = await get_gpssat()
 		if u_sat > 0:
@@ -1008,14 +961,11 @@ async def send_status(ais, cfg, tg_logger, sys_stats, gps_data=None):
 			sats_info = f', gps: {u_sat}/{n_sat}'
 		else:
 			sats_info = f', gps: {u_sat}'
-
 	uptime = sys_stats.uptime()
-
 	# Construct messages
 	status_text = f'{timestamp}[{gridsquare}]{near_add} {uptime}{sats_info}'
 	aprs_packet = f'{cfg.call}>APP642:>{status_text}'
 	tg_msg = f'<u>{cfg.call} Status</u>\n\n<b>{timestamp}[{gridsquare}]{near_add_tg} {uptime}{sats_info}</b>'
-
 	if os.path.exists(STATUS_FILE):
 		try:
 			with open(STATUS_FILE, 'r') as f:
@@ -1046,7 +996,6 @@ async def ais_connect(cfg):
 	loop = asyncio.get_running_loop()
 	max_retries = 5
 	retry_delay = 5
-
 	for attempt in range(max_retries):
 		try:
 			await loop.run_in_executor(None, ais.connect)
@@ -1058,7 +1007,6 @@ async def ais_connect(cfg):
 			if attempt < max_retries - 1:
 				await asyncio.sleep(retry_delay)
 				retry_delay = min(retry_delay * 2, 60)
-
 	logging.error('Connection error, exiting')
 	sys.exit(getattr(os, 'EX_NOHOST', 1))
 
@@ -1068,9 +1016,7 @@ def should_send_position(tmr, sb, gps_data):
 	if os.getenv('GPSD_ENABLE'):
 		if not os.getenv('SMARTBEACONING_ENABLE'):
 			return False
-
 		return sb.should_send(gps_data)
-
 	return tmr % 1800 == 1
 
 
@@ -1081,54 +1027,48 @@ async def main():
 	reload_event = asyncio.Event()
 
 	def signal_handler():
-		logging.info("SIGHUP received. Reloading configuration...")
+		logging.info('SIGHUP received. Reloading configuration...')
 		reload_event.set()
 
 	try:
 		loop.add_signal_handler(signal.SIGHUP, signal_handler)
 	except (AttributeError, NotImplementedError):
-		logging.debug("Signal handling not supported on this platform.")
-
+		logging.debug('Signal handling not supported on this platform.')
 	cfg = Config()
 	while True:
 		reload_event.clear()
 		cfg.reload()
 		if cfg.latitude == 0 and cfg.longitude == 0:
 			cfg.latitude, cfg.longitude = await get_coordinates()
-		if os.getenv("GPSD_ENABLE"):
+		if os.getenv('GPSD_ENABLE'):
 			gps_data = await get_gpspos()
-			cfg.timestamp,cfg.latitude,cfg.longitude,cfg.altitude,cfg.speed,cfg.course = gps_data
+			cfg.timestamp, cfg.latitude, cfg.longitude, cfg.altitude, cfg.speed, cfg.course = gps_data
 		ais = await ais_connect(cfg)
 		tg_logger = TelegramLogger()
 		sb = SmartBeaconing()
 		sys_stats = SystemStats()
 		async with tg_logger:
 			# Send startup message to Telegram
-			await tg_logger.log(f"🚀 <b>{cfg.call}</b> starting up...")
-
+			await tg_logger.log(f'🚀 <b>{cfg.call}</b> starting up...')
 			# Send initial position
 			gps_data = None
-			if os.getenv("GPSD_ENABLE"):
+			if os.getenv('GPSD_ENABLE'):
 				gps_data = await get_gpspos()
 			ais = await send_position(ais, cfg, tg_logger, sys_stats, gps_data=gps_data)
 			sb.last_beacon_time = time.time()
 			if gps_data:
 				sb.last_course = gps_data[5]
-
 			tmr = 0
 			try:
 				while True:
 					tmr = (tmr + 1) % 86400
 					if reload_event.is_set():
 						break
-
 					gps_data = None
-					if os.getenv("GPSD_ENABLE"):
+					if os.getenv('GPSD_ENABLE'):
 						gps_data = await get_gpspos()
-
 					if should_send_position(tmr, sb, gps_data):
 						ais = await send_position(ais, cfg, tg_logger, sys_stats, gps_data=gps_data)
-
 					if tmr % 14400 == 1:
 						ais = await send_header(ais, cfg, tg_logger, sys_stats)
 					if tmr % cfg.sleep == 1:
@@ -1136,18 +1076,16 @@ async def main():
 					await asyncio.sleep(1)
 			finally:
 				if reload_event.is_set():
-					await tg_logger.log(f"🔄 <b>{cfg.call}</b> reloading configuration...")
+					await tg_logger.log(f'🔄 <b>{cfg.call}</b> reloading configuration...')
 				else:
-					await tg_logger.log(f"🛑 <b>{cfg.call}</b> shutting down...")
+					await tg_logger.log(f'🛑 <b>{cfg.call}</b> shutting down...')
 				await tg_logger.stop_location()
-
 				# Close AIS connection
 				if ais:
 					try:
 						ais.close()
 					except Exception:
 						pass
-
 		if not reload_event.is_set():
 			break
 
