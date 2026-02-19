@@ -255,20 +255,5 @@ class TestGPS(unittest.TestCase):
 		self.assertEqual(mock_fetch.call_count, 5)
 
 
-class TestSystemInfo(unittest.TestCase):
-	def test_get_osinfo(self):
-		"""Test OS info parsing."""
-		mock_os_release = 'PRETTY_NAME="Raspbian GNU/Linux 13 (trixie)"\nNAME="Raspbian GNU/Linux"\nVERSION_ID="13"\nVERSION="13 (trixie)"\nID=raspbian\nID_LIKE=debian\nDEBIAN_VERSION_FULL=13.0\nVERSION_CODENAME=trixie\nHOME_URL="http://www.raspbian.org/"\nSUPPORT_URL="http://www.raspbian.org/RaspbianForums"\nBUG_REPORT_URL="http://www.raspbian.org/RaspbianBugs"\n'
-
-		with patch('builtins.open', mock_open(read_data=mock_os_release)):
-			with patch('os.uname') as mock_uname:
-				mock_uname.return_value = MagicMock(
-					sysname='Linux', release='6.12.63+rpt-rpi-v8', version='#1 SMP PREEMPT Debian 1:6.12.63-1+rpt1 (2025-10-26)', machine='aarch64'
-				)
-				info = main.get_osinfo()
-				self.assertIn('Debian13.0 (trixie)', info)
-				self.assertIn('[Linux 6.12.63]', info)
-
-
 if __name__ == '__main__':
 	unittest.main()

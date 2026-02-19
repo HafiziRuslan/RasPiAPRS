@@ -333,6 +333,118 @@ class SmartBeaconing(object):
 		return should_send
 
 
+class SystemStats(object):
+	"""Class to handle system statistics."""
+
+	def avg_cpu_load(self):
+		"""Get CPU load as a percentage of total capacity."""
+		try:
+			load = psutil.getloadavg()[2]
+			core = psutil.cpu_count()
+			return int((load / core) * 100 * 1000)
+		except Exception as e:
+			logging.error('Unexpected error: %s', e)
+			return 0
+
+	def memory_used(self):
+		"""Get used memory in bits."""
+		try:
+			totalVmem = psutil.virtual_memory().total
+			freeVmem = psutil.virtual_memory().free
+			buffVmem = psutil.virtual_memory().buffers
+			cacheVmem = psutil.virtual_memory().cached
+			return totalVmem - freeVmem - buffVmem - cacheVmem
+		except Exception as e:
+			logging.error('Unexpected error: %s', e)
+			return 0
+
+	def storage_used(self):
+		"""Get used disk space in bits."""
+		try:
+			diskused = psutil.disk_usage('/').used
+			return diskused
+		except Exception as e:
+			logging.error('Unexpected error: %s', e)
+			return 0
+
+	def cur_temp(self):
+		"""Get CPU temperature in degC."""
+		try:
+			temperature = psutil.sensors_temperatures()['cpu_thermal'][0].current
+			return int(temperature * 10)
+		except Exception as e:
+			logging.error('Unexpected error: %s', e)
+			return 0
+
+	def uptime(self):
+		"""Get system uptime in a human-readable format."""
+		try:
+			uptime_seconds = dt.datetime.now(dt.timezone.utc).timestamp() - psutil.boot_time()
+			uptime = dt.timedelta(seconds=uptime_seconds)
+			return f'up: {humanize.naturaldelta(uptime)}'
+		except Exception as e:
+			logging.error('Unexpected error: %s', e)
+			return ''
+
+	def os_info(self):
+		"""Get operating system information."""
+
+		osname = ''
+		try:
+			os_info = {}
+			with open(OS_RELEASE_FILE) as osr:
+				for line in osr:
+					line = line.strip()
+					if '=' in line:
+						key, value = line.split('=', 1)
+						os_info[key] = value.strip().replace('"', '')
+
+			id_like = os_info.get('ID_LIKE', '').title()
+			version_codename = os_info.get('VERSION_CODENAME', '')
+			debian_version_full = os_info.get('DEBIAN_VERSION_FULL') or os_info.get('VERSION_ID', '')
+			osname = f'{id_like}{debian_version_full} ({version_codename})'
+		except (IOError, OSError):
+			logging.warning('OS release file not found: %s', OS_RELEASE_FILE)
+
+		kernelver = ''
+		try:
+			kernel = os.uname()
+			kernelver = f'[{kernel.sysname} {kernel.release.split("+")[0]}]'
+		except Exception as e:
+			logging.error('Unexpected error: %s', e)
+		return f' {osname} {kernelver}'
+
+	def mmdvm_info(self):
+		"""Get MMDVM configured frequency and color code."""
+
+		mmdvm_info = {}
+		dmr_enabled = False
+		try:
+			with open(MMDVMHOST_FILE, 'r') as mmh:
+				for line in mmh:
+					if '[DMR]' in line:
+						dmr_enabled = 'Enable=1' in next(mmh, '')
+					elif '=' in line:
+						key, value = line.split('=', 1)
+						mmdvm_info[key.strip()] = value.strip()
+		except (IOError, OSError):
+			logging.warning('MMDVMHost file not found: %s', MMDVMHOST_FILE)
+
+		rx_freq = int(mmdvm_info.get('RXFrequency', 0))
+		tx_freq = int(mmdvm_info.get('TXFrequency', 0))
+		color_code = int(mmdvm_info.get('ColorCode', 0))
+
+		rx = round(rx_freq / 1000000, 6)
+		tx = round(tx_freq / 1000000, 6)
+		shift = ''
+		if tx > rx:
+			shift = f' ({round(rx - tx, 6)}MHz)'
+		elif tx < rx:
+			shift = f' (+{round(rx - tx, 6)}MHz)'
+		cc = f' CC{color_code}' if dmr_enabled else ''
+		return (str(tx) + 'MHz' + shift + cc) + ','
+
+
 class TelegramLogger(object):
 	"""Class to handle logging to Telegram."""
 
@@ -755,118 +867,6 @@ async def get_gpssat():
 	return timestamp, 0, 0
 
 
-def get_cpuload():
-	"""Get CPU load as a percentage of total capacity."""
-	try:
-		load = psutil.getloadavg()[2]
-		core = psutil.cpu_count()
-		return int((load / core) * 100 * 1000)
-	except Exception as e:
-		logging.error('Unexpected error: %s', e)
-		return 0
-
-
-def get_memused():
-	"""Get used memory in bits."""
-	try:
-		totalVmem = psutil.virtual_memory().total
-		freeVmem = psutil.virtual_memory().free
-		buffVmem = psutil.virtual_memory().buffers
-		cacheVmem = psutil.virtual_memory().cached
-		return totalVmem - freeVmem - buffVmem - cacheVmem
-	except Exception as e:
-		logging.error('Unexpected error: %s', e)
-		return 0
-
-
-def get_diskused():
-	"""Get used disk space in bits."""
-	try:
-		diskused = psutil.disk_usage('/').used
-		return diskused
-	except Exception as e:
-		logging.error('Unexpected error: %s', e)
-		return 0
-
-
-def get_temp():
-	"""Get CPU temperature in degC."""
-	try:
-		temperature = psutil.sensors_temperatures()['cpu_thermal'][0].current
-		return int(temperature * 10)
-	except Exception as e:
-		logging.error('Unexpected error: %s', e)
-		return 0
-
-
-def get_uptime():
-	"""Get system uptime in a human-readable format."""
-	try:
-		uptime_seconds = dt.datetime.now(dt.timezone.utc).timestamp() - psutil.boot_time()
-		uptime = dt.timedelta(seconds=uptime_seconds)
-		return f'up: {humanize.naturaldelta(uptime)}'
-	except Exception as e:
-		logging.error('Unexpected error: %s', e)
-		return ''
-
-
-def get_osinfo():
-	"""Get operating system information."""
-	osname = ''
-	try:
-		os_info = {}
-		with open(OS_RELEASE_FILE) as osr:
-			for line in osr:
-				line = line.strip()
-				if '=' in line:
-					key, value = line.split('=', 1)
-					os_info[key] = value.strip().replace('"', '')
-
-		id_like = os_info.get('ID_LIKE', '').title()
-		version_codename = os_info.get('VERSION_CODENAME', '')
-		debian_version_full = os_info.get('DEBIAN_VERSION_FULL') or os_info.get('VERSION_ID', '')
-		osname = f'{id_like}{debian_version_full} ({version_codename})'
-	except (IOError, OSError):
-		logging.warning('OS release file not found: %s', OS_RELEASE_FILE)
-	kernelver = ''
-	try:
-		kernel = os.uname()
-		kernelver = f'[{kernel.sysname} {kernel.release.split("+")[0]}]'
-	except Exception as e:
-		logging.error('Unexpected error: %s', e)
-	return f' {osname} {kernelver}'
-
-
-def get_mmdvminfo():
-	"""Get MMDVM configured frequency and color code."""
-	mmdvm_info = {}
-	dmr_enabled = False
-	try:
-		with open(MMDVMHOST_FILE, 'r') as mmh:
-			for line in mmh:
-				if '[DMR]' in line:
-					dmr_enabled = 'Enable=1' in next(mmh, '')
-				elif '=' in line:
-					key, value = line.split('=', 1)
-					mmdvm_info[key.strip()] = value.strip()
-	except (IOError, OSError):
-		logging.warning('MMDVMHost file not found: %s', MMDVMHOST_FILE)
-
-	rx_freq = int(mmdvm_info.get('RXFrequency', 0))
-	tx_freq = int(mmdvm_info.get('TXFrequency', 0))
-	color_code = int(mmdvm_info.get('ColorCode', 0))
-
-	rx = round(rx_freq / 1000000, 6)
-	tx = round(tx_freq / 1000000, 6)
-	shift = ''
-	if tx > rx:
-		shift = f' ({round(rx - tx, 6)}MHz)'
-	elif tx < rx:
-		shift = f' (+{round(rx - tx, 6)}MHz)'
-	cc = f' CC{color_code}' if dmr_enabled else ''
-	return (str(tx) + 'MHz' + shift + cc) + ','
-
-
 async def _get_current_location_data(cfg, gps_data=None):
 	"""
 	Determines the current location data from GPS or fallback to config.
@@ -891,7 +891,7 @@ async def _get_current_location_data(cfg, gps_data=None):
 	return None, lat, lon, alt, 0, 0
 
 
-async def send_position(ais, cfg, tg_logger, gps_data=None):
+async def send_position(ais, cfg, tg_logger, sys_stats, gps_data=None):
 	"""Send APRS position packet to APRS-IS."""
 
 	# Determine current location data
@@ -906,8 +906,8 @@ async def send_position(ais, cfg, tg_logger, gps_data=None):
 	spdkmh = _spd_to_kmh(cur_spd)
 
 	# Build comment
-	mmdvminfo = get_mmdvminfo()
-	osinfo = get_osinfo()
+	mmdvminfo = sys_stats.mmdvm_info()
+	osinfo = sys_stats.os_info()
 	comment = f'{mmdvminfo}{osinfo} https://github.com/HafiziRuslan/RasPiAPRS'
 
 	# Determine timestamp
@@ -948,15 +948,15 @@ async def send_position(ais, cfg, tg_logger, gps_data=None):
 		ais.sendall(posit)
 		logging.info(posit)
 		await tg_logger.log(tgpos, cur_lat, cur_lon, int(csestr))
-		await send_status(ais, cfg, tg_logger, gps_data)
+		await send_status(ais, cfg, tg_logger, sys_stats, gps_data)
 	except APRSConnectionError as err:
 		logging.error('APRS connection error at position: %s', err)
 		ais = await ais_connect(cfg)
-		ais = await send_position(ais, cfg, tg_logger, gps_data)  # Recursive call on failure
+		ais = await send_position(ais, cfg, tg_logger, sys_stats, gps_data)  # Recursive call on failure
 	return ais
 
 
-async def send_header(ais, cfg, tg_logger):
+async def send_header(ais, cfg, tg_logger, sys_stats):
 	"""Send APRS header information to APRS-IS."""
 	caller = f'{cfg.call}>APP642::{cfg.call:9s}:'
 	params = ['CPUTemp', 'CPULoad', 'RAMUsed', 'DiskUsed']
@@ -975,21 +975,21 @@ async def send_header(ais, cfg, tg_logger):
 		ais.sendall(payload)
 		logging.info(payload)
 		await tg_logger.log(tg_msg)
-		await send_status(ais, cfg, tg_logger)
+		await send_status(ais, cfg, tg_logger, sys_stats)
 	except APRSConnectionError as err:
 		logging.error('APRS connection error at header: %s', err)
 		ais = await ais_connect(cfg)
-		ais = await send_header(ais, cfg, tg_logger)
+		ais = await send_header(ais, cfg, tg_logger, sys_stats)
 	return ais
 
 
-async def send_telemetry(ais, cfg, tg_logger):
+async def send_telemetry(ais, cfg, tg_logger, sys_stats):
 	"""Send APRS telemetry information to APRS-IS."""
 	seq = Sequence().next()
-	temp = get_temp()
-	cpuload = get_cpuload()
-	memused = get_memused()
-	diskused = get_diskused()
+	temp = sys_stats.cur_temp()
+	cpuload = sys_stats.avg_cpu_load()
+	memused = sys_stats.memory_used()
+	diskused = sys_stats.storage_used()
 	telemmemused = int(memused / 1.0000e6)
 	telemdiskused = int(diskused / 1.0000e6)
 
@@ -1012,15 +1012,15 @@ async def send_telemetry(ais, cfg, tg_logger):
 		ais.sendall(telem)
 		logging.info(telem)
 		await tg_logger.log(tgtel)
-		await send_status(ais, cfg, tg_logger)
+		await send_status(ais, cfg, tg_logger, sys_stats)
 	except APRSConnectionError as err:
 		logging.error('APRS connection error at telemetry: %s', err)
 		ais = await ais_connect(cfg)
-		ais = await send_telemetry(ais, cfg, tg_logger)
+		ais = await send_telemetry(ais, cfg, tg_logger, sys_stats)
 	return ais
 
 
-async def send_status(ais, cfg, tg_logger, gps_data=None):
+async def send_status(ais, cfg, tg_logger, sys_stats, gps_data=None):
 	"""Send APRS status information to APRS-IS."""
 	# Determine coordinates
 	_, lat, lon, _, _, _ = await _get_current_location_data(cfg, gps_data)
@@ -1044,7 +1044,7 @@ async def send_status(ais, cfg, tg_logger, gps_data=None):
 		else:
 			sats_info = f', gps: {u_sat}'
 
-	uptime = get_uptime()
+	uptime = sys_stats.uptime()
 
 	# Construct messages
 	status_text = f'{timestamp}[{gridsquare}]{near_add} {uptime}{sats_info}'
@@ -1070,7 +1070,7 @@ async def send_status(ais, cfg, tg_logger, gps_data=None):
 	except APRSConnectionError as err:
 		logging.error('APRS connection error at status: %s', err)
 		ais = await ais_connect(cfg)
-		ais = await send_status(ais, cfg, tg_logger, gps_data)
+		ais = await send_status(ais, cfg, tg_logger, sys_stats, gps_data)
 	return ais
 
 
@@ -1120,6 +1120,7 @@ async def main():
 	ais = await ais_connect(cfg)
 	tg_logger = TelegramLogger()
 	sb = SmartBeaconing()
+	sys_stats = SystemStats()
 	async with tg_logger:
 		try:
 			for tmr in Timer():
@@ -1128,12 +1129,12 @@ async def main():
 					gps_data = await get_gpspos()
 
 				if should_send_position(tmr, sb, gps_data):
-					ais = await send_position(ais, cfg, tg_logger, gps_data=gps_data)
+					ais = await send_position(ais, cfg, tg_logger, sys_stats, gps_data=gps_data)
 
 				if tmr % 14400 == 1:
-					ais = await send_header(ais, cfg, tg_logger)
+					ais = await send_header(ais, cfg, tg_logger, sys_stats)
 				if tmr % cfg.sleep == 1:
-					ais = await send_telemetry(ais, cfg, tg_logger)
+					ais = await send_telemetry(ais, cfg, tg_logger, sys_stats)
 				await asyncio.sleep(1)
 		finally:
 			await tg_logger.stop_location()
