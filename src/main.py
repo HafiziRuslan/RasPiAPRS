@@ -1141,13 +1141,15 @@ async def main():
 
 if __name__ == '__main__':
 	configure_logging()
+	exit_code = 0
 	try:
 		logging.info('Starting the application...')
 		asyncio.run(main())
 	except KeyboardInterrupt:
 		logging.info('Stopping application...')
 	except Exception as e:
-		logging.critical('Critical error occurred: %s', e)
+		logging.critical('Critical error occurred: %s', e, exc_info=True)
+		exit_code = 1
 	finally:
 		logging.info('Exiting script...')
-		sys.exit(0)
+		sys.exit(exit_code)
