@@ -2,14 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-20T05:25:51+08:00)
+## [beta7] - (2026-02-20T06:28:56+08:00)
 
-- 21 commit(s) contributed to the release.
+- 28 commit(s) contributed to the release.
 - 2 day(s) passed between the first and last commit.
 - 3 day(s) passed between releases.
 
 ### 🚀 Features in beta7
 
+- [6d8d0d1](https://github.com/HafiziRuslan/RasPiAPRS/commit/6d8d0d10e5379478acf0ac5d062d9da45381a1d5) feat(config reload): add dynamic config reload and signal handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T06:09:08+08:00*
+- [6c2d10a](https://github.com/HafiziRuslan/RasPiAPRS/commit/6c2d10a133da24aa9bf86147c92dc200b2090567) feat(main): add startup and shutdown log messages in tg_logger *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T06:03:34+08:00*
+- [1de9f46](https://github.com/HafiziRuslan/RasPiAPRS/commit/1de9f460f9975f6eee740406399bf75889090dbb) feat(main): integrate initial GPS position beaconing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T05:58:22+08:00*
+- [7685608](https://github.com/HafiziRuslan/RasPiAPRS/commit/7685608badb4b25f4f096582d3df9f19bdcf39f6) feat(system stats): integrate SystemStats class and refactor usage *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T05:52:24+08:00*
 - [f9d8587](https://github.com/HafiziRuslan/RasPiAPRS/commit/f9d85873cc046aaf26e09ac3935f4f8ce7d96f71) feat(main): add centralized location retrieval helper *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T05:25:51+08:00*
 - [f8c6050](https://github.com/HafiziRuslan/RasPiAPRS/commit/f8c60501d226a7be8e776bc45dc57eb30361e211) feat(telegram): refactor telegram logger to externalize location state *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T05:11:32+08:00*
 - [d08bf82](https://github.com/HafiziRuslan/RasPiAPRS/commit/d08bf82496a8587fb1fb089aaa52ad6d2eaf7b4b) feat(main): skip sending when speed below threshold *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T05:06:25+08:00*
@@ -24,6 +28,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta7
 
+- [cd54ca6](https://github.com/HafiziRuslan/RasPiAPRS/commit/cd54ca65edd1380bb8895e8c2fd8007fc4957e94) fix(timing): normalize spacing and minor formatting across main module *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T06:28:56+08:00*
+- [3e032f1](https://github.com/HafiziRuslan/RasPiAPRS/commit/3e032f173a0a0c78b6afa7aa8113f87bb2b7b0f6) fix(main): propagate exit code on error in entrypoint *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T05:31:13+08:00*
 - [2140998](https://github.com/HafiziRuslan/RasPiAPRS/commit/2140998f35d97bb932fd5fb3ad16de0ecb08ce77) fix(main): cast coordinates and prefer gps data when valid *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T05:18:36+08:00*
 - [e4a5118](https://github.com/HafiziRuslan/RasPiAPRS/commit/e4a51180f5016a613a7fdc00b8679b956c2cfc20) fix(main): use float zeros for gps fallback values *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T04:21:29+08:00*
 - [6404d8b](https://github.com/HafiziRuslan/RasPiAPRS/commit/6404d8b593c11f18ff9aecc73108f77c87228145) fix(troubleshoot): check /var/tmp instead of /tmp for writability *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T04:04:58+08:00*
@@ -35,6 +41,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta7
 
+- [8cfc5c4](https://github.com/HafiziRuslan/RasPiAPRS/commit/8cfc5c4c4c7e6174ecd335f93a2431ce9e5bc6df) refactor(main): streamline sequence and timer usage *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T06:19:18+08:00*
 - [42d0039](https://github.com/HafiziRuslan/RasPiAPRS/commit/42d00393e710684b327b09f5cfb8c71edc10e937) refactor(main): implement APRS/Telegram live location and smarter sending logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T02:01:34+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta7
@@ -939,4 +946,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-20T05:27:01.505737177+08:00
+generated using git-cliff on 2026-02-20T06:29:43.677637233+08:00
