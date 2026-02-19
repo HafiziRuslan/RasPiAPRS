@@ -336,31 +336,34 @@ class SmartBeaconing(object):
 class TelegramLogger(object):
 	"""Class to handle logging to Telegram."""
 
-	def __init__(self):
+	def __init__(self, location_id_file=LOCATION_ID_FILE):
 		self.enabled = os.getenv('TELEGRAM_ENABLE')
 		self.bot = None
-		if self.enabled:
-			self.token = os.getenv('TELEGRAM_TOKEN')
-			self.chat_id = os.getenv('TELEGRAM_CHAT_ID')
-			self.topic_id = os.getenv('TELEGRAM_TOPIC_ID')
-			self.loc_topic_id = os.getenv('TELEGRAM_LOC_TOPIC_ID')
-			if not self.token or not self.chat_id:
-				logging.error('Telegram token or chat ID is missing. Disabling Telegram logging.')
-				self.enabled = False
-			else:
-				self.bot = telegram.Bot(self.token)
-			if self.topic_id:
-				try:
-					self.topic_id = int(self.topic_id)
-				except (ValueError, TypeError):
-					logging.error('Invalid TELEGRAM_TOPIC_ID. It should be an integer.')
-					self.topic_id = None
-			if self.loc_topic_id:
-				try:
-					self.loc_topic_id = int(self.loc_topic_id)
-				except (ValueError, TypeError):
-					logging.error('Invalid TELEGRAM_LOC_TOPIC_ID. It should be an integer.')
-					self.loc_topic_id = None
+		self.location_id_file = location_id_file
+		if not self.enabled:
+			return
+
+		self.token = os.getenv('TELEGRAM_TOKEN')
+		self.chat_id = os.getenv('TELEGRAM_CHAT_ID')
+		if not self.token or not self.chat_id:
+			logging.error('Telegram token or chat ID is missing. Disabling Telegram logging.')
+			self.enabled = False
+			return
+
+		self.bot = telegram.Bot(self.token)
+		self.topic_id = self._parse_topic_id_from_env('TELEGRAM_TOPIC_ID')
+		self.loc_topic_id = self._parse_topic_id_from_env('TELEGRAM_LOC_TOPIC_ID')
+
+	def _parse_topic_id_from_env(self, env_var):
+		"""Safely parse a topic ID from an environment variable."""
+		topic_id_str = os.getenv(env_var)
+		if not topic_id_str:
+			return None
+		try:
+			return int(topic_id_str)
+		except (ValueError, TypeError):
+			logging.error('Invalid %s. It should be an integer.', env_var)
+			return None
 
 	async def __aenter__(self):
 		if self.bot:
@@ -405,33 +408,68 @@ class TelegramLogger(object):
 		except Exception as e:
 			logging.error('Failed to send message to Telegram: %s', e)
 
+	def _read_location_id(self):
+		"""Reads location message ID and start time from file."""
+		if not os.path.exists(self.location_id_file):
+			return None, None
+		try:
+			with open(self.location_id_file, 'r') as f:
+				parts = f.read().split(':')
+				msg_id = int(parts[0])
+				start_time = float(parts[1]) if len(parts) > 1 else time.time()
+				return msg_id, start_time
+		except (IOError, ValueError, IndexError) as e:
+			logging.warning('Could not read or parse location ID file: %s', e)
+			return None, None
+
+	def _write_location_id(self, msg_id, start_time):
+		"""Writes location message ID and start time to file."""
+		try:
+			with open(self.location_id_file, 'w') as f:
+				f.write(f'{msg_id}:{start_time}')
+		except IOError as e:
+			logging.error('Failed to save location ID: %s', e)
+
+	def _remove_location_id_file(self):
+		"""Removes the location ID file."""
+		if os.path.exists(self.location_id_file):
+			try:
+				os.remove(self.location_id_file)
+			except OSError as e:
+				logging.error('Failed to remove location ID file: %s', e)
+
 	async def _update_location(self, lat, lon, cse):
 		"""Update or send live location."""
-		sent_location = False
-		if os.path.exists(LOCATION_ID_FILE):
-			try:
-				with open(LOCATION_ID_FILE, 'r') as f:
-					parts = f.read().split(':')
-					loc_msg_id = int(parts[0])
-					start_time = float(parts[1]) if len(parts) > 1 else time.time()
-				edit_kwargs = {
-					'chat_id': self.chat_id,
-					'message_id': loc_msg_id,
-					'latitude': lat,
-					'longitude': lon,
-					'heading': cse if cse > 0 else None,
-					'live_period': int(time.time() - start_time + 86400),
-				}
-				eloc = await self._call_with_retry(self.bot.edit_message_live_location, **edit_kwargs)
-				logging.info('Edited location in Telegram: %s/%s', eloc.chat_id, eloc.message_id)
-				sent_location = True
-			except Exception as e:
-				if 'message is not modified' in str(e):
-					sent_location = True
-				else:
-					logging.warning('Failed to edit location in Telegram: %s', e)
+		loc_msg_id, start_time = self._read_location_id()
+		if loc_msg_id and start_time:
+			if await self._try_edit_live_location(loc_msg_id, start_time, lat, lon, cse):
+				return
+		await self._send_new_live_location(lat, lon, cse)
 
-		if not sent_location:
+	async def _try_edit_live_location(self, msg_id, start_time, lat, lon, cse):
+		"""Attempt to edit an existing live location message."""
+		try:
+			edit_kwargs = {
+				'chat_id': self.chat_id,
+				'message_id': msg_id,
+				'latitude': lat,
+				'longitude': lon,
+				'heading': cse if cse > 0 else None,
+				'live_period': int(time.time() - start_time + 86400),
+			}
+			eloc = await self._call_with_retry(self.bot.edit_message_live_location, **edit_kwargs)
+			logging.info('Edited location in Telegram: %s/%s', eloc.chat_id, eloc.message_id)
+			return True
+		except Exception as e:
+			if 'message is not modified' in str(e):
+				logging.debug('Live location not modified.')
+				return True
+			logging.warning('Failed to edit location in Telegram: %s. Sending a new one.', e)
+			return False
+
+	async def _send_new_live_location(self, lat, lon, cse):
+		"""Send a new live location message."""
+		try:
 			loc_kwargs = {'chat_id': self.chat_id, 'latitude': lat, 'longitude': lon, 'heading': cse if cse > 0 else None, 'live_period': 86400}
 			if self.loc_topic_id:
 				loc_kwargs['message_thread_id'] = self.loc_topic_id
@@ -439,34 +477,24 @@ class TelegramLogger(object):
 				loc_kwargs['message_thread_id'] = self.topic_id
 			loc = await self._call_with_retry(self.bot.send_location, **loc_kwargs)
 			logging.info('Sent location to Telegram: %s/%s/%s', loc.chat_id, loc.message_thread_id, loc.message_id)
-			try:
-				with open(LOCATION_ID_FILE, 'w') as f:
-					f.write(f'{loc.message_id}:{time.time()}')
-			except Exception as e:
-				logging.error('Failed to save location ID: %s', e)
+			self._write_location_id(loc.message_id, time.time())
+		except Exception as e:
+			logging.error('Failed to send new location to Telegram: %s', e)
 
 	async def stop_location(self):
 		"""Stop live location sharing."""
 		if not self.enabled or not self.bot:
 			return
-		if os.path.exists(LOCATION_ID_FILE):
-			try:
-				with open(LOCATION_ID_FILE, 'r') as f:
-					parts = f.read().split(':')
-					location_id = int(parts[0])
-				try:
-					await self._call_with_retry(self.bot.stop_message_live_location, chat_id=self.chat_id, message_id=location_id)
-					logging.info('Stopped live location in Telegram: %s/%s', self.chat_id, location_id)
-				except Exception as e:
-					logging.warning('Failed to stop live location in Telegram: %s', e)
-			except Exception as e:
-				logging.error('Error stopping live location: %s', e)
-			finally:
-				if os.path.exists(LOCATION_ID_FILE):
-					try:
-						os.remove(LOCATION_ID_FILE)
-					except OSError:
-						pass
+		location_id, _ = self._read_location_id()
+		if not location_id:
+			return
+		try:
+			await self._call_with_retry(self.bot.stop_message_live_location, chat_id=self.chat_id, message_id=location_id)
+			logging.info('Stopped live location in Telegram: %s/%s', self.chat_id, location_id)
+		except Exception as e:
+			logging.warning('Failed to stop live location in Telegram: %s', e)
+		finally:
+			self._remove_location_id_file()
 
 
 def _fetch_from_gpsd(filter_class):
