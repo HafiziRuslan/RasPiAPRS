@@ -193,7 +193,7 @@ sync_dependencies() {
   local action=$1
   if [ "$INTERNET_AVAILABLE" = true ]; then
     log_msg INFO "$action RasPiAPRS dependencies"
-    uv sync -q
+    sudo -u $dir_own uv sync -q
     elif [ "$action" = "Installing" ]; then
     log_msg WARN "Internet unavailable. Skipping dependency installation."
   fi
@@ -201,7 +201,7 @@ sync_dependencies() {
 
 if [ ! -d ".venv" ]; then
   log_msg INFO "RasPiAPRS environment not found, creating one."
-  uv venv
+  sudo -u $dir_own uv venv
   log_msg INFO "Activating RasPiAPRS environment"
   source .venv/bin/activate
   sync_dependencies "Installing"
