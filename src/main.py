@@ -382,7 +382,7 @@ class TelegramLogger(object):
 				await asyncio.sleep(delay)
 				delay *= 2
 
-	async def log(self, tg_message: str, lat: float = 0, lon: float = 0, cse: float = 0):
+	async def log(self, tg_message: str, lat: float = 0.0, lon: float = 0.0, cse: float = 0.0):
 		"""Send log message and optionally location to Telegram channel."""
 		if not self.enabled or not self.bot:
 			return
@@ -521,18 +521,18 @@ def _get_fallback_location():
 		try:
 			with open(GPS_FILE, 'r') as f:
 				gps_data = json.load(f)
-				lat = float(gps_data.get('lat', 0))
-				lon = float(gps_data.get('lon', 0))
-				alt = float(gps_data.get('alt', 0))
+				lat = float(gps_data.get('lat', 0.0))
+				lon = float(gps_data.get('lon', 0.0))
+				alt = float(gps_data.get('alt', 0.0))
 		except (IOError, OSError, json.JSONDecodeError, ValueError) as e:
 			logging.warning('Could not read or parse GPS file %s: %s', GPS_FILE, e)
 
 	# If cache failed or empty, try environment
 	if lat == 0 and lon == 0:
 		try:
-			lat = float(os.getenv('APRS_LATITUDE', 0))
-			lon = float(os.getenv('APRS_LONGITUDE', 0))
-			alt = float(os.getenv('APRS_ALTITUDE', 0))
+			lat = float(os.getenv('APRS_LATITUDE', 0.0))
+			lon = float(os.getenv('APRS_LONGITUDE', 0.0))
+			alt = float(os.getenv('APRS_ALTITUDE', 0.0))
 		except ValueError:
 			lat, lon, alt = 0, 0, 0
 
