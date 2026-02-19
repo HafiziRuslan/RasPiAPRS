@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-20T04:04:58+08:00)
+## [beta7] - (2026-02-20T04:21:29+08:00)
 
-- 15 commit(s) contributed to the release.
+- 17 commit(s) contributed to the release.
 - 2 day(s) passed between the first and last commit.
 - 3 day(s) passed between releases.
 
 ### 🚀 Features in beta7
 
+- [12a3e44](https://github.com/HafiziRuslan/RasPiAPRS/commit/12a3e4442fdfea97f5d128542ce6e7bc5ba34c96) feat(main): tighten type hints and defaults for logging and GPS *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T04:19:27+08:00*
 - [910a205](https://github.com/HafiziRuslan/RasPiAPRS/commit/910a205a3e5cc635950a2137adae98999c3835f4) feat(readme): adjust sudo permissions note and cron path *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T01:30:45+08:00*
 - [ce1c2f6](https://github.com/HafiziRuslan/RasPiAPRS/commit/ce1c2f6e3460cd60bcb44cf4acbec1322ae6bbc0) feat(core): integrate extensive dependency updates and v2.6.1 lockfile overhaul *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T03:08:24+08:00*
 - [7d84c9e](https://github.com/HafiziRuslan/RasPiAPRS/commit/7d84c9e470a4002859e3a0ef30aa9b35227f04a9) feat(src.main): add gpsd data retrieval with retries and async helper *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T03:02:00+08:00*
@@ -20,6 +21,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta7
 
+- [e4a5118](https://github.com/HafiziRuslan/RasPiAPRS/commit/e4a51180f5016a613a7fdc00b8679b956c2cfc20) fix(main): use float zeros for gps fallback values *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T04:21:29+08:00*
 - [6404d8b](https://github.com/HafiziRuslan/RasPiAPRS/commit/6404d8b593c11f18ff9aecc73108f77c87228145) fix(troubleshoot): check /var/tmp instead of /tmp for writability *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T04:04:58+08:00*
 - [8656b76](https://github.com/HafiziRuslan/RasPiAPRS/commit/8656b7669db260054e2972316750200621de367b) fix(main): run uv commands as dedicated user *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T01:48:22+08:00*
 - [b4bb5fe](https://github.com/HafiziRuslan/RasPiAPRS/commit/b4bb5fe66d6193a32303163c5c3346645473b6d5) fix(unit tests): update osinfo expectations for debian 13 and kernel 6.12 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T02:52:57+08:00*
@@ -933,4 +935,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-20T04:05:34.366849598+08:00
+generated using git-cliff on 2026-02-20T04:39:40.501666958+08:00
