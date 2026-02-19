@@ -2,14 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-20T04:21:29+08:00)
+## [beta7] - (2026-02-20T05:25:51+08:00)
 
-- 17 commit(s) contributed to the release.
+- 21 commit(s) contributed to the release.
 - 2 day(s) passed between the first and last commit.
 - 3 day(s) passed between releases.
 
 ### 🚀 Features in beta7
 
+- [f9d8587](https://github.com/HafiziRuslan/RasPiAPRS/commit/f9d85873cc046aaf26e09ac3935f4f8ce7d96f71) feat(main): add centralized location retrieval helper *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T05:25:51+08:00*
+- [f8c6050](https://github.com/HafiziRuslan/RasPiAPRS/commit/f8c60501d226a7be8e776bc45dc57eb30361e211) feat(telegram): refactor telegram logger to externalize location state *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T05:11:32+08:00*
+- [d08bf82](https://github.com/HafiziRuslan/RasPiAPRS/commit/d08bf82496a8587fb1fb089aaa52ad6d2eaf7b4b) feat(main): skip sending when speed below threshold *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T05:06:25+08:00*
 - [12a3e44](https://github.com/HafiziRuslan/RasPiAPRS/commit/12a3e4442fdfea97f5d128542ce6e7bc5ba34c96) feat(main): tighten type hints and defaults for logging and GPS *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T04:19:27+08:00*
 - [910a205](https://github.com/HafiziRuslan/RasPiAPRS/commit/910a205a3e5cc635950a2137adae98999c3835f4) feat(readme): adjust sudo permissions note and cron path *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T01:30:45+08:00*
 - [ce1c2f6](https://github.com/HafiziRuslan/RasPiAPRS/commit/ce1c2f6e3460cd60bcb44cf4acbec1322ae6bbc0) feat(core): integrate extensive dependency updates and v2.6.1 lockfile overhaul *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T03:08:24+08:00*
@@ -21,6 +24,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta7
 
+- [2140998](https://github.com/HafiziRuslan/RasPiAPRS/commit/2140998f35d97bb932fd5fb3ad16de0ecb08ce77) fix(main): cast coordinates and prefer gps data when valid *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T05:18:36+08:00*
 - [e4a5118](https://github.com/HafiziRuslan/RasPiAPRS/commit/e4a51180f5016a613a7fdc00b8679b956c2cfc20) fix(main): use float zeros for gps fallback values *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T04:21:29+08:00*
 - [6404d8b](https://github.com/HafiziRuslan/RasPiAPRS/commit/6404d8b593c11f18ff9aecc73108f77c87228145) fix(troubleshoot): check /var/tmp instead of /tmp for writability *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T04:04:58+08:00*
 - [8656b76](https://github.com/HafiziRuslan/RasPiAPRS/commit/8656b7669db260054e2972316750200621de367b) fix(main): run uv commands as dedicated user *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T01:48:22+08:00*
@@ -935,4 +939,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-20T04:39:40.501666958+08:00
+generated using git-cliff on 2026-02-20T05:27:01.505737177+08:00
