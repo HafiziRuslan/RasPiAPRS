@@ -2,14 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-20T21:21:43+08:00)
+## [beta7] - (2026-02-20T22:32:31+08:00)
 
-- 30 commit(s) contributed to the release.
+- 32 commit(s) contributed to the release.
 - 3 day(s) passed between the first and last commit.
 - 4 day(s) passed between releases.
 
 ### 🚀 Features in beta7
 
+- [6054d49](https://github.com/HafiziRuslan/RasPiAPRS/commit/6054d49cb382c9ee04b864f52ca469520b8c92f1) feat(main): integrate dynamic app metadata and update references *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T22:32:31+08:00*
+- [ef0fee4](https://github.com/HafiziRuslan/RasPiAPRS/commit/ef0fee43ca828483e7c5fcbb54c3ba33ad3bdd83) feat(pyproject): update project metadata and URLs in pyproject.toml *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T22:32:24+08:00*
 - [6d8d0d1](https://github.com/HafiziRuslan/RasPiAPRS/commit/6d8d0d10e5379478acf0ac5d062d9da45381a1d5) feat(config reload): add dynamic config reload and signal handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T06:09:08+08:00*
 - [6c2d10a](https://github.com/HafiziRuslan/RasPiAPRS/commit/6c2d10a133da24aa9bf86147c92dc200b2090567) feat(main): add startup and shutdown log messages in tg_logger *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T06:03:34+08:00*
 - [1de9f46](https://github.com/HafiziRuslan/RasPiAPRS/commit/1de9f460f9975f6eee740406399bf75889090dbb) feat(main): integrate initial GPS position beaconing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T05:58:22+08:00*
@@ -948,4 +950,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-20T21:22:13.643972488+08:00
+generated using git-cliff on 2026-02-20T22:33:28.236933854+08:00
