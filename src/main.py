@@ -598,9 +598,12 @@ def _fetch_from_gpsd(filter_class):
 		port = int(os.getenv('GPSD_PORT', 2947))
 		with GPSDClient(host=host, port=port, timeout=15) as client:
 			for result in client.dict_stream(convert_datetime=True, filter=[filter_class]):
-				if result['class'] == filter_class:
+				if filter_class == 'TPV':
+					if result.get('mode', 0) > 1:
+						return result
+				else:
 					return result
-				return None
+			return None
 	except Exception as e:
 		return e
 
