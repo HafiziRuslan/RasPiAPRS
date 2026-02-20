@@ -1013,10 +1013,8 @@ async def ais_connect(cfg):
 
 def should_send_position(tmr, sb, gps_data):
 	"""Determine if a position update is needed."""
-	if os.getenv('GPSD_ENABLE'):
-		if not os.getenv('SMARTBEACONING_ENABLE'):
-			return False
-		return sb.should_send(gps_data)
+	if os.getenv('GPSD_ENABLE') and os.getenv('SMARTBEACONING_ENABLE') and sb.should_send(gps_data):
+		return True
 	return tmr % 1800 == 1
 
 
@@ -1055,10 +1053,12 @@ async def main():
 			if os.getenv('GPSD_ENABLE'):
 				gps_data = await get_gpspos()
 			ais = await send_position(ais, cfg, tg_logger, sys_stats, gps_data=gps_data)
+			ais = await send_header(ais, cfg, tg_logger, sys_stats)
+			ais = await send_telemetry(ais, cfg, tg_logger, sys_stats)
 			sb.last_beacon_time = time.time()
 			if gps_data:
 				sb.last_course = gps_data[5]
-			tmr = 0
+			tmr = 1
 			try:
 				while True:
 					tmr = (tmr + 1) % 86400
