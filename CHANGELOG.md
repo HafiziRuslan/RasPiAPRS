@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-20T20:11:45+08:00)
+## [beta7] - (2026-02-20T21:21:43+08:00)
 
-- 29 commit(s) contributed to the release.
+- 30 commit(s) contributed to the release.
 - 3 day(s) passed between the first and last commit.
 - 4 day(s) passed between releases.
 
@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta7
 
+- [b1c8c21](https://github.com/HafiziRuslan/RasPiAPRS/commit/b1c8c2191008e3136e1e1ed43eb1cbe8de1c1720) fix(ais): adjust position sending logic to respect gpsd and beaconing flags *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T21:21:43+08:00*
 - [bc7355c](https://github.com/HafiziRuslan/RasPiAPRS/commit/bc7355cb1fe1660eee156a8eb33f64435314cdc7) fix(main): simplify should_send_position logic and adjust beacon flow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T20:11:45+08:00*
 - [cd54ca6](https://github.com/HafiziRuslan/RasPiAPRS/commit/cd54ca65edd1380bb8895e8c2fd8007fc4957e94) fix(timing): normalize spacing and minor formatting across main module *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T06:28:56+08:00*
 - [3e032f1](https://github.com/HafiziRuslan/RasPiAPRS/commit/3e032f173a0a0c78b6afa7aa8113f87bb2b7b0f6) fix(main): propagate exit code on error in entrypoint *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T05:31:13+08:00*
@@ -947,4 +948,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-20T20:12:12.091569018+08:00
+generated using git-cliff on 2026-02-20T21:22:13.643972488+08:00
