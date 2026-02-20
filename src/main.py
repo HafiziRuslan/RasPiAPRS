@@ -9,8 +9,10 @@ import logging.handlers
 import os
 import pickle
 import signal
+import subprocess
 import sys
 import time
+import tomllib
 
 import aiohttp
 import aprslib
@@ -34,6 +36,35 @@ CACHE_FILE = '/var/tmp/raspiaprs/nominatim_cache.pkl'
 LOCATION_ID_FILE = '/var/tmp/raspiaprs/location_id.tmp'
 STATUS_FILE = '/var/tmp/raspiaprs/status.tmp'
 GPS_FILE = '/var/tmp/raspiaprs/gps.json'
+
+
+def get_app_metadata():
+	repo_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+	try:
+		git_sha = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], cwd=repo_path).decode('ascii').strip()
+	except Exception:
+		git_sha = 'unknown'
+
+	project_meta = 'RasPiAPRS-v0.0.0'
+	github = 'https://github.com/HafiziRuslan/RasPiAPRS'
+	try:
+		pyproject_path = os.path.join(repo_path, 'pyproject.toml')
+		with open(pyproject_path, 'rb') as f:
+			data = tomllib.load(f)
+			name = data['project']['name']
+			version = data['project']['version']
+			project_meta = f'{name}-v{version}'
+			github = data['project']['urls']['github']
+	except FileNotFoundError:
+		logging.warning('pyproject.toml not found, using default project metadata.')
+	except (tomllib.TOMLDecodeError, KeyError) as e:
+		logging.warning('Failed to parse pyproject.toml: %s. Using default project metadata.', e)
+
+	return f'{project_meta}-{git_sha}', github
+
+
+APP_NAME, PROJECT_URL = get_app_metadata()
 
 
 # Set up logging
@@ -758,7 +789,7 @@ def get_add_from_pos(lat, lon):
 	if coord_key in cache:
 		logging.debug('Address found in cache for requested coordinates')
 		return cache[coord_key]
-	geolocator = Nominatim(user_agent='raspiaprs0.1b7')
+	geolocator = Nominatim(user_agent=APP_NAME)
 	try:
 		location = geolocator.reverse((lat, lon), exactly_one=True, namedetails=True, addressdetails=True)
 		if location:
@@ -840,7 +871,7 @@ async def send_position(ais, cfg, tg_logger, sys_stats, gps_data=None):
 	# Build comment
 	mmdvminfo = sys_stats.mmdvm_info()
 	osinfo = sys_stats.os_info()
-	comment = f'{mmdvminfo}{osinfo} https://github.com/HafiziRuslan/RasPiAPRS'
+	comment = f'{mmdvminfo}{osinfo} {PROJECT_URL}'
 	# Determine timestamp
 	ztime = dt.datetime.now(dt.timezone.utc)
 	timestamp = cur_time.strftime('%d%H%Mz') if cur_time else ztime.strftime('%d%H%Mz')
@@ -1050,7 +1081,7 @@ async def main():
 		sys_stats = SystemStats()
 		async with tg_logger:
 			# Send startup message to Telegram
-			await tg_logger.log(f'🚀 <b>{cfg.call}</b> starting up...')
+			await tg_logger.log(f'🚀 <b>{cfg.call}</b>, {APP_NAME} starting up...')
 			# Send initial position
 			gps_data = None
 			if os.getenv('GPSD_ENABLE'):
@@ -1079,9 +1110,9 @@ async def main():
 					await asyncio.sleep(1)
 			finally:
 				if reload_event.is_set():
-					await tg_logger.log(f'🔄 <b>{cfg.call}</b> reloading configuration...')
+					await tg_logger.log(f'🔄 <b>{cfg.call}</b>, {APP_NAME} reloading configuration...')
 				else:
-					await tg_logger.log(f'🛑 <b>{cfg.call}</b> shutting down...')
+					await tg_logger.log(f'🛑 <b>{cfg.call}</b>, {APP_NAME} shutting down...')
 				await tg_logger.stop_location()
 				# Close AIS connection
 				if ais:
