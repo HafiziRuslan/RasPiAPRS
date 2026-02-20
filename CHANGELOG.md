@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-20T23:27:23+08:00)
+## [beta7] - (2026-02-21T00:02:58+08:00)
 
-- 35 commit(s) contributed to the release.
+- 36 commit(s) contributed to the release.
 - 3 day(s) passed between the first and last commit.
 - 4 day(s) passed between releases.
 
 ### 🚀 Features in beta7
 
+- [20185ae](https://github.com/HafiziRuslan/RasPiAPRS/commit/20185ae596044f3b7f744397bea4d4ff9fa78bd7) feat(pylock): broaden python version support and add macOS wheels *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-21T00:02:58+08:00*
 - [b7bcac9](https://github.com/HafiziRuslan/RasPiAPRS/commit/b7bcac9f8a80f1e705695abe277796eeb2ecc724) feat(main): improve startup, robustness and resilience *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T23:27:23+08:00*
 - [e6e7658](https://github.com/HafiziRuslan/RasPiAPRS/commit/e6e7658b9c67d41a2d56ebac319a6d73df0c4557) feat(main): simplify and centralize app metadata loading *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T22:57:17+08:00*
 - [5e409a2](https://github.com/HafiziRuslan/RasPiAPRS/commit/5e409a2f5759b38a49187b7b7d2da1b7e7a0a4e3) feat(main): handle missing git gracefully in metadata retrieval *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T22:48:46+08:00*
@@ -953,4 +954,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-20T23:28:20.417741270+08:00
+generated using git-cliff on 2026-02-21T00:03:29.407388777+08:00
