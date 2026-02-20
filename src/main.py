@@ -42,29 +42,22 @@ GPS_FILE = '/var/tmp/raspiaprs/gps.json'
 def get_app_metadata():
 	repo_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 	git_sha = 'unknown'
-
 	if shutil.which('git'):
 		try:
 			git_sha = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], cwd=repo_path).decode('ascii').strip()
 		except Exception:
-			git_sha = 'unknown'
+			pass
 
-	project_meta = 'RasPiAPRS-v0.0.0'
-	github = 'https://github.com/HafiziRuslan/RasPiAPRS'
+	meta = {'name': 'RasPiAPRS', 'version': '0.0.0', 'github': 'https://github.com/HafiziRuslan/RasPiAPRS'}
 	try:
-		pyproject_path = os.path.join(repo_path, 'pyproject.toml')
-		with open(pyproject_path, 'rb') as f:
-			data = tomllib.load(f)
-			name = data['project']['name']
-			version = data['project']['version']
-			project_meta = f'{name}-v{version}'
-			github = data['project']['urls']['github']
-	except FileNotFoundError:
-		logging.warning('pyproject.toml not found, using default project metadata.')
-	except (tomllib.TOMLDecodeError, KeyError) as e:
-		logging.warning('Failed to parse pyproject.toml: %s. Using default project metadata.', e)
+		with open(os.path.join(repo_path, 'pyproject.toml'), 'rb') as f:
+			data = tomllib.load(f).get('project', {})
+			meta.update({k: data.get(k, meta[k]) for k in ['name', 'version']})
+			meta['github'] = data.get('urls', {}).get('github', meta['github'])
+	except Exception as e:
+		logging.warning('Failed to load project metadata: %s', e)
 
-	return f'{project_meta}-{git_sha}', github
+	return f"{meta['name']}-v{meta['version']}-{git_sha}", meta['github']
 
 
 APP_NAME, PROJECT_URL = get_app_metadata()
