@@ -1013,9 +1013,12 @@ async def ais_connect(cfg):
 
 def should_send_position(tmr, sb, gps_data):
 	"""Determine if a position update is needed."""
+	send: bool = False
 	if os.getenv('GPSD_ENABLE') and os.getenv('SMARTBEACONING_ENABLE') and sb.should_send(gps_data):
-		return True
-	return tmr % 1800 == 1
+		send = True
+	if tmr % 1200 == 1:
+		send = True
+	return send
 
 
 async def main():
