@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-21T00:02:58+08:00)
+## [beta7] - (2026-02-21T02:30:05+08:00)
 
-- 36 commit(s) contributed to the release.
+- 37 commit(s) contributed to the release.
 - 3 day(s) passed between the first and last commit.
 - 4 day(s) passed between releases.
 
@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta7
 
+- [202883c](https://github.com/HafiziRuslan/RasPiAPRS/commit/202883ccb1fa20cc53aa8d1df164a24e35911613) fix(data): handle GPSD TPV mode properly in dict_stream retrieval *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-21T02:30:05+08:00*
 - [b1c8c21](https://github.com/HafiziRuslan/RasPiAPRS/commit/b1c8c2191008e3136e1e1ed43eb1cbe8de1c1720) fix(ais): adjust position sending logic to respect gpsd and beaconing flags *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T21:21:43+08:00*
 - [bc7355c](https://github.com/HafiziRuslan/RasPiAPRS/commit/bc7355cb1fe1660eee156a8eb33f64435314cdc7) fix(main): simplify should_send_position logic and adjust beacon flow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T20:11:45+08:00*
 - [cd54ca6](https://github.com/HafiziRuslan/RasPiAPRS/commit/cd54ca65edd1380bb8895e8c2fd8007fc4957e94) fix(timing): normalize spacing and minor formatting across main module *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T06:28:56+08:00*
@@ -954,4 +955,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-21T00:03:29.407388777+08:00
+generated using git-cliff on 2026-02-21T02:30:32.512525574+08:00
