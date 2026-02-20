@@ -1,62 +1,54 @@
 [project]
-name = "RasPiAPRS"
-version = "0.1-beta.7"
-description = "APRS telemetry for Pi-Star/WPSD/AllStarLink"
+name = 'RasPiAPRS'
+version = '0.1beta7'
+description = 'APRS telemetry for Pi-Star/WPSD/AllStarLink'
 keywords = [
-  "amateur-radio",
-  "aprs",
-  "aprs-beacon",
-  "mmdvm",
-  "pi-star",
-  "aprs-telemetry",
-  "allstarlink",
-  "wpsd",
+  'amateur-radio',
+  'aprs',
+  'aprs-beacon',
+  'mmdvm',
+  'pi-star',
+  'aprs-telemetry',
+  'allstarlink',
+  'wpsd',
 ]
-readme = "README.md"
-license = "BSD-3-Clause"
+readme = 'README.md'
+license = 'BSD-3-Clause'
 authors = [
-  { name = "Fred Cirera", email = "github-fred@hidzz.com" },
-  { name = "Hafizi Ruslan", email = "9w2lgx@mhrtech.my" },
+  { name = 'Fred Cirera', email = 'github-fred@hidzz.com' },
+  { name = 'Hafizi Ruslan', email = '9w2lgx@mhrtech.my' },
 ]
-maintainers = [{ name = "Hafizi Ruslan", email = "9w2lgx@mhrtech.my" }]
+maintainers = [{ name = 'Hafizi Ruslan', email = '9w2lgx@mhrtech.my' }]
 classifiers = [
-  "Development Status :: 4 - Beta",
-  "Programming Language :: Python",
+  'Development Status :: 4 - Beta',
+  'Programming Language :: Python',
 ]
+urls.github = 'https://github.com/HafiziRuslan/RasPiAPRS'
+urls.repository = 'https://github.com/HafiziRuslan/RasPiAPRS.git'
+urls.sourcecode = 'https://github.com/0x9900/aprstar.git'
+urls.history = 'https://github.com/HafiziRuslan/RasPiAPRS/blob/master/CHANGELOG.md'
+urls.issuetracker = 'https://github.com/HafiziRuslan/RasPiAPRS/issues'
 
-requires-python = ">=3.13"
+requires-python = '>=3.10'
 dependencies = [
-  "aiohttp>=3.13.3",
-  "aprslib>=0.7.2",
-  "geopy>=2.4.1",
-  "gpsdclient>=1.3.2",
-  "humanize>=4.15.0",
-  "psutil>=7.2.2",
-  "python-dotenv>=1.2.1",
-  "python-telegram-bot>=22.6",
+  'aiohttp>=3.13.3',
+  'aprslib>=0.7.2',
+  'geopy>=2.4.1',
+  'gpsdclient>=1.3.2',
+  'humanize>=4.15.0',
+  'psutil>=7.2.2',
+  'python-dotenv>=1.2.1',
+  'python-telegram-bot>=22.6',
 ]
-
-[project.urls]
-github = "https://github.com/HafiziRuslan/RasPiAPRS"
-repository = "https://github.com/HafiziRuslan/RasPiAPRS.git"
-sourcecode = "https://github.com/0x9900/aprstar.git"
-history = "https://github.com/HafiziRuslan/RasPiAPRS/blob/master/CHANGELOG.md"
-issuetracker = "https://github.com/HafiziRuslan/RasPiAPRS/issues"
 
 [tool.ruff]
 line-length = 150
-
-[tool.ruff.analyze]
-detect-string-imports = true
-
-[tool.ruff.format]
-quote-style = "single"
-indent-style = "tab"
-docstring-code-format = true
-line-ending = "lf"
-skip-magic-trailing-comma = true
-
-[tool.ruff.lint.isort]
-combine-as-imports = true
-default-section = "first-party"
-force-single-line = true
+analyze.detect-string-imports = true
+format.quote-style = 'single'
+format.indent-style = 'tab'
+format.docstring-code-format = true
+format.line-ending = 'lf'
+format.skip-magic-trailing-comma = true
+lint.isort.combine-as-imports = true
+lint.isort.default-section = 'first-party'
+lint.isort.force-single-line = true
