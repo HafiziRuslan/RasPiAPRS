@@ -9,6 +9,7 @@ import logging.handlers
 import os
 import pickle
 import signal
+import shutil
 import subprocess
 import sys
 import time
@@ -40,11 +41,13 @@ GPS_FILE = '/var/tmp/raspiaprs/gps.json'
 
 def get_app_metadata():
 	repo_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+	git_sha = 'unknown'
 
-	try:
-		git_sha = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], cwd=repo_path).decode('ascii').strip()
-	except Exception:
-		git_sha = 'unknown'
+	if shutil.which('git'):
+		try:
+			git_sha = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], cwd=repo_path).decode('ascii').strip()
+		except Exception:
+			git_sha = 'unknown'
 
 	project_meta = 'RasPiAPRS-v0.0.0'
 	github = 'https://github.com/HafiziRuslan/RasPiAPRS'
