@@ -6,6 +6,9 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
+# Ensure we are in the script directory
+cd "$(dirname "$0")"
+
 dir_own=$(stat -c '%U' .)
 
 log_msg() {
@@ -41,35 +44,78 @@ send_notification() {
     local chat_id=$(get_env_var "TELEGRAM_CHAT_ID" | tr -d '[:space:]')
     local topic_id=$(get_env_var "TELEGRAM_TOPIC_ID" | tr -d '[:space:]')
 
-    if [ -n "$token" ] && [ -n "$chat_id" ]; then
+    if [ -z "$token" ] || [ -z "$chat_id" ]; then
+      return
+    fi
+
+    local curl_args=()
+    local json_data
+    local data
+
+    # Prefer jq for JSON construction
+    if command -v jq >/dev/null 2>&1; then
+      local jq_args=(--arg chat_id "$chat_id" --arg text "$message")
+      local jq_filter='{chat_id: $chat_id, text: $text}'
+      if [ -n "$topic_id" ]; then
+        jq_args+=(--arg topic_id "$topic_id")
+        jq_filter='{chat_id: $chat_id, text: $text, message_thread_id: ($topic_id | tonumber)}'
+      fi
+
+      if json_data=$(jq -n "${jq_args[@]}" "$jq_filter" 2>/dev/null); then
+        curl_args=("-H" "Content-Type: application/json" "-d" "$json_data")
+      fi
+    fi
+
+    # If jq method failed or is not available, use python fallback
+    if [ ${#curl_args[@]} -eq 0 ]; then
       local encoded_message=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$message")
-      local data="chat_id=$chat_id"
+      data="chat_id=$chat_id"
       if [ -n "$topic_id" ]; then
         data="$data&message_thread_id=$topic_id"
       fi
-      local data="$data&text=$encoded_message"
-      curl -s --data "$data" "https://api.telegram.org/bot$token/sendMessage" >/dev/null 2>&1
+      data="$data&text=$encoded_message"
+      curl_args=("--data" "$data")
     fi
+
+    local url="https://api.telegram.org/bot$token/sendMessage"
+    for i in {1..3}; do
+      if curl -s --fail "${curl_args[@]}" "$url" >/dev/null 2>&1; then
+        return 0 # Success
+      fi
+      log_msg WARN "Failed to send notification (attempt $i/3). Retrying in 2 seconds..."
+      sleep 2
+    done
+
+    log_msg ERROR "Failed to send notification after 3 attempts."
   fi
 }
 
 check_internet() {
-  local output
-  if output=$(timeout 5 ping -q -c 3 -W 1 8.8.8.8 2>&1); then
-    return 0
-  else
-    log_msg WARN "Internet check failed. Ping statistics: $output"
-    return 1
-  fi
+  local hosts=("1.1.1.1" "8.8.8.8" "github.com" "pypi.org")
+  for host in "${hosts[@]}"; do
+    if timeout 5 ping -q -c 1 -W 1 "$host" >/dev/null 2>&1; then
+      return 0
+    fi
+  done
+
+  log_msg WARN "Internet check failed. Could not reach any of: ${hosts[*]}"
+  return 1
 }
 
 check_disk_space() {
-  local required_space_kb=102400 # 100MB
-  local available_space_kb
-  available_space_kb=$(df -kP . | awk 'NR==2 {print $4}')
+  local required_space_mb=100 # 100MB
+  local available_space_mb
+  # Get the last line of df output to be robust against outputs with or without a header.
+  available_space_mb=$(df -mP . | tail -n 1 | awk '{print $4}')
 
-  if [ "$available_space_kb" -lt "$required_space_kb" ]; then
-    log_msg WARN "⚠️ Insufficient disk space for update. Required: ${required_space_kb}KB, Available: ${available_space_kb}KB."
+  # Validate that we received a numeric value before comparison.
+  if ! [[ "$available_space_mb" =~ ^[0-9]+$ ]]; then
+    log_msg WARN "⚠️ Could not determine available disk space."
+    return 1
+  fi
+
+  if [ "$available_space_mb" -lt "$required_space_mb" ]; then
+    log_msg WARN "⚠️ Insufficient disk space for update. Required: ${required_space_mb}MB, Available: ${available_space_mb}MB."
     return 1
   fi
   return 0
@@ -194,20 +240,25 @@ sync_dependencies() {
   if [ "$INTERNET_AVAILABLE" = true ]; then
     log_msg INFO "$action RasPiAPRS dependencies"
     sudo -u $dir_own uv sync -q
-    elif [ "$action" = "Installing" ]; then
+  elif [ "$action" = "Installing" ]; then
     log_msg WARN "Internet unavailable. Skipping dependency installation."
   fi
 }
+
+if [ -d ".venv" ]; then
+  if ! sudo -u $dir_own ./.venv/bin/python3 -c "import sys" >/dev/null 2>&1; then
+    log_msg WARN "⚠️ Virtual environment appears corrupted. Removing it..."
+    rm -rf .venv
+  fi
+fi
 
 if [ ! -d ".venv" ]; then
   log_msg INFO "RasPiAPRS environment not found, creating one."
   sudo -u $dir_own uv venv
   log_msg INFO "Activating RasPiAPRS environment"
-  source .venv/bin/activate
   sync_dependencies "Installing"
 else
   log_msg INFO "RasPiAPRS environment exists. -> Activating RasPiAPRS environment"
-  source .venv/bin/activate
   sync_dependencies "Updating"
 fi
 
@@ -226,7 +277,7 @@ while true; do
 
   START_TIME=$(date +%s)
   set +e
-  uv run -s ./src/main.py
+  sudo -u $dir_own uv run -s ./src/main.py
   exit_code=$?
   set -e
   END_TIME=$(date +%s)
@@ -259,7 +310,7 @@ while true; do
     if [ "$RESTART_DELAY" -gt "$MAX_DELAY" ]; then
       RESTART_DELAY=$MAX_DELAY
     fi
-    elif [ "$exit_code" -eq 0 ]; then
+  elif [ "$exit_code" -eq 0 ]; then
     log_msg INFO "RasPiAPRS exited normally. Stopping."
     break
   else
