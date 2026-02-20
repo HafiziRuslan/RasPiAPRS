@@ -37,8 +37,11 @@ dependencies = [
 ]
 
 [project.urls]
-repository = "https://github.com/HafiziRuslan/RasPiAPRS"
-changelog = "https://github.com/HafiziRuslan/RasPiAPRS/blob/master/CHANGELOG.md"
+github = "https://github.com/HafiziRuslan/RasPiAPRS"
+repository = "https://github.com/HafiziRuslan/RasPiAPRS.git"
+sourcecode = "https://github.com/0x9900/aprstar.git"
+history = "https://github.com/HafiziRuslan/RasPiAPRS/blob/master/CHANGELOG.md"
+issuetracker = "https://github.com/HafiziRuslan/RasPiAPRS/issues"
 
 [tool.ruff]
 line-length = 150
