@@ -2,14 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-20T22:32:31+08:00)
+## [beta7] - (2026-02-20T23:27:23+08:00)
 
-- 32 commit(s) contributed to the release.
+- 35 commit(s) contributed to the release.
 - 3 day(s) passed between the first and last commit.
 - 4 day(s) passed between releases.
 
 ### 🚀 Features in beta7
 
+- [b7bcac9](https://github.com/HafiziRuslan/RasPiAPRS/commit/b7bcac9f8a80f1e705695abe277796eeb2ecc724) feat(main): improve startup, robustness and resilience *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T23:27:23+08:00*
+- [e6e7658](https://github.com/HafiziRuslan/RasPiAPRS/commit/e6e7658b9c67d41a2d56ebac319a6d73df0c4557) feat(main): simplify and centralize app metadata loading *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T22:57:17+08:00*
+- [5e409a2](https://github.com/HafiziRuslan/RasPiAPRS/commit/5e409a2f5759b38a49187b7b7d2da1b7e7a0a4e3) feat(main): handle missing git gracefully in metadata retrieval *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T22:48:46+08:00*
 - [6054d49](https://github.com/HafiziRuslan/RasPiAPRS/commit/6054d49cb382c9ee04b864f52ca469520b8c92f1) feat(main): integrate dynamic app metadata and update references *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T22:32:31+08:00*
 - [ef0fee4](https://github.com/HafiziRuslan/RasPiAPRS/commit/ef0fee43ca828483e7c5fcbb54c3ba33ad3bdd83) feat(pyproject): update project metadata and URLs in pyproject.toml *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T22:32:24+08:00*
 - [6d8d0d1](https://github.com/HafiziRuslan/RasPiAPRS/commit/6d8d0d10e5379478acf0ac5d062d9da45381a1d5) feat(config reload): add dynamic config reload and signal handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T06:09:08+08:00*
@@ -950,4 +953,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-20T22:33:28.236933854+08:00
+generated using git-cliff on 2026-02-20T23:28:20.417741270+08:00
