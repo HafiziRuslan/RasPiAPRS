@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-21T02:30:05+08:00)
+## [beta7] - (2026-02-21T23:19:31+08:00)
 
-- 37 commit(s) contributed to the release.
-- 3 day(s) passed between the first and last commit.
-- 4 day(s) passed between releases.
+- 39 commit(s) contributed to the release.
+- 4 day(s) passed between the first and last commit.
+- 5 day(s) passed between releases.
 
 ### 🚀 Features in beta7
 
+- [aacad2c](https://github.com/HafiziRuslan/RasPiAPRS/commit/aacad2c5357e09c0d0d8b62d22b78462bc79d74a) feat(main): integrate gpsd and telegram options through config-driven envs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-21T23:15:42+08:00*
 - [20185ae](https://github.com/HafiziRuslan/RasPiAPRS/commit/20185ae596044f3b7f744397bea4d4ff9fa78bd7) feat(pylock): broaden python version support and add macOS wheels *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-21T00:02:58+08:00*
 - [b7bcac9](https://github.com/HafiziRuslan/RasPiAPRS/commit/b7bcac9f8a80f1e705695abe277796eeb2ecc724) feat(main): improve startup, robustness and resilience *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T23:27:23+08:00*
 - [e6e7658](https://github.com/HafiziRuslan/RasPiAPRS/commit/e6e7658b9c67d41a2d56ebac319a6d73df0c4557) feat(main): simplify and centralize app metadata loading *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T22:57:17+08:00*
@@ -34,6 +35,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta7
 
+- [cb7442f](https://github.com/HafiziRuslan/RasPiAPRS/commit/cb7442f782c942e136d1c443661eae057f57a10e) fix(login): clean up commented blocks and env handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-21T23:19:31+08:00*
 - [202883c](https://github.com/HafiziRuslan/RasPiAPRS/commit/202883ccb1fa20cc53aa8d1df164a24e35911613) fix(data): handle GPSD TPV mode properly in dict_stream retrieval *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-21T02:30:05+08:00*
 - [b1c8c21](https://github.com/HafiziRuslan/RasPiAPRS/commit/b1c8c2191008e3136e1e1ed43eb1cbe8de1c1720) fix(ais): adjust position sending logic to respect gpsd and beaconing flags *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T21:21:43+08:00*
 - [bc7355c](https://github.com/HafiziRuslan/RasPiAPRS/commit/bc7355cb1fe1660eee156a8eb33f64435314cdc7) fix(main): simplify should_send_position logic and adjust beacon flow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T20:11:45+08:00*
@@ -955,4 +957,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-21T02:30:32.512525574+08:00
+generated using git-cliff on 2026-02-21T23:21:48.382508894+08:00
