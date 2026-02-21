@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-21T23:19:31+08:00)
+## [beta7] - (2026-02-22T00:48:30+08:00)
 
-- 39 commit(s) contributed to the release.
+- 40 commit(s) contributed to the release.
 - 4 day(s) passed between the first and last commit.
 - 5 day(s) passed between releases.
 
 ### 🚀 Features in beta7
 
+- [b557f26](https://github.com/HafiziRuslan/RasPiAPRS/commit/b557f26475534cd8c876a3a1ce2db3a4966a47ba) feat(config): add aprsthursday and aprsmysunday schedules *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T00:48:30+08:00*
 - [aacad2c](https://github.com/HafiziRuslan/RasPiAPRS/commit/aacad2c5357e09c0d0d8b62d22b78462bc79d74a) feat(main): integrate gpsd and telegram options through config-driven envs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-21T23:15:42+08:00*
 - [20185ae](https://github.com/HafiziRuslan/RasPiAPRS/commit/20185ae596044f3b7f744397bea4d4ff9fa78bd7) feat(pylock): broaden python version support and add macOS wheels *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-21T00:02:58+08:00*
 - [b7bcac9](https://github.com/HafiziRuslan/RasPiAPRS/commit/b7bcac9f8a80f1e705695abe277796eeb2ecc724) feat(main): improve startup, robustness and resilience *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T23:27:23+08:00*
@@ -957,4 +958,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-21T23:21:48.382508894+08:00
+generated using git-cliff on 2026-02-22T00:48:57.906228733+08:00
