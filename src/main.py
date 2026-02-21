@@ -64,7 +64,6 @@ def get_app_metadata():
 APP_NAME, PROJECT_URL = get_app_metadata()
 
 
-# Set up logging
 def configure_logging():
 	log_dir = '/var/log/raspiaprs'
 	if not os.path.exists(log_dir) or not os.access(log_dir, os.W_OK):
@@ -114,7 +113,6 @@ def configure_logging():
 			logging.error('Failed to create %s: %s', filename, e)
 
 
-# Handle environment configuration
 class Config(object):
 	def __init__(self):
 		self.reload()
@@ -806,7 +804,6 @@ async def _retrieve_gpsd_data(cfg, filter_class, log_name):
 def _get_fallback_location(cfg):
 	"""Retrieve location from cache or environment variables."""
 	lat, lon, alt = 0.0, 0.0, 0.0
-	# Try cache first
 	if os.path.exists(GPS_FILE):
 		try:
 			with open(GPS_FILE, 'r') as f:
@@ -816,7 +813,6 @@ def _get_fallback_location(cfg):
 				alt = float(gps_data.get('alt', 0.0))
 		except (IOError, OSError, json.JSONDecodeError, ValueError) as e:
 			logging.warning('Could not read or parse GPS file %s: %s', GPS_FILE, e)
-	# If cache failed or empty, try environment
 	if lat == 0.0 and lon == 0.0:
 		try:
 			lat = float(cfg.latitude)
@@ -1008,15 +1004,12 @@ async def get_gpssat(cfg):
 
 async def _get_current_location_data(cfg, gps_data=None):
 	"""Determines the current location data from GPS or fallback to config.Returns a tuple of (timestamp, lat, lon, alt, spd, cse)."""
-	# Get GPS data if not provided and GPSD is enabled
 	if not gps_data and cfg.gpsd_enabled:
 		gps_data = await get_gpspos(cfg)
-	# Unpack and validate gps_data if available
 	if gps_data:
 		timestamp, lat, lon, alt, spd, cse = gps_data
 		if isinstance(lat, (int, float)) and isinstance(lon, (int, float)) and (lat != 0 or lon != 0):
 			return timestamp, lat, lon, alt, spd, cse
-	# Fallback to config/env if GPS data is invalid or unavailable
 	lat = float(cfg.latitude)
 	lon = float(cfg.longitude)
 	alt = float(cfg.altitude)
@@ -1026,23 +1019,18 @@ async def _get_current_location_data(cfg, gps_data=None):
 
 async def send_position(ais, cfg, tg_logger, sys_stats, gps_data=None):
 	"""Send APRS position packet to APRS-IS."""
-	# Determine current location data
 	cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = await _get_current_location_data(cfg, gps_data)
-	# Format data for APRS
 	latstr = _lat_to_aprs(cur_lat)
 	lonstr = _lon_to_aprs(cur_lon)
 	altstr = _alt_to_aprs(cur_alt)
 	spdstr = _spd_to_knots(cur_spd)
 	csestr = _cse_to_aprs(cur_cse)
 	spdkmh = _spd_to_kmh(cur_spd)
-	# Build comment
 	mmdvminfo = sys_stats.mmdvm_info()
 	osinfo = sys_stats.os_info()
 	comment = f'{mmdvminfo}{osinfo} {PROJECT_URL}'
-	# Determine timestamp
 	ztime = dt.datetime.now(dt.timezone.utc)
 	timestamp = cur_time.strftime('%d%H%Mz') if cur_time else ztime.strftime('%d%H%Mz')
-	# Determine symbol based on speed (SmartBeaconing symbol logic)
 	symbt = cfg.symbol_table
 	symb = cfg.symbol
 	if cfg.symbol_overlay:
@@ -1077,7 +1065,7 @@ async def send_position(ais, cfg, tg_logger, sys_stats, gps_data=None):
 	except APRSConnectionError as err:
 		logging.error('APRS connection error at position: %s', err)
 		ais = await ais_connect(cfg)
-		ais = await send_position(ais, cfg, tg_logger, sys_stats, gps_data)  # Recursive call on failure
+		ais = await send_position(ais, cfg, tg_logger, sys_stats, gps_data)
 	return ais
 
 
@@ -1141,14 +1129,11 @@ async def send_telemetry(ais, cfg, tg_logger, sys_stats):
 
 async def send_status(ais, cfg, tg_logger, sys_stats, gps_data=None):
 	"""Send APRS status information to APRS-IS."""
-	# Determine coordinates
 	_, lat, lon, _, _, _ = await _get_current_location_data(cfg, gps_data)
-	# Get location details
 	gridsquare = latlon_to_grid(lat, lon)
 	address = get_add_from_pos(lat, lon)
 	near_add = format_address(address)
 	near_add_tg = format_address(address, True)
-	# Timestamp and Satellite info
 	ztime = dt.datetime.now(dt.timezone.utc)
 	timestamp = ztime.strftime('%d%H%Mz')
 	sats_info = ''
@@ -1160,7 +1145,6 @@ async def send_status(ais, cfg, tg_logger, sys_stats, gps_data=None):
 		else:
 			sats_info = f', gps: {u_sat}'
 	uptime = sys_stats.uptime()
-	# Construct messages
 	status_text = f'{timestamp}[{gridsquare}]{near_add} {uptime}{sats_info}'
 	aprs_packet = f'{cfg.call}>APP642:>{status_text}'
 	tg_msg = f'<u>{cfg.call} Status</u>\n\n<b>{timestamp}[{gridsquare}]{near_add_tg} {uptime}{sats_info}</b>'
@@ -1271,7 +1255,6 @@ async def main():
 		reload_event.clear()
 		ais, tg_logger, timer, sb, sys_stats = await initialize_session(cfg)
 		async with tg_logger:
-			# Send startup message to Telegram
 			await tg_logger.log(f'🚀 <b>{cfg.call}</b>, {APP_NAME} starting up...')
 			try:
 				await process_loop(cfg, ais, tg_logger, timer, sb, sys_stats, reload_event)
@@ -1281,7 +1264,6 @@ async def main():
 				else:
 					await tg_logger.log(f'🛑 <b>{cfg.call}</b>, {APP_NAME} shutting down...')
 				await tg_logger.stop_location()
-				# Close AIS connection
 				if ais:
 					try:
 						ais.close()
