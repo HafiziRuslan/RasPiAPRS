@@ -32,6 +32,7 @@ PISTAR_RELEASE_FILE = '/etc/pistar-release'
 WPSD_RELEASE_FILE = '/etc/WPSD-release'
 MMDVMHOST_FILE = '/etc/mmdvmhost'
 # Temporary files path
+TIMER_FILE = '/var/tmp/raspiaprs/timer.tmp'
 SEQUENCE_FILE = '/var/tmp/raspiaprs/sequence.tmp'
 CACHE_FILE = '/var/tmp/raspiaprs/nominatim_cache.pkl'
 LOCATION_ID_FILE = '/var/tmp/raspiaprs/location_id.tmp'
@@ -57,7 +58,7 @@ def get_app_metadata():
 	except Exception as e:
 		logging.warning('Failed to load project metadata: %s', e)
 
-	return f"{meta['name']}-v{meta['version']}-{git_sha}", meta['github']
+	return f'{meta["name"]}-v{meta["version"]}-{git_sha}', meta['github']
 
 
 APP_NAME, PROJECT_URL = get_app_metadata()
@@ -143,6 +144,25 @@ class Config(object):
 		else:
 			logging.warning('Generating passcode')
 			self.passcode = aprslib.passcode(call)
+		self.gpsd_enabled = os.getenv('GPSD_ENABLE')
+		if self.gpsd_enabled:
+			self.gpsd_host = os.getenv('GPSD_HOST', 'localhost')
+			self.gpsd_port = os.getenv('GPSD_PORT', 2947)
+		self.smartbeaconing_enabled = os.getenv('SMARTBEACONING_ENABLE')
+		if self.smartbeaconing_enabled:
+			self.smartbeaconing_fast_speed = os.getenv('SMARTBEACONING_FASTSPEED', 100)
+			self.smartbeaconing_slow_speed = os.getenv('SMARTBEACONING_SLOWSPEED', 10)
+			self.smartbeaconing_fast_rate = os.getenv('SMARTBEACONING_FASTRATE', 60)
+			self.smartbeaconing_slow_rate = os.getenv('SMARTBEACONING_SLOWRATE', 600)
+			self.smartbeaconing_min_turn_angle = os.getenv('SMARTBEACONING_MINTURNANGLE', 28)
+			self.smartbeaconing_turn_slope = os.getenv('SMARTBEACONING_TURNSLOPE', 255)
+			self.smartbeaconing_min_turn_time = os.getenv('SMARTBEACONING_MINTURNTIME', 5)
+		self.telegram_enabled = os.getenv('TELEGRAM_ENABLE')
+		if self.telegram_enabled:
+			self.telegram_token = os.getenv('TELEGRAM_TOKEN')
+			self.telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID')
+			self.telegram_topic_id = os.getenv('TELEGRAM_TOPIC_ID')
+			self.telegram_loc_topic_id = os.getenv('TELEGRAM_LOC_TOPIC_ID')
 
 	def __repr__(self):
 		return ('<Config> call: {0.call}, passcode: {0.passcode} - {0.latitude}/{0.longitude}/{0.altitude}').format(self)
@@ -243,6 +263,143 @@ class Config(object):
 	def passcode(self, val):
 		self._passcode = str(val)
 
+	@property
+	def gpsd_enabled(self):
+		return self._gpsd_enabled
+
+	@gpsd_enabled.setter
+	def gpsd_enabled(self, val):
+		self._gpsd_enabled = val
+
+	@property
+	def smartbeaconing_enabled(self):
+		return self._smartbeaconing_enabled
+
+	@smartbeaconing_enabled.setter
+	def smartbeaconing_enabled(self, val):
+		self._smartbeaconing_enabled = val
+
+	@property
+	def gpsd_host(self):
+		return self._gpsd_host
+
+	@gpsd_host.setter
+	def gpsd_host(self, val):
+		self._gpsd_host = str(val)
+
+	@property
+	def gpsd_port(self):
+		return self._gpsd_port
+
+	@gpsd_port.setter
+	def gpsd_port(self, val):
+		try:
+			self._gpsd_port = int(val)
+		except ValueError:
+			self._gpsd_port = 2947
+
+	@property
+	def smartbeaconing_fast_speed(self):
+		return self._smartbeaconing_fast_speed
+
+	@smartbeaconing_fast_speed.setter
+	def smartbeaconing_fast_speed(self, val):
+		self._smartbeaconing_fast_speed = int(val)
+
+	@property
+	def smartbeaconing_slow_speed(self):
+		return self._smartbeaconing_slow_speed
+
+	@smartbeaconing_slow_speed.setter
+	def smartbeaconing_slow_speed(self, val):
+		self._smartbeaconing_slow_speed = int(val)
+
+	@property
+	def smartbeaconing_fast_rate(self):
+		return self._smartbeaconing_fast_rate
+
+	@smartbeaconing_fast_rate.setter
+	def smartbeaconing_fast_rate(self, val):
+		self._smartbeaconing_fast_rate = int(val)
+
+	@property
+	def smartbeaconing_slow_rate(self):
+		return self._smartbeaconing_slow_rate
+
+	@smartbeaconing_slow_rate.setter
+	def smartbeaconing_slow_rate(self, val):
+		self._smartbeaconing_slow_rate = int(val)
+
+	@property
+	def smartbeaconing_min_turn_angle(self):
+		return self._smartbeaconing_min_turn_angle
+
+	@smartbeaconing_min_turn_angle.setter
+	def smartbeaconing_min_turn_angle(self, val):
+		self._smartbeaconing_min_turn_angle = int(val)
+
+	@property
+	def smartbeaconing_turn_slope(self):
+		return self._smartbeaconing_turn_slope
+
+	@smartbeaconing_turn_slope.setter
+	def smartbeaconing_turn_slope(self, val):
+		self._smartbeaconing_turn_slope = int(val)
+
+	@property
+	def smartbeaconing_min_turn_time(self):
+		return self._smartbeaconing_min_turn_time
+
+	@smartbeaconing_min_turn_time.setter
+	def smartbeaconing_min_turn_time(self, val):
+		self._smartbeaconing_min_turn_time = int(val)
+
+	@property
+	def telegram_enabled(self):
+		return self._telegram_enabled
+
+	@telegram_enabled.setter
+	def telegram_enabled(self, val):
+		self._telegram_enabled = val
+
+	@property
+	def telegram_token(self):
+		return self._telegram_token
+
+	@telegram_token.setter
+	def telegram_token(self, val):
+		self._telegram_token = str(val) if val else None
+
+	@property
+	def telegram_chat_id(self):
+		return self._telegram_chat_id
+
+	@telegram_chat_id.setter
+	def telegram_chat_id(self, val):
+		self._telegram_chat_id = str(val) if val else None
+
+	def _parse_int(self, val):
+		try:
+			return int(val)
+		except (ValueError, TypeError):
+			return None
+
+	@property
+	def telegram_topic_id(self):
+		return self._telegram_topic_id
+
+	@telegram_topic_id.setter
+	def telegram_topic_id(self, val):
+		self._telegram_topic_id = self._parse_int(val)
+
+	@property
+	def telegram_loc_topic_id(self):
+		return self._telegram_loc_topic_id
+
+	@telegram_loc_topic_id.setter
+	def telegram_loc_topic_id(self, val):
+		self._telegram_loc_topic_id = self._parse_int(val)
+
 
 class Sequence(object):
 	"""Class to manage APRS sequence."""
@@ -269,30 +426,53 @@ class Sequence(object):
 		return self._count
 
 
+class Timer(object):
+	"""Class to manage persistent timer."""
+
+	def __init__(self):
+		self.timer_file = TIMER_FILE
+		try:
+			with open(self.timer_file) as fds:
+				self._count = int(fds.readline())
+		except (IOError, ValueError):
+			self._count = 0
+
+	def _flush(self):
+		try:
+			with open(self.timer_file, 'w') as fds:
+				fds.write(f'{self._count:d}')
+		except IOError:
+			pass
+
+	@property
+	def count(self):
+		self._count = (1 + self._count) % 86400
+		self._flush()
+		return self._count
+
+
 class SmartBeaconing(object):
 	"""Class to handle SmartBeaconing logic."""
 
-	def __init__(self):
+	def __init__(self, cfg):
+		self.cfg = cfg
 		self.last_beacon_time = 0
 		self.last_course = 0
-		self._load_config()
-
-	def _load_config(self):
-		self.fast_speed = int(os.getenv('SMARTBEACONING_FASTSPEED', 100))
-		self.slow_speed = int(os.getenv('SMARTBEACONING_SLOWSPEED', 10))
-		self.fast_rate = int(os.getenv('SMARTBEACONING_FASTRATE', 60))
-		self.slow_rate = int(os.getenv('SMARTBEACONING_SLOWRATE', 600))
-		self.min_turn_angle = int(os.getenv('SMARTBEACONING_MINTURNANGLE', 28))
-		self.turn_slope = int(os.getenv('SMARTBEACONING_TURNSLOPE', 255))
-		self.min_turn_time = int(os.getenv('SMARTBEACONING_MINTURNTIME', 5))
 
 	def _calculate_rate(self, spd_kmh):
 		"""Calculate beacon rate based on speed."""
-		if spd_kmh > self.fast_speed:
-			return self.fast_rate
-		if spd_kmh < self.slow_speed:
-			return self.slow_rate
-		return int(self.slow_rate - ((spd_kmh - self.slow_speed) * (self.slow_rate - self.fast_rate) / (self.fast_speed - self.slow_speed)))
+		if spd_kmh > self.cfg.smartbeaconing_fast_speed:
+			return self.cfg.smartbeaconing_fast_rate
+		if spd_kmh < self.cfg.smartbeaconing_slow_speed:
+			return self.cfg.smartbeaconing_slow_rate
+		return int(
+			self.cfg.smartbeaconing_slow_rate
+			- (
+				(spd_kmh - self.cfg.smartbeaconing_slow_speed)
+				* (self.cfg.smartbeaconing_slow_rate - self.cfg.smartbeaconing_fast_rate)
+				/ (self.cfg.smartbeaconing_fast_speed - self.cfg.smartbeaconing_slow_speed)
+			)
+		)
 
 	def should_send(self, gps_data):
 		"""Determine if a beacon should be sent based on GPS data."""
@@ -304,14 +484,14 @@ class SmartBeaconing(object):
 		if spd_kmh <= 3:
 			return False
 		rate = self._calculate_rate(spd_kmh)
-		turn_threshold = self.min_turn_angle + (self.turn_slope / (spd_kmh if spd_kmh > 0 else 1))
+		turn_threshold = self.cfg.smartbeaconing_min_turn_angle + (self.cfg.smartbeaconing_turn_slope / (spd_kmh if spd_kmh > 0 else 1))
 		heading_change = abs(cur_cse - self.last_course)
 		if heading_change > 180:
 			heading_change = 360 - heading_change
 		turn_detected = spd_kmh > 5 and heading_change > turn_threshold
 		time_since_last = time.time() - self.last_beacon_time
 		should_send = False
-		if turn_detected and time_since_last > self.min_turn_time:
+		if turn_detected and time_since_last > self.cfg.smartbeaconing_min_turn_time:
 			logging.debug('SmartBeaconing: Turn detected (Heading difference: %d, Threshold: %d)', heading_change, turn_threshold)
 			should_send = True
 		elif time_since_last > rate:
@@ -432,32 +612,22 @@ class SystemStats(object):
 class TelegramLogger(object):
 	"""Class to handle logging to Telegram."""
 
-	def __init__(self, location_id_file=LOCATION_ID_FILE):
-		self.enabled = os.getenv('TELEGRAM_ENABLE')
+	def __init__(self, cfg, location_id_file=LOCATION_ID_FILE):
+		self.cfg = cfg
+		self.enabled = cfg.telegram_enabled
 		self.bot = None
 		self.location_id_file = location_id_file
 		if not self.enabled:
 			return
-		self.token = os.getenv('TELEGRAM_TOKEN')
-		self.chat_id = os.getenv('TELEGRAM_CHAT_ID')
+		self.token = cfg.telegram_token
+		self.chat_id = cfg.telegram_chat_id
 		if not self.token or not self.chat_id:
 			logging.error('Telegram token or chat ID is missing. Disabling Telegram logging.')
 			self.enabled = False
 			return
 		self.bot = telegram.Bot(self.token)
-		self.topic_id = self._parse_topic_id_from_env('TELEGRAM_TOPIC_ID')
-		self.loc_topic_id = self._parse_topic_id_from_env('TELEGRAM_LOC_TOPIC_ID')
-
-	def _parse_topic_id_from_env(self, env_var):
-		"""Safely parse a topic ID from an environment variable."""
-		topic_id_str = os.getenv(env_var)
-		if not topic_id_str:
-			return None
-		try:
-			return int(topic_id_str)
-		except (ValueError, TypeError):
-			logging.error('Invalid %s. It should be an integer.', env_var)
-			return None
+		self.topic_id = cfg.telegram_topic_id
+		self.loc_topic_id = cfg.telegram_loc_topic_id
 
 	async def __aenter__(self):
 		if self.bot:
@@ -591,11 +761,9 @@ class TelegramLogger(object):
 			self._remove_location_id_file()
 
 
-def _fetch_from_gpsd(filter_class):
+def _fetch_from_gpsd(host, port, filter_class):
 	"""Worker function to fetch data from GPSD synchronously."""
 	try:
-		host = os.getenv('GPSD_HOST', 'localhost')
-		port = int(os.getenv('GPSD_PORT', 2947))
 		with GPSDClient(host=host, port=port, timeout=15) as client:
 			for result in client.dict_stream(convert_datetime=True, filter=[filter_class]):
 				if filter_class == 'TPV':
@@ -608,9 +776,9 @@ def _fetch_from_gpsd(filter_class):
 		return e
 
 
-async def _retrieve_gpsd_data(filter_class, log_name):
+async def _retrieve_gpsd_data(cfg, filter_class, log_name):
 	"""Retrieve data from GPSD with retries."""
-	if not os.getenv('GPSD_ENABLE'):
+	if not cfg.gpsd_enabled:
 		return None
 	logging.debug('Trying to figure out %s using GPS', log_name)
 	max_retries = 5
@@ -618,7 +786,7 @@ async def _retrieve_gpsd_data(filter_class, log_name):
 	loop = asyncio.get_running_loop()
 	for attempt in range(max_retries):
 		try:
-			result = await loop.run_in_executor(None, _fetch_from_gpsd, filter_class)
+			result = await loop.run_in_executor(None, _fetch_from_gpsd, cfg.gpsd_host, cfg.gpsd_port, filter_class)
 			if isinstance(result, Exception):
 				raise result
 			if result:
@@ -635,7 +803,7 @@ async def _retrieve_gpsd_data(filter_class, log_name):
 	return None
 
 
-def _get_fallback_location():
+def _get_fallback_location(cfg):
 	"""Retrieve location from cache or environment variables."""
 	lat, lon, alt = 0.0, 0.0, 0.0
 	# Try cache first
@@ -651,9 +819,9 @@ def _get_fallback_location():
 	# If cache failed or empty, try environment
 	if lat == 0.0 and lon == 0.0:
 		try:
-			lat = float(os.getenv('APRS_LATITUDE', 0.0))
-			lon = float(os.getenv('APRS_LONGITUDE', 0.0))
-			alt = float(os.getenv('APRS_ALTITUDE', 0.0))
+			lat = float(cfg.latitude)
+			lon = float(cfg.longitude)
+			alt = float(cfg.altitude)
 		except ValueError:
 			lat, lon, alt = 0.0, 0.0, 0.0
 	return lat, lon, alt
@@ -668,12 +836,12 @@ def _save_gps_cache(lat, lon, alt):
 		logging.error('Failed to write GPS data to %s: %s', GPS_FILE, e)
 
 
-async def get_gpspos():
+async def get_gpspos(cfg):
 	"""Get position from GPSD."""
 	timestamp = dt.datetime.now(dt.timezone.utc)
-	if not os.getenv('GPSD_ENABLE'):
+	if not cfg.gpsd_enabled:
 		return timestamp, 0, 0, 0, 0, 0
-	result = await _retrieve_gpsd_data('TPV', 'position')
+	result = await _retrieve_gpsd_data(cfg, 'TPV', 'position')
 	if result:
 		utc = result.get('time', timestamp)
 		lat = result.get('lat', 0.0)
@@ -685,7 +853,7 @@ async def get_gpspos():
 		_save_gps_cache(lat, lon, alt)
 		return utc, lat, lon, alt, spd, cse
 	logging.warning('Reading from cache.')
-	env_lat, env_lon, env_alt = _get_fallback_location()
+	env_lat, env_lon, env_alt = _get_fallback_location(cfg)
 	return timestamp, env_lat, env_lon, env_alt, 0, 0
 
 
@@ -824,12 +992,12 @@ def format_address(address, include_flag=False):
 	return f' near {full_area}{cc_str},'
 
 
-async def get_gpssat():
+async def get_gpssat(cfg):
 	"""Get satellite from GPSD."""
 	timestamp = dt.datetime.now(dt.timezone.utc)
-	if not os.getenv('GPSD_ENABLE'):
+	if not cfg.gpsd_enabled:
 		return timestamp, 0, 0
-	result = await _retrieve_gpsd_data('SKY', 'satellite')
+	result = await _retrieve_gpsd_data(cfg, 'SKY', 'satellite')
 	if result:
 		utc = result.get('time', timestamp)
 		uSat = result.get('uSat', 0)
@@ -841,17 +1009,17 @@ async def get_gpssat():
 async def _get_current_location_data(cfg, gps_data=None):
 	"""Determines the current location data from GPS or fallback to config.Returns a tuple of (timestamp, lat, lon, alt, spd, cse)."""
 	# Get GPS data if not provided and GPSD is enabled
-	if not gps_data and os.getenv('GPSD_ENABLE'):
-		gps_data = await get_gpspos()
+	if not gps_data and cfg.gpsd_enabled:
+		gps_data = await get_gpspos(cfg)
 	# Unpack and validate gps_data if available
 	if gps_data:
 		timestamp, lat, lon, alt, spd, cse = gps_data
 		if isinstance(lat, (int, float)) and isinstance(lon, (int, float)) and (lat != 0 or lon != 0):
 			return timestamp, lat, lon, alt, spd, cse
 	# Fallback to config/env if GPS data is invalid or unavailable
-	lat = float(os.getenv('APRS_LATITUDE', cfg.latitude))
-	lon = float(os.getenv('APRS_LONGITUDE', cfg.longitude))
-	alt = float(os.getenv('APRS_ALTITUDE', cfg.altitude))
+	lat = float(cfg.latitude)
+	lon = float(cfg.longitude)
+	alt = float(cfg.altitude)
 
 	return None, lat, lon, alt, 0, 0
 
@@ -884,9 +1052,9 @@ async def send_position(ais, cfg, tg_logger, sys_stats, gps_data=None):
 	if cur_spd > 0:
 		extdatstr = f'{csestr}/{spdstr}'
 		tgposmoving = f'\n\tSpeed: <b>{int(cur_spd)}m/s</b> | <b>{int(spdkmh)}km/h</b> | <b>{int(spdstr)}kn</b>\n\tCourse: <b>{int(cur_cse)}°</b>'
-		if os.getenv('SMARTBEACONING_ENABLE'):
-			sspd = int(os.getenv('SMARTBEACONING_SLOWSPEED'))
-			fspd = int(os.getenv('SMARTBEACONING_FASTSPEED'))
+		if cfg.smartbeaconing_enabled:
+			sspd = cfg.smartbeaconing_slow_speed
+			fspd = cfg.smartbeaconing_fast_speed
 			kmhspd = int(spdkmh)
 			if kmhspd > fspd:
 				symbt, symb = '\\', '>'
@@ -919,7 +1087,7 @@ async def send_header(ais, cfg, tg_logger, sys_stats):
 	params = ['CPUTemp', 'CPULoad', 'RAMUsed', 'DiskUsed']
 	units = ['deg.C', '%', 'GB', 'GB']
 	eqns = ['0,0.1,0', '0,0.001,0', '0,0.001,0', '0,0.001,0']
-	if os.getenv('GPSD_ENABLE'):
+	if cfg.gpsd_enabled:
 		params.append('GPSUsed')
 		units.append('sats')
 		eqns.append('0,1,0')
@@ -955,8 +1123,8 @@ async def send_telemetry(ais, cfg, tg_logger, sys_stats):
 		f'RAM Used: <b>{humanize.naturalsize(memused, binary=True)}</b>\n'
 		f'Disk Used: <b>{humanize.naturalsize(diskused, binary=True)}</b>'
 	)
-	if os.getenv('GPSD_ENABLE'):
-		_, uSat, _ = await get_gpssat()
+	if cfg.gpsd_enabled:
+		_, uSat, _ = await get_gpssat(cfg)
 		telem += f',{uSat:d}'
 		tgtel += f'\nGPS Used: <b>{uSat}</b>'
 	try:
@@ -984,8 +1152,8 @@ async def send_status(ais, cfg, tg_logger, sys_stats, gps_data=None):
 	ztime = dt.datetime.now(dt.timezone.utc)
 	timestamp = ztime.strftime('%d%H%Mz')
 	sats_info = ''
-	if os.getenv('GPSD_ENABLE'):
-		timez, u_sat, n_sat = await get_gpssat()
+	if cfg.gpsd_enabled:
+		timez, u_sat, n_sat = await get_gpssat(cfg)
 		if u_sat > 0:
 			timestamp = timez.strftime('%d%H%Mz')
 			sats_info = f', gps: {u_sat}/{n_sat}'
@@ -1041,21 +1209,14 @@ async def ais_connect(cfg):
 	sys.exit(getattr(os, 'EX_NOHOST', 1))
 
 
-def should_send_position(tmr, sb, gps_data):
+def should_send_position(cfg, timer_tick, sb, gps_data):
 	"""Determine if a position update is needed."""
-	send: bool = False
-	if os.getenv('GPSD_ENABLE') and os.getenv('SMARTBEACONING_ENABLE') and sb.should_send(gps_data):
-		send = True
-	if tmr % 1200 == 1:
-		send = True
-	return send
+	return (cfg.gpsd_enabled and cfg.smartbeaconing_enabled and sb.should_send(gps_data)) or (timer_tick % 1200 == 1)
 
 
-async def main():
-	"""Main function to run the APRS reporting loop."""
-	# Setup reloading mechanism
+def setup_signal_handling(reload_event):
+	"""Setup signal handlers for reloading configuration."""
 	loop = asyncio.get_running_loop()
-	reload_event = asyncio.Event()
 
 	def signal_handler():
 		logging.info('SIGHUP received. Reloading configuration...')
@@ -1065,48 +1226,55 @@ async def main():
 		loop.add_signal_handler(signal.SIGHUP, signal_handler)
 	except (AttributeError, NotImplementedError):
 		logging.debug('Signal handling not supported on this platform.')
+
+
+async def initialize_session(cfg):
+	"""Initialize the APRS session components."""
+	cfg.reload()
+	if cfg.latitude == 0 and cfg.longitude == 0:
+		cfg.latitude, cfg.longitude = await get_coordinates()
+	if cfg.gpsd_enabled:
+		gps_data = await get_gpspos(cfg)
+		cfg.timestamp, cfg.latitude, cfg.longitude, cfg.altitude, cfg.speed, cfg.course = gps_data
+	ais = await ais_connect(cfg)
+	tg_logger = TelegramLogger(cfg)
+	timer = Timer()
+	sb = SmartBeaconing(cfg)
+	sys_stats = SystemStats()
+	return ais, tg_logger, timer, sb, sys_stats
+
+
+async def process_loop(cfg, ais, tg_logger, timer, sb, sys_stats, reload_event):
+	"""Run the main processing loop."""
+	while True:
+		timer_tick = timer.count
+		if reload_event.is_set():
+			break
+		gps_data = None
+		if cfg.gpsd_enabled:
+			gps_data = await get_gpspos(cfg)
+		if should_send_position(cfg, timer_tick, sb, gps_data):
+			ais = await send_position(ais, cfg, tg_logger, sys_stats, gps_data=gps_data)
+		if timer_tick % 14400 == 1:
+			ais = await send_header(ais, cfg, tg_logger, sys_stats)
+		if timer_tick % cfg.sleep == 1:
+			ais = await send_telemetry(ais, cfg, tg_logger, sys_stats)
+		await asyncio.sleep(1)
+
+
+async def main():
+	"""Main function to run the APRS reporting loop."""
+	reload_event = asyncio.Event()
+	setup_signal_handling(reload_event)
 	cfg = Config()
 	while True:
 		reload_event.clear()
-		cfg.reload()
-		if cfg.latitude == 0 and cfg.longitude == 0:
-			cfg.latitude, cfg.longitude = await get_coordinates()
-		if os.getenv('GPSD_ENABLE'):
-			gps_data = await get_gpspos()
-			cfg.timestamp, cfg.latitude, cfg.longitude, cfg.altitude, cfg.speed, cfg.course = gps_data
-		ais = await ais_connect(cfg)
-		tg_logger = TelegramLogger()
-		sb = SmartBeaconing()
-		sys_stats = SystemStats()
+		ais, tg_logger, timer, sb, sys_stats = await initialize_session(cfg)
 		async with tg_logger:
 			# Send startup message to Telegram
 			await tg_logger.log(f'🚀 <b>{cfg.call}</b>, {APP_NAME} starting up...')
-			# Send initial position
-			gps_data = None
-			if os.getenv('GPSD_ENABLE'):
-				gps_data = await get_gpspos()
-			ais = await send_position(ais, cfg, tg_logger, sys_stats, gps_data=gps_data)
-			ais = await send_header(ais, cfg, tg_logger, sys_stats)
-			ais = await send_telemetry(ais, cfg, tg_logger, sys_stats)
-			sb.last_beacon_time = time.time()
-			if gps_data:
-				sb.last_course = gps_data[5]
-			tmr = 1
 			try:
-				while True:
-					tmr = (tmr + 1) % 86400
-					if reload_event.is_set():
-						break
-					gps_data = None
-					if os.getenv('GPSD_ENABLE'):
-						gps_data = await get_gpspos()
-					if should_send_position(tmr, sb, gps_data):
-						ais = await send_position(ais, cfg, tg_logger, sys_stats, gps_data=gps_data)
-					if tmr % 14400 == 1:
-						ais = await send_header(ais, cfg, tg_logger, sys_stats)
-					if tmr % cfg.sleep == 1:
-						ais = await send_telemetry(ais, cfg, tg_logger, sys_stats)
-					await asyncio.sleep(1)
+				await process_loop(cfg, ais, tg_logger, timer, sb, sys_stats, reload_event)
 			finally:
 				if reload_event.is_set():
 					await tg_logger.log(f'🔄 <b>{cfg.call}</b>, {APP_NAME} reloading configuration...')
