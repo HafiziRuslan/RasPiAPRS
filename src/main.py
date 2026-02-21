@@ -22,7 +22,7 @@ import humanize
 import psutil
 import symbols
 import telegram
-from aprslib.exceptions import ConnectionError as APRSConnectionError
+from aprslib.exceptions import ConnectionError as APRSConnectionError, ParseError as APRSParseError
 from geopy.geocoders import Nominatim
 from gpsdclient import GPSDClient
 
@@ -38,6 +38,8 @@ CACHE_FILE = '/var/tmp/raspiaprs/nominatim_cache.pkl'
 LOCATION_ID_FILE = '/var/tmp/raspiaprs/location_id.tmp'
 STATUS_FILE = '/var/tmp/raspiaprs/status.tmp'
 GPS_FILE = '/var/tmp/raspiaprs/gps.json'
+# In-memory tracking for scheduled messages
+SCHEDULED_MSG_TRACKING = {}
 
 
 def get_app_metadata():
@@ -161,6 +163,8 @@ class Config(object):
 			self.telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID')
 			self.telegram_topic_id = os.getenv('TELEGRAM_TOPIC_ID')
 			self.telegram_loc_topic_id = os.getenv('TELEGRAM_LOC_TOPIC_ID')
+		self.aprsthursday_enabled = os.getenv('APRSTHURSDAY_ENABLE', 'False').lower() == 'true'
+		self.aprsmysunday_enabled = os.getenv('APRSMYSUNDAY_ENABLE', 'False').lower() == 'true'
 
 	def __repr__(self):
 		return ('<Config> call: {0.call}, passcode: {0.passcode} - {0.latitude}/{0.longitude}/{0.altitude}').format(self)
@@ -397,6 +401,22 @@ class Config(object):
 	@telegram_loc_topic_id.setter
 	def telegram_loc_topic_id(self, val):
 		self._telegram_loc_topic_id = self._parse_int(val)
+
+	@property
+	def aprsthursday_enabled(self):
+		return self._aprsthursday_enabled
+
+	@aprsthursday_enabled.setter
+	def aprsthursday_enabled(self, val):
+		self._aprsthursday_enabled = val
+
+	@property
+	def aprsmysunday_enabled(self):
+		return self._aprsmysunday_enabled
+
+	@aprsmysunday_enabled.setter
+	def aprsmysunday_enabled(self, val):
+		self._aprsmysunday_enabled = val
 
 
 class Sequence(object):
@@ -1013,7 +1033,6 @@ async def _get_current_location_data(cfg, gps_data=None):
 	lat = float(cfg.latitude)
 	lon = float(cfg.longitude)
 	alt = float(cfg.altitude)
-
 	return None, lat, lon, alt, 0, 0
 
 
@@ -1171,6 +1190,43 @@ async def send_status(ais, cfg, tg_logger, sys_stats, gps_data=None):
 	return ais
 
 
+async def send_scheduled_message(ais, cfg, tg_logger, name, weekday, addrcall, template):
+	"""Send a scheduled message to APRS-IS."""
+	now = dt.datetime.now(dt.timezone.utc)
+	if now.weekday() != weekday:
+		return ais
+
+	today = now.strftime('%Y-%m-%d')
+	if SCHEDULED_MSG_TRACKING.get(name) == today:
+		return ais
+
+	_, lat, lon, _, _, _ = await _get_current_location_data(cfg)
+	gridsquare = latlon_to_grid(lat, lon)
+	message = '{0} [{1}] via {2}'.format(template, gridsquare, APP_NAME)
+	if len(message) > 67:
+		logging.error('Message length %d exceeds APRS limit of 67 characters: %s', len(message), message)
+		return ais
+	payload = f'{cfg.call}>APP642::{addrcall:9s}:{message}'
+
+	try:
+		parsed = aprslib.parse(payload)
+	except APRSParseError as err:
+		logging.error('APRS packet parsing error at %s: %s', name, err)
+		return ais
+
+	try:
+		ais.sendall(payload)
+		logging.info(payload)
+		tg_msg = f'<u>{parsed["from"]} #{name}</u>\n\nFrom: <b>{parsed["from"]}</b>\nTo: <b>{parsed["addresse"]}</b>\nMessage: <b>{parsed["message_text"]}</b>'
+		await tg_logger.log(tg_msg)
+		SCHEDULED_MSG_TRACKING[name] = today
+	except APRSConnectionError as err:
+		logging.error('APRS connection error at %s: %s', name, err)
+		ais = await ais_connect(cfg)
+		ais = await send_scheduled_message(ais, cfg, tg_logger, name, weekday, addrcall, template)
+	return ais
+
+
 async def ais_connect(cfg):
 	"""Establish connection to APRS-IS with retries."""
 	logging.info('Connecting to APRS-IS server %s:%d as %s', cfg.server, cfg.port, cfg.call)
@@ -1243,6 +1299,10 @@ async def process_loop(cfg, ais, tg_logger, timer, sb, sys_stats, reload_event):
 			ais = await send_header(ais, cfg, tg_logger, sys_stats)
 		if timer_tick % cfg.sleep == 1:
 			ais = await send_telemetry(ais, cfg, tg_logger, sys_stats)
+		if cfg.aprsthursday_enabled:
+			ais = await send_scheduled_message(ais, cfg, tg_logger, 'APRSThursday', 3, 'ANSRVR', 'CQ HOTG #APRSThursday')
+		if cfg.aprsmysunday_enabled:
+			ais = await send_scheduled_message(ais, cfg, tg_logger, 'APRSMySunday', 6, 'APRSMY', 'CHECK #APRSMySunday')
 		await asyncio.sleep(1)
 
 
