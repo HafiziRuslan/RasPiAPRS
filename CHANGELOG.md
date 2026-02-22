@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-23T00:49:13+08:00)
+## [beta7] - (2026-02-23T03:32:59+08:00)
 
-- 61 commit(s) contributed to the release.
+- 65 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
 ### 🚀 Features in beta7
 
+- [18e2c18](https://github.com/HafiziRuslan/RasPiAPRS/commit/18e2c1830a59a7ffb4f64b3aa2792d71f4187d50) feat(main): integrate APRSSender and refactor helpers *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T03:32:59+08:00*
 - [96d719d](https://github.com/HafiziRuslan/RasPiAPRS/commit/96d719db63739fd4b5677f3141c1c5333ca48cbe) feat(main): introduce persistent dict-based cache and tracking *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T23:58:35+08:00*
 - [cc61f21](https://github.com/HafiziRuslan/RasPiAPRS/commit/cc61f210fd7377ab962979fb5e802b7a5ef6eaa6) feat(src/main): add relay path to payload and telegram log *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T22:53:28+08:00*
 - [f92766b](https://github.com/HafiziRuslan/RasPiAPRS/commit/f92766b47479f858c62b7b97b7c87830a0db7c73) feat(config): support additional sender config and message routing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T21:34:36+08:00*
@@ -41,6 +42,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta7
 
+- [6ad760c](https://github.com/HafiziRuslan/RasPiAPRS/commit/6ad760c6bffa33fff64fb1d81881c61cc3ac1269) fix(cleanup): track cpu temperature and correct load gauge *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T03:13:50+08:00*
 - [5729df7](https://github.com/HafiziRuslan/RasPiAPRS/commit/5729df7100a9940fd89d2fe81306d5aebb263736) fix(main): refactor APRS messaging to support tz and robust packet sending *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T00:49:13+08:00*
 - [ee437c6](https://github.com/HafiziRuslan/RasPiAPRS/commit/ee437c692abeff4a90a8017872b17115250c5964) fix(sqlite): migrate to persistent dict and adjust sequence handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T00:24:35+08:00*
 - [6e14b8b](https://github.com/HafiziRuslan/RasPiAPRS/commit/6e14b8b676ccb24e59ee7c8cc3f4e782196a2a5b) fix(cliff): standardize quote usage in cliff.toml *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T23:34:51+08:00*
@@ -73,6 +75,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta7
 
+- [09426b2](https://github.com/HafiziRuslan/RasPiAPRS/commit/09426b298afda6b8cff7fe9adae12128c690ef38) refactor(main): integrate APRSSender and async gps fallback *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T03:02:40+08:00*
+- [fc5019a](https://github.com/HafiziRuslan/RasPiAPRS/commit/fc5019a5440bf6d4b717d404615a78fec8e3225f) refactor(sync): unify task processing loop and return values *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T02:47:19+08:00*
 - [8852aa5](https://github.com/HafiziRuslan/RasPiAPRS/commit/8852aa5059dbbb0e16780f0c5ee32bb4c5d81944) refactor(main): integrate scheduled message handler into loop and init *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T20:48:50+08:00*
 - [8cfc5c4](https://github.com/HafiziRuslan/RasPiAPRS/commit/8cfc5c4c4c7e6174ecd335f93a2431ce9e5bc6df) refactor(main): streamline sequence and timer usage *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T06:19:18+08:00*
 - [42d0039](https://github.com/HafiziRuslan/RasPiAPRS/commit/42d00393e710684b327b09f5cfb8c71edc10e937) refactor(main): implement APRS/Telegram live location and smarter sending logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T02:01:34+08:00*
@@ -980,4 +984,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-23T00:51:46.023317953+08:00
+generated using git-cliff on 2026-02-23T03:36:00.938368953+08:00
