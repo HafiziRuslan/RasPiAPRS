@@ -475,7 +475,7 @@ class SystemStats(object):
 		def _fetch():
 			uptime_seconds = dt.datetime.now(dt.timezone.utc).timestamp() - psutil.boot_time()
 			uptime = dt.timedelta(seconds=uptime_seconds)
-			return f', up: {humanize.naturaldelta(uptime)}'
+			return f'up: {humanize.naturaldelta(uptime)}'
 
 		return self._get_cached('uptime', _fetch, ttl=60, default='')
 
@@ -505,7 +505,7 @@ class SystemStats(object):
 				kernelver = f'[{kernel.sysname} {kernel.release.split("+")[0]}]'
 			except Exception as e:
 				logging.error('Unexpected error: %s', e)
-			return f' {osname} {kernelver}'
+			return f'{osname} {kernelver}'
 
 		return self._get_cached('os_info', _fetch, ttl=300, default='')
 
@@ -537,7 +537,7 @@ class SystemStats(object):
 			elif tx < rx:
 				shift = f' (+{round(rx - tx, 6)}MHz)'
 			cc = f' CC{color_code}' if dmr_enabled else ''
-			return (str(tx) + 'MHz' + shift + cc) + ','
+			return str(tx) + 'MHz' + shift + cc
 
 		return self._get_cached('mmdvm_info', _fetch, ttl=300, default='')
 
@@ -605,7 +605,7 @@ class ScheduledMessageHandler:
 			logging.error('APRS packet parsing error at %s: %s', name, err)
 			return False
 		await aprs_sender.send_packet(payload, name)
-		tg_msg = f'<u>{parsed["from"]} <b>{name}</b></u>\n\nFrom: <b>{parsed["from"]}</b>\nTo: <b>{parsed["addresse"]}</b>'
+		tg_msg = f'<u>{parsed["from"]} Packet <b>{name}</b></u>\n\nFrom: <b>{parsed["from"]}</b>\nTo: <b>{parsed["addresse"]}</b>'
 		path_list = parsed.get('path')
 		if path_list:
 			tg_msg += f'\nPath: <b>{", ".join(path_list)}</b>'
@@ -827,7 +827,7 @@ class APRSSender:
 		spdkmh = _spd_to_kmh(cur_spd)
 		mmdvminfo = self.sys_stats.mmdvm_info
 		osinfo = self.sys_stats.os_info
-		comment = f'{mmdvminfo}{osinfo} {PROJECT_URL}'
+		comment = ', '.join(filter(None, [mmdvminfo, osinfo, PROJECT_URL]))
 		ztime = dt.datetime.now(dt.timezone.utc)
 		timestamp = cur_time.strftime('%d%H%Mz') if cur_time else ztime.strftime('%d%H%Mz')
 		symbt = self.cfg.symbol_table
@@ -851,16 +851,15 @@ class APRSSender:
 					symbt, symb = '/', '('
 		lookup_table = symbt if symbt in ['/', '\\'] else '\\'
 		sym_desc = symbols.get_desc(lookup_table, symb).split('(')[0].strip()
-		payload = f'@{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
-		posit = f'{FROMCALL}>{TOCALL}:{payload}'
+		payload = f'{FROMCALL}>{TOCALL}:@{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
 		tgpos = f'<u>{FROMCALL} Position</u>\n\nTime: <b>{timestamp}</b>\nSymbol: {symbt}{symb} ({sym_desc})\nPosition:\n\tLatitude: <b>{cur_lat}</b>\n\tLongitude: <b>{cur_lon}</b>\n\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\nComment: <b>{comment}</b>'
-		await self.send_packet(posit, 'position')
+		await self.send_packet(payload, 'position')
 		await self.tg_logger.log(tgpos, cur_lat, cur_lon, int(csestr))
 
 	async def send_header(self):
 		"""Send APRS header information to APRS-IS."""
 		caller = f'{FROMCALL}>{TOCALL}::{FROMCALL:9s}:'
-		params = ['CPUTemp', 'CPULoad', 'RAMUsed', 'DiskUsed']
+		params = ['CPUTemp', 'CPULoad', 'RAMUsed', 'ROMUsed']
 		units = ['deg.C', '%', 'GB', 'GB']
 		eqns = ['0,0.1,0', '0,0.001,0', '0,0.001,0', '0,0.001,0']
 		if self.cfg.gpsd_enabled:
@@ -882,26 +881,26 @@ class APRSSender:
 		diskused = self.sys_stats.storage_used
 		telemmemused = int(memused / 1.0000e6)
 		telemdiskused = int(diskused / 1.0000e6)
-		telem = f'{FROMCALL}>{TOCALL}:T#{seq:03d},{cputemp:d},{cpuload:d},{telemmemused:d},{telemdiskused:d}'
+		payload = f'{FROMCALL}>{TOCALL}:T#{seq:03d},{cputemp:d},{cpuload:d},{telemmemused:d},{telemdiskused:d}'
 		tgtel = (
 			f'<u>{FROMCALL} Telemetry</u>\n\n'
 			f'Sequence: <b>#{seq}</b>\n'
 			f'CPU Temp: <b>{cputemp / 10:.1f} °C</b>\n'
 			f'CPU Load: <b>{cpuload / 1000:.1f}%</b>\n'
 			f'RAM Used: <b>{humanize.naturalsize(memused, binary=True)}</b>\n'
-			f'Disk Used: <b>{humanize.naturalsize(diskused, binary=True)}</b>'
+			f'ROM Used: <b>{humanize.naturalsize(diskused, binary=True)}</b>'
 		)
 		if self.cfg.gpsd_enabled:
 			_, uSat, _ = await get_gpssat(self.cfg)
-			telem += f',{uSat:d}'
+			payload += f',{uSat:d}'
 			tgtel += f'\nGPS Used: <b>{uSat}</b>'
-		await self.send_packet(telem, 'telemetry')
+		await self.send_packet(payload, 'telemetry')
 		await self.tg_logger.log(tgtel)
 
 	async def send_status(self, gps_data=None):
 		"""Send APRS status information to APRS-IS."""
 		_, lat, lon, _, _, _ = await _get_current_location_data(self.cfg, gps_data)
-		gridsquare = latlon_to_grid(lat, lon)
+		gridsquare = f'[{latlon_to_grid(lat, lon)}]'
 		address = get_add_from_pos(lat, lon)
 		near_add = format_address(address)
 		near_add_tg = format_address(address, True)
@@ -912,24 +911,25 @@ class APRSSender:
 			timez, u_sat, n_sat = await get_gpssat(self.cfg)
 			if u_sat > 0:
 				timestamp = timez.strftime('%d%H%Mz')
-				sats_info = f', gps: {u_sat}/{n_sat}'
+				sats_info = f'gps: {u_sat}/{n_sat}'
 			else:
-				sats_info = f', gps: {u_sat}'
+				sats_info = f'gps: {u_sat}'
 		uptime = self.sys_stats.uptime
-		status_text = f'{timestamp}[{gridsquare}]{near_add}{uptime}{sats_info}'
-		aprs_packet = f'{FROMCALL}>{TOCALL}:>{status_text}'
-		tg_msg = f'<u>{FROMCALL} Status</u>\n\n<b>{timestamp}[{gridsquare}]{near_add_tg}{uptime}{sats_info}</b>'
+		stat_text = f'{timestamp}{", ".join(filter(None, [gridsquare, near_add, uptime, sats_info]))}'
+		tele_text = f'{timestamp}{", ".join(filter(None, [gridsquare, near_add_tg, uptime, sats_info]))}'
+		payload = f'{FROMCALL}>{TOCALL}:>{stat_text}'
+		tg_msg = f'<u>{FROMCALL} Status</u>\n\n<b>{tele_text}</b>'
 		if os.path.exists(STATUS_FILE):
 			try:
 				with open(STATUS_FILE, 'r') as f:
-					if f.read() == aprs_packet:
+					if f.read() == payload:
 						return
 			except (IOError, OSError):
 				pass
-		await self.send_packet(aprs_packet, 'status')
+		await self.send_packet(payload, 'status')
 		try:
 			with open(STATUS_FILE, 'w') as f:
-				f.write(aprs_packet)
+				f.write(payload)
 		except (IOError, OSError):
 			pass
 		await self.tg_logger.log(tg_msg)
@@ -1189,7 +1189,7 @@ def format_address(address, include_flag=False):
 			cc_str = f' [{flag} {cc}]'
 		else:
 			cc_str = f' ({cc})'
-	return f' near {full_area}{cc_str},'
+	return f'near {full_area}{cc_str}'
 
 
 def setup_signal_handling(reload_event):
