@@ -7,6 +7,7 @@ import json
 import logging
 import logging.handlers
 import os
+import random
 import re
 import shutil
 import signal
@@ -550,18 +551,25 @@ class ScheduledMessageHandler:
 	def _init_messages(self):
 		self.messages = []
 		definitions = [
-			('aprsthursday_enabled', 'APRSThursday', 3, 'ANSRVR', 'CQ HOTG #{}'),
-			('aprsmysunday_enabled', 'APRSMYSunday', 6, 'APRSMY', 'CHECK #{}'),
+			('aprsthursday_enabled', 'APRSThursday', 3, 'ANSRVR', 'CQ HOTG #{}', dt.timezone.utc),
+			('aprsmysunday_enabled', 'APRSMYSunday', 6, 'APRSMY', 'CHECK #{}', dt.timezone(dt.timedelta(hours=8))),
 		]
-		for attr, name, weekday, addrcall, template_fmt in definitions:
+		for attr, name, weekday, addrcall, template_fmt, tz in definitions:
 			if getattr(self.cfg, attr, False):
 				self.messages.append(
-					{'name': name, 'weekday': weekday, 'addrcall': addrcall, 'template': template_fmt.format(name), 'from_call': None}
+					{'name': name, 'weekday': weekday, 'addrcall': addrcall, 'template': template_fmt.format(name), 'from_call': None, 'tz': tz}
 				)
 				if self.cfg.additional_sender:
 					for sender in self.cfg.additional_sender:
 						self.messages.append(
-							{'name': name, 'weekday': weekday, 'addrcall': addrcall, 'template': template_fmt.format(name), 'from_call': sender}
+							{
+								'name': name,
+								'weekday': weekday,
+								'addrcall': addrcall,
+								'template': template_fmt.format(name),
+								'from_call': sender,
+								'tz': tz,
+							}
 						)
 
 	async def send_all(self, ais, tg_logger, sys_stats):
@@ -570,9 +578,9 @@ class ScheduledMessageHandler:
 			ais = await self._send_one(ais, tg_logger, sys_stats, **msg_info)
 		return ais
 
-	async def _send_one(self, ais, tg_logger, sys_stats, name, weekday, addrcall, template, from_call=None):
+	async def _send_one(self, ais, tg_logger, sys_stats, name, weekday, addrcall, template, from_call=None, tz=dt.timezone.utc):
 		"""Send a single scheduled message to APRS-IS if it's due."""
-		now = dt.datetime.now(dt.timezone.utc)
+		now = dt.datetime.now(tz)
 		if now.weekday() != weekday:
 			return ais
 		today = now.strftime('%Y-%m-%d')
@@ -598,27 +606,21 @@ class ScheduledMessageHandler:
 		except APRSParseError as err:
 			logging.error('APRS packet parsing error at %s: %s', name, err)
 			return ais
-		try:
-			ais.sendall(payload)
-			logging.info(payload)
-			tg_msg = f'<u>{parsed["from"]} <b>{name}</b></u>\n\nFrom: <b>{parsed["from"]}</b>\nTo: <b>{parsed["addresse"]}</b>'
-			path_list = parsed.get('path')
-			if path_list:
-				tg_msg += f'\nPath: <b>{", ".join(path_list)}</b>'
-			if parsed.get('via'):
-				tg_msg += f'\nvia: <b>{parsed["via"]}</b>'
-			tg_msg += f'\nMessage: <b>{parsed["message_text"]}</b>'
-			if parsed.get('msgNo'):
-				tg_msg += f'\nMessage No: <b>{parsed["msgNo"]}</b>'
-			await tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
-			seq_mgr._save()
-			self.tracking[tracking_key] = today
-			self.tracking.flush()
-			ais = await send_status(ais, self.cfg, tg_logger, sys_stats)
-		except APRSConnectionError as err:
-			logging.error('APRS connection error at %s: %s', name, err)
-			ais = await ais_connect(self.cfg)
-			ais = await self._send_one(ais, tg_logger, sys_stats, name, weekday, addrcall, template, from_call)
+		ais = await send_packet(ais, self.cfg, payload, name)
+		tg_msg = f'<u>{parsed["from"]} <b>{name}</b></u>\n\nFrom: <b>{parsed["from"]}</b>\nTo: <b>{parsed["addresse"]}</b>'
+		path_list = parsed.get('path')
+		if path_list:
+			tg_msg += f'\nPath: <b>{", ".join(path_list)}</b>'
+		if parsed.get('via'):
+			tg_msg += f'\nvia: <b>{parsed["via"]}</b>'
+		tg_msg += f'\nMessage: <b>{parsed["message_text"]}</b>'
+		if parsed.get('msgNo'):
+			tg_msg += f'\nMessage No: <b>{parsed["msgNo"]}</b>'
+		await tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
+		seq_mgr._save()
+		self.tracking[tracking_key] = today
+		self.tracking.flush()
+		ais = await send_status(ais, self.cfg, tg_logger, sys_stats)
 		return ais
 
 
@@ -1021,6 +1023,19 @@ async def _get_current_location_data(cfg, gps_data=None):
 	return None, lat, lon, alt, 0, 0
 
 
+async def send_packet(ais, cfg, payload, log_context='packet'):
+	"""Send a packet with random delay and retry logic."""
+	while True:
+		try:
+			await asyncio.sleep(random.uniform(0, 5))
+			ais.sendall(payload)
+			logging.info(payload)
+			return ais
+		except APRSConnectionError as err:
+			logging.error('APRS connection error at %s: %s', log_context, err)
+			ais = await ais_connect(cfg)
+
+
 async def send_position(ais, cfg, tg_logger, sys_stats, gps_data=None):
 	"""Send APRS position packet to APRS-IS."""
 	cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = await _get_current_location_data(cfg, gps_data)
@@ -1059,15 +1074,9 @@ async def send_position(ais, cfg, tg_logger, sys_stats, gps_data=None):
 	payload = f'@{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
 	posit = f'{FROMCALL}>{TOCALL}:{payload}'
 	tgpos = f'<u>{FROMCALL} Position</u>\n\nTime: <b>{timestamp}</b>\nSymbol: {symbt}{symb} ({sym_desc})\nPosition:\n\tLatitude: <b>{cur_lat}</b>\n\tLongitude: <b>{cur_lon}</b>\n\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\nComment: <b>{comment}</b>'
-	try:
-		ais.sendall(posit)
-		logging.info(posit)
-		await tg_logger.log(tgpos, cur_lat, cur_lon, int(csestr))
-		await send_status(ais, cfg, tg_logger, sys_stats, gps_data)
-	except APRSConnectionError as err:
-		logging.error('APRS connection error at position: %s', err)
-		ais = await ais_connect(cfg)
-		ais = await send_position(ais, cfg, tg_logger, sys_stats, gps_data)
+	ais = await send_packet(ais, cfg, posit, 'position')
+	await tg_logger.log(tgpos, cur_lat, cur_lon, int(csestr))
+	await send_status(ais, cfg, tg_logger, sys_stats, gps_data)
 	return ais
 
 
@@ -1083,15 +1092,9 @@ async def send_header(ais, cfg, tg_logger, sys_stats):
 		eqns.append('0,1,0')
 	payload = f'{caller}PARM.{",".join(params)}\r\n{caller}UNIT.{",".join(units)}\r\n{caller}EQNS.{",".join(eqns)}'
 	tg_msg = f'<u>{FROMCALL} Header</u>\n\nParameters: <b>{",".join(params)}</b>\nUnits: <b>{",".join(units)}</b>\nEquations: <b>{",".join(eqns)}</b>\n\nValue: <code>[a,b,c]=(a×v²)+(b×v)+c</code>'
-	try:
-		ais.sendall(payload)
-		logging.info(payload)
-		await tg_logger.log(tg_msg)
-		await send_status(ais, cfg, tg_logger, sys_stats)
-	except APRSConnectionError as err:
-		logging.error('APRS connection error at header: %s', err)
-		ais = await ais_connect(cfg)
-		ais = await send_header(ais, cfg, tg_logger, sys_stats)
+	ais = await send_packet(ais, cfg, payload, 'header')
+	await tg_logger.log(tg_msg)
+	await send_status(ais, cfg, tg_logger, sys_stats)
 	return ais
 
 
@@ -1118,15 +1121,9 @@ async def send_telemetry(ais, cfg, tg_logger, sys_stats):
 		_, uSat, _ = await get_gpssat(cfg)
 		telem += f',{uSat:d}'
 		tgtel += f'\nGPS Used: <b>{uSat}</b>'
-	try:
-		ais.sendall(telem)
-		logging.info(telem)
-		await tg_logger.log(tgtel)
-		await send_status(ais, cfg, tg_logger, sys_stats)
-	except APRSConnectionError as err:
-		logging.error('APRS connection error at telemetry: %s', err)
-		ais = await ais_connect(cfg)
-		ais = await send_telemetry(ais, cfg, tg_logger, sys_stats)
+	ais = await send_packet(ais, cfg, telem, 'telemetry')
+	await tg_logger.log(tgtel)
+	await send_status(ais, cfg, tg_logger, sys_stats)
 	return ais
 
 
@@ -1158,19 +1155,13 @@ async def send_status(ais, cfg, tg_logger, sys_stats, gps_data=None):
 					return ais
 		except (IOError, OSError):
 			pass
+	ais = await send_packet(ais, cfg, aprs_packet, 'status')
 	try:
-		ais.sendall(aprs_packet)
-		logging.info(aprs_packet)
-		try:
-			with open(STATUS_FILE, 'w') as f:
-				f.write(aprs_packet)
-		except (IOError, OSError):
-			pass
-		await tg_logger.log(tg_msg)
-	except APRSConnectionError as err:
-		logging.error('APRS connection error at status: %s', err)
-		ais = await ais_connect(cfg)
-		ais = await send_status(ais, cfg, tg_logger, sys_stats, gps_data)
+		with open(STATUS_FILE, 'w') as f:
+			f.write(aprs_packet)
+	except (IOError, OSError):
+		pass
+	await tg_logger.log(tg_msg)
 	return ais
 
 
