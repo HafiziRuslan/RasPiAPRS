@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-22T21:55:48+08:00)
+## [beta7] - (2026-02-22T22:00:58+08:00)
 
-- 51 commit(s) contributed to the release.
+- 52 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta7
 
+- [f1fd954](https://github.com/HafiziRuslan/RasPiAPRS/commit/f1fd95410fea59a7867d367d3221653a0da1a308) fix(config): document optional default filters and update env hints *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T22:00:58+08:00*
 - [86f3203](https://github.com/HafiziRuslan/RasPiAPRS/commit/86f32038d639d3d6af3aa9360b37ebcd8c8d2013) fix(env)(dotenv): correct ADDITIONAL_SENDER format in .env.sample *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T21:55:48+08:00*
 - [85fd4d6](https://github.com/HafiziRuslan/RasPiAPRS/commit/85fd4d62b6f6e73b2bac99b5d964e3b4007a4d22) fix(config and logging): add telegram_msg_topic_id support and use topic_id in logs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T21:44:35+08:00*
 - [3da3b49](https://github.com/HafiziRuslan/RasPiAPRS/commit/3da3b491fe4328d02f9ebc8612838862a3431d8a) fix(main): update config paths and payload format for aprs app *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T20:11:43+08:00*
@@ -969,4 +970,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-22T21:56:16.893727651+08:00
+generated using git-cliff on 2026-02-22T22:01:23.368201144+08:00
