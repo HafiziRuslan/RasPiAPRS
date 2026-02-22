@@ -7,7 +7,6 @@ import json
 import logging
 import logging.handlers
 import os
-import pickle
 import signal
 import shutil
 import subprocess
@@ -36,13 +35,14 @@ PISTAR_RELEASE_FILE = f'{ETC_DIR}/pistar-release'
 WPSD_RELEASE_FILE = f'{ETC_DIR}/WPSD-release'
 MMDVMHOST_FILE = f'{ETC_DIR}/mmdvmhost'
 # Temporary files path
-TIMER_FILE = f'{TMP_DIR}/timer.tmp'
-SEQUENCE_FILE = f'{TMP_DIR}/sequence.tmp'
-MSG_SEQUENCE_FILE = f'{TMP_DIR}/msg_sequence.tmp'
-CACHE_FILE = f'{TMP_DIR}/nominatim_cache.pkl'
-LOCATION_ID_FILE = f'{TMP_DIR}/location_id.tmp'
-STATUS_FILE = f'{TMP_DIR}/status.tmp'
 GPS_FILE = f'{TMP_DIR}/gps.json'
+LOCATION_ID_FILE = f'{TMP_DIR}/location_id.tmp'
+MSG_SEQUENCE_FILE = f'{TMP_DIR}/msg_sequence.tmp'
+MSG_TRACKING_FILE = f'{TMP_DIR}/msg_tracking.json'
+NOMINATIM_CACHE_FILE = f'{TMP_DIR}/nominatim_cache.json'
+SEQUENCE_FILE = f'{TMP_DIR}/sequence.tmp'
+STATUS_FILE = f'{TMP_DIR}/status.tmp'
+TIMER_FILE = f'{TMP_DIR}/timer.tmp'
 
 
 def get_app_metadata():
@@ -281,6 +281,44 @@ class PersistentCounter:
 		return self._count
 
 
+class PersistentDict(dict):
+	"""A dictionary that is persisted to a JSON file."""
+
+	def __init__(self, path):
+		self.file_path = path
+		super().__init__(self._load())
+
+	def _load(self):
+		if not os.path.exists(self.file_path):
+			return {}
+		try:
+			with open(self.file_path, 'r') as f:
+				data = json.load(f)
+			if isinstance(data, dict):
+				return data
+			logging.warning('Data in %s is not a dictionary, ignoring.', self.file_path)
+			return {}
+		except (IOError, ValueError, json.JSONDecodeError) as e:
+			logging.warning('Failed to load persistent dict from %s: %s', self.file_path, e)
+			return {}
+
+	def _save(self):
+		try:
+			with open(self.file_path, 'w') as f:
+				json.dump(self, f)
+		except (IOError, OSError) as e:
+			logging.error('Failed to save persistent dict to %s: %s', self.file_path, e)
+
+	def reload(self):
+		"""Reload data from disk."""
+		super().clear()
+		super().update(self._load())
+
+	def flush(self):
+		"""Force save to disk."""
+		self._save()
+
+
 class Sequence(PersistentCounter):
 	"""Class to manage APRS sequence."""
 
@@ -499,7 +537,7 @@ class ScheduledMessageHandler:
 
 	def __init__(self, cfg):
 		self.cfg = cfg
-		self.tracking = {}
+		self.tracking = PersistentDict(MSG_TRACKING_FILE)
 		self.messages = []
 		self._init_messages()
 
@@ -533,7 +571,7 @@ class ScheduledMessageHandler:
 			return ais
 		today = now.strftime('%Y-%m-%d')
 		source = from_call or FROMCALL
-		tracking_key = f'{name}:{source}'
+		tracking_key = f'{name},{source}'
 		if self.tracking.get(tracking_key) == today:
 			return ais
 		_, lat, lon, _, _, _ = await _get_current_location_data(self.cfg)
@@ -567,6 +605,7 @@ class ScheduledMessageHandler:
 				tg_msg += f'\nMessage No: <b>{parsed["msgNo"]}</b>'
 			await tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
 			self.tracking[tracking_key] = today
+			self.tracking.flush()
 			ais = await send_status(ais, self.cfg, tg_logger, sys_stats)
 		except APRSConnectionError as err:
 			logging.error('APRS connection error at %s: %s', name, err)
@@ -772,15 +811,14 @@ async def _retrieve_gpsd_data(cfg, filter_class, log_name):
 def _get_fallback_location(cfg):
 	"""Retrieve location from cache or environment variables."""
 	lat, lon, alt = 0.0, 0.0, 0.0
-	if os.path.exists(GPS_FILE):
+	gps_cache = PersistentDict(GPS_FILE)
+	if gps_cache:
 		try:
-			with open(GPS_FILE, 'r') as f:
-				gps_data = json.load(f)
-				lat = float(gps_data.get('lat', 0.0))
-				lon = float(gps_data.get('lon', 0.0))
-				alt = float(gps_data.get('alt', 0.0))
-		except (IOError, OSError, json.JSONDecodeError, ValueError) as e:
-			logging.warning('Could not read or parse GPS file %s: %s', GPS_FILE, e)
+			lat = float(gps_cache.get('lat', 0.0))
+			lon = float(gps_cache.get('lon', 0.0))
+			alt = float(gps_cache.get('alt', 0.0))
+		except (ValueError, TypeError):
+			pass
 	if lat == 0.0 and lon == 0.0:
 		try:
 			lat = float(cfg.latitude)
@@ -793,11 +831,9 @@ def _get_fallback_location(cfg):
 
 def _save_gps_cache(lat, lon, alt):
 	"""Save GPS location to cache file."""
-	try:
-		with open(GPS_FILE, 'w') as f:
-			json.dump({'lat': lat, 'lon': lon, 'alt': alt}, f)
-	except (IOError, OSError) as e:
-		logging.error('Failed to write GPS data to %s: %s', GPS_FILE, e)
+	cache = PersistentDict(GPS_FILE)
+	cache.update({'lat': lat, 'lon': lon, 'alt': alt})
+	cache.flush()
 
 
 async def get_gpspos(cfg):
@@ -910,11 +946,7 @@ def latlon_to_grid(lat, lon, precision=6):
 
 def get_add_from_pos(lat, lon):
 	"""Get address from coordinates, using a local cache."""
-	if os.path.exists(CACHE_FILE):
-		with open(CACHE_FILE, 'rb') as cache_file:
-			cache = pickle.load(cache_file)
-	else:
-		cache = {}
+	cache = PersistentDict(NOMINATIM_CACHE_FILE)
 	coord_key = f'{lat:.4f},{lon:.4f}'
 	if coord_key in cache:
 		return cache[coord_key]
@@ -924,8 +956,7 @@ def get_add_from_pos(lat, lon):
 		if location:
 			address = location.raw['address']
 			cache[coord_key] = address
-			with open(CACHE_FILE, 'wb') as cache_file:
-				pickle.dump(cache, cache_file)
+			cache.flush()
 			logging.debug(f'Address cached for requested coordinates: {coord_key}')
 			return address
 		else:
