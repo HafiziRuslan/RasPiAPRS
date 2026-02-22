@@ -163,7 +163,7 @@ class Config:
 	altitude: float = 0.0
 	server: str = 'rotate.aprs2.net'
 	port: int = 14580
-	filter: str = 'm/50'
+	# filter: str = 'm/50'
 	passcode: int = 0
 	gpsd_enabled: bool = False
 	gpsd_host: str = 'localhost'
@@ -208,7 +208,7 @@ class Config:
 		self.altitude = _env_get_float('APRS_ALTITUDE', 0.0)
 		self.server = os.getenv('APRSIS_SERVER', 'rotate.aprs2.net')
 		self.port = _env_get_int('APRSIS_PORT', 14580, 'Port value error')
-		self.filter = os.getenv('APRSIS_FILTER', 'm/10')
+		# self.filter = os.getenv('APRSIS_FILTER', 'm/10')
 		passcode = os.getenv('APRS_PASSCODE')
 		if passcode:
 			self.passcode = passcode
