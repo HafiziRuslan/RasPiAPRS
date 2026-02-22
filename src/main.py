@@ -1150,7 +1150,7 @@ async def process_loop(cfg, ais, tg_logger, timer, sb, sys_stats, reload_event):
 		if cfg.aprsthursday_enabled:
 			ais = await send_scheduled_message(ais, cfg, tg_logger, 'APRSThursday', 3, 'ANSRVR', 'CQ HOTG #APRSThursday')
 		if cfg.aprsmysunday_enabled:
-			ais = await send_scheduled_message(ais, cfg, tg_logger, 'APRSMySunday', 6, 'APRSMY', 'CHECK #APRSMySunday')
+			ais = await send_scheduled_message(ais, cfg, tg_logger, 'APRSMySunday', 6, 'APRSMY', 'CHECK #APRSMYSunday')
 		await asyncio.sleep(1)
 
 
