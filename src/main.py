@@ -42,8 +42,6 @@ CACHE_FILE = f'{TMP_DIR}/nominatim_cache.pkl'
 LOCATION_ID_FILE = f'{TMP_DIR}/location_id.tmp'
 STATUS_FILE = f'{TMP_DIR}/status.tmp'
 GPS_FILE = f'{TMP_DIR}/gps.json'
-# In-memory tracking for scheduled messages
-SCHEDULED_MSG_TRACKING = {}
 
 
 def get_app_metadata():
@@ -477,6 +475,69 @@ class SystemStats(object):
 			return (str(tx) + 'MHz' + shift + cc) + ','
 
 		return self._get_cached('mmdvm_info', _fetch, ttl=300)
+
+
+class ScheduledMessageHandler:
+	"""Class to handle sending scheduled messages."""
+
+	def __init__(self, cfg):
+		self.cfg = cfg
+		self.tracking = {}
+		self.messages = []
+		self._init_messages()
+
+	def _init_messages(self):
+		self.messages = []
+		definitions = [
+			('aprsthursday_enabled', 'APRSThursday', 3, 'ANSRVR', 'CQ HOTG #{}'),
+			('aprsmysunday_enabled', 'APRSMYSunday', 6, 'APRSMY', 'CHECK #{}'),
+		]
+		for attr, name, weekday, addrcall, template in definitions:
+			if getattr(self.cfg, attr, False):
+				self.messages.append({'name': name, 'weekday': weekday, 'addrcall': addrcall, 'template': template.format(name)})
+
+	async def send_all(self, ais, tg_logger, sys_stats):
+		"""Send all due scheduled messages."""
+		for msg_info in self.messages:
+			ais = await self._send_one(ais, tg_logger, sys_stats, **msg_info)
+		return ais
+
+	async def _send_one(self, ais, tg_logger, sys_stats, name, weekday, addrcall, template):
+		"""Send a single scheduled message to APRS-IS if it's due."""
+		now = dt.datetime.now(dt.timezone.utc)
+		if now.weekday() != weekday:
+			return ais
+		today = now.strftime('%Y-%m-%d')
+		if self.tracking.get(name) == today:
+			return ais
+		_, lat, lon, _, _, _ = await _get_current_location_data(self.cfg)
+		gridsquare = latlon_to_grid(lat, lon)
+		with Sequence(path=MSG_SEQUENCE_FILE, modulo=100000) as seq_mgr:
+			seq = seq_mgr.count
+		message = f'{template} [{gridsquare}] via {APP_NAME}{{{seq}'
+		if len(message) > 67:
+			logging.error('Message length %d exceeds APRS limit of 67 characters: %s', len(message), message)
+			return ais
+		payload = f'{FROMCALL}>{TOCALL}::{addrcall:9s}:{message}'
+		try:
+			parsed = aprslib.parse(payload)
+		except APRSParseError as err:
+			logging.error('APRS packet parsing error at %s: %s', name, err)
+			return ais
+		try:
+			ais.sendall(payload)
+			logging.info(payload)
+			tg_msg = f'<u>{parsed["from"]} <b>{name}</b></u>\n\nFrom: <b>{parsed["from"]}</b>\nTo: <b>{parsed["addresse"]}</b>\nMessage: <b>{parsed["message_text"]}</b>'
+			if parsed.get('msgNo'):
+				tg_msg += f'\nMessage No: <b>{parsed["msgNo"]}</b>'
+			await tg_logger.log(tg_msg)
+			self.tracking[name] = today
+			ais = await send_status(ais, self.cfg, tg_logger, sys_stats)
+		except APRSConnectionError as err:
+			logging.error('APRS connection error at %s: %s', name, err)
+			ais = await ais_connect(self.cfg)
+			ais = await self._send_one(ais, tg_logger, sys_stats, name, weekday, addrcall, template)
+		return ais
 
 
 class TelegramLogger(object):
@@ -1038,43 +1099,6 @@ async def send_status(ais, cfg, tg_logger, sys_stats, gps_data=None):
 	return ais
 
 
-async def send_scheduled_message(ais, cfg, tg_logger, name, weekday, addrcall, template):
-	"""Send a scheduled message to APRS-IS."""
-	now = dt.datetime.now(dt.timezone.utc)
-	if now.weekday() != weekday:
-		return ais
-	today = now.strftime('%Y-%m-%d')
-	if SCHEDULED_MSG_TRACKING.get(name) == today:
-		return ais
-	_, lat, lon, _, _, _ = await _get_current_location_data(cfg)
-	gridsquare = latlon_to_grid(lat, lon)
-	with Sequence(path=MSG_SEQUENCE_FILE, modulo=100000) as seq_mgr:
-		seq = seq_mgr.count
-	message = '{0} [{1}] via {2}{{{3}'.format(template, gridsquare, APP_NAME, seq)
-	if len(message) > 67:
-		logging.error('Message length %d exceeds APRS limit of 67 characters: %s', len(message), message)
-		return ais
-	payload = f'{FROMCALL}>{TOCALL}::{addrcall:9s}:{message}'
-	try:
-		parsed = aprslib.parse(payload)
-	except APRSParseError as err:
-		logging.error('APRS packet parsing error at %s: %s', name, err)
-		return ais
-	try:
-		ais.sendall(payload)
-		logging.info(payload)
-		tg_msg = f'<u>{parsed["from"]} #{name}</u>\n\nFrom: <b>{parsed["from"]}</b>\nTo: <b>{parsed["addresse"]}</b>\nMessage: <b>{parsed["message_text"]}</b>'
-		if parsed.get('msgNo'):
-			tg_msg += f'\nMessage No: <b>{parsed["msgNo"]}</b>'
-		await tg_logger.log(tg_msg)
-		SCHEDULED_MSG_TRACKING[name] = today
-	except APRSConnectionError as err:
-		logging.error('APRS connection error at %s: %s', name, err)
-		ais = await ais_connect(cfg)
-		ais = await send_scheduled_message(ais, cfg, tg_logger, name, weekday, addrcall, template)
-	return ais
-
-
 async def ais_connect(cfg):
 	"""Establish connection to APRS-IS with retries."""
 	logging.info('Connecting to APRS-IS server %s:%d as %s', cfg.server, cfg.port, FROMCALL)
@@ -1129,10 +1153,11 @@ async def initialize_session(cfg):
 	timer = Timer()
 	sb = SmartBeaconing(cfg)
 	sys_stats = SystemStats()
-	return ais, tg_logger, timer, sb, sys_stats
+	scheduled_msg_handler = ScheduledMessageHandler(cfg)
+	return ais, tg_logger, timer, sb, sys_stats, scheduled_msg_handler
 
 
-async def process_loop(cfg, ais, tg_logger, timer, sb, sys_stats, reload_event):
+async def process_loop(cfg, ais, tg_logger, timer, sb, sys_stats, reload_event, scheduled_msg_handler):
 	"""Run the main processing loop."""
 	while True:
 		with timer:
@@ -1148,10 +1173,7 @@ async def process_loop(cfg, ais, tg_logger, timer, sb, sys_stats, reload_event):
 			ais = await send_header(ais, cfg, tg_logger, sys_stats)
 		if timer_tick % cfg.sleep == 1:
 			ais = await send_telemetry(ais, cfg, tg_logger, sys_stats)
-		if cfg.aprsthursday_enabled:
-			ais = await send_scheduled_message(ais, cfg, tg_logger, 'APRSThursday', 3, 'ANSRVR', 'CQ HOTG #APRSThursday')
-		if cfg.aprsmysunday_enabled:
-			ais = await send_scheduled_message(ais, cfg, tg_logger, 'APRSMySunday', 6, 'APRSMY', 'CHECK #APRSMYSunday')
+		ais = await scheduled_msg_handler.send_all(ais, tg_logger, sys_stats)
 		await asyncio.sleep(0.5)
 
 
@@ -1162,11 +1184,11 @@ async def main():
 	cfg = Config()
 	while True:
 		reload_event.clear()
-		ais, tg_logger, timer, sb, sys_stats = await initialize_session(cfg)
+		ais, tg_logger, timer, sb, sys_stats, scheduled_msg_handler = await initialize_session(cfg)
 		async with tg_logger:
 			await tg_logger.log(f'🚀 <b>{FROMCALL}</b>, {APP_NAME} starting up...')
 			try:
-				await process_loop(cfg, ais, tg_logger, timer, sb, sys_stats, reload_event)
+				await process_loop(cfg, ais, tg_logger, timer, sb, sys_stats, reload_event, scheduled_msg_handler)
 			finally:
 				if reload_event.is_set():
 					await tg_logger.log(f'🔄 <b>{FROMCALL}</b>, {APP_NAME} reloading configuration...')
