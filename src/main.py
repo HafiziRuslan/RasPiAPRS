@@ -34,6 +34,7 @@ MMDVMHOST_FILE = '/etc/mmdvmhost'
 # Temporary files path
 TIMER_FILE = '/var/tmp/raspiaprs/timer.tmp'
 SEQUENCE_FILE = '/var/tmp/raspiaprs/sequence.tmp'
+MSG_SEQUENCE_FILE = '/var/tmp/raspiaprs/msg_sequence.tmp'
 CACHE_FILE = '/var/tmp/raspiaprs/nominatim_cache.pkl'
 LOCATION_ID_FILE = '/var/tmp/raspiaprs/location_id.tmp'
 STATUS_FILE = '/var/tmp/raspiaprs/status.tmp'
@@ -233,54 +234,47 @@ class Config:
 		self.aprsmysunday_enabled = _env_get_bool('APRSMYSUNDAY_ENABLE')
 
 
-class Sequence(object):
-	"""Class to manage APRS sequence."""
+class PersistentCounter:
+	"""Base class for persistent counters that read/write a value from/to a file."""
 
-	def __init__(self):
-		self.sequence_file = SEQUENCE_FILE
+	def __init__(self, path, modulo):
+		self.file_path = path
+		self.modulo = modulo
+		self._count = 0
+
+	def __enter__(self):
 		try:
-			with open(self.sequence_file) as fds:
+			with open(self.file_path) as fds:
 				self._count = int(fds.readline())
 		except (IOError, ValueError):
 			self._count = 0
+		return self
 
-	def _flush(self):
+	def __exit__(self, exc_type, exc_val, exc_tb):
 		try:
-			with open(self.sequence_file, 'w') as fds:
+			with open(self.file_path, 'w') as fds:
 				fds.write(f'{self._count:d}')
 		except IOError:
 			pass
 
 	@property
 	def count(self):
-		self._count = (1 + self._count) % 1000
-		self._flush()
+		self._count = (1 + self._count) % self.modulo
 		return self._count
 
 
-class Timer(object):
+class Sequence(PersistentCounter):
+	"""Class to manage APRS sequence."""
+
+	def __init__(self, path=SEQUENCE_FILE, modulo=1000):
+		super().__init__(path, modulo)
+
+
+class Timer(PersistentCounter):
 	"""Class to manage persistent timer."""
 
 	def __init__(self):
-		self.timer_file = TIMER_FILE
-		try:
-			with open(self.timer_file) as fds:
-				self._count = int(fds.readline())
-		except (IOError, ValueError):
-			self._count = 0
-
-	def _flush(self):
-		try:
-			with open(self.timer_file, 'w') as fds:
-				fds.write(f'{self._count:d}')
-		except IOError:
-			pass
-
-	@property
-	def count(self):
-		self._count = (1 + self._count) % 86400
-		self._flush()
-		return self._count
+		super().__init__(TIMER_FILE, 86400)
 
 
 class SmartBeaconing(object):
@@ -966,7 +960,8 @@ async def send_header(ais, cfg, tg_logger, sys_stats):
 
 async def send_telemetry(ais, cfg, tg_logger, sys_stats):
 	"""Send APRS telemetry information to APRS-IS."""
-	seq = Sequence().count
+	with Sequence() as seq_mgr:
+		seq = seq_mgr.count
 	temp = sys_stats.cur_temp()
 	cpuload = sys_stats.avg_cpu_load()
 	memused = sys_stats.memory_used()
@@ -1052,7 +1047,9 @@ async def send_scheduled_message(ais, cfg, tg_logger, name, weekday, addrcall, t
 		return ais
 	_, lat, lon, _, _, _ = await _get_current_location_data(cfg)
 	gridsquare = latlon_to_grid(lat, lon)
-	message = '{0} [{1}] via {2}'.format(template, gridsquare, APP_NAME)
+	with Sequence(path=MSG_SEQUENCE_FILE, modulo=100000) as seq_mgr:
+		seq = seq_mgr.count
+	message = '{0} [{1}] via {2}{{{3}'.format(template, gridsquare, APP_NAME, seq)
 	if len(message) > 67:
 		logging.error('Message length %d exceeds APRS limit of 67 characters: %s', len(message), message)
 		return ais
@@ -1066,6 +1063,8 @@ async def send_scheduled_message(ais, cfg, tg_logger, name, weekday, addrcall, t
 		ais.sendall(payload)
 		logging.info(payload)
 		tg_msg = f'<u>{parsed["from"]} #{name}</u>\n\nFrom: <b>{parsed["from"]}</b>\nTo: <b>{parsed["addresse"]}</b>\nMessage: <b>{parsed["message_text"]}</b>'
+		if parsed.get('msgNo'):
+			tg_msg += f'\nMessage No: <b>{parsed["msgNo"]}</b>'
 		await tg_logger.log(tg_msg)
 		SCHEDULED_MSG_TRACKING[name] = today
 	except APRSConnectionError as err:
@@ -1135,7 +1134,8 @@ async def initialize_session(cfg):
 async def process_loop(cfg, ais, tg_logger, timer, sb, sys_stats, reload_event):
 	"""Run the main processing loop."""
 	while True:
-		timer_tick = timer.count
+		with timer:
+			timer_tick = timer.count
 		if reload_event.is_set():
 			break
 		gps_data = None
