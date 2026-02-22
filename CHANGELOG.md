@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-23T04:09:30+08:00)
+## [beta7] - (2026-02-23T04:54:46+08:00)
 
-- 66 commit(s) contributed to the release.
+- 68 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
@@ -43,6 +43,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta7
 
+- [bf0af25](https://github.com/HafiziRuslan/RasPiAPRS/commit/bf0af25e77dbc59bc9445c580428fc4608e17eb5) fix(code): align strings and payload formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T04:54:46+08:00*
+- [18d1050](https://github.com/HafiziRuslan/RasPiAPRS/commit/18d105074aea3e94c39147ad80bf8727f3f4baec) fix(readme): update metrics wording and optional GPS label *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T04:54:15+08:00*
 - [6ad760c](https://github.com/HafiziRuslan/RasPiAPRS/commit/6ad760c6bffa33fff64fb1d81881c61cc3ac1269) fix(cleanup): track cpu temperature and correct load gauge *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T03:13:50+08:00*
 - [5729df7](https://github.com/HafiziRuslan/RasPiAPRS/commit/5729df7100a9940fd89d2fe81306d5aebb263736) fix(main): refactor APRS messaging to support tz and robust packet sending *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T00:49:13+08:00*
 - [ee437c6](https://github.com/HafiziRuslan/RasPiAPRS/commit/ee437c692abeff4a90a8017872b17115250c5964) fix(sqlite): migrate to persistent dict and adjust sequence handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T00:24:35+08:00*
@@ -985,4 +987,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-23T04:09:56.273674411+08:00
+generated using git-cliff on 2026-02-23T04:55:23.678332363+08:00
