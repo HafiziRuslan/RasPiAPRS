@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-22T19:28:01+08:00)
+## [beta7] - (2026-02-22T19:29:38+08:00)
 
-- 44 commit(s) contributed to the release.
+- 45 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
@@ -38,6 +38,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta7
 
+- [bca9ece](https://github.com/HafiziRuslan/RasPiAPRS/commit/bca9ece8a866a20ea5f68f9b6ee41fab352c7895) fix(main): reduce sleep interval for loop cadence *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T19:29:38+08:00*
 - [a58d04a](https://github.com/HafiziRuslan/RasPiAPRS/commit/a58d04a69fd997f5f2c4fddbf9d6c78dc4ce0e68) fix(api): correct APRSMySunday message tag spelling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T19:01:36+08:00*
 - [9cfc0bd](https://github.com/HafiziRuslan/RasPiAPRS/commit/9cfc0bd07297febb0533ebce7f843f53d4df1c6b) fix(app): apply global caller constants and minor refactors *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T18:48:18+08:00*
 - [cb7442f](https://github.com/HafiziRuslan/RasPiAPRS/commit/cb7442f782c942e136d1c443661eae057f57a10e) fix(login): clean up commented blocks and env handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-21T23:19:31+08:00*
@@ -962,4 +963,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-22T19:28:34.454920160+08:00
+generated using git-cliff on 2026-02-22T19:30:13.005771637+08:00
