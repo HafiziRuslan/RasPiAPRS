@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-22T23:04:39+08:00)
+## [beta7] - (2026-02-22T23:22:43+08:00)
 
-- 55 commit(s) contributed to the release.
+- 57 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
@@ -40,6 +40,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta7
 
+- [f461d81](https://github.com/HafiziRuslan/RasPiAPRS/commit/f461d81856ef41e68c4bfa2dd242072d07d7999a) fix(main): format path as comma-separated list in tg message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T23:22:43+08:00*
+- [56a6429](https://github.com/HafiziRuslan/RasPiAPRS/commit/56a64293c566b5fa109933ba12f94c125253c274) fix(core): simplify path_str when from_call is true *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T23:18:04+08:00*
 - [d906f24](https://github.com/HafiziRuslan/RasPiAPRS/commit/d906f24b9cefee52af719bcfb7f4ff4ff5a2bc2e) fix(configure): adjust env sections and script message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T23:04:39+08:00*
 - [1d1273e](https://github.com/HafiziRuslan/RasPiAPRS/commit/1d1273ec67b2f84d845cb3cd3284e76e2184c12d) fix(main): track per-source delivery to prevent duplicates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T22:11:58+08:00*
 - [f1fd954](https://github.com/HafiziRuslan/RasPiAPRS/commit/f1fd95410fea59a7867d367d3221653a0da1a308) fix(config): document optional default filters and update env hints *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T22:00:58+08:00*
@@ -973,4 +975,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-22T23:05:08.081912257+08:00
+generated using git-cliff on 2026-02-22T23:23:18.660988839+08:00
