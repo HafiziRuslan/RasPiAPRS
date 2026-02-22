@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-22T18:48:18+08:00)
+## [beta7] - (2026-02-22T19:28:01+08:00)
 
-- 42 commit(s) contributed to the release.
+- 44 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
 ### 🚀 Features in beta7
 
+- [b0ba844](https://github.com/HafiziRuslan/RasPiAPRS/commit/b0ba844f58a94e3c9cc1f7e5047211d10a18bd60) feat(performance): introduce persistent file-based counters for seq and timer *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T19:28:01+08:00*
 - [4fab0f9](https://github.com/HafiziRuslan/RasPiAPRS/commit/4fab0f903b046fc2ecf2f30fc29e6df8c290790e) feat(system): update python deps to require Python >= 3.13 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T01:19:37+08:00*
 - [b557f26](https://github.com/HafiziRuslan/RasPiAPRS/commit/b557f26475534cd8c876a3a1ce2db3a4966a47ba) feat(config): add aprsthursday and aprsmysunday schedules *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T00:48:30+08:00*
 - [aacad2c](https://github.com/HafiziRuslan/RasPiAPRS/commit/aacad2c5357e09c0d0d8b62d22b78462bc79d74a) feat(main): integrate gpsd and telegram options through config-driven envs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-21T23:15:42+08:00*
@@ -37,6 +38,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta7
 
+- [a58d04a](https://github.com/HafiziRuslan/RasPiAPRS/commit/a58d04a69fd997f5f2c4fddbf9d6c78dc4ce0e68) fix(api): correct APRSMySunday message tag spelling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T19:01:36+08:00*
 - [9cfc0bd](https://github.com/HafiziRuslan/RasPiAPRS/commit/9cfc0bd07297febb0533ebce7f843f53d4df1c6b) fix(app): apply global caller constants and minor refactors *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T18:48:18+08:00*
 - [cb7442f](https://github.com/HafiziRuslan/RasPiAPRS/commit/cb7442f782c942e136d1c443661eae057f57a10e) fix(login): clean up commented blocks and env handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-21T23:19:31+08:00*
 - [202883c](https://github.com/HafiziRuslan/RasPiAPRS/commit/202883ccb1fa20cc53aa8d1df164a24e35911613) fix(data): handle GPSD TPV mode properly in dict_stream retrieval *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-21T02:30:05+08:00*
@@ -960,4 +962,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-22T18:49:06.856141683+08:00
+generated using git-cliff on 2026-02-22T19:28:34.454920160+08:00
