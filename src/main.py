@@ -409,6 +409,7 @@ class SystemStats(object):
 		self._cache[key] = (val, now)
 		return val
 
+	@property
 	def avg_cpu_load(self):
 		"""Get CPU load as a percentage of total capacity."""
 
@@ -423,6 +424,7 @@ class SystemStats(object):
 
 		return self._get_cached('cpu_load', _fetch, ttl=5)
 
+	@property
 	def memory_used(self):
 		"""Get used memory in bits."""
 
@@ -439,6 +441,7 @@ class SystemStats(object):
 
 		return self._get_cached('memory_used', _fetch, ttl=5)
 
+	@property
 	def storage_used(self):
 		"""Get used disk space in bits."""
 
@@ -452,6 +455,7 @@ class SystemStats(object):
 
 		return self._get_cached('storage_used', _fetch, ttl=60)
 
+	@property
 	def cur_temp(self):
 		"""Get CPU temperature in degC."""
 
@@ -465,6 +469,7 @@ class SystemStats(object):
 
 		return self._get_cached('cur_temp', _fetch, ttl=5)
 
+	@property
 	def uptime(self):
 		"""Get system uptime in a human-readable format."""
 
@@ -479,6 +484,7 @@ class SystemStats(object):
 
 		return self._get_cached('uptime', _fetch, ttl=60)
 
+	@property
 	def os_info(self):
 		"""Get operating system information."""
 
@@ -508,6 +514,7 @@ class SystemStats(object):
 
 		return self._get_cached('os_info', _fetch, ttl=300)
 
+	@property
 	def mmdvm_info(self):
 		"""Get MMDVM configured frequency and color code."""
 
@@ -573,25 +580,25 @@ class ScheduledMessageHandler:
 							}
 						)
 
-	async def send_all(self, ais, tg_logger):
+	async def send_all(self, aprs_sender):
 		"""Send all due scheduled messages."""
 		sent_any = False
 		for msg_info in self.messages:
-			ais, sent = await self._send_one(ais, tg_logger, **msg_info)
+			sent = await self._send_one(aprs_sender, **msg_info)
 			if sent:
 				sent_any = True
-		return ais, sent_any
+		return sent_any
 
-	async def _send_one(self, ais, tg_logger, name, weekday, addrcall, template, from_call=None, tz=dt.timezone.utc):
+	async def _send_one(self, aprs_sender, name, weekday, addrcall, template, from_call=None, tz=dt.timezone.utc):
 		"""Send a single scheduled message to APRS-IS if it's due."""
 		now = dt.datetime.now(tz)
 		if now.weekday() != weekday:
-			return ais, False
+			return False
 		today = now.strftime('%Y-%m-%d')
 		source = from_call or FROMCALL
 		tracking_key = f'{name},{source}'
 		if self.tracking.get(tracking_key) == today:
-			return ais, False
+			return False
 		_, lat, lon, _, _, _ = await _get_current_location_data(self.cfg)
 		gridsquare = latlon_to_grid(lat, lon)
 		seq_mgr = Sequence(name='msg_sequence', modulo=100000)
@@ -600,7 +607,7 @@ class ScheduledMessageHandler:
 		message = f'{template} from ({gridsquare}) via {APP_NAME}'
 		if len(message) > 67:
 			logging.error('Message length %d exceeds APRS limit of 67 characters: %s', len(message), message)
-			return ais, False
+			return False
 		path_str = ''
 		if from_call:
 			path_str = f',{FROMCALL}'
@@ -609,8 +616,8 @@ class ScheduledMessageHandler:
 			parsed = aprslib.parse(payload)
 		except APRSParseError as err:
 			logging.error('APRS packet parsing error at %s: %s', name, err)
-			return ais, False
-		ais = await send_packet(ais, self.cfg, payload, name)
+			return False
+		await aprs_sender.send_packet(payload, name)
 		tg_msg = f'<u>{parsed["from"]} <b>{name}</b></u>\n\nFrom: <b>{parsed["from"]}</b>\nTo: <b>{parsed["addresse"]}</b>'
 		path_list = parsed.get('path')
 		if path_list:
@@ -620,11 +627,11 @@ class ScheduledMessageHandler:
 		tg_msg += f'\nMessage: <b>{parsed["message_text"]}</b>'
 		if parsed.get('msgNo'):
 			tg_msg += f'\nMessage No: <b>{parsed["msgNo"]}</b>'
-		await tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
+		await aprs_sender.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
 		seq_mgr._save()
 		self.tracking[tracking_key] = today
 		self.tracking.flush()
-		return ais, True
+		return True
 
 
 class TelegramLogger(object):
@@ -870,6 +877,53 @@ async def get_gpspos(cfg):
 	return timestamp, env_lat, env_lon, env_alt, 0, 0
 
 
+async def get_gpssat(cfg):
+	"""Get satellite from GPSD."""
+	timestamp = dt.datetime.now(dt.timezone.utc)
+	if not cfg.gpsd_enabled:
+		return timestamp, 0, 0
+	result = await _retrieve_gpsd_data(cfg, 'SKY', 'satellite')
+	if result:
+		utc = result.get('time', timestamp)
+		uSat = result.get('uSat', 0)
+		nSat = result.get('nSat', 0)
+		return utc, uSat, nSat
+	return timestamp, 0, 0
+
+
+async def get_coordinates():
+	"""Get approximate latitude and longitude using IP address lookup."""
+	url = 'http://ip-api.com/json/'
+	try:
+		async with aiohttp.ClientSession() as session:
+			async with session.get(url) as response:
+				data = await response.json()
+	except Exception as err:
+		logging.error('Failed to fetch coordinates from %s: %s', url, err)
+		return 0, 0
+	else:
+		try:
+			logging.debug('IP-Position: %f, %f', data['lat'], data['lon'])
+			return data['lat'], data['lon']
+		except (KeyError, TypeError) as err:
+			logging.error('Unexpected response format: %s', err)
+			return 0, 0
+
+
+async def _get_current_location_data(cfg, gps_data=None):
+	"""Determines the current location data from GPS or fallback to config.Returns a tuple of (timestamp, lat, lon, alt, spd, cse)."""
+	if not gps_data and cfg.gpsd_enabled:
+		gps_data = await get_gpspos(cfg)
+	if gps_data:
+		timestamp, lat, lon, alt, spd, cse = gps_data
+		if isinstance(lat, (int, float)) and isinstance(lon, (int, float)) and (lat != 0 or lon != 0):
+			return timestamp, lat, lon, alt, spd, cse
+	lat = float(cfg.latitude)
+	lon = float(cfg.longitude)
+	alt = float(cfg.altitude)
+	return None, lat, lon, alt, 0, 0
+
+
 def _lat_to_aprs(lat):
 	"""Format latitude for APRS."""
 	ns = 'N' if lat >= 0 else 'S'
@@ -918,25 +972,6 @@ def _spd_to_kmh(spd):
 	spd_kmh = max(0, spd_kmh)
 	spd_kmh = min(999, spd_kmh)
 	return f'{spd_kmh:03.0f}'
-
-
-async def get_coordinates():
-	"""Get approximate latitude and longitude using IP address lookup."""
-	url = 'http://ip-api.com/json/'
-	try:
-		async with aiohttp.ClientSession() as session:
-			async with session.get(url) as response:
-				data = await response.json()
-	except Exception as err:
-		logging.error('Failed to fetch coordinates from %s: %s', url, err)
-		return 0, 0
-	else:
-		try:
-			logging.debug('IP-Position: %f, %f', data['lat'], data['lon'])
-			return data['lat'], data['lon']
-		except (KeyError, TypeError) as err:
-			logging.error('Unexpected response format: %s', err)
-			return 0, 0
 
 
 def latlon_to_grid(lat, lon, precision=6):
@@ -998,193 +1033,173 @@ def format_address(address, include_flag=False):
 	return f' near {full_area}{cc_str},'
 
 
-async def get_gpssat(cfg):
-	"""Get satellite from GPSD."""
-	timestamp = dt.datetime.now(dt.timezone.utc)
-	if not cfg.gpsd_enabled:
-		return timestamp, 0, 0
-	result = await _retrieve_gpsd_data(cfg, 'SKY', 'satellite')
-	if result:
-		utc = result.get('time', timestamp)
-		uSat = result.get('uSat', 0)
-		nSat = result.get('nSat', 0)
-		return utc, uSat, nSat
-	return timestamp, 0, 0
+class APRSSender:
+	"""Class to handle APRS connection and packet sending."""
 
+	def __init__(self, cfg, tg_logger, sys_stats):
+		self.cfg = cfg
+		self.tg_logger = tg_logger
+		self.sys_stats = sys_stats
+		self.ais = None
 
-async def _get_current_location_data(cfg, gps_data=None):
-	"""Determines the current location data from GPS or fallback to config.Returns a tuple of (timestamp, lat, lon, alt, spd, cse)."""
-	if not gps_data and cfg.gpsd_enabled:
-		gps_data = await get_gpspos(cfg)
-	if gps_data:
-		timestamp, lat, lon, alt, spd, cse = gps_data
-		if isinstance(lat, (int, float)) and isinstance(lon, (int, float)) and (lat != 0 or lon != 0):
-			return timestamp, lat, lon, alt, spd, cse
-	lat = float(cfg.latitude)
-	lon = float(cfg.longitude)
-	alt = float(cfg.altitude)
-	return None, lat, lon, alt, 0, 0
+	async def connect(self):
+		"""Establish connection to APRS-IS with retries."""
+		logging.info('Connecting to APRS-IS server %s:%d as %s', self.cfg.server, self.cfg.port, FROMCALL)
+		self.ais = aprslib.IS(FROMCALL, passwd=self.cfg.passcode, host=self.cfg.server, port=self.cfg.port)
+		loop = asyncio.get_running_loop()
+		max_retries = 5
+		retry_delay = 5
+		for attempt in range(max_retries):
+			try:
+				await loop.run_in_executor(None, self.ais.connect)
+				# self.ais.set_filter(self.cfg.filter)
+				logging.info('Connected to APRS-IS server %s:%d as %s', self.cfg.server, self.cfg.port, FROMCALL)
+				return
+			except APRSConnectionError as err:
+				logging.warning('APRS connection error (attempt %d/%d): %s', attempt + 1, max_retries, err)
+				if attempt < max_retries - 1:
+					await asyncio.sleep(retry_delay)
+					retry_delay = min(retry_delay * 2, 60)
+		logging.error('Connection error, exiting')
+		sys.exit(getattr(os, 'EX_NOHOST', 1))
 
+	async def send_packet(self, payload, log_context='packet'):
+		"""Send a packet with random delay and retry logic."""
+		while True:
+			try:
+				await asyncio.sleep(random.uniform(0, 5))
+				self.ais.sendall(payload)
+				logging.info(payload)
+				return
+			except APRSConnectionError as err:
+				logging.error('APRS connection error at %s: %s', log_context, err)
+				await self.connect()
 
-async def send_packet(ais, cfg, payload, log_context='packet'):
-	"""Send a packet with random delay and retry logic."""
-	while True:
+	async def send_position(self, gps_data=None):
+		"""Send APRS position packet to APRS-IS."""
+		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = await _get_current_location_data(self.cfg, gps_data)
+		latstr = _lat_to_aprs(cur_lat)
+		lonstr = _lon_to_aprs(cur_lon)
+		altstr = _alt_to_aprs(cur_alt)
+		spdstr = _spd_to_knots(cur_spd)
+		csestr = _cse_to_aprs(cur_cse)
+		spdkmh = _spd_to_kmh(cur_spd)
+		mmdvminfo = self.sys_stats.mmdvm_info
+		osinfo = self.sys_stats.os_info
+		comment = f'{mmdvminfo}{osinfo} {PROJECT_URL}'
+		ztime = dt.datetime.now(dt.timezone.utc)
+		timestamp = cur_time.strftime('%d%H%Mz') if cur_time else ztime.strftime('%d%H%Mz')
+		symbt = self.cfg.symbol_table
+		symb = self.cfg.symbol
+		if self.cfg.symbol_overlay:
+			symbt = self.cfg.symbol_overlay
+		tgposmoving = ''
+		extdatstr = ''
+		if cur_spd > 0:
+			extdatstr = f'{csestr}/{spdstr}'
+			tgposmoving = f'\n\tSpeed: <b>{int(cur_spd)}m/s</b> | <b>{int(spdkmh)}km/h</b> | <b>{int(spdstr)}kn</b>\n\tCourse: <b>{int(cur_cse)}°</b>'
+			if self.cfg.smartbeaconing_enabled:
+				sspd = self.cfg.smartbeaconing_slow_speed
+				fspd = self.cfg.smartbeaconing_fast_speed
+				kmhspd = int(spdkmh)
+				if kmhspd > fspd:
+					symbt, symb = '\\', '>'
+				elif sspd < kmhspd <= fspd:
+					symbt, symb = '/', '>'
+				elif 0 < kmhspd <= sspd:
+					symbt, symb = '/', '('
+		lookup_table = symbt if symbt in ['/', '\\'] else '\\'
+		sym_desc = symbols.get_desc(lookup_table, symb).split('(')[0].strip()
+		payload = f'@{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
+		posit = f'{FROMCALL}>{TOCALL}:{payload}'
+		tgpos = f'<u>{FROMCALL} Position</u>\n\nTime: <b>{timestamp}</b>\nSymbol: {symbt}{symb} ({sym_desc})\nPosition:\n\tLatitude: <b>{cur_lat}</b>\n\tLongitude: <b>{cur_lon}</b>\n\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\nComment: <b>{comment}</b>'
+		await self.send_packet(posit, 'position')
+		await self.tg_logger.log(tgpos, cur_lat, cur_lon, int(csestr))
+
+	async def send_header(self):
+		"""Send APRS header information to APRS-IS."""
+		caller = f'{FROMCALL}>{TOCALL}::{FROMCALL:9s}:'
+		params = ['CPUTemp', 'CPULoad', 'RAMUsed', 'DiskUsed']
+		units = ['deg.C', '%', 'GB', 'GB']
+		eqns = ['0,0.1,0', '0,0.001,0', '0,0.001,0', '0,0.001,0']
+		if self.cfg.gpsd_enabled:
+			params.append('GPSUsed')
+			units.append('sats')
+			eqns.append('0,1,0')
+		payload = f'{caller}PARM.{",".join(params)}\r\n{caller}UNIT.{",".join(units)}\r\n{caller}EQNS.{",".join(eqns)}'
+		tg_msg = f'<u>{FROMCALL} Header</u>\n\nParameters: <b>{",".join(params)}</b>\nUnits: <b>{",".join(units)}</b>\nEquations: <b>{",".join(eqns)}</b>\n\nValue: <code>[a,b,c]=(a×v²)+(b×v)+c</code>'
+		await self.send_packet(payload, 'header')
+		await self.tg_logger.log(tg_msg)
+
+	async def send_telemetry(self):
+		"""Send APRS telemetry information to APRS-IS."""
+		with Sequence(name='telem_sequence', modulo=1000) as seq_mgr:
+			seq = seq_mgr.count
+		temp = self.sys_stats.cur_temp
+		cpuload = self.sys_stats.avg_cpu_load
+		memused = self.sys_stats.memory_used
+		diskused = self.sys_stats.storage_used
+		telemmemused = int(memused / 1.0000e6)
+		telemdiskused = int(diskused / 1.0000e6)
+		telem = f'{FROMCALL}>{TOCALL}:T#{seq:03d},{temp:d},{cpuload:d},{telemmemused:d},{telemdiskused:d}'
+		tgtel = (
+			f'<u>{FROMCALL} Telemetry</u>\n\n'
+			f'Sequence: <b>#{seq}</b>\n'
+			f'CPU Temp: <b>{temp / 10:.1f} °C</b>\n'
+			f'CPU Load: <b>{cpuload / 1000:.1f}%</b>\n'
+			f'RAM Used: <b>{humanize.naturalsize(memused, binary=True)}</b>\n'
+			f'Disk Used: <b>{humanize.naturalsize(diskused, binary=True)}</b>'
+		)
+		if self.cfg.gpsd_enabled:
+			_, uSat, _ = await get_gpssat(self.cfg)
+			telem += f',{uSat:d}'
+			tgtel += f'\nGPS Used: <b>{uSat}</b>'
+		await self.send_packet(telem, 'telemetry')
+		await self.tg_logger.log(tgtel)
+
+	async def send_status(self, gps_data=None):
+		"""Send APRS status information to APRS-IS."""
+		_, lat, lon, _, _, _ = await _get_current_location_data(self.cfg, gps_data)
+		gridsquare = latlon_to_grid(lat, lon)
+		address = get_add_from_pos(lat, lon)
+		near_add = format_address(address)
+		near_add_tg = format_address(address, True)
+		ztime = dt.datetime.now(dt.timezone.utc)
+		timestamp = ztime.strftime('%d%H%Mz')
+		sats_info = ''
+		if self.cfg.gpsd_enabled:
+			timez, u_sat, n_sat = await get_gpssat(self.cfg)
+			if u_sat > 0:
+				timestamp = timez.strftime('%d%H%Mz')
+				sats_info = f', gps: {u_sat}/{n_sat}'
+			else:
+				sats_info = f', gps: {u_sat}'
+		uptime = self.sys_stats.uptime
+		status_text = f'{timestamp}[{gridsquare}]{near_add} {uptime}{sats_info}'
+		aprs_packet = f'{FROMCALL}>{TOCALL}:>{status_text}'
+		tg_msg = f'<u>{FROMCALL} Status</u>\n\n<b>{timestamp}[{gridsquare}]{near_add_tg} {uptime}{sats_info}</b>'
+		if os.path.exists(STATUS_FILE):
+			try:
+				with open(STATUS_FILE, 'r') as f:
+					if f.read() == aprs_packet:
+						return
+			except (IOError, OSError):
+				pass
+		await self.send_packet(aprs_packet, 'status')
 		try:
-			await asyncio.sleep(random.uniform(0, 5))
-			ais.sendall(payload)
-			logging.info(payload)
-			return ais
-		except APRSConnectionError as err:
-			logging.error('APRS connection error at %s: %s', log_context, err)
-			ais = await ais_connect(cfg)
-
-
-async def send_position(ais, cfg, tg_logger, sys_stats, gps_data=None):
-	"""Send APRS position packet to APRS-IS."""
-	cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = await _get_current_location_data(cfg, gps_data)
-	latstr = _lat_to_aprs(cur_lat)
-	lonstr = _lon_to_aprs(cur_lon)
-	altstr = _alt_to_aprs(cur_alt)
-	spdstr = _spd_to_knots(cur_spd)
-	csestr = _cse_to_aprs(cur_cse)
-	spdkmh = _spd_to_kmh(cur_spd)
-	mmdvminfo = sys_stats.mmdvm_info()
-	osinfo = sys_stats.os_info()
-	comment = f'{mmdvminfo}{osinfo} {PROJECT_URL}'
-	ztime = dt.datetime.now(dt.timezone.utc)
-	timestamp = cur_time.strftime('%d%H%Mz') if cur_time else ztime.strftime('%d%H%Mz')
-	symbt = cfg.symbol_table
-	symb = cfg.symbol
-	if cfg.symbol_overlay:
-		symbt = cfg.symbol_overlay
-	tgposmoving = ''
-	extdatstr = ''
-	if cur_spd > 0:
-		extdatstr = f'{csestr}/{spdstr}'
-		tgposmoving = f'\n\tSpeed: <b>{int(cur_spd)}m/s</b> | <b>{int(spdkmh)}km/h</b> | <b>{int(spdstr)}kn</b>\n\tCourse: <b>{int(cur_cse)}°</b>'
-		if cfg.smartbeaconing_enabled:
-			sspd = cfg.smartbeaconing_slow_speed
-			fspd = cfg.smartbeaconing_fast_speed
-			kmhspd = int(spdkmh)
-			if kmhspd > fspd:
-				symbt, symb = '\\', '>'
-			elif sspd < kmhspd <= fspd:
-				symbt, symb = '/', '>'
-			elif 0 < kmhspd <= sspd:
-				symbt, symb = '/', '('
-	lookup_table = symbt if symbt in ['/', '\\'] else '\\'
-	sym_desc = symbols.get_desc(lookup_table, symb).split('(')[0].strip()
-	payload = f'@{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
-	posit = f'{FROMCALL}>{TOCALL}:{payload}'
-	tgpos = f'<u>{FROMCALL} Position</u>\n\nTime: <b>{timestamp}</b>\nSymbol: {symbt}{symb} ({sym_desc})\nPosition:\n\tLatitude: <b>{cur_lat}</b>\n\tLongitude: <b>{cur_lon}</b>\n\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\nComment: <b>{comment}</b>'
-	ais = await send_packet(ais, cfg, posit, 'position')
-	await tg_logger.log(tgpos, cur_lat, cur_lon, int(csestr))
-	return ais
-
-
-async def send_header(ais, cfg, tg_logger):
-	"""Send APRS header information to APRS-IS."""
-	caller = f'{FROMCALL}>{TOCALL}::{FROMCALL:9s}:'
-	params = ['CPUTemp', 'CPULoad', 'RAMUsed', 'DiskUsed']
-	units = ['deg.C', '%', 'GB', 'GB']
-	eqns = ['0,0.1,0', '0,0.001,0', '0,0.001,0', '0,0.001,0']
-	if cfg.gpsd_enabled:
-		params.append('GPSUsed')
-		units.append('sats')
-		eqns.append('0,1,0')
-	payload = f'{caller}PARM.{",".join(params)}\r\n{caller}UNIT.{",".join(units)}\r\n{caller}EQNS.{",".join(eqns)}'
-	tg_msg = f'<u>{FROMCALL} Header</u>\n\nParameters: <b>{",".join(params)}</b>\nUnits: <b>{",".join(units)}</b>\nEquations: <b>{",".join(eqns)}</b>\n\nValue: <code>[a,b,c]=(a×v²)+(b×v)+c</code>'
-	ais = await send_packet(ais, cfg, payload, 'header')
-	await tg_logger.log(tg_msg)
-	return ais
-
-
-async def send_telemetry(ais, cfg, tg_logger, sys_stats):
-	"""Send APRS telemetry information to APRS-IS."""
-	with Sequence(name='telem_sequence', modulo=1000) as seq_mgr:
-		seq = seq_mgr.count
-	temp = sys_stats.cur_temp()
-	cpuload = sys_stats.avg_cpu_load()
-	memused = sys_stats.memory_used()
-	diskused = sys_stats.storage_used()
-	telemmemused = int(memused / 1.0000e6)
-	telemdiskused = int(diskused / 1.0000e6)
-	telem = f'{FROMCALL}>{TOCALL}:T#{seq:03d},{temp:d},{cpuload:d},{telemmemused:d},{telemdiskused:d}'
-	tgtel = (
-		f'<u>{FROMCALL} Telemetry</u>\n\n'
-		f'Sequence: <b>#{seq}</b>\n'
-		f'CPU Temp: <b>{temp / 10:.1f} °C</b>\n'
-		f'CPU Load: <b>{cpuload / 1000:.1f}%</b>\n'
-		f'RAM Used: <b>{humanize.naturalsize(memused, binary=True)}</b>\n'
-		f'Disk Used: <b>{humanize.naturalsize(diskused, binary=True)}</b>'
-	)
-	if cfg.gpsd_enabled:
-		_, uSat, _ = await get_gpssat(cfg)
-		telem += f',{uSat:d}'
-		tgtel += f'\nGPS Used: <b>{uSat}</b>'
-	ais = await send_packet(ais, cfg, telem, 'telemetry')
-	await tg_logger.log(tgtel)
-	return ais
-
-
-async def send_status(ais, cfg, tg_logger, sys_stats, gps_data=None):
-	"""Send APRS status information to APRS-IS."""
-	_, lat, lon, _, _, _ = await _get_current_location_data(cfg, gps_data)
-	gridsquare = latlon_to_grid(lat, lon)
-	address = get_add_from_pos(lat, lon)
-	near_add = format_address(address)
-	near_add_tg = format_address(address, True)
-	ztime = dt.datetime.now(dt.timezone.utc)
-	timestamp = ztime.strftime('%d%H%Mz')
-	sats_info = ''
-	if cfg.gpsd_enabled:
-		timez, u_sat, n_sat = await get_gpssat(cfg)
-		if u_sat > 0:
-			timestamp = timez.strftime('%d%H%Mz')
-			sats_info = f', gps: {u_sat}/{n_sat}'
-		else:
-			sats_info = f', gps: {u_sat}'
-	uptime = sys_stats.uptime()
-	status_text = f'{timestamp}[{gridsquare}]{near_add} {uptime}{sats_info}'
-	aprs_packet = f'{FROMCALL}>{TOCALL}:>{status_text}'
-	tg_msg = f'<u>{FROMCALL} Status</u>\n\n<b>{timestamp}[{gridsquare}]{near_add_tg} {uptime}{sats_info}</b>'
-	if os.path.exists(STATUS_FILE):
-		try:
-			with open(STATUS_FILE, 'r') as f:
-				if f.read() == aprs_packet:
-					return ais
+			with open(STATUS_FILE, 'w') as f:
+				f.write(aprs_packet)
 		except (IOError, OSError):
 			pass
-	ais = await send_packet(ais, cfg, aprs_packet, 'status')
-	try:
-		with open(STATUS_FILE, 'w') as f:
-			f.write(aprs_packet)
-	except (IOError, OSError):
-		pass
-	await tg_logger.log(tg_msg)
-	return ais
+		await self.tg_logger.log(tg_msg)
 
-
-async def ais_connect(cfg):
-	"""Establish connection to APRS-IS with retries."""
-	logging.info('Connecting to APRS-IS server %s:%d as %s', cfg.server, cfg.port, FROMCALL)
-	ais = aprslib.IS(FROMCALL, passwd=cfg.passcode, host=cfg.server, port=cfg.port)
-	loop = asyncio.get_running_loop()
-	max_retries = 5
-	retry_delay = 5
-	for attempt in range(max_retries):
-		try:
-			await loop.run_in_executor(None, ais.connect)
-			# ais.set_filter(cfg.filter)
-			logging.info('Connected to APRS-IS server %s:%d as %s', cfg.server, cfg.port, FROMCALL)
-			return ais
-		except APRSConnectionError as err:
-			logging.warning('APRS connection error (attempt %d/%d): %s', attempt + 1, max_retries, err)
-			if attempt < max_retries - 1:
-				await asyncio.sleep(retry_delay)
-				retry_delay = min(retry_delay * 2, 60)
-	logging.error('Connection error, exiting')
-	sys.exit(getattr(os, 'EX_NOHOST', 1))
+	def close(self):
+		"""Close the APRS-IS connection."""
+		if self.ais:
+			try:
+				self.ais.close()
+			except Exception:
+				pass
 
 
 def should_send_position(cfg, timer_tick, sb, gps_data):
@@ -1214,16 +1229,17 @@ async def initialize_session(cfg):
 	if cfg.gpsd_enabled:
 		gps_data = await get_gpspos(cfg)
 		cfg.timestamp, cfg.latitude, cfg.longitude, cfg.altitude, cfg.speed, cfg.course = gps_data
-	ais = await ais_connect(cfg)
 	tg_logger = TelegramLogger(cfg)
+	sys_stats = SystemStats()
+	aprs_sender = APRSSender(cfg, tg_logger, sys_stats)
+	await aprs_sender.connect()
 	timer = Timer()
 	sb = SmartBeaconing(cfg)
-	sys_stats = SystemStats()
 	scheduled_msg_handler = ScheduledMessageHandler(cfg)
-	return ais, tg_logger, timer, sb, sys_stats, scheduled_msg_handler
+	return aprs_sender, tg_logger, timer, sb, sys_stats, scheduled_msg_handler
 
 
-def _get_tasks(cfg, timer_tick, sb, gps_data, tg_logger, sys_stats, scheduled_msg_handler):
+def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, scheduled_msg_handler):
 	class Task(NamedTuple):
 		condition: bool
 		func: Callable
@@ -1231,14 +1247,14 @@ def _get_tasks(cfg, timer_tick, sb, gps_data, tg_logger, sys_stats, scheduled_ms
 		kwargs: dict
 
 	return [
-		Task(should_send_position(cfg, timer_tick, sb, gps_data), send_position, (cfg, tg_logger, sys_stats), {'gps_data': gps_data}),
-		Task(timer_tick % 14400 == 1, send_header, (cfg, tg_logger), {}),
-		Task(timer_tick % cfg.sleep == 1, send_telemetry, (cfg, tg_logger, sys_stats), {}),
-		Task(True, scheduled_msg_handler.send_all, (tg_logger,), {}),
+		Task(should_send_position(cfg, timer_tick, sb, gps_data), aprs_sender.send_position, (), {'gps_data': gps_data}),
+		Task(timer_tick % 14400 == 1, aprs_sender.send_header, (), {}),
+		Task(timer_tick % cfg.sleep == 1, aprs_sender.send_telemetry, (), {}),
+		Task(True, scheduled_msg_handler.send_all, (aprs_sender,), {}),
 	]
 
 
-async def process_loop(cfg, ais, tg_logger, timer, sb, sys_stats, reload_event, scheduled_msg_handler):
+async def process_loop(cfg, aprs_sender, tg_logger, timer, sb, sys_stats, reload_event, scheduled_msg_handler):
 	"""Run the main processing loop."""
 	while True:
 		with timer:
@@ -1249,22 +1265,18 @@ async def process_loop(cfg, ais, tg_logger, timer, sb, sys_stats, reload_event, 
 		if cfg.gpsd_enabled:
 			gps_data = await get_gpspos(cfg)
 		packet_sent = False
-		tasks = _get_tasks(cfg, timer_tick, sb, gps_data, tg_logger, sys_stats, scheduled_msg_handler)
+		tasks = _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, scheduled_msg_handler)
 		for task in tasks:
 			if task.condition:
 				try:
-					res = await task.func(ais, *task.args, **task.kwargs)
-					if isinstance(res, tuple):
-						ais, sent = res
-					else:
-						ais = res
-						sent = True
+					res = await task.func(*task.args, **task.kwargs)
+					sent = res if isinstance(res, bool) else True
 					if sent:
 						packet_sent = True
 				except Exception as e:
 					logging.error('Error executing task %s: %s', task.func.__name__, e, exc_info=True)
 		if packet_sent:
-			ais = await send_status(ais, cfg, tg_logger, sys_stats, gps_data=gps_data)
+			await aprs_sender.send_status(gps_data=gps_data)
 		await asyncio.sleep(0.5)
 
 
@@ -1275,22 +1287,18 @@ async def main():
 	cfg = Config()
 	while True:
 		reload_event.clear()
-		ais, tg_logger, timer, sb, sys_stats, scheduled_msg_handler = await initialize_session(cfg)
+		aprs_sender, tg_logger, timer, sb, sys_stats, scheduled_msg_handler = await initialize_session(cfg)
 		async with tg_logger:
 			await tg_logger.log(f'🚀 <b>{FROMCALL}</b>, {APP_NAME} starting up...')
 			try:
-				await process_loop(cfg, ais, tg_logger, timer, sb, sys_stats, reload_event, scheduled_msg_handler)
+				await process_loop(cfg, aprs_sender, tg_logger, timer, sb, sys_stats, reload_event, scheduled_msg_handler)
 			finally:
 				if reload_event.is_set():
 					await tg_logger.log(f'🔄 <b>{FROMCALL}</b>, {APP_NAME} reloading configuration...')
 				else:
 					await tg_logger.log(f'🛑 <b>{FROMCALL}</b>, {APP_NAME} shutting down...')
 				await tg_logger.stop_location()
-				if ais:
-					try:
-						ais.close()
-					except Exception:
-						pass
+				aprs_sender.close()
 		if not reload_event.is_set():
 			break
 
