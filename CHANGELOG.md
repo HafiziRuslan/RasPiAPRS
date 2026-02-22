@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-22T23:58:35+08:00)
+## [beta7] - (2026-02-23T00:24:35+08:00)
 
-- 59 commit(s) contributed to the release.
+- 60 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
@@ -41,6 +41,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta7
 
+- [ee437c6](https://github.com/HafiziRuslan/RasPiAPRS/commit/ee437c692abeff4a90a8017872b17115250c5964) fix(sqlite): migrate to persistent dict and adjust sequence handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T00:24:35+08:00*
 - [6e14b8b](https://github.com/HafiziRuslan/RasPiAPRS/commit/6e14b8b676ccb24e59ee7c8cc3f4e782196a2a5b) fix(cliff): standardize quote usage in cliff.toml *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T23:34:51+08:00*
 - [f461d81](https://github.com/HafiziRuslan/RasPiAPRS/commit/f461d81856ef41e68c4bfa2dd242072d07d7999a) fix(main): format path as comma-separated list in tg message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T23:22:43+08:00*
 - [56a6429](https://github.com/HafiziRuslan/RasPiAPRS/commit/56a64293c566b5fa109933ba12f94c125253c274) fix(core): simplify path_str when from_call is true *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T23:18:04+08:00*
@@ -978,4 +979,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-22T23:59:00.975133568+08:00
+generated using git-cliff on 2026-02-23T00:25:00.351960680+08:00
