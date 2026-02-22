@@ -557,8 +557,9 @@ class ScheduledMessageHandler:
 			ais.sendall(payload)
 			logging.info(payload)
 			tg_msg = f'<u>{parsed["from"]} <b>{name}</b></u>\n\nFrom: <b>{parsed["from"]}</b>\nTo: <b>{parsed["addresse"]}</b>'
-			if parsed.get('path'):
-				tg_msg += f'\nPath: <b>{parsed["path"]}</b>'
+			path_list = parsed.get('path')
+			if path_list:
+				tg_msg += f'\nPath: <b>{", ".join(path_list)}</b>'
 			if parsed.get('via'):
 				tg_msg += f'\nvia: <b>{parsed["via"]}</b>'
 			tg_msg += f'\nMessage: <b>{parsed["message_text"]}</b>'
