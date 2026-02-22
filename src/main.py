@@ -532,7 +532,9 @@ class ScheduledMessageHandler:
 		if now.weekday() != weekday:
 			return ais
 		today = now.strftime('%Y-%m-%d')
-		if self.tracking.get(name) == today:
+		source = from_call or FROMCALL
+		tracking_key = f'{name}:{source}'
+		if self.tracking.get(tracking_key) == today:
 			return ais
 		_, lat, lon, _, _, _ = await _get_current_location_data(self.cfg)
 		gridsquare = latlon_to_grid(lat, lon)
@@ -542,7 +544,6 @@ class ScheduledMessageHandler:
 		if len(message) > 67:
 			logging.error('Message length %d exceeds APRS limit of 67 characters: %s', len(message), message)
 			return ais
-		source = from_call or FROMCALL
 		path_str = ''
 		if from_call:
 			path_str = f',{FROMCALL}'
@@ -562,7 +563,7 @@ class ScheduledMessageHandler:
 			if parsed.get('msgNo'):
 				tg_msg += f'\nMessage No: <b>{parsed["msgNo"]}</b>'
 			await tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
-			self.tracking[name] = today
+			self.tracking[tracking_key] = today
 			ais = await send_status(ais, self.cfg, tg_logger, sys_stats)
 		except APRSConnectionError as err:
 			logging.error('APRS connection error at %s: %s', name, err)
