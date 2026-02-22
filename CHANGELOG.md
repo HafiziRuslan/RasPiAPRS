@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-22T01:19:37+08:00)
+## [beta7] - (2026-02-22T18:48:18+08:00)
 
-- 41 commit(s) contributed to the release.
-- 4 day(s) passed between the first and last commit.
-- 5 day(s) passed between releases.
+- 42 commit(s) contributed to the release.
+- 5 day(s) passed between the first and last commit.
+- 6 day(s) passed between releases.
 
 ### 🚀 Features in beta7
 
@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta7
 
+- [9cfc0bd](https://github.com/HafiziRuslan/RasPiAPRS/commit/9cfc0bd07297febb0533ebce7f843f53d4df1c6b) fix(app): apply global caller constants and minor refactors *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T18:48:18+08:00*
 - [cb7442f](https://github.com/HafiziRuslan/RasPiAPRS/commit/cb7442f782c942e136d1c443661eae057f57a10e) fix(login): clean up commented blocks and env handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-21T23:19:31+08:00*
 - [202883c](https://github.com/HafiziRuslan/RasPiAPRS/commit/202883ccb1fa20cc53aa8d1df164a24e35911613) fix(data): handle GPSD TPV mode properly in dict_stream retrieval *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-21T02:30:05+08:00*
 - [b1c8c21](https://github.com/HafiziRuslan/RasPiAPRS/commit/b1c8c2191008e3136e1e1ed43eb1cbe8de1c1720) fix(ais): adjust position sending logic to respect gpsd and beaconing flags *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T21:21:43+08:00*
@@ -959,4 +960,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-22T01:21:05.975445901+08:00
+generated using git-cliff on 2026-02-22T18:49:06.856141683+08:00
