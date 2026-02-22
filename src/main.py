@@ -546,7 +546,7 @@ class ScheduledMessageHandler:
 			return ais
 		path_str = ''
 		if from_call:
-			path_str = f',{FROMCALL}'
+			path_str = f',RELAY,{FROMCALL}*,qAR,{FROMCALL}'
 		payload = f'{source}>{TOCALL}{path_str}::{addrcall:9s}:{message}'
 		try:
 			parsed = aprslib.parse(payload)
@@ -557,6 +557,8 @@ class ScheduledMessageHandler:
 			ais.sendall(payload)
 			logging.info(payload)
 			tg_msg = f'<u>{parsed["from"]} <b>{name}</b></u>\n\nFrom: <b>{parsed["from"]}</b>\nTo: <b>{parsed["addresse"]}</b>'
+			if parsed.get('path'):
+				tg_msg += f'\nPath: <b>{parsed["path"]}</b>'
 			if parsed.get('via'):
 				tg_msg += f'\nvia: <b>{parsed["via"]}</b>'
 			tg_msg += f'\nMessage: <b>{parsed["message_text"]}</b>'
