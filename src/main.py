@@ -15,7 +15,7 @@ import subprocess
 import sys
 import time
 import tomllib
-from collections import UserDict
+from collections import UserDict, deque
 from dataclasses import dataclass
 from typing import Callable, NamedTuple
 
@@ -398,6 +398,7 @@ class SystemStats(object):
 
 	def __init__(self):
 		self._cache = {}
+		self._temp_history = deque()
 
 	def _get_cached(self, key, func, ttl=10):
 		now = time.time()
@@ -415,7 +416,7 @@ class SystemStats(object):
 
 		def _fetch():
 			try:
-				load = psutil.getloadavg()[2]
+				load = psutil.getloadavg()[1]
 				core = psutil.cpu_count()
 				return int((load / core) * 100 * 1000)
 			except Exception as e:
@@ -455,9 +456,22 @@ class SystemStats(object):
 
 		return self._get_cached('storage_used', _fetch, ttl=60)
 
+	def check_temp(self):
+		"""Check and record current temperature."""
+		try:
+			temperature = psutil.sensors_temperatures()['cpu_thermal'][0].current
+			now = time.time()
+			self._temp_history.append((now, temperature))
+			while self._temp_history and self._temp_history[0][0] < now - 600:
+				self._temp_history.popleft()
+		except Exception:
+			pass
+
 	@property
 	def cur_temp(self):
 		"""Get CPU temperature in degC."""
+		if self._temp_history:
+			return int((sum(t for _, t in self._temp_history) / len(self._temp_history)) * 10)
 
 		def _fetch():
 			try:
@@ -1261,6 +1275,8 @@ async def process_loop(cfg, aprs_sender, tg_logger, timer, sb, sys_stats, reload
 			timer_tick = timer.count
 		if reload_event.is_set():
 			break
+		if timer_tick % 20 == 0:
+			sys_stats.check_temp()
 		gps_data = None
 		if cfg.gpsd_enabled:
 			gps_data = await get_gpspos(cfg)
