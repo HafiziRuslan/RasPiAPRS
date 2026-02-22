@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-22T20:11:43+08:00)
+## [beta7] - (2026-02-22T20:48:50+08:00)
 
-- 47 commit(s) contributed to the release.
+- 48 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
@@ -60,6 +60,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta7
 
+- [8852aa5](https://github.com/HafiziRuslan/RasPiAPRS/commit/8852aa5059dbbb0e16780f0c5ee32bb4c5d81944) refactor(main): integrate scheduled message handler into loop and init *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T20:48:50+08:00*
 - [8cfc5c4](https://github.com/HafiziRuslan/RasPiAPRS/commit/8cfc5c4c4c7e6174ecd335f93a2431ce9e5bc6df) refactor(main): streamline sequence and timer usage *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-20T06:19:18+08:00*
 - [42d0039](https://github.com/HafiziRuslan/RasPiAPRS/commit/42d00393e710684b327b09f5cfb8c71edc10e937) refactor(main): implement APRS/Telegram live location and smarter sending logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-18T02:01:34+08:00*
 
@@ -965,4 +966,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-22T20:12:18.773153453+08:00
+generated using git-cliff on 2026-02-22T21:09:19.855942896+08:00
