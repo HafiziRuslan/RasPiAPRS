@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-22T23:34:51+08:00)
+## [beta7] - (2026-02-22T23:58:35+08:00)
 
-- 58 commit(s) contributed to the release.
+- 59 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
 ### 🚀 Features in beta7
 
+- [96d719d](https://github.com/HafiziRuslan/RasPiAPRS/commit/96d719db63739fd4b5677f3141c1c5333ca48cbe) feat(main): introduce persistent dict-based cache and tracking *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T23:58:35+08:00*
 - [cc61f21](https://github.com/HafiziRuslan/RasPiAPRS/commit/cc61f210fd7377ab962979fb5e802b7a5ef6eaa6) feat(src/main): add relay path to payload and telegram log *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T22:53:28+08:00*
 - [f92766b](https://github.com/HafiziRuslan/RasPiAPRS/commit/f92766b47479f858c62b7b97b7c87830a0db7c73) feat(config): support additional sender config and message routing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T21:34:36+08:00*
 - [b0ba844](https://github.com/HafiziRuslan/RasPiAPRS/commit/b0ba844f58a94e3c9cc1f7e5047211d10a18bd60) feat(performance): introduce persistent file-based counters for seq and timer *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T19:28:01+08:00*
@@ -977,4 +978,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-22T23:35:18.003370740+08:00
+generated using git-cliff on 2026-02-22T23:59:00.975133568+08:00
