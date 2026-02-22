@@ -180,6 +180,7 @@ class Config:
 	telegram_token: str | None = None
 	telegram_chat_id: str | None = None
 	telegram_topic_id: int | None = None
+	telegram_msg_topic_id: int | None = None
 	telegram_loc_topic_id: int | None = None
 	aprsthursday_enabled: bool = False
 	aprsmysunday_enabled: bool = False
@@ -232,6 +233,7 @@ class Config:
 			self.telegram_token = os.getenv('TELEGRAM_TOKEN')
 			self.telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID')
 			self.telegram_topic_id = _env_get_int_or_none('TELEGRAM_TOPIC_ID')
+			self.telegram_msg_topic_id = _env_get_int_or_none('TELEGRAM_MSG_TOPIC_ID')
 			self.telegram_loc_topic_id = _env_get_int_or_none('TELEGRAM_LOC_TOPIC_ID')
 		self.aprsthursday_enabled = _env_get_bool('APRSTHURSDAY_ENABLE')
 		self.aprsmysunday_enabled = _env_get_bool('APRSMYSUNDAY_ENABLE')
@@ -559,7 +561,7 @@ class ScheduledMessageHandler:
 			tg_msg += f'\nMessage: <b>{parsed["message_text"]}</b>'
 			if parsed.get('msgNo'):
 				tg_msg += f'\nMessage No: <b>{parsed["msgNo"]}</b>'
-			await tg_logger.log(tg_msg)
+			await tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
 			self.tracking[name] = today
 			ais = await send_status(ais, self.cfg, tg_logger, sys_stats)
 		except APRSConnectionError as err:
@@ -612,7 +614,7 @@ class TelegramLogger(object):
 				await asyncio.sleep(delay)
 				delay *= 2
 
-	async def log(self, tg_message: str, lat: float = 0.0, lon: float = 0.0, cse: float = 0.0):
+	async def log(self, tg_message: str, lat: float = 0.0, lon: float = 0.0, cse: float = 0.0, topic_id: int | None = None):
 		"""Send log message and optionally location to Telegram channel."""
 		if not self.enabled or not self.bot:
 			return
@@ -623,8 +625,9 @@ class TelegramLogger(object):
 				'parse_mode': 'HTML',
 				'link_preview_options': {'is_disabled': True, 'prefer_small_media': True, 'show_above_text': True},
 			}
-			if self.topic_id:
-				msg_kwargs['message_thread_id'] = self.topic_id
+			current_topic_id = topic_id if topic_id is not None else self.topic_id
+			if current_topic_id:
+				msg_kwargs['message_thread_id'] = current_topic_id
 			msg = await self._call_with_retry(self.bot.send_message, **msg_kwargs)
 			logging.info('Sent message to Telegram: %s/%s/%s', msg.chat_id, msg.message_thread_id, msg.message_id)
 			if lat != 0 and lon != 0:
