@@ -7,14 +7,16 @@ import json
 import logging
 import logging.handlers
 import os
-import signal
+import re
 import shutil
+import signal
 import subprocess
 import sys
-import re
 import time
 import tomllib
+from collections import UserDict
 from dataclasses import dataclass
+
 import aiohttp
 import aprslib
 import dotenv
@@ -37,12 +39,9 @@ MMDVMHOST_FILE = f'{ETC_DIR}/mmdvmhost'
 # Temporary files path
 GPS_FILE = f'{TMP_DIR}/gps.json'
 LOCATION_ID_FILE = f'{TMP_DIR}/location_id.tmp'
-MSG_SEQUENCE_FILE = f'{TMP_DIR}/msg_sequence.tmp'
 MSG_TRACKING_FILE = f'{TMP_DIR}/msg_tracking.json'
 NOMINATIM_CACHE_FILE = f'{TMP_DIR}/nominatim_cache.json'
-SEQUENCE_FILE = f'{TMP_DIR}/sequence.tmp'
 STATUS_FILE = f'{TMP_DIR}/status.tmp'
-TIMER_FILE = f'{TMP_DIR}/timer.tmp'
 
 
 def get_app_metadata():
@@ -260,20 +259,28 @@ class PersistentCounter:
 		self.modulo = modulo
 		self._count = 0
 
-	def __enter__(self):
+	def _load(self):
 		try:
 			with open(self.file_path) as fds:
 				self._count = int(fds.readline())
+			if self._count >= self.modulo:
+				self._count = 0
 		except (IOError, ValueError):
 			self._count = 0
-		return self
 
-	def __exit__(self, exc_type, exc_val, exc_tb):
+	def _save(self):
 		try:
 			with open(self.file_path, 'w') as fds:
 				fds.write(f'{self._count:d}')
 		except IOError:
 			pass
+
+	def __enter__(self):
+		self._load()
+		return self
+
+	def __exit__(self, exc_type, exc_val, exc_tb):
+		self._save()
 
 	@property
 	def count(self):
@@ -281,7 +288,7 @@ class PersistentCounter:
 		return self._count
 
 
-class PersistentDict(dict):
+class PersistentDict(UserDict):
 	"""A dictionary that is persisted to a JSON file."""
 
 	def __init__(self, path):
@@ -305,14 +312,13 @@ class PersistentDict(dict):
 	def _save(self):
 		try:
 			with open(self.file_path, 'w') as f:
-				json.dump(self, f)
+				json.dump(self.data, f)
 		except (IOError, OSError) as e:
 			logging.error('Failed to save persistent dict to %s: %s', self.file_path, e)
 
 	def reload(self):
 		"""Reload data from disk."""
-		super().clear()
-		super().update(self._load())
+		self.data = self._load()
 
 	def flush(self):
 		"""Force save to disk."""
@@ -322,15 +328,15 @@ class PersistentDict(dict):
 class Sequence(PersistentCounter):
 	"""Class to manage APRS sequence."""
 
-	def __init__(self, path=SEQUENCE_FILE, modulo=1000):
-		super().__init__(path, modulo)
+	def __init__(self, name='sequence', modulo=100):
+		super().__init__(f'{TMP_DIR}/{name}.tmp', modulo)
 
 
 class Timer(PersistentCounter):
 	"""Class to manage persistent timer."""
 
-	def __init__(self):
-		super().__init__(TIMER_FILE, 86400)
+	def __init__(self, name='timer', modulo=86400):
+		super().__init__(f'{TMP_DIR}/{name}.tmp', modulo)
 
 
 class SmartBeaconing(object):
@@ -576,9 +582,10 @@ class ScheduledMessageHandler:
 			return ais
 		_, lat, lon, _, _, _ = await _get_current_location_data(self.cfg)
 		gridsquare = latlon_to_grid(lat, lon)
-		with Sequence(path=MSG_SEQUENCE_FILE, modulo=100000) as seq_mgr:
-			seq = seq_mgr.count
-		message = f'{template} from ({gridsquare}) via {APP_NAME}, de {source}'
+		seq_mgr = Sequence(name='msg_sequence', modulo=100000)
+		seq_mgr._load()
+		seq = seq_mgr.count
+		message = f'{template} from ({gridsquare}) via {APP_NAME}'
 		if len(message) > 67:
 			logging.error('Message length %d exceeds APRS limit of 67 characters: %s', len(message), message)
 			return ais
@@ -604,6 +611,7 @@ class ScheduledMessageHandler:
 			if parsed.get('msgNo'):
 				tg_msg += f'\nMessage No: <b>{parsed["msgNo"]}</b>'
 			await tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
+			seq_mgr._save()
 			self.tracking[tracking_key] = today
 			self.tracking.flush()
 			ais = await send_status(ais, self.cfg, tg_logger, sys_stats)
@@ -1089,7 +1097,7 @@ async def send_header(ais, cfg, tg_logger, sys_stats):
 
 async def send_telemetry(ais, cfg, tg_logger, sys_stats):
 	"""Send APRS telemetry information to APRS-IS."""
-	with Sequence() as seq_mgr:
+	with Sequence(name='telem_sequence', modulo=1000) as seq_mgr:
 		seq = seq_mgr.count
 	temp = sys_stats.cur_temp()
 	cpuload = sys_stats.avg_cpu_load()
