@@ -540,14 +540,14 @@ class ScheduledMessageHandler:
 		gridsquare = latlon_to_grid(lat, lon)
 		with Sequence(path=MSG_SEQUENCE_FILE, modulo=100000) as seq_mgr:
 			seq = seq_mgr.count
-		message = f'{template} [{gridsquare}] via {APP_NAME}{{{seq}'
+		message = f'{template} from ({gridsquare}) via {APP_NAME}, de {source}'
 		if len(message) > 67:
 			logging.error('Message length %d exceeds APRS limit of 67 characters: %s', len(message), message)
 			return ais
 		path_str = ''
 		if from_call:
 			path_str = f',RELAY,{FROMCALL}*,qAR,{FROMCALL}'
-		payload = f'{source}>{TOCALL}{path_str}::{addrcall:9s}:{message}'
+		payload = f'{source}>{TOCALL}{path_str}::{addrcall:9s}:{message}{{{seq}'
 		try:
 			parsed = aprslib.parse(payload)
 		except APRSParseError as err:
