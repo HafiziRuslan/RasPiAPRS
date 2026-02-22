@@ -26,19 +26,22 @@ from aprslib.exceptions import ConnectionError as APRSConnectionError, ParseErro
 from geopy.geocoders import Nominatim
 from gpsdclient import GPSDClient
 
+# Default directory
+ETC_DIR = '/etc'
+TMP_DIR = '/var/tmp/raspiaprs'
 # Default paths for system files
-OS_RELEASE_FILE = '/etc/os-release'
-PISTAR_RELEASE_FILE = '/etc/pistar-release'
-WPSD_RELEASE_FILE = '/etc/WPSD-release'
-MMDVMHOST_FILE = '/etc/mmdvmhost'
+OS_RELEASE_FILE = f'{ETC_DIR}/os-release'
+PISTAR_RELEASE_FILE = f'{ETC_DIR}/pistar-release'
+WPSD_RELEASE_FILE = f'{ETC_DIR}/WPSD-release'
+MMDVMHOST_FILE = f'{ETC_DIR}/mmdvmhost'
 # Temporary files path
-TIMER_FILE = '/var/tmp/raspiaprs/timer.tmp'
-SEQUENCE_FILE = '/var/tmp/raspiaprs/sequence.tmp'
-MSG_SEQUENCE_FILE = '/var/tmp/raspiaprs/msg_sequence.tmp'
-CACHE_FILE = '/var/tmp/raspiaprs/nominatim_cache.pkl'
-LOCATION_ID_FILE = '/var/tmp/raspiaprs/location_id.tmp'
-STATUS_FILE = '/var/tmp/raspiaprs/status.tmp'
-GPS_FILE = '/var/tmp/raspiaprs/gps.json'
+TIMER_FILE = f'{TMP_DIR}/timer.tmp'
+SEQUENCE_FILE = f'{TMP_DIR}/sequence.tmp'
+MSG_SEQUENCE_FILE = f'{TMP_DIR}/msg_sequence.tmp'
+CACHE_FILE = f'{TMP_DIR}/nominatim_cache.pkl'
+LOCATION_ID_FILE = f'{TMP_DIR}/location_id.tmp'
+STATUS_FILE = f'{TMP_DIR}/status.tmp'
+GPS_FILE = f'{TMP_DIR}/gps.json'
 # In-memory tracking for scheduled messages
 SCHEDULED_MSG_TRACKING = {}
 
@@ -915,13 +918,11 @@ async def send_position(ais, cfg, tg_logger, sys_stats, gps_data=None):
 				symbt, symb = '/', '>'
 			elif 0 < kmhspd <= sspd:
 				symbt, symb = '/', '('
-	# Construct payload and messages
 	lookup_table = symbt if symbt in ['/', '\\'] else '\\'
 	sym_desc = symbols.get_desc(lookup_table, symb).split('(')[0].strip()
-	payload = f'/{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
+	payload = f'@{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
 	posit = f'{FROMCALL}>{TOCALL}:{payload}'
 	tgpos = f'<u>{FROMCALL} Position</u>\n\nTime: <b>{timestamp}</b>\nSymbol: {symbt}{symb} ({sym_desc})\nPosition:\n\tLatitude: <b>{cur_lat}</b>\n\tLongitude: <b>{cur_lon}</b>\n\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\nComment: <b>{comment}</b>'
-	# Send data
 	try:
 		ais.sendall(posit)
 		logging.info(posit)
