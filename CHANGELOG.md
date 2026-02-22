@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-23T03:32:59+08:00)
+## [beta7] - (2026-02-23T04:09:30+08:00)
 
-- 65 commit(s) contributed to the release.
+- 66 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
 ### 🚀 Features in beta7
 
+- [9bd7cf6](https://github.com/HafiziRuslan/RasPiAPRS/commit/9bd7cf625409dc580ef87e1df32d01bfe650341f) feat(main): add robust caching with defaults and temp fetch helper *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T04:09:30+08:00*
 - [18e2c18](https://github.com/HafiziRuslan/RasPiAPRS/commit/18e2c1830a59a7ffb4f64b3aa2792d71f4187d50) feat(main): integrate APRSSender and refactor helpers *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T03:32:59+08:00*
 - [96d719d](https://github.com/HafiziRuslan/RasPiAPRS/commit/96d719db63739fd4b5677f3141c1c5333ca48cbe) feat(main): introduce persistent dict-based cache and tracking *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T23:58:35+08:00*
 - [cc61f21](https://github.com/HafiziRuslan/RasPiAPRS/commit/cc61f210fd7377ab962979fb5e802b7a5ef6eaa6) feat(src/main): add relay path to payload and telegram log *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T22:53:28+08:00*
@@ -984,4 +985,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-23T03:36:00.938368953+08:00
+generated using git-cliff on 2026-02-23T04:09:56.273674411+08:00
