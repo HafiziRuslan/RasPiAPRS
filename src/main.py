@@ -1150,20 +1150,25 @@ def latlon_to_grid(lat, lon, precision=6):
 		grid += chr(subsq_lon + ord('A')) + chr(subsq_lat + ord('A'))
 	return grid
 
+# Golocation
+_GEOLOCATOR = None
+_NOMINATIM_CACHE = PersistentDict(NOMINATIM_CACHE_FILE)
+
 
 def get_add_from_pos(lat, lon):
 	"""Get address from coordinates, using a local cache."""
-	cache = PersistentDict(NOMINATIM_CACHE_FILE)
+	global _GEOLOCATOR
 	coord_key = f'{lat:.4f},{lon:.4f}'
-	if coord_key in cache:
-		return cache[coord_key]
-	geolocator = Nominatim(user_agent=APP_NAME)
+	if coord_key in _NOMINATIM_CACHE:
+		return _NOMINATIM_CACHE[coord_key]
+	if _GEOLOCATOR is None:
+		_GEOLOCATOR = Nominatim(user_agent=APP_NAME, timeout=10)
 	try:
-		location = geolocator.reverse((lat, lon), exactly_one=True, namedetails=True, addressdetails=True)
+		location = _GEOLOCATOR.reverse((lat, lon), exactly_one=True, namedetails=True, addressdetails=True)
 		if location:
 			address = location.raw['address']
-			cache[coord_key] = address
-			cache.flush()
+			_NOMINATIM_CACHE[coord_key] = address
+			_NOMINATIM_CACHE.flush()
 			logging.debug(f'Address cached for requested coordinates: {coord_key}')
 			return address
 		else:
@@ -1189,7 +1194,7 @@ def format_address(address, include_flag=False):
 			cc_str = f' [{flag} {cc}]'
 		else:
 			cc_str = f' ({cc})'
-	return f'near {full_area}{cc_str}'
+	return f'in {full_area}{cc_str}'
 
 
 def setup_signal_handling(reload_event):
