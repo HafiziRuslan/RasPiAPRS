@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-23T00:24:35+08:00)
+## [beta7] - (2026-02-23T00:49:13+08:00)
 
-- 60 commit(s) contributed to the release.
+- 61 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
@@ -41,6 +41,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta7
 
+- [5729df7](https://github.com/HafiziRuslan/RasPiAPRS/commit/5729df7100a9940fd89d2fe81306d5aebb263736) fix(main): refactor APRS messaging to support tz and robust packet sending *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T00:49:13+08:00*
 - [ee437c6](https://github.com/HafiziRuslan/RasPiAPRS/commit/ee437c692abeff4a90a8017872b17115250c5964) fix(sqlite): migrate to persistent dict and adjust sequence handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T00:24:35+08:00*
 - [6e14b8b](https://github.com/HafiziRuslan/RasPiAPRS/commit/6e14b8b676ccb24e59ee7c8cc3f4e782196a2a5b) fix(cliff): standardize quote usage in cliff.toml *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T23:34:51+08:00*
 - [f461d81](https://github.com/HafiziRuslan/RasPiAPRS/commit/f461d81856ef41e68c4bfa2dd242072d07d7999a) fix(main): format path as comma-separated list in tg message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T23:22:43+08:00*
@@ -979,4 +980,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-23T00:25:00.351960680+08:00
+generated using git-cliff on 2026-02-23T00:51:46.023317953+08:00
