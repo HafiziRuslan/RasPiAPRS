@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file.
 # See https://keats.github.io/tera/docs/#introduction
 body = """
 {% if version %}\
-  \n## [{{ version | trim_start_matches(pat="v") }}] - ({{ timestamp | date(format="%+", timezone="Asia/Kuala_Lumpur") }})
+  \n## [{{ version | trim_start_matches(pat='v') }}] - ({{ timestamp | date(format='%+', timezone='Asia/Kuala_Lumpur') }})
 {% else %}\
   \n## [unreleased]
 {% endif %}
@@ -24,22 +24,22 @@ body = """
 {%- if statistics.links | length > 0 %}
   - {{ statistics.links | length }} linked issue(s) detected in commits.
 	{%- for link in statistics.links %}
-    {{ "  " }}- [{{ link.text }}]({{ link.href }}) (referenced {{ link.count }} time(s))
+    {{ '  ' }}- [{{ link.text }}]({{ link.href }}) (referenced {{ link.count }} time(s))
 	{%- endfor %}
 {%- endif %}
 {%- if statistics.days_passed_since_last_release %}
 	- {{ statistics.days_passed_since_last_release }} day(s) passed between releases.
 {%- endif %}
-{% for group, commits in commits | filter(attribute="merge_commit", value=false) | group_by(attribute="group") %}
-  ### {{ group | striptags | trim }} in {{ version | trim_start_matches(pat="v") }}
-  {% for commit in commits | unique(attribute="message") | sort(attribute="author.timestamp") | reverse %}
-    - {% if commit.id %}[{{ commit.id | truncate(length=7, end="") }}]({{ self::remote_url() }}/commit/{{ commit.id }}) {% endif %}\
+{% for group, commits in commits | filter(attribute='merge_commit', value=false) | group_by(attribute='group') %}
+  ### {{ group | striptags | trim }} in {{ version | trim_start_matches(pat='v') }}
+  {% for commit in commits | unique(attribute='message') | sort(attribute='author.timestamp') | reverse %}
+    - {% if commit.id %}[{{ commit.id | truncate(length=7, end='') }}]({{ self::remote_url() }}/commit/{{ commit.id }}) {% endif %}\
       {% if commit.scope %}*({{ commit.scope }})* {% endif %}\
       {% if commit.breaking %}[**breaking**] {% endif %}\
-      {{ commit.message | split(pat="\n") | first | trim}}\
+      {{ commit.message | split(pat='\n') | first | trim}}\
       {% if commit.remote.username %} *by [@{{ commit.remote.username }}](https://github.com/{{ commit.remote.username }}){% endif %}\
       {% if commit.remote.pr_number %} in #{{ commit.remote.pr_number }}{% endif %}\
-      {% if commit.author.timestamp %} on {{ commit.author.timestamp | date(format="%+", timezone="Asia/Kuala_Lumpur") }}*{% endif %}\
+      {% if commit.author.timestamp %} on {{ commit.author.timestamp | date(format='%+', timezone='Asia/Kuala_Lumpur') }}*{% endif %}\
   {% endfor %}
 {% endfor %}
 ---
@@ -50,7 +50,7 @@ body = """
 # A Tera template to be rendered at the end of the changelog.
 # See https://keats.github.io/tera/docs/#introduction
 footer = """
-\ngenerated using git-cliff on {{ now() | date(format="%+", timezone="Asia/Kuala_Lumpur", locale="en_MY") }}
+\ngenerated using git-cliff on {{ now() | date(format='%+', timezone='Asia/Kuala_Lumpur', locale='en_MY') }}
 """
 # Remove leading and trailing whitespaces from the changelog's body.
 trim = true
@@ -59,7 +59,8 @@ render_always = true
 # An array of regex based postprocessors to modify the changelog.
 postprocessors = [
   # Replace the placeholder <REPO> with a URL.
-  # { pattern = '.*https://github.com/{{ remote.github.owner }}/{{ remote.github.repo }}.*', replace = "[{{ remote.github.repo }}](https://github.com/{{ remote.github.owner }}/{{ remote.github.repo }})" },
+  # { pattern = '.*https://github.com/{{ remote.github.owner }}/{{ remote.github.repo }}.*', replace = '[{{ remote.github.repo }}](https://github.com/{{ remote.github.owner }}/{{ remote.github.repo }})' },
+  { pattern = '__', replace = '' },
 ]
 
 [git]
@@ -76,12 +77,12 @@ split_commits = false
 # An array of regex based parsers to modify commit messages prior to further processing.
 commit_preprocessors = [
   # Replace issue numbers with link templates to be updated in `changelog.postprocessors`.
-  #{ pattern = '\((\w+\s)?#([0-9]+)\)', replace = "([#${2}](<REPO>/issues/${2}))"},
+  #{ pattern = '\((\w+\s)?#([0-9]+)\)', replace = '([#${2}](<REPO>/issues/${2}))'},
   # Check spelling of the commit message using https://github.com/crate-ci/typos.
   # If the spelling is incorrect, it will be fixed automatically.
   #{ pattern = '.*', replace_command = 'typos --write-changes -' },
   # Remove gitmoji, both actual UTF emoji and :emoji:
-  { pattern = ' *(:\w+:|[\p{Emoji_Presentation}\p{Extended_Pictographic}](?:\u{FE0F})?\u{200D}?) *', replace = "" },
+  { pattern = ' *(:\w+:|[\p{Emoji_Presentation}\p{Extended_Pictographic}](?:\u{FE0F})?\u{200D}?) *', replace = '' },
 ]
 # Prevent commits that are breaking from being excluded by commit parsers.
 protect_breaking_commits = false
@@ -89,23 +90,23 @@ protect_breaking_commits = false
 # Assigns commits to groups.
 # Optionally sets the commit's scope and can decide to exclude commits from further processing.
 commit_parsers = [
-  { message = "feat", group = "<!-- 0 -->🚀 Features" },
-  { message = "fix|Fix", group = "<!-- 1 -->🐛 Bug Fixes" },
-  { message = "refactor|Enhance", group = "<!-- 2 -->🚜 Refactor" },
-  { field = "author.name", pattern = "^github", skip = true },
-  { message = "doc", group = "<!-- 3 -->📚 Documentation" },
-  { message = "perf", group = "<!-- 4 -->⚡ Performance" },
-  { message = "style", group = "<!-- 5 -->🎨 Styling" },
-  { message = "test", group = "<!-- 6 -->🧪 Testing" },
-  { message = "chore\\(release\\): prepare for", skip = true },
-  { message = "chore\\(deps.*\\)", skip = true },
-  { message = "chore\\(pr\\)", skip = true },
-  { message = "chore\\(pull\\)", skip = true },
-  { message = "chore|ci|build", group = "<!-- 7 -->⚙️ Miscellaneous Tasks" },
-  { body = ".*security", group = "<!-- 8 -->🛡️ Security" },
-  { message = "^revert", group = "<!-- 9 -->◀️ Revert" },
-  { body = ".*(M|m)erge branch.*", skip = true },
-  { message = ".*", group = "<!-- 10 -->💼 Other" },
+  { message = 'feat', group = '<!-- 0 -->🚀 Features' },
+  { message = 'fix|Fix', group = '<!-- 1 -->🐛 Bug Fixes' },
+  { message = 'refactor|Enhance', group = '<!-- 2 -->🚜 Refactor' },
+  { field = 'author.name', pattern = '^github', skip = true },
+  { message = 'doc', group = '<!-- 3 -->📚 Documentation' },
+  { message = 'perf', group = '<!-- 4 -->⚡ Performance' },
+  { message = 'style', group = '<!-- 5 -->🎨 Styling' },
+  { message = 'test', group = '<!-- 6 -->🧪 Testing' },
+  { message = 'chore\\(release\\): prepare for', skip = true },
+  { message = 'chore\\(deps.*\\)', skip = true },
+  { message = 'chore\\(pr\\)', skip = true },
+  { message = 'chore\\(pull\\)', skip = true },
+  { message = 'chore|ci|build', group = '<!-- 7 -->⚙️ Miscellaneous Tasks' },
+  { body = '.*security', group = '<!-- 8 -->🛡️ Security' },
+  { message = '^revert', group = '<!-- 9 -->◀️ Revert' },
+  { body = '.*(M|m)erge branch.*', skip = true },
+  { message = '.*', group = '<!-- 10 -->💼 Other' },
 ]
 # Exclude commits that are not matched by any commit parser.
 filter_commits = true
@@ -119,6 +120,6 @@ topo_order = false
 topo_order_commits = true
 # Order of commits in each group/release within the changelog.
 # Allowed values: newest, oldest
-sort_commits = "newest"
+sort_commits = 'newest'
 # Process submodules commits
 recurse_submodules = false
