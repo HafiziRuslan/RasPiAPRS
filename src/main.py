@@ -546,7 +546,7 @@ class ScheduledMessageHandler:
 			return ais
 		path_str = ''
 		if from_call:
-			path_str = f',RELAY,{FROMCALL}*,qAR,{FROMCALL}'
+			path_str = f',{FROMCALL}'
 		payload = f'{source}>{TOCALL}{path_str}::{addrcall:9s}:{message}{{{seq}'
 		try:
 			parsed = aprslib.parse(payload)
