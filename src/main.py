@@ -17,6 +17,7 @@ import time
 import tomllib
 from collections import UserDict
 from dataclasses import dataclass
+from typing import Callable, NamedTuple
 
 import aiohttp
 import aprslib
@@ -572,22 +573,25 @@ class ScheduledMessageHandler:
 							}
 						)
 
-	async def send_all(self, ais, tg_logger, sys_stats):
+	async def send_all(self, ais, tg_logger):
 		"""Send all due scheduled messages."""
+		sent_any = False
 		for msg_info in self.messages:
-			ais = await self._send_one(ais, tg_logger, sys_stats, **msg_info)
-		return ais
+			ais, sent = await self._send_one(ais, tg_logger, **msg_info)
+			if sent:
+				sent_any = True
+		return ais, sent_any
 
-	async def _send_one(self, ais, tg_logger, sys_stats, name, weekday, addrcall, template, from_call=None, tz=dt.timezone.utc):
+	async def _send_one(self, ais, tg_logger, name, weekday, addrcall, template, from_call=None, tz=dt.timezone.utc):
 		"""Send a single scheduled message to APRS-IS if it's due."""
 		now = dt.datetime.now(tz)
 		if now.weekday() != weekday:
-			return ais
+			return ais, False
 		today = now.strftime('%Y-%m-%d')
 		source = from_call or FROMCALL
 		tracking_key = f'{name},{source}'
 		if self.tracking.get(tracking_key) == today:
-			return ais
+			return ais, False
 		_, lat, lon, _, _, _ = await _get_current_location_data(self.cfg)
 		gridsquare = latlon_to_grid(lat, lon)
 		seq_mgr = Sequence(name='msg_sequence', modulo=100000)
@@ -596,7 +600,7 @@ class ScheduledMessageHandler:
 		message = f'{template} from ({gridsquare}) via {APP_NAME}'
 		if len(message) > 67:
 			logging.error('Message length %d exceeds APRS limit of 67 characters: %s', len(message), message)
-			return ais
+			return ais, False
 		path_str = ''
 		if from_call:
 			path_str = f',{FROMCALL}'
@@ -605,7 +609,7 @@ class ScheduledMessageHandler:
 			parsed = aprslib.parse(payload)
 		except APRSParseError as err:
 			logging.error('APRS packet parsing error at %s: %s', name, err)
-			return ais
+			return ais, False
 		ais = await send_packet(ais, self.cfg, payload, name)
 		tg_msg = f'<u>{parsed["from"]} <b>{name}</b></u>\n\nFrom: <b>{parsed["from"]}</b>\nTo: <b>{parsed["addresse"]}</b>'
 		path_list = parsed.get('path')
@@ -620,8 +624,7 @@ class ScheduledMessageHandler:
 		seq_mgr._save()
 		self.tracking[tracking_key] = today
 		self.tracking.flush()
-		ais = await send_status(ais, self.cfg, tg_logger, sys_stats)
-		return ais
+		return ais, True
 
 
 class TelegramLogger(object):
@@ -1076,11 +1079,10 @@ async def send_position(ais, cfg, tg_logger, sys_stats, gps_data=None):
 	tgpos = f'<u>{FROMCALL} Position</u>\n\nTime: <b>{timestamp}</b>\nSymbol: {symbt}{symb} ({sym_desc})\nPosition:\n\tLatitude: <b>{cur_lat}</b>\n\tLongitude: <b>{cur_lon}</b>\n\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\nComment: <b>{comment}</b>'
 	ais = await send_packet(ais, cfg, posit, 'position')
 	await tg_logger.log(tgpos, cur_lat, cur_lon, int(csestr))
-	await send_status(ais, cfg, tg_logger, sys_stats, gps_data)
 	return ais
 
 
-async def send_header(ais, cfg, tg_logger, sys_stats):
+async def send_header(ais, cfg, tg_logger):
 	"""Send APRS header information to APRS-IS."""
 	caller = f'{FROMCALL}>{TOCALL}::{FROMCALL:9s}:'
 	params = ['CPUTemp', 'CPULoad', 'RAMUsed', 'DiskUsed']
@@ -1094,7 +1096,6 @@ async def send_header(ais, cfg, tg_logger, sys_stats):
 	tg_msg = f'<u>{FROMCALL} Header</u>\n\nParameters: <b>{",".join(params)}</b>\nUnits: <b>{",".join(units)}</b>\nEquations: <b>{",".join(eqns)}</b>\n\nValue: <code>[a,b,c]=(a×v²)+(b×v)+c</code>'
 	ais = await send_packet(ais, cfg, payload, 'header')
 	await tg_logger.log(tg_msg)
-	await send_status(ais, cfg, tg_logger, sys_stats)
 	return ais
 
 
@@ -1123,7 +1124,6 @@ async def send_telemetry(ais, cfg, tg_logger, sys_stats):
 		tgtel += f'\nGPS Used: <b>{uSat}</b>'
 	ais = await send_packet(ais, cfg, telem, 'telemetry')
 	await tg_logger.log(tgtel)
-	await send_status(ais, cfg, tg_logger, sys_stats)
 	return ais
 
 
@@ -1223,6 +1223,21 @@ async def initialize_session(cfg):
 	return ais, tg_logger, timer, sb, sys_stats, scheduled_msg_handler
 
 
+def _get_tasks(cfg, timer_tick, sb, gps_data, tg_logger, sys_stats, scheduled_msg_handler):
+	class Task(NamedTuple):
+		condition: bool
+		func: Callable
+		args: tuple
+		kwargs: dict
+
+	return [
+		Task(should_send_position(cfg, timer_tick, sb, gps_data), send_position, (cfg, tg_logger, sys_stats), {'gps_data': gps_data}),
+		Task(timer_tick % 14400 == 1, send_header, (cfg, tg_logger), {}),
+		Task(timer_tick % cfg.sleep == 1, send_telemetry, (cfg, tg_logger, sys_stats), {}),
+		Task(True, scheduled_msg_handler.send_all, (tg_logger,), {}),
+	]
+
+
 async def process_loop(cfg, ais, tg_logger, timer, sb, sys_stats, reload_event, scheduled_msg_handler):
 	"""Run the main processing loop."""
 	while True:
@@ -1233,13 +1248,23 @@ async def process_loop(cfg, ais, tg_logger, timer, sb, sys_stats, reload_event, 
 		gps_data = None
 		if cfg.gpsd_enabled:
 			gps_data = await get_gpspos(cfg)
-		if should_send_position(cfg, timer_tick, sb, gps_data):
-			ais = await send_position(ais, cfg, tg_logger, sys_stats, gps_data=gps_data)
-		if timer_tick % 14400 == 1:
-			ais = await send_header(ais, cfg, tg_logger, sys_stats)
-		if timer_tick % cfg.sleep == 1:
-			ais = await send_telemetry(ais, cfg, tg_logger, sys_stats)
-		ais = await scheduled_msg_handler.send_all(ais, tg_logger, sys_stats)
+		packet_sent = False
+		tasks = _get_tasks(cfg, timer_tick, sb, gps_data, tg_logger, sys_stats, scheduled_msg_handler)
+		for task in tasks:
+			if task.condition:
+				try:
+					res = await task.func(ais, *task.args, **task.kwargs)
+					if isinstance(res, tuple):
+						ais, sent = res
+					else:
+						ais = res
+						sent = True
+					if sent:
+						packet_sent = True
+				except Exception as e:
+					logging.error('Error executing task %s: %s', task.func.__name__, e, exc_info=True)
+		if packet_sent:
+			ais = await send_status(ais, cfg, tg_logger, sys_stats, gps_data=gps_data)
 		await asyncio.sleep(0.5)
 
 
