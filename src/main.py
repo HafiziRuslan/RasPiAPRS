@@ -408,7 +408,7 @@ class SystemStats(object):
 			try:
 				uptime_seconds = dt.datetime.now(dt.timezone.utc).timestamp() - psutil.boot_time()
 				uptime = dt.timedelta(seconds=uptime_seconds)
-				return f'up: {humanize.naturaldelta(value=uptime, minimum_unit="minutes")}'
+				return f'up: {humanize.naturaldelta(uptime)}'
 			except Exception as e:
 				logging.error('Unexpected error: %s', e)
 				return ''
