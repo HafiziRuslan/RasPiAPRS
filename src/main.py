@@ -1150,7 +1150,7 @@ def latlon_to_grid(lat, lon, precision=6):
 		grid += chr(subsq_lon + ord('A')) + chr(subsq_lat + ord('A'))
 	return grid
 
-# Golocation
+# Geolocation
 _GEOLOCATOR = None
 _NOMINATIM_CACHE = PersistentDict(NOMINATIM_CACHE_FILE)
 
