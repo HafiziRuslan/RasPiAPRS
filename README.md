@@ -6,11 +6,11 @@ You can see an example of the metrics logged by my WPSD node [9W4GPA](https://ap
 
 The metrics are:-
 
-1. CPU temperature
-2. CPU load (average 15 minutes)
+1. CPU temperature (average 10 minutes)
+2. CPU load (average 10 minutes)
 3. Memory used
 4. Disk usage
-5. GPS used (optional)
+5. GPS used [optional]
 
 ## Requirements
 
