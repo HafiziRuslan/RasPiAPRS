@@ -12,6 +12,7 @@ import signal
 import shutil
 import subprocess
 import sys
+import re
 import time
 import tomllib
 from dataclasses import dataclass
@@ -162,7 +163,7 @@ class Config:
 	altitude: float = 0.0
 	server: str = 'rotate.aprs2.net'
 	port: int = 14580
-	filter: str = 'm/10'
+	filter: str = 'm/50'
 	passcode: int = 0
 	gpsd_enabled: bool = False
 	gpsd_host: str = 'localhost'
@@ -182,6 +183,7 @@ class Config:
 	telegram_loc_topic_id: int | None = None
 	aprsthursday_enabled: bool = False
 	aprsmysunday_enabled: bool = False
+	additional_sender: list[str] | None = None
 
 	def __post_init__(self):
 		self.reload()
@@ -233,6 +235,19 @@ class Config:
 			self.telegram_loc_topic_id = _env_get_int_or_none('TELEGRAM_LOC_TOPIC_ID')
 		self.aprsthursday_enabled = _env_get_bool('APRSTHURSDAY_ENABLE')
 		self.aprsmysunday_enabled = _env_get_bool('APRSMYSUNDAY_ENABLE')
+		self.additional_sender = None
+		if self.aprsthursday_enabled or self.aprsmysunday_enabled:
+			senders_str = os.getenv('ADDITIONAL_SENDER')
+			if senders_str:
+				valid_senders = []
+				for sender in senders_str.split(','):
+					sender = sender.strip().upper()
+					if re.match(r'^[A-Z0-9]+(-[A-Z0-9]+)?$', sender):
+						valid_senders.append(sender)
+					else:
+						logging.warning('Invalid ADDITIONAL_SENDER format: %s. Ignoring.', sender)
+				if valid_senders:
+					self.additional_sender = valid_senders
 
 
 class PersistentCounter:
@@ -492,9 +507,16 @@ class ScheduledMessageHandler:
 			('aprsthursday_enabled', 'APRSThursday', 3, 'ANSRVR', 'CQ HOTG #{}'),
 			('aprsmysunday_enabled', 'APRSMYSunday', 6, 'APRSMY', 'CHECK #{}'),
 		]
-		for attr, name, weekday, addrcall, template in definitions:
+		for attr, name, weekday, addrcall, template_fmt in definitions:
 			if getattr(self.cfg, attr, False):
-				self.messages.append({'name': name, 'weekday': weekday, 'addrcall': addrcall, 'template': template.format(name)})
+				self.messages.append(
+					{'name': name, 'weekday': weekday, 'addrcall': addrcall, 'template': template_fmt.format(name), 'from_call': None}
+				)
+				if self.cfg.additional_sender:
+					for sender in self.cfg.additional_sender:
+						self.messages.append(
+							{'name': name, 'weekday': weekday, 'addrcall': addrcall, 'template': template_fmt.format(name), 'from_call': sender}
+						)
 
 	async def send_all(self, ais, tg_logger, sys_stats):
 		"""Send all due scheduled messages."""
@@ -502,7 +524,7 @@ class ScheduledMessageHandler:
 			ais = await self._send_one(ais, tg_logger, sys_stats, **msg_info)
 		return ais
 
-	async def _send_one(self, ais, tg_logger, sys_stats, name, weekday, addrcall, template):
+	async def _send_one(self, ais, tg_logger, sys_stats, name, weekday, addrcall, template, from_call=None):
 		"""Send a single scheduled message to APRS-IS if it's due."""
 		now = dt.datetime.now(dt.timezone.utc)
 		if now.weekday() != weekday:
@@ -518,7 +540,11 @@ class ScheduledMessageHandler:
 		if len(message) > 67:
 			logging.error('Message length %d exceeds APRS limit of 67 characters: %s', len(message), message)
 			return ais
-		payload = f'{FROMCALL}>{TOCALL}::{addrcall:9s}:{message}'
+		source = from_call or FROMCALL
+		path_str = ''
+		if from_call:
+			path_str = f',{FROMCALL}'
+		payload = f'{source}>{TOCALL}{path_str}::{addrcall:9s}:{message}'
 		try:
 			parsed = aprslib.parse(payload)
 		except APRSParseError as err:
@@ -527,7 +553,10 @@ class ScheduledMessageHandler:
 		try:
 			ais.sendall(payload)
 			logging.info(payload)
-			tg_msg = f'<u>{parsed["from"]} <b>{name}</b></u>\n\nFrom: <b>{parsed["from"]}</b>\nTo: <b>{parsed["addresse"]}</b>\nMessage: <b>{parsed["message_text"]}</b>'
+			tg_msg = f'<u>{parsed["from"]} <b>{name}</b></u>\n\nFrom: <b>{parsed["from"]}</b>\nTo: <b>{parsed["addresse"]}</b>'
+			if parsed.get('via'):
+				tg_msg += f'\nvia: <b>{parsed["via"]}</b>'
+			tg_msg += f'\nMessage: <b>{parsed["message_text"]}</b>'
 			if parsed.get('msgNo'):
 				tg_msg += f'\nMessage No: <b>{parsed["msgNo"]}</b>'
 			await tg_logger.log(tg_msg)
@@ -536,7 +565,7 @@ class ScheduledMessageHandler:
 		except APRSConnectionError as err:
 			logging.error('APRS connection error at %s: %s', name, err)
 			ais = await ais_connect(self.cfg)
-			ais = await self._send_one(ais, tg_logger, sys_stats, name, weekday, addrcall, template)
+			ais = await self._send_one(ais, tg_logger, sys_stats, name, weekday, addrcall, template, from_call)
 		return ais
 
 
