@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-22T23:22:43+08:00)
+## [beta7] - (2026-02-22T23:34:51+08:00)
 
-- 57 commit(s) contributed to the release.
+- 58 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
@@ -40,6 +40,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta7
 
+- [6e14b8b](https://github.com/HafiziRuslan/RasPiAPRS/commit/6e14b8b676ccb24e59ee7c8cc3f4e782196a2a5b) fix(cliff): standardize quote usage in cliff.toml *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T23:34:51+08:00*
 - [f461d81](https://github.com/HafiziRuslan/RasPiAPRS/commit/f461d81856ef41e68c4bfa2dd242072d07d7999a) fix(main): format path as comma-separated list in tg message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T23:22:43+08:00*
 - [56a6429](https://github.com/HafiziRuslan/RasPiAPRS/commit/56a64293c566b5fa109933ba12f94c125253c274) fix(core): simplify path_str when from_call is true *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T23:18:04+08:00*
 - [d906f24](https://github.com/HafiziRuslan/RasPiAPRS/commit/d906f24b9cefee52af719bcfb7f4ff4ff5a2bc2e) fix(configure): adjust env sections and script message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T23:04:39+08:00*
@@ -149,7 +150,7 @@ All notable changes to this project will be documented in this file.
 
 ## [beta5] - (2026-01-20T08:43:15+08:00)
 
-- 129 commit(s) contributed to the release.
+- 130 commit(s) contributed to the release.
 - 20 day(s) passed between the first and last commit.
 - 20 day(s) passed between releases.
 
@@ -271,7 +272,7 @@ All notable changes to this project will be documented in this file.
 
 - [0f315df](https://github.com/HafiziRuslan/RasPiAPRS/commit/0f315dff12371729652719e9e3b86b4837883434) style(formatting): improve readability of logging calls *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T23:51:35+08:00*
 - [ce44ba3](https://github.com/HafiziRuslan/RasPiAPRS/commit/ce44ba392a4d193bb8f4dda2c36e2080c5e3a59a) style(formatting): format code for pep8 compliance *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-17T22:39:50+08:00*
-- [ac1e84c](https://github.com/HafiziRuslan/RasPiAPRS/commit/ac1e84c2e5afcb36e7c042a41bd032395c1a9378) style(config): simplify config __repr__ formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-07T19:27:50+08:00*
+- [ac1e84c](https://github.com/HafiziRuslan/RasPiAPRS/commit/ac1e84c2e5afcb36e7c042a41bd032395c1a9378) style(config): simplify config repr formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-07T19:27:50+08:00*
 - [023d396](https://github.com/HafiziRuslan/RasPiAPRS/commit/023d3968a5a8bfb86bd0982e4bfd5636ff951aaa) style(gps): simplify boolean usage check in tests *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-06T02:59:17+08:00*
 - [d2c4845](https://github.com/HafiziRuslan/RasPiAPRS/commit/d2c48450c75310cb9712953b3fe894da8480f063) style(formatting): standardize python code style *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-03T21:00:49+08:00*
 - [fbd0acf](https://github.com/HafiziRuslan/RasPiAPRS/commit/fbd0acf18d72a804cedad0e663fa59973522f12c) style(output): shorten status output labels *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-01T02:09:27+08:00*
@@ -299,6 +300,7 @@ All notable changes to this project will be documented in this file.
 - [ae5d33d](https://github.com/HafiziRuslan/RasPiAPRS/commit/ae5d33dc963e570f34d78dde9f5fc97877991c99) ci(release): remove redundant workflow_run trigger *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-01T01:22:24+08:00*
 - [7903d35](https://github.com/HafiziRuslan/RasPiAPRS/commit/7903d3522a93c7dc5cdb9dab61431273a29d0a97) chore(automation): configure dependency automation tools *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-01-01T01:08:41+08:00*
 - [a850558](https://github.com/HafiziRuslan/RasPiAPRS/commit/a8505582735e3e1bbe31343c7b0036a261398285) chore(version): bump raspiaprs version to 0.1b5 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-31T18:52:15+08:00*
+- [74b1f41](https://github.com/HafiziRuslan/RasPiAPRS/commit/74b1f41b7f8692e0490dfc089ab054e2a3302b94) chore(release): prepare for 0.1-beta.5 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-31T17:14:41+08:00*
 - [e33f0e0](https://github.com/HafiziRuslan/RasPiAPRS/commit/e33f0e0443e67918f4031f5a4d85632fa76cc5f8) build(deps): update psutil to 7.2.1 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-31T17:12:11+08:00*
 
 ---
@@ -975,4 +977,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-22T23:23:18.660988839+08:00
+generated using git-cliff on 2026-02-22T23:35:18.003370740+08:00
