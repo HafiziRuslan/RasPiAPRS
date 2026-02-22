@@ -398,13 +398,17 @@ class SystemStats(object):
 		self._cache = {}
 		self._temp_history = deque()
 
-	def _get_cached(self, key, func, ttl=10):
+	def _get_cached(self, key, func, ttl=10, default=None):
 		now = time.time()
 		if key in self._cache:
 			val, ts = self._cache[key]
 			if now - ts < ttl:
 				return val
-		val = func()
+		try:
+			val = func()
+		except Exception as e:
+			logging.error('Unexpected error in %s: %s', key, e)
+			val = default
 		self._cache[key] = (val, now)
 		return val
 
@@ -413,51 +417,39 @@ class SystemStats(object):
 		"""Get CPU load as a percentage of total capacity."""
 
 		def _fetch():
-			try:
-				load = psutil.getloadavg()[1]
-				core = psutil.cpu_count()
-				return int((load / core) * 100 * 1000)
-			except Exception as e:
-				logging.error('Unexpected error: %s', e)
-				return 0
+			load = psutil.getloadavg()[1]
+			core = psutil.cpu_count()
+			return int((load / core) * 100 * 1000)
 
-		return self._get_cached('cpu_load', _fetch, ttl=5)
+		return self._get_cached('cpu_load', _fetch, ttl=5, default=0)
 
 	@property
 	def memory_used(self):
 		"""Get used memory in bits."""
 
 		def _fetch():
-			try:
-				totalVmem = psutil.virtual_memory().total
-				freeVmem = psutil.virtual_memory().free
-				buffVmem = psutil.virtual_memory().buffers
-				cacheVmem = psutil.virtual_memory().cached
-				return totalVmem - freeVmem - buffVmem - cacheVmem
-			except Exception as e:
-				logging.error('Unexpected error: %s', e)
-				return 0
+			mem = psutil.virtual_memory()
+			return mem.total - mem.free - mem.buffers - mem.cached
 
-		return self._get_cached('memory_used', _fetch, ttl=5)
+		return self._get_cached('memory_used', _fetch, ttl=5, default=0)
 
 	@property
 	def storage_used(self):
 		"""Get used disk space in bits."""
 
 		def _fetch():
-			try:
-				diskused = psutil.disk_usage('/').used
-				return diskused
-			except Exception as e:
-				logging.error('Unexpected error: %s', e)
-				return 0
+			return psutil.disk_usage('/').used
 
-		return self._get_cached('storage_used', _fetch, ttl=60)
+		return self._get_cached('storage_used', _fetch, ttl=60, default=0)
+
+	def _fetch_raw_cpu_temp(self):
+		"""Fetch raw CPU temperature."""
+		return psutil.sensors_temperatures()['cpu_thermal'][0].current
 
 	def check_temp(self):
 		"""Check and record current temperature."""
 		try:
-			temperature = psutil.sensors_temperatures()['cpu_thermal'][0].current
+			temperature = self._fetch_raw_cpu_temp()
 			now = time.time()
 			self._temp_history.append((now, temperature))
 			while self._temp_history and self._temp_history[0][0] < now - 600:
@@ -466,35 +458,26 @@ class SystemStats(object):
 			pass
 
 	@property
-	def cur_temp(self):
+	def avg_temp(self):
 		"""Get CPU temperature in degC."""
 		if self._temp_history:
 			return int((sum(t for _, t in self._temp_history) / len(self._temp_history)) * 10)
 
 		def _fetch():
-			try:
-				temperature = psutil.sensors_temperatures()['cpu_thermal'][0].current
-				return int(temperature * 10)
-			except Exception as e:
-				logging.error('Unexpected error: %s', e)
-				return 0
+			return int(self._fetch_raw_cpu_temp() * 10)
 
-		return self._get_cached('cur_temp', _fetch, ttl=5)
+		return self._get_cached('avg_temp', _fetch, ttl=5, default=0)
 
 	@property
 	def uptime(self):
 		"""Get system uptime in a human-readable format."""
 
 		def _fetch():
-			try:
-				uptime_seconds = dt.datetime.now(dt.timezone.utc).timestamp() - psutil.boot_time()
-				uptime = dt.timedelta(seconds=uptime_seconds)
-				return f'up: {humanize.naturaldelta(uptime)}'
-			except Exception as e:
-				logging.error('Unexpected error: %s', e)
-				return ''
+			uptime_seconds = dt.datetime.now(dt.timezone.utc).timestamp() - psutil.boot_time()
+			uptime = dt.timedelta(seconds=uptime_seconds)
+			return f', up: {humanize.naturaldelta(uptime)}'
 
-		return self._get_cached('uptime', _fetch, ttl=60)
+		return self._get_cached('uptime', _fetch, ttl=60, default='')
 
 	@property
 	def os_info(self):
@@ -524,7 +507,7 @@ class SystemStats(object):
 				logging.error('Unexpected error: %s', e)
 			return f' {osname} {kernelver}'
 
-		return self._get_cached('os_info', _fetch, ttl=300)
+		return self._get_cached('os_info', _fetch, ttl=300, default='')
 
 	@property
 	def mmdvm_info(self):
@@ -556,7 +539,7 @@ class SystemStats(object):
 			cc = f' CC{color_code}' if dmr_enabled else ''
 			return (str(tx) + 'MHz' + shift + cc) + ','
 
-		return self._get_cached('mmdvm_info', _fetch, ttl=300)
+		return self._get_cached('mmdvm_info', _fetch, ttl=300, default='')
 
 
 class ScheduledMessageHandler:
@@ -576,21 +559,13 @@ class ScheduledMessageHandler:
 		]
 		for attr, name, weekday, addrcall, template_fmt, tz in definitions:
 			if getattr(self.cfg, attr, False):
-				self.messages.append(
-					{'name': name, 'weekday': weekday, 'addrcall': addrcall, 'template': template_fmt.format(name), 'from_call': None, 'tz': tz}
-				)
+				senders = [None]
 				if self.cfg.additional_sender:
-					for sender in self.cfg.additional_sender:
-						self.messages.append(
-							{
-								'name': name,
-								'weekday': weekday,
-								'addrcall': addrcall,
-								'template': template_fmt.format(name),
-								'from_call': sender,
-								'tz': tz,
-							}
-						)
+					senders.extend(self.cfg.additional_sender)
+				for sender in senders:
+					self.messages.append(
+						{'name': name, 'weekday': weekday, 'addrcall': addrcall, 'template': template_fmt.format(name), 'from_call': sender, 'tz': tz}
+					)
 
 	async def send_all(self, aprs_sender):
 		"""Send all due scheduled messages."""
@@ -901,17 +876,17 @@ class APRSSender:
 		"""Send APRS telemetry information to APRS-IS."""
 		with Sequence(name='telem_sequence', modulo=1000) as seq_mgr:
 			seq = seq_mgr.count
-		temp = self.sys_stats.cur_temp
+		cputemp = self.sys_stats.avg_temp
 		cpuload = self.sys_stats.avg_cpu_load
 		memused = self.sys_stats.memory_used
 		diskused = self.sys_stats.storage_used
 		telemmemused = int(memused / 1.0000e6)
 		telemdiskused = int(diskused / 1.0000e6)
-		telem = f'{FROMCALL}>{TOCALL}:T#{seq:03d},{temp:d},{cpuload:d},{telemmemused:d},{telemdiskused:d}'
+		telem = f'{FROMCALL}>{TOCALL}:T#{seq:03d},{cputemp:d},{cpuload:d},{telemmemused:d},{telemdiskused:d}'
 		tgtel = (
 			f'<u>{FROMCALL} Telemetry</u>\n\n'
 			f'Sequence: <b>#{seq}</b>\n'
-			f'CPU Temp: <b>{temp / 10:.1f} °C</b>\n'
+			f'CPU Temp: <b>{cputemp / 10:.1f} °C</b>\n'
 			f'CPU Load: <b>{cpuload / 1000:.1f}%</b>\n'
 			f'RAM Used: <b>{humanize.naturalsize(memused, binary=True)}</b>\n'
 			f'Disk Used: <b>{humanize.naturalsize(diskused, binary=True)}</b>'
@@ -941,9 +916,9 @@ class APRSSender:
 			else:
 				sats_info = f', gps: {u_sat}'
 		uptime = self.sys_stats.uptime
-		status_text = f'{timestamp}[{gridsquare}]{near_add} {uptime}{sats_info}'
+		status_text = f'{timestamp}[{gridsquare}]{near_add}{uptime}{sats_info}'
 		aprs_packet = f'{FROMCALL}>{TOCALL}:>{status_text}'
-		tg_msg = f'<u>{FROMCALL} Status</u>\n\n<b>{timestamp}[{gridsquare}]{near_add_tg} {uptime}{sats_info}</b>'
+		tg_msg = f'<u>{FROMCALL} Status</u>\n\n<b>{timestamp}[{gridsquare}]{near_add_tg}{uptime}{sats_info}</b>'
 		if os.path.exists(STATUS_FILE):
 			try:
 				with open(STATUS_FILE, 'r') as f:
@@ -1121,38 +1096,41 @@ def _cse_to_aprs(cse):
 	return f'{cse:03.0f}'
 
 
+def _to_aprs_coord(val, pos_char, neg_char, width):
+	"""Format coordinate for APRS."""
+	direction = pos_char if val >= 0 else neg_char
+	val = abs(val)
+	deg = int(val)
+	minutes = (val - deg) * 60
+	return f'{deg:0{width}d}{minutes:05.2f}{direction}'
+
+
 def _lat_to_aprs(lat):
 	"""Format latitude for APRS."""
-	ns = 'N' if lat >= 0 else 'S'
-	lat = abs(lat)
-	deg = int(lat)
-	minutes = (lat - deg) * 60
-	return f'{deg:02d}{minutes:05.2f}{ns}'
+	return _to_aprs_coord(lat, 'N', 'S', 2)
 
 
 def _lon_to_aprs(lon):
 	"""Format longitude for APRS."""
-	ew = 'E' if lon >= 0 else 'W'
-	lon = abs(lon)
-	deg = int(lon)
-	minutes = (lon - deg) * 60
-	return f'{deg:03d}{minutes:05.2f}{ew}'
+	return _to_aprs_coord(lon, 'E', 'W', 3)
+
+
+def _format_speed(val):
+	"""Format speed for APRS with clamping."""
+	val = max(0, min(999, val))
+	return f'{val:03.0f}'
 
 
 def _spd_to_kmh(spd):
 	"""Format speed for APRS (mps to kmh)."""
-	spd_kmh = spd * 3.6 if spd else 0
-	spd_kmh = max(0, spd_kmh)
-	spd_kmh = min(999, spd_kmh)
-	return f'{spd_kmh:03.0f}'
+	val = spd * 3.6 if spd else 0
+	return _format_speed(val)
 
 
 def _spd_to_knots(spd):
 	"""Format speed for APRS (mps to knots)."""
-	spd_knots = spd / 0.51444 if spd else 0
-	spd_knots = max(0, spd_knots)
-	spd_knots = min(999, spd_knots)
-	return f'{spd_knots:03.0f}'
+	val = spd / 0.51444 if spd else 0
+	return _format_speed(val)
 
 
 def latlon_to_grid(lat, lon, precision=6):
