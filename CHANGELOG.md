@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-23T04:54:46+08:00)
+## [beta7] - (2026-02-23T05:20:58+08:00)
 
-- 68 commit(s) contributed to the release.
+- 70 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
 ### 🚀 Features in beta7
 
+- [f6b32fe](https://github.com/HafiziRuslan/RasPiAPRS/commit/f6b32fe6bbb8fe53679697f41f887f0b00eb0fc8) feat(main): initialize global cache and ensure cache dir exists *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T05:19:52+08:00*
 - [9bd7cf6](https://github.com/HafiziRuslan/RasPiAPRS/commit/9bd7cf625409dc580ef87e1df32d01bfe650341f) feat(main): add robust caching with defaults and temp fetch helper *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T04:09:30+08:00*
 - [18e2c18](https://github.com/HafiziRuslan/RasPiAPRS/commit/18e2c1830a59a7ffb4f64b3aa2792d71f4187d50) feat(main): integrate APRSSender and refactor helpers *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T03:32:59+08:00*
 - [96d719d](https://github.com/HafiziRuslan/RasPiAPRS/commit/96d719db63739fd4b5677f3141c1c5333ca48cbe) feat(main): introduce persistent dict-based cache and tracking *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-22T23:58:35+08:00*
@@ -43,6 +44,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta7
 
+- [096b392](https://github.com/HafiziRuslan/RasPiAPRS/commit/096b3925ad17c5f8a8fcf561ace9fd2eef38f169) fix(main): correct typo in geolocation comment *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T05:20:58+08:00*
 - [bf0af25](https://github.com/HafiziRuslan/RasPiAPRS/commit/bf0af25e77dbc59bc9445c580428fc4608e17eb5) fix(code): align strings and payload formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T04:54:46+08:00*
 - [18d1050](https://github.com/HafiziRuslan/RasPiAPRS/commit/18d105074aea3e94c39147ad80bf8727f3f4baec) fix(readme): update metrics wording and optional GPS label *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T04:54:15+08:00*
 - [6ad760c](https://github.com/HafiziRuslan/RasPiAPRS/commit/6ad760c6bffa33fff64fb1d81881c61cc3ac1269) fix(cleanup): track cpu temperature and correct load gauge *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T03:13:50+08:00*
@@ -987,4 +989,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-23T04:55:23.678332363+08:00
+generated using git-cliff on 2026-02-23T05:21:35.658119823+08:00
