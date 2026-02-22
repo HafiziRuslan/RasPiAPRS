@@ -14,7 +14,7 @@ import subprocess
 import sys
 import time
 import tomllib
-
+from dataclasses import dataclass
 import aiohttp
 import aprslib
 import dotenv
@@ -50,7 +50,6 @@ def get_app_metadata():
 			git_sha = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], cwd=repo_path).decode('ascii').strip()
 		except Exception:
 			pass
-
 	meta = {'name': 'RasPiAPRS', 'version': '0.0.0', 'github': 'https://github.com/HafiziRuslan/RasPiAPRS'}
 	try:
 		with open(os.path.join(repo_path, 'pyproject.toml'), 'rb') as f:
@@ -59,11 +58,12 @@ def get_app_metadata():
 			meta['github'] = data.get('urls', {}).get('github', meta['github'])
 	except Exception as e:
 		logging.warning('Failed to load project metadata: %s', e)
-
 	return f'{meta["name"]}-v{meta["version"]}-{git_sha}', meta['github']
 
 
 APP_NAME, PROJECT_URL = get_app_metadata()
+FROMCALL = 'N0CALL'
+TOCALL = 'APP642'
 
 
 def configure_logging():
@@ -72,14 +72,12 @@ def configure_logging():
 		log_dir = 'logs'
 	if not os.path.exists(log_dir):
 		os.makedirs(log_dir)
-
 	logging.getLogger('aprslib').setLevel(logging.DEBUG)
 	logging.getLogger('asyncio').setLevel(logging.DEBUG)
 	logging.getLogger('hpack').setLevel(logging.DEBUG)
 	logging.getLogger('httpx').setLevel(logging.DEBUG)
 	logging.getLogger('telegram').setLevel(logging.DEBUG)
 	logging.getLogger('urllib3').setLevel(logging.DEBUG)
-
 	logger = logging.getLogger()
 	logger.setLevel(logging.DEBUG)
 	formatter = logging.Formatter(
@@ -115,308 +113,124 @@ def configure_logging():
 			logging.error('Failed to create %s: %s', filename, e)
 
 
-class Config(object):
-	def __init__(self):
+def _env_get_int(key: str, default: int, warning_msg: str | None = None) -> int:
+	val = os.getenv(key)
+	if val is None:
+		return default
+	try:
+		return int(val)
+	except (ValueError, TypeError):
+		if warning_msg:
+			logging.warning('%s, using %d', warning_msg, default)
+		return default
+
+
+def _env_get_float(key: str, default: float) -> float:
+	val = os.getenv(key)
+	if val is None:
+		return default
+	try:
+		return float(val)
+	except (ValueError, TypeError):
+		return default
+
+
+def _env_get_bool(key: str, default: str = 'False') -> bool:
+	return os.getenv(key, default).lower() in ('true', '1', 't', 'y', 'yes')
+
+
+def _env_get_int_or_none(key: str) -> int | None:
+	val = os.getenv(key)
+	if val is None:
+		return None
+	try:
+		return int(val)
+	except (ValueError, TypeError):
+		return None
+
+
+@dataclass
+class Config:
+	sleep: int = 600
+	symbol_table: str = '/'
+	symbol: str = 'n'
+	symbol_overlay: str | None = None
+	latitude: float = 0.0
+	longitude: float = 0.0
+	altitude: float = 0.0
+	server: str = 'rotate.aprs2.net'
+	port: int = 14580
+	filter: str = 'm/10'
+	passcode: int = 0
+	gpsd_enabled: bool = False
+	gpsd_host: str = 'localhost'
+	gpsd_port: int = 2947
+	smartbeaconing_enabled: bool = False
+	smartbeaconing_fast_speed: int = 100
+	smartbeaconing_slow_speed: int = 10
+	smartbeaconing_fast_rate: int = 60
+	smartbeaconing_slow_rate: int = 600
+	smartbeaconing_min_turn_angle: int = 28
+	smartbeaconing_turn_slope: int = 255
+	smartbeaconing_min_turn_time: int = 5
+	telegram_enabled: bool = False
+	telegram_token: str | None = None
+	telegram_chat_id: str | None = None
+	telegram_topic_id: int | None = None
+	telegram_loc_topic_id: int | None = None
+	aprsthursday_enabled: bool = False
+	aprsmysunday_enabled: bool = False
+
+	def __post_init__(self):
 		self.reload()
 
 	def reload(self):
 		"""Reload configuration from environment variables."""
+		global FROMCALL
 		dotenv.load_dotenv('.env', override=True)
-		call = os.getenv('APRS_CALL', 'N0CALL')
+		call_base = os.getenv('APRS_CALL', 'N0CALL')
 		ssid = os.getenv('APRS_SSID', '0')
-		self.call = call if ssid == '0' else f'{call}-{ssid}'
-		self.sleep = os.getenv('SLEEP', 600)
+		FROMCALL = call_base if ssid == '0' else f'{call_base}-{ssid}'
+		self.sleep = _env_get_int('SLEEP', 600, 'Sleep value error')
 		self.symbol_table = os.getenv('APRS_SYMBOL_TABLE', '/')
 		self.symbol = os.getenv('APRS_SYMBOL', 'n')
 		if self.symbol_table not in ['/', '\\']:
 			self.symbol_overlay = self.symbol_table
 		else:
 			self.symbol_overlay = None
-		self.latitude = os.getenv('APRS_LATITUDE', 0)
-		self.longitude = os.getenv('APRS_LONGITUDE', 0)
-		self.altitude = os.getenv('APRS_ALTITUDE', 0)
+		self.latitude = _env_get_float('APRS_LATITUDE', 0.0)
+		self.longitude = _env_get_float('APRS_LONGITUDE', 0.0)
+		self.altitude = _env_get_float('APRS_ALTITUDE', 0.0)
 		self.server = os.getenv('APRSIS_SERVER', 'rotate.aprs2.net')
-		self.port = os.getenv('APRSIS_PORT', 14580)
+		self.port = _env_get_int('APRSIS_PORT', 14580, 'Port value error')
 		self.filter = os.getenv('APRSIS_FILTER', 'm/10')
 		passcode = os.getenv('APRS_PASSCODE')
 		if passcode:
 			self.passcode = passcode
 		else:
 			logging.warning('Generating passcode')
-			self.passcode = aprslib.passcode(call)
-		self.gpsd_enabled = os.getenv('GPSD_ENABLE')
+			self.passcode = aprslib.passcode(call_base)
+		self.gpsd_enabled = _env_get_bool('GPSD_ENABLE')
 		if self.gpsd_enabled:
 			self.gpsd_host = os.getenv('GPSD_HOST', 'localhost')
-			self.gpsd_port = os.getenv('GPSD_PORT', 2947)
-		self.smartbeaconing_enabled = os.getenv('SMARTBEACONING_ENABLE')
+			self.gpsd_port = _env_get_int('GPSD_PORT', 2947)
+		self.smartbeaconing_enabled = _env_get_bool('SMARTBEACONING_ENABLE')
 		if self.smartbeaconing_enabled:
-			self.smartbeaconing_fast_speed = os.getenv('SMARTBEACONING_FASTSPEED', 100)
-			self.smartbeaconing_slow_speed = os.getenv('SMARTBEACONING_SLOWSPEED', 10)
-			self.smartbeaconing_fast_rate = os.getenv('SMARTBEACONING_FASTRATE', 60)
-			self.smartbeaconing_slow_rate = os.getenv('SMARTBEACONING_SLOWRATE', 600)
-			self.smartbeaconing_min_turn_angle = os.getenv('SMARTBEACONING_MINTURNANGLE', 28)
-			self.smartbeaconing_turn_slope = os.getenv('SMARTBEACONING_TURNSLOPE', 255)
-			self.smartbeaconing_min_turn_time = os.getenv('SMARTBEACONING_MINTURNTIME', 5)
-		self.telegram_enabled = os.getenv('TELEGRAM_ENABLE')
+			self.smartbeaconing_fast_speed = _env_get_int('SMARTBEACONING_FASTSPEED', 100)
+			self.smartbeaconing_slow_speed = _env_get_int('SMARTBEACONING_SLOWSPEED', 10)
+			self.smartbeaconing_fast_rate = _env_get_int('SMARTBEACONING_FASTRATE', 60)
+			self.smartbeaconing_slow_rate = _env_get_int('SMARTBEACONING_SLOWRATE', 600)
+			self.smartbeaconing_min_turn_angle = _env_get_int('SMARTBEACONING_MINTURNANGLE', 28)
+			self.smartbeaconing_turn_slope = _env_get_int('SMARTBEACONING_TURNSLOPE', 255)
+			self.smartbeaconing_min_turn_time = _env_get_int('SMARTBEACONING_MINTURNTIME', 5)
+		self.telegram_enabled = _env_get_bool('TELEGRAM_ENABLE')
 		if self.telegram_enabled:
 			self.telegram_token = os.getenv('TELEGRAM_TOKEN')
 			self.telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID')
-			self.telegram_topic_id = os.getenv('TELEGRAM_TOPIC_ID')
-			self.telegram_loc_topic_id = os.getenv('TELEGRAM_LOC_TOPIC_ID')
-		self.aprsthursday_enabled = os.getenv('APRSTHURSDAY_ENABLE', 'False').lower() == 'true'
-		self.aprsmysunday_enabled = os.getenv('APRSMYSUNDAY_ENABLE', 'False').lower() == 'true'
-
-	def __repr__(self):
-		return ('<Config> call: {0.call}, passcode: {0.passcode} - {0.latitude}/{0.longitude}/{0.altitude}').format(self)
-
-	@property
-	def call(self):
-		return self._call
-
-	@call.setter
-	def call(self, val):
-		self._call = str(val)
-
-	@property
-	def sleep(self):
-		return self._sleep
-
-	@sleep.setter
-	def sleep(self, val):
-		try:
-			self._sleep = int(val)
-		except ValueError:
-			logging.warning('Sleep value error, using 600')
-			self._sleep = 600
-
-	@property
-	def latitude(self):
-		return self._latitude
-
-	@latitude.setter
-	def latitude(self, val):
-		self._latitude = val
-
-	@property
-	def longitude(self):
-		return self._longitude
-
-	@longitude.setter
-	def longitude(self, val):
-		self._longitude = val
-
-	@property
-	def altitude(self):
-		return self._altitude
-
-	@altitude.setter
-	def altitude(self, val):
-		self._altitude = val
-
-	@property
-	def symbol(self):
-		return self._symbol
-
-	@symbol.setter
-	def symbol(self, val):
-		self._symbol = str(val)
-
-	@property
-	def symbol_table(self):
-		return self._symbol_table
-
-	@symbol_table.setter
-	def symbol_table(self, val):
-		self._symbol_table = str(val)
-
-	@property
-	def symbol_overlay(self):
-		return self._symbol_overlay
-
-	@symbol_overlay.setter
-	def symbol_overlay(self, val):
-		self._symbol_overlay = str(val) if val else None
-
-	@property
-	def server(self):
-		return self._server
-
-	@server.setter
-	def server(self, val):
-		self._server = str(val)
-
-	@property
-	def port(self):
-		return self._port
-
-	@port.setter
-	def port(self, val):
-		try:
-			self._port = int(val)
-		except ValueError:
-			logging.warning('Port value error, using 14580')
-			self._port = 14580
-
-	@property
-	def passcode(self):
-		return self._passcode
-
-	@passcode.setter
-	def passcode(self, val):
-		self._passcode = str(val)
-
-	@property
-	def gpsd_enabled(self):
-		return self._gpsd_enabled
-
-	@gpsd_enabled.setter
-	def gpsd_enabled(self, val):
-		self._gpsd_enabled = val
-
-	@property
-	def smartbeaconing_enabled(self):
-		return self._smartbeaconing_enabled
-
-	@smartbeaconing_enabled.setter
-	def smartbeaconing_enabled(self, val):
-		self._smartbeaconing_enabled = val
-
-	@property
-	def gpsd_host(self):
-		return self._gpsd_host
-
-	@gpsd_host.setter
-	def gpsd_host(self, val):
-		self._gpsd_host = str(val)
-
-	@property
-	def gpsd_port(self):
-		return self._gpsd_port
-
-	@gpsd_port.setter
-	def gpsd_port(self, val):
-		try:
-			self._gpsd_port = int(val)
-		except ValueError:
-			self._gpsd_port = 2947
-
-	@property
-	def smartbeaconing_fast_speed(self):
-		return self._smartbeaconing_fast_speed
-
-	@smartbeaconing_fast_speed.setter
-	def smartbeaconing_fast_speed(self, val):
-		self._smartbeaconing_fast_speed = int(val)
-
-	@property
-	def smartbeaconing_slow_speed(self):
-		return self._smartbeaconing_slow_speed
-
-	@smartbeaconing_slow_speed.setter
-	def smartbeaconing_slow_speed(self, val):
-		self._smartbeaconing_slow_speed = int(val)
-
-	@property
-	def smartbeaconing_fast_rate(self):
-		return self._smartbeaconing_fast_rate
-
-	@smartbeaconing_fast_rate.setter
-	def smartbeaconing_fast_rate(self, val):
-		self._smartbeaconing_fast_rate = int(val)
-
-	@property
-	def smartbeaconing_slow_rate(self):
-		return self._smartbeaconing_slow_rate
-
-	@smartbeaconing_slow_rate.setter
-	def smartbeaconing_slow_rate(self, val):
-		self._smartbeaconing_slow_rate = int(val)
-
-	@property
-	def smartbeaconing_min_turn_angle(self):
-		return self._smartbeaconing_min_turn_angle
-
-	@smartbeaconing_min_turn_angle.setter
-	def smartbeaconing_min_turn_angle(self, val):
-		self._smartbeaconing_min_turn_angle = int(val)
-
-	@property
-	def smartbeaconing_turn_slope(self):
-		return self._smartbeaconing_turn_slope
-
-	@smartbeaconing_turn_slope.setter
-	def smartbeaconing_turn_slope(self, val):
-		self._smartbeaconing_turn_slope = int(val)
-
-	@property
-	def smartbeaconing_min_turn_time(self):
-		return self._smartbeaconing_min_turn_time
-
-	@smartbeaconing_min_turn_time.setter
-	def smartbeaconing_min_turn_time(self, val):
-		self._smartbeaconing_min_turn_time = int(val)
-
-	@property
-	def telegram_enabled(self):
-		return self._telegram_enabled
-
-	@telegram_enabled.setter
-	def telegram_enabled(self, val):
-		self._telegram_enabled = val
-
-	@property
-	def telegram_token(self):
-		return self._telegram_token
-
-	@telegram_token.setter
-	def telegram_token(self, val):
-		self._telegram_token = str(val) if val else None
-
-	@property
-	def telegram_chat_id(self):
-		return self._telegram_chat_id
-
-	@telegram_chat_id.setter
-	def telegram_chat_id(self, val):
-		self._telegram_chat_id = str(val) if val else None
-
-	def _parse_int(self, val):
-		try:
-			return int(val)
-		except (ValueError, TypeError):
-			return None
-
-	@property
-	def telegram_topic_id(self):
-		return self._telegram_topic_id
-
-	@telegram_topic_id.setter
-	def telegram_topic_id(self, val):
-		self._telegram_topic_id = self._parse_int(val)
-
-	@property
-	def telegram_loc_topic_id(self):
-		return self._telegram_loc_topic_id
-
-	@telegram_loc_topic_id.setter
-	def telegram_loc_topic_id(self, val):
-		self._telegram_loc_topic_id = self._parse_int(val)
-
-	@property
-	def aprsthursday_enabled(self):
-		return self._aprsthursday_enabled
-
-	@aprsthursday_enabled.setter
-	def aprsthursday_enabled(self, val):
-		self._aprsthursday_enabled = val
-
-	@property
-	def aprsmysunday_enabled(self):
-		return self._aprsmysunday_enabled
-
-	@aprsmysunday_enabled.setter
-	def aprsmysunday_enabled(self, val):
-		self._aprsmysunday_enabled = val
+			self.telegram_topic_id = _env_get_int_or_none('TELEGRAM_TOPIC_ID')
+			self.telegram_loc_topic_id = _env_get_int_or_none('TELEGRAM_LOC_TOPIC_ID')
+		self.aprsthursday_enabled = _env_get_bool('APRSTHURSDAY_ENABLE')
+		self.aprsmysunday_enabled = _env_get_bool('APRSMYSUNDAY_ENABLE')
 
 
 class Sequence(object):
@@ -524,107 +338,148 @@ class SmartBeaconing(object):
 class SystemStats(object):
 	"""Class to handle system statistics."""
 
+	def __init__(self):
+		self._cache = {}
+
+	def _get_cached(self, key, func, ttl=10):
+		now = time.time()
+		if key in self._cache:
+			val, ts = self._cache[key]
+			if now - ts < ttl:
+				return val
+		val = func()
+		self._cache[key] = (val, now)
+		return val
+
 	def avg_cpu_load(self):
 		"""Get CPU load as a percentage of total capacity."""
-		try:
-			load = psutil.getloadavg()[2]
-			core = psutil.cpu_count()
-			return int((load / core) * 100 * 1000)
-		except Exception as e:
-			logging.error('Unexpected error: %s', e)
-			return 0
+
+		def _fetch():
+			try:
+				load = psutil.getloadavg()[2]
+				core = psutil.cpu_count()
+				return int((load / core) * 100 * 1000)
+			except Exception as e:
+				logging.error('Unexpected error: %s', e)
+				return 0
+
+		return self._get_cached('cpu_load', _fetch, ttl=5)
 
 	def memory_used(self):
 		"""Get used memory in bits."""
-		try:
-			totalVmem = psutil.virtual_memory().total
-			freeVmem = psutil.virtual_memory().free
-			buffVmem = psutil.virtual_memory().buffers
-			cacheVmem = psutil.virtual_memory().cached
-			return totalVmem - freeVmem - buffVmem - cacheVmem
-		except Exception as e:
-			logging.error('Unexpected error: %s', e)
-			return 0
+
+		def _fetch():
+			try:
+				totalVmem = psutil.virtual_memory().total
+				freeVmem = psutil.virtual_memory().free
+				buffVmem = psutil.virtual_memory().buffers
+				cacheVmem = psutil.virtual_memory().cached
+				return totalVmem - freeVmem - buffVmem - cacheVmem
+			except Exception as e:
+				logging.error('Unexpected error: %s', e)
+				return 0
+
+		return self._get_cached('memory_used', _fetch, ttl=5)
 
 	def storage_used(self):
 		"""Get used disk space in bits."""
-		try:
-			diskused = psutil.disk_usage('/').used
-			return diskused
-		except Exception as e:
-			logging.error('Unexpected error: %s', e)
-			return 0
+
+		def _fetch():
+			try:
+				diskused = psutil.disk_usage('/').used
+				return diskused
+			except Exception as e:
+				logging.error('Unexpected error: %s', e)
+				return 0
+
+		return self._get_cached('storage_used', _fetch, ttl=60)
 
 	def cur_temp(self):
 		"""Get CPU temperature in degC."""
-		try:
-			temperature = psutil.sensors_temperatures()['cpu_thermal'][0].current
-			return int(temperature * 10)
-		except Exception as e:
-			logging.error('Unexpected error: %s', e)
-			return 0
+
+		def _fetch():
+			try:
+				temperature = psutil.sensors_temperatures()['cpu_thermal'][0].current
+				return int(temperature * 10)
+			except Exception as e:
+				logging.error('Unexpected error: %s', e)
+				return 0
+
+		return self._get_cached('cur_temp', _fetch, ttl=5)
 
 	def uptime(self):
 		"""Get system uptime in a human-readable format."""
-		try:
-			uptime_seconds = dt.datetime.now(dt.timezone.utc).timestamp() - psutil.boot_time()
-			uptime = dt.timedelta(seconds=uptime_seconds)
-			return f'up: {humanize.naturaldelta(uptime)}'
-		except Exception as e:
-			logging.error('Unexpected error: %s', e)
-			return ''
+
+		def _fetch():
+			try:
+				uptime_seconds = dt.datetime.now(dt.timezone.utc).timestamp() - psutil.boot_time()
+				uptime = dt.timedelta(seconds=uptime_seconds)
+				return f'up: {humanize.naturaldelta(value=uptime, minimum_unit="minutes")}'
+			except Exception as e:
+				logging.error('Unexpected error: %s', e)
+				return ''
+
+		return self._get_cached('uptime', _fetch, ttl=60)
 
 	def os_info(self):
 		"""Get operating system information."""
-		osname = ''
-		try:
-			os_info = {}
-			with open(OS_RELEASE_FILE) as osr:
-				for line in osr:
-					line = line.strip()
-					if '=' in line:
-						key, value = line.split('=', 1)
-						os_info[key] = value.strip().replace('"', '')
-			id_like = os_info.get('ID_LIKE', '').title()
-			version_codename = os_info.get('VERSION_CODENAME', '')
-			debian_version_full = os_info.get('DEBIAN_VERSION_FULL') or os_info.get('VERSION_ID', '')
-			osname = f'{id_like}{debian_version_full} ({version_codename})'
-		except (IOError, OSError):
-			logging.warning('OS release file not found: %s', OS_RELEASE_FILE)
-		kernelver = ''
-		try:
-			kernel = os.uname()
-			kernelver = f'[{kernel.sysname} {kernel.release.split("+")[0]}]'
-		except Exception as e:
-			logging.error('Unexpected error: %s', e)
-		return f' {osname} {kernelver}'
+
+		def _fetch():
+			osname = ''
+			try:
+				os_info = {}
+				with open(OS_RELEASE_FILE) as osr:
+					for line in osr:
+						line = line.strip()
+						if '=' in line:
+							key, value = line.split('=', 1)
+							os_info[key] = value.strip().replace('"', '')
+				id_like = os_info.get('ID_LIKE', '').title()
+				version_codename = os_info.get('VERSION_CODENAME', '')
+				debian_version_full = os_info.get('DEBIAN_VERSION_FULL') or os_info.get('VERSION_ID', '')
+				osname = f'{id_like}{debian_version_full} ({version_codename})'
+			except (IOError, OSError):
+				logging.warning('OS release file not found: %s', OS_RELEASE_FILE)
+			kernelver = ''
+			try:
+				kernel = os.uname()
+				kernelver = f'[{kernel.sysname} {kernel.release.split("+")[0]}]'
+			except Exception as e:
+				logging.error('Unexpected error: %s', e)
+			return f' {osname} {kernelver}'
+
+		return self._get_cached('os_info', _fetch, ttl=300)
 
 	def mmdvm_info(self):
 		"""Get MMDVM configured frequency and color code."""
-		mmdvm_info = {}
-		dmr_enabled = False
-		try:
-			with open(MMDVMHOST_FILE, 'r') as mmh:
-				for line in mmh:
-					if '[DMR]' in line:
-						dmr_enabled = 'Enable=1' in next(mmh, '')
-					elif '=' in line:
-						key, value = line.split('=', 1)
-						mmdvm_info[key.strip()] = value.strip()
-		except (IOError, OSError):
-			logging.warning('MMDVMHost file not found: %s', MMDVMHOST_FILE)
-		rx_freq = int(mmdvm_info.get('RXFrequency', 0))
-		tx_freq = int(mmdvm_info.get('TXFrequency', 0))
-		color_code = int(mmdvm_info.get('ColorCode', 0))
-		rx = round(rx_freq / 1000000, 6)
-		tx = round(tx_freq / 1000000, 6)
-		shift = ''
-		if tx > rx:
-			shift = f' ({round(rx - tx, 6)}MHz)'
-		elif tx < rx:
-			shift = f' (+{round(rx - tx, 6)}MHz)'
-		cc = f' CC{color_code}' if dmr_enabled else ''
-		return (str(tx) + 'MHz' + shift + cc) + ','
+
+		def _fetch():
+			mmdvm_info = {}
+			dmr_enabled = False
+			try:
+				with open(MMDVMHOST_FILE, 'r') as mmh:
+					for line in mmh:
+						if '[DMR]' in line:
+							dmr_enabled = 'Enable=1' in next(mmh, '')
+						elif '=' in line:
+							key, value = line.split('=', 1)
+							mmdvm_info[key.strip()] = value.strip()
+			except (IOError, OSError):
+				logging.warning('MMDVMHost file not found: %s', MMDVMHOST_FILE)
+			rx_freq = int(mmdvm_info.get('RXFrequency', 0))
+			tx_freq = int(mmdvm_info.get('TXFrequency', 0))
+			color_code = int(mmdvm_info.get('ColorCode', 0))
+			rx = round(rx_freq / 1000000, 6)
+			tx = round(tx_freq / 1000000, 6)
+			shift = ''
+			if tx > rx:
+				shift = f' ({round(rx - tx, 6)}MHz)'
+			elif tx < rx:
+				shift = f' (+{round(rx - tx, 6)}MHz)'
+			cc = f' CC{color_code}' if dmr_enabled else ''
+			return (str(tx) + 'MHz' + shift + cc) + ','
+
+		return self._get_cached('mmdvm_info', _fetch, ttl=300)
 
 
 class TelegramLogger(object):
@@ -798,7 +653,6 @@ async def _retrieve_gpsd_data(cfg, filter_class, log_name):
 	"""Retrieve data from GPSD with retries."""
 	if not cfg.gpsd_enabled:
 		return None
-	logging.debug('Trying to figure out %s using GPS', log_name)
 	max_retries = 5
 	retry_delay = 1
 	loop = asyncio.get_running_loop()
@@ -925,7 +779,6 @@ def _spd_to_kmh(spd):
 
 async def get_coordinates():
 	"""Get approximate latitude and longitude using IP address lookup."""
-	logging.debug('Trying to figure out the coordinate using your IP address')
 	url = 'http://ip-api.com/json/'
 	try:
 		async with aiohttp.ClientSession() as session:
@@ -968,9 +821,8 @@ def get_add_from_pos(lat, lon):
 			cache = pickle.load(cache_file)
 	else:
 		cache = {}
-	coord_key = f'{lat:.2f},{lon:.2f}'
+	coord_key = f'{lat:.4f},{lon:.4f}'
 	if coord_key in cache:
-		logging.debug('Address found in cache for requested coordinates')
 		return cache[coord_key]
 	geolocator = Nominatim(user_agent=APP_NAME)
 	try:
@@ -980,10 +832,10 @@ def get_add_from_pos(lat, lon):
 			cache[coord_key] = address
 			with open(CACHE_FILE, 'wb') as cache_file:
 				pickle.dump(cache, cache_file)
-			logging.debug('Address fetched and cached for requested coordinates')
+			logging.debug(f'Address cached for requested coordinates: {coord_key}')
 			return address
 		else:
-			logging.warning('No address found for provided coordinates')
+			logging.warning(f'No address found for provided coordinates: {coord_key}')
 			return None
 	except Exception as e:
 		logging.error('Error getting address: %s', e)
@@ -1073,8 +925,8 @@ async def send_position(ais, cfg, tg_logger, sys_stats, gps_data=None):
 	lookup_table = symbt if symbt in ['/', '\\'] else '\\'
 	sym_desc = symbols.get_desc(lookup_table, symb).split('(')[0].strip()
 	payload = f'/{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
-	posit = f'{cfg.call}>APP642:{payload}'
-	tgpos = f'<u>{cfg.call} Position</u>\n\nTime: <b>{timestamp}</b>\nSymbol: {symbt}{symb} ({sym_desc})\nPosition:\n\tLatitude: <b>{cur_lat}</b>\n\tLongitude: <b>{cur_lon}</b>\n\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\nComment: <b>{comment}</b>'
+	posit = f'{FROMCALL}>{TOCALL}:{payload}'
+	tgpos = f'<u>{FROMCALL} Position</u>\n\nTime: <b>{timestamp}</b>\nSymbol: {symbt}{symb} ({sym_desc})\nPosition:\n\tLatitude: <b>{cur_lat}</b>\n\tLongitude: <b>{cur_lon}</b>\n\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\nComment: <b>{comment}</b>'
 	# Send data
 	try:
 		ais.sendall(posit)
@@ -1090,7 +942,7 @@ async def send_position(ais, cfg, tg_logger, sys_stats, gps_data=None):
 
 async def send_header(ais, cfg, tg_logger, sys_stats):
 	"""Send APRS header information to APRS-IS."""
-	caller = f'{cfg.call}>APP642::{cfg.call:9s}:'
+	caller = f'{FROMCALL}>{TOCALL}::{FROMCALL:9s}:'
 	params = ['CPUTemp', 'CPULoad', 'RAMUsed', 'DiskUsed']
 	units = ['deg.C', '%', 'GB', 'GB']
 	eqns = ['0,0.1,0', '0,0.001,0', '0,0.001,0', '0,0.001,0']
@@ -1099,7 +951,7 @@ async def send_header(ais, cfg, tg_logger, sys_stats):
 		units.append('sats')
 		eqns.append('0,1,0')
 	payload = f'{caller}PARM.{",".join(params)}\r\n{caller}UNIT.{",".join(units)}\r\n{caller}EQNS.{",".join(eqns)}'
-	tg_msg = f'<u>{cfg.call} Header</u>\n\nParameters: <b>{",".join(params)}</b>\nUnits: <b>{",".join(units)}</b>\nEquations: <b>{",".join(eqns)}</b>\n\nValue: <code>[a,b,c]=(a×v²)+(b×v)+c</code>'
+	tg_msg = f'<u>{FROMCALL} Header</u>\n\nParameters: <b>{",".join(params)}</b>\nUnits: <b>{",".join(units)}</b>\nEquations: <b>{",".join(eqns)}</b>\n\nValue: <code>[a,b,c]=(a×v²)+(b×v)+c</code>'
 	try:
 		ais.sendall(payload)
 		logging.info(payload)
@@ -1121,9 +973,9 @@ async def send_telemetry(ais, cfg, tg_logger, sys_stats):
 	diskused = sys_stats.storage_used()
 	telemmemused = int(memused / 1.0000e6)
 	telemdiskused = int(diskused / 1.0000e6)
-	telem = f'{cfg.call}>APP642:T#{seq:03d},{temp:d},{cpuload:d},{telemmemused:d},{telemdiskused:d}'
+	telem = f'{FROMCALL}>{TOCALL}:T#{seq:03d},{temp:d},{cpuload:d},{telemmemused:d},{telemdiskused:d}'
 	tgtel = (
-		f'<u>{cfg.call} Telemetry</u>\n\n'
+		f'<u>{FROMCALL} Telemetry</u>\n\n'
 		f'Sequence: <b>#{seq}</b>\n'
 		f'CPU Temp: <b>{temp / 10:.1f} °C</b>\n'
 		f'CPU Load: <b>{cpuload / 1000:.1f}%</b>\n'
@@ -1165,8 +1017,8 @@ async def send_status(ais, cfg, tg_logger, sys_stats, gps_data=None):
 			sats_info = f', gps: {u_sat}'
 	uptime = sys_stats.uptime()
 	status_text = f'{timestamp}[{gridsquare}]{near_add} {uptime}{sats_info}'
-	aprs_packet = f'{cfg.call}>APP642:>{status_text}'
-	tg_msg = f'<u>{cfg.call} Status</u>\n\n<b>{timestamp}[{gridsquare}]{near_add_tg} {uptime}{sats_info}</b>'
+	aprs_packet = f'{FROMCALL}>{TOCALL}:>{status_text}'
+	tg_msg = f'<u>{FROMCALL} Status</u>\n\n<b>{timestamp}[{gridsquare}]{near_add_tg} {uptime}{sats_info}</b>'
 	if os.path.exists(STATUS_FILE):
 		try:
 			with open(STATUS_FILE, 'r') as f:
@@ -1195,25 +1047,21 @@ async def send_scheduled_message(ais, cfg, tg_logger, name, weekday, addrcall, t
 	now = dt.datetime.now(dt.timezone.utc)
 	if now.weekday() != weekday:
 		return ais
-
 	today = now.strftime('%Y-%m-%d')
 	if SCHEDULED_MSG_TRACKING.get(name) == today:
 		return ais
-
 	_, lat, lon, _, _, _ = await _get_current_location_data(cfg)
 	gridsquare = latlon_to_grid(lat, lon)
 	message = '{0} [{1}] via {2}'.format(template, gridsquare, APP_NAME)
 	if len(message) > 67:
 		logging.error('Message length %d exceeds APRS limit of 67 characters: %s', len(message), message)
 		return ais
-	payload = f'{cfg.call}>APP642::{addrcall:9s}:{message}'
-
+	payload = f'{FROMCALL}>{TOCALL}::{addrcall:9s}:{message}'
 	try:
 		parsed = aprslib.parse(payload)
 	except APRSParseError as err:
 		logging.error('APRS packet parsing error at %s: %s', name, err)
 		return ais
-
 	try:
 		ais.sendall(payload)
 		logging.info(payload)
@@ -1229,8 +1077,8 @@ async def send_scheduled_message(ais, cfg, tg_logger, name, weekday, addrcall, t
 
 async def ais_connect(cfg):
 	"""Establish connection to APRS-IS with retries."""
-	logging.info('Connecting to APRS-IS server %s:%d as %s', cfg.server, cfg.port, cfg.call)
-	ais = aprslib.IS(cfg.call, passwd=cfg.passcode, host=cfg.server, port=cfg.port)
+	logging.info('Connecting to APRS-IS server %s:%d as %s', cfg.server, cfg.port, FROMCALL)
+	ais = aprslib.IS(FROMCALL, passwd=cfg.passcode, host=cfg.server, port=cfg.port)
 	loop = asyncio.get_running_loop()
 	max_retries = 5
 	retry_delay = 5
@@ -1238,7 +1086,7 @@ async def ais_connect(cfg):
 		try:
 			await loop.run_in_executor(None, ais.connect)
 			# ais.set_filter(cfg.filter)
-			logging.info('Connected to APRS-IS server %s:%d as %s', cfg.server, cfg.port, cfg.call)
+			logging.info('Connected to APRS-IS server %s:%d as %s', cfg.server, cfg.port, FROMCALL)
 			return ais
 		except APRSConnectionError as err:
 			logging.warning('APRS connection error (attempt %d/%d): %s', attempt + 1, max_retries, err)
@@ -1315,14 +1163,14 @@ async def main():
 		reload_event.clear()
 		ais, tg_logger, timer, sb, sys_stats = await initialize_session(cfg)
 		async with tg_logger:
-			await tg_logger.log(f'🚀 <b>{cfg.call}</b>, {APP_NAME} starting up...')
+			await tg_logger.log(f'🚀 <b>{FROMCALL}</b>, {APP_NAME} starting up...')
 			try:
 				await process_loop(cfg, ais, tg_logger, timer, sb, sys_stats, reload_event)
 			finally:
 				if reload_event.is_set():
-					await tg_logger.log(f'🔄 <b>{cfg.call}</b>, {APP_NAME} reloading configuration...')
+					await tg_logger.log(f'🔄 <b>{FROMCALL}</b>, {APP_NAME} reloading configuration...')
 				else:
-					await tg_logger.log(f'🛑 <b>{cfg.call}</b>, {APP_NAME} shutting down...')
+					await tg_logger.log(f'🛑 <b>{FROMCALL}</b>, {APP_NAME} shutting down...')
 				await tg_logger.stop_location()
 				if ais:
 					try:
