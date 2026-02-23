@@ -1002,6 +1002,7 @@ def _get_fallback_location(cfg):
 			alt = float(cfg.altitude)
 		except ValueError:
 			lat, lon, alt = 0.0, 0.0, 0.0
+	logging.debug('Cached Position: %s, %s, %s', lat, lon, alt)
 	return lat, lon, alt
 
 
@@ -1028,7 +1029,6 @@ async def get_gpspos(cfg):
 		logging.debug('%s | GPS Position: %s, %s, %s, %s, %s', utc, lat, lon, alt, spd, cse)
 		_save_gps_cache(lat, lon, alt)
 		return utc, lat, lon, alt, spd, cse
-	logging.warning('Reading from cache.')
 	env_lat, env_lon, env_alt = _get_fallback_location(cfg)
 	return timestamp, env_lat, env_lon, env_alt, 0, 0
 
