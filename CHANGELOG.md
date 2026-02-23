@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-23T05:20:58+08:00)
+## [beta7] - (2026-02-24T00:42:36+08:00)
 
-- 70 commit(s) contributed to the release.
-- 5 day(s) passed between the first and last commit.
-- 6 day(s) passed between releases.
+- 71 commit(s) contributed to the release.
+- 6 day(s) passed between the first and last commit.
+- 7 day(s) passed between releases.
 
 ### 🚀 Features in beta7
 
+- [c7dadcb](https://github.com/HafiziRuslan/RasPiAPRS/commit/c7dadcbf2a0fd446ac54887ec1e69bce1693f4ae) feat(main): log cached position and remove cache warning *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-24T00:42:36+08:00*
 - [f6b32fe](https://github.com/HafiziRuslan/RasPiAPRS/commit/f6b32fe6bbb8fe53679697f41f887f0b00eb0fc8) feat(main): initialize global cache and ensure cache dir exists *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T05:19:52+08:00*
 - [9bd7cf6](https://github.com/HafiziRuslan/RasPiAPRS/commit/9bd7cf625409dc580ef87e1df32d01bfe650341f) feat(main): add robust caching with defaults and temp fetch helper *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T04:09:30+08:00*
 - [18e2c18](https://github.com/HafiziRuslan/RasPiAPRS/commit/18e2c1830a59a7ffb4f64b3aa2792d71f4187d50) feat(main): integrate APRSSender and refactor helpers *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T03:32:59+08:00*
@@ -989,4 +990,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-23T05:21:35.658119823+08:00
+generated using git-cliff on 2026-02-24T00:43:35.021394770+08:00
