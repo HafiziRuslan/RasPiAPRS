@@ -1262,7 +1262,7 @@ class APRSSender:
 			symbt = self.cfg.symbol_overlay
 		tgposmoving = ''
 		extdatstr = ''
-		if cur_spd > 0:
+		if cur_spd >= 1:
 			extdatstr = f'{csestr}/{spdstr}'
 			tgposmoving = f'\n\tSpeed: <b>{int(cur_spd)}m/s</b> | <b>{int(spdkmh)}km/h</b> | <b>{int(spdstr)}kn</b>\n\tCourse: <b>{int(cur_cse)}°</b>'
 			if self.cfg.smartbeaconing_enabled:
