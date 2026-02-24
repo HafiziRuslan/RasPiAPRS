@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-02-25T02:12:12+08:00)
+## [beta8] - (2026-02-25T04:07:05+08:00)
 
-- 2 commit(s) contributed to the release.
+- 3 commit(s) contributed to the release.
 - 0 day(s) passed between the first and last commit.
 
 ### 🚀 Features in beta8
@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [df59769](https://github.com/HafiziRuslan/RasPiAPRS/commit/df59769be9cac11fd9d6be704802f973a40a2372) fix(main): update speed threshold to 1 for position updates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T04:07:05+08:00*
 - [22b167e](https://github.com/HafiziRuslan/RasPiAPRS/commit/22b167e11c9b62fcb62e13d521772cdf909a9276) fix(main): correct git sha retrieval for metadata *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T02:12:12+08:00*
 
 ---
@@ -1016,4 +1017,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-25T02:13:03.325311576+08:00
+generated using git-cliff on 2026-02-25T04:07:38.753815419+08:00
