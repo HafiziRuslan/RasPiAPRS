@@ -2,14 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-24T08:05:39+08:00)
+## [beta7] - (2026-02-25T01:48:56+08:00)
 
-- 72 commit(s) contributed to the release.
+- 82 commit(s) contributed to the release.
 - 7 day(s) passed between the first and last commit.
 - 8 day(s) passed between releases.
 
 ### 🚀 Features in beta7
 
+- [ed79d71](https://github.com/HafiziRuslan/RasPiAPRS/commit/ed79d71bea3d95fe2f3f119f95e10748ff8e2719) feat(gps): introduce GPSDPoller with retryable GPSD data access *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T01:48:56+08:00*
+- [6021219](https://github.com/HafiziRuslan/RasPiAPRS/commit/60212193e7256887492d09436087f137bf312f78) feat(main): fix metadata format string for app versioning *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T01:21:54+08:00*
+- [91d7186](https://github.com/HafiziRuslan/RasPiAPRS/commit/91d718616c0d606916ba877a1487cb9d7fa85846) feat(main): reset Kalman filter on GPS jump detection *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T00:26:25+08:00*
+- [4f09876](https://github.com/HafiziRuslan/RasPiAPRS/commit/4f09876482a3a797b1c0eea2114b4fc5ec7bd8b8) feat(gps): introduce Kalman smoothing and dead-reckoning for GPS *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T00:22:03+08:00*
+- [391ff78](https://github.com/HafiziRuslan/RasPiAPRS/commit/391ff78d32a127c2e9a724d97aae8fdd7a5d91fa) feat(gps): integrate GPSHandler for gpsd access and fallback logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-24T23:37:11+08:00*
+- [511520b](https://github.com/HafiziRuslan/RasPiAPRS/commit/511520bf5432423588db22c3574b70cea4627fb7) feat(main): add APRS and GPS utilities for enhanced geolocation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-24T23:26:09+08:00*
 - [c7dadcb](https://github.com/HafiziRuslan/RasPiAPRS/commit/c7dadcbf2a0fd446ac54887ec1e69bce1693f4ae) feat(main): log cached position and remove cache warning *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-24T00:42:36+08:00*
 - [f6b32fe](https://github.com/HafiziRuslan/RasPiAPRS/commit/f6b32fe6bbb8fe53679697f41f887f0b00eb0fc8) feat(main): initialize global cache and ensure cache dir exists *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T05:19:52+08:00*
 - [9bd7cf6](https://github.com/HafiziRuslan/RasPiAPRS/commit/9bd7cf625409dc580ef87e1df32d01bfe650341f) feat(main): add robust caching with defaults and temp fetch helper *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T04:09:30+08:00*
@@ -45,6 +51,10 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta7
 
+- [3107ba3](https://github.com/HafiziRuslan/RasPiAPRS/commit/3107ba3c16c935894a8e362bd8d281fce6ba48ef) fix(config): remove trailing newline in pyproject and update sbom metadata *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T01:33:17+08:00*
+- [e06f156](https://github.com/HafiziRuslan/RasPiAPRS/commit/e06f156dcf75611b25c2b3c8308224d8e50d57b0) fix(main): correct speed unit conversion *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T01:10:58+08:00*
+- [8b49da9](https://github.com/HafiziRuslan/RasPiAPRS/commit/8b49da97cea03aadba63b97bc4503e5cf7dfaccb) fix(main): adjust gpsd health check delays and spacing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-24T23:10:35+08:00*
+- [9b08166](https://github.com/HafiziRuslan/RasPiAPRS/commit/9b0816621554a62ac162f3e45130b0f3286dab7f) fix(main): adjust gpsd handling and health check logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-24T23:02:24+08:00*
 - [417aaed](https://github.com/HafiziRuslan/RasPiAPRS/commit/417aaedeeaff34a930fcf21c2f3dcd2cb35b388f) fix(main): adjust tracking to use isoformat timestamp *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-24T08:05:39+08:00*
 - [096b392](https://github.com/HafiziRuslan/RasPiAPRS/commit/096b3925ad17c5f8a8fcf561ace9fd2eef38f169) fix(main): correct typo in geolocation comment *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T05:20:58+08:00*
 - [bf0af25](https://github.com/HafiziRuslan/RasPiAPRS/commit/bf0af25e77dbc59bc9445c580428fc4608e17eb5) fix(code): align strings and payload formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T04:54:46+08:00*
@@ -991,4 +1001,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-24T08:07:14.694009107+08:00
+generated using git-cliff on 2026-02-25T01:49:32.199255397+08:00
