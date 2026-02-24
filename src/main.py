@@ -340,6 +340,261 @@ class Timer(PersistentCounter):
 		super().__init__(f'{TMP_DIR}/{name}.tmp', modulo)
 
 
+def _alt_to_aprs(alt):
+	"""Format altitude for APRS (meters to feet)."""
+	alt_ft = alt / 0.3048 if alt else 0
+	alt_ft = max(-999999, alt_ft)
+	alt_ft = min(999999, alt_ft)
+	return f'/A={alt_ft:06.0f}'
+
+
+def _cse_to_aprs(cse):
+	"""Format course for APRS."""
+	cse = cse % 360 if cse else 0
+	cse = max(0, cse)
+	cse = min(359, cse)
+	return f'{cse:03.0f}'
+
+
+def _to_aprs_coord(val, pos_char, neg_char, width):
+	"""Format coordinate for APRS."""
+	direction = pos_char if val >= 0 else neg_char
+	val = abs(val)
+	deg = int(val)
+	minutes = (val - deg) * 60
+	return f'{deg:0{width}d}{minutes:05.2f}{direction}'
+
+
+def _lat_to_aprs(lat):
+	"""Format latitude for APRS."""
+	return _to_aprs_coord(lat, 'N', 'S', 2)
+
+
+def _lon_to_aprs(lon):
+	"""Format longitude for APRS."""
+	return _to_aprs_coord(lon, 'E', 'W', 3)
+
+
+def _format_speed(val):
+	"""Format speed for APRS with clamping."""
+	val = max(0, min(999, val))
+	return f'{val:03.0f}'
+
+
+def _spd_to_kmh(spd):
+	"""Format speed for APRS (mps to kmh)."""
+	val = spd * 3.6 if spd else 0
+	return _format_speed(val)
+
+
+def _spd_to_knots(spd):
+	"""Format speed for APRS (mps to knots)."""
+	val = spd / 0.51444 if spd else 0
+	return _format_speed(val)
+
+
+def latlon_to_grid(lat, lon, precision=6):
+	"""Convert position to grid square."""
+	lon += 180
+	lat += 90
+	field_lon = int(lon // 20)
+	field_lat = int(lat // 10)
+	grid = chr(field_lon + ord('A')) + chr(field_lat + ord('A'))
+	if precision >= 4:
+		square_lon = int((lon % 20) // 2)
+		square_lat = int((lat % 10) // 1)
+		grid += str(square_lon) + str(square_lat)
+	if precision >= 6:
+		subsq_lon = int(((lon % 2) / 2) * 24)
+		subsq_lat = int(((lat % 1) / 1) * 24)
+		grid += chr(subsq_lon + ord('A')) + chr(subsq_lat + ord('A'))
+	return grid
+
+
+# Geolocation
+_GEOLOCATOR = None
+_NOMINATIM_CACHE = PersistentDict(NOMINATIM_CACHE_FILE)
+
+
+def get_add_from_pos(lat, lon):
+	"""Get address from coordinates, using a local cache."""
+	global _GEOLOCATOR
+	coord_key = f'{lat:.4f},{lon:.4f}'
+	if coord_key in _NOMINATIM_CACHE:
+		return _NOMINATIM_CACHE[coord_key]
+	if _GEOLOCATOR is None:
+		_GEOLOCATOR = Nominatim(user_agent=APP_NAME, timeout=10)
+	try:
+		location = _GEOLOCATOR.reverse((lat, lon), exactly_one=True, namedetails=True, addressdetails=True)
+		if location:
+			address = location.raw['address']
+			_NOMINATIM_CACHE[coord_key] = address
+			_NOMINATIM_CACHE.flush()
+			logging.debug(f'Address cached for requested coordinates: {coord_key}')
+			return address
+		else:
+			logging.warning(f'No address found for provided coordinates: {coord_key}')
+			return None
+	except Exception as e:
+		logging.error('Error getting address: %s', e)
+		return None
+
+
+def format_address(address, include_flag=False):
+	"""Format address dictionary into a string."""
+	if not address:
+		return ''
+	area = address.get('suburb') or address.get('town') or address.get('city') or address.get('district') or ''
+	state = address.get('state') or address.get('region') or address.get('province') or ''
+	full_area = ', '.join(filter(None, [area, state]))
+	cc_str = ''
+	if cc := address.get('country_code'):
+		cc = cc.upper()
+		if include_flag:
+			flag = ''.join(chr(ord(c) + 127397) for c in cc)
+			cc_str = f' [{flag} {cc}]'
+		else:
+			cc_str = f' ({cc})'
+	return f'in {full_area}{cc_str}'
+
+
+def _fetch_from_gpsd(host, port, filter_class):
+	"""Worker function to fetch data from GPSD synchronously."""
+	try:
+		with GPSDClient(host=host, port=port, timeout=10) as client:
+			for result in client.dict_stream(convert_datetime=True, filter=[filter_class]):
+				if filter_class == 'TPV':
+					if result.get('mode', 0) > 1:
+						return result
+				else:
+					return result
+			return None
+	except Exception as e:
+		return e
+
+
+async def _retrieve_gpsd_data(cfg, filter_class, log_name):
+	"""Retrieve data from GPSD."""
+	global GPSD_HEALTHY
+	if not cfg.gpsd_enabled or not GPSD_HEALTHY:
+		if cfg.gpsd_enabled and not GPSD_HEALTHY:
+			logging.warning('GPSD is marked as unhealthy, skipping retrieval for %s.', log_name)
+		return None
+	loop = asyncio.get_running_loop()
+	try:
+		result = await loop.run_in_executor(None, _fetch_from_gpsd, cfg.gpsd_host, cfg.gpsd_port, filter_class)
+		if isinstance(result, Exception):
+			raise result
+		if result:
+			if not GPSD_HEALTHY:
+				logging.info('GPSD connection restored during data retrieval.')
+			GPSD_HEALTHY = True
+			return result
+		else:
+			logging.warning('GPS %s unavailable.', log_name)
+			GPSD_HEALTHY = False
+	except Exception as e:
+		logging.error('GPSD (%s) connection error: %s', log_name, e)
+		GPSD_HEALTHY = False
+	return None
+
+
+def _get_fallback_location(cfg):
+	"""Retrieve location from cache or environment variables."""
+	lat, lon, alt = 0.0, 0.0, 0.0
+	gps_cache = PersistentDict(GPS_FILE)
+	if gps_cache:
+		try:
+			lat = float(gps_cache.get('lat', 0.0))
+			lon = float(gps_cache.get('lon', 0.0))
+			alt = float(gps_cache.get('alt', 0.0))
+		except (ValueError, TypeError):
+			pass
+	if lat == 0.0 and lon == 0.0:
+		try:
+			lat = float(cfg.latitude)
+			lon = float(cfg.longitude)
+			alt = float(cfg.altitude)
+		except ValueError:
+			lat, lon, alt = 0.0, 0.0, 0.0
+	logging.debug('Cached Position: %s, %s, %s', lat, lon, alt)
+	return lat, lon, alt
+
+
+def _save_gps_cache(lat, lon, alt):
+	"""Save GPS location to cache file."""
+	cache = PersistentDict(GPS_FILE)
+	cache.update({'lat': lat, 'lon': lon, 'alt': alt})
+	cache.flush()
+
+
+async def get_gpspos(cfg):
+	"""Get position from GPSD."""
+	timestamp = dt.datetime.now(dt.timezone.utc)
+	if not cfg.gpsd_enabled:
+		return timestamp, 0, 0, 0, 0, 0
+	result = await _retrieve_gpsd_data(cfg, 'TPV', 'position')
+	if result:
+		utc = result.get('time', timestamp)
+		lat = result.get('lat', 0.0)
+		lon = result.get('lon', 0.0)
+		alt = result.get('alt', 0.0)
+		spd = result.get('speed', 0)
+		cse = result.get('magtrack', 0) or result.get('track', 0)
+		logging.debug('%s | GPS Position: %s, %s, %s, %s, %s', utc, lat, lon, alt, spd, cse)
+		_save_gps_cache(lat, lon, alt)
+		return utc, lat, lon, alt, spd, cse
+	env_lat, env_lon, env_alt = _get_fallback_location(cfg)
+	return timestamp, env_lat, env_lon, env_alt, 0, 0
+
+
+async def get_gpssat(cfg):
+	"""Get satellite from GPSD."""
+	timestamp = dt.datetime.now(dt.timezone.utc)
+	if not cfg.gpsd_enabled:
+		return timestamp, 0, 0
+	result = await _retrieve_gpsd_data(cfg, 'SKY', 'satellite')
+	if result:
+		utc = result.get('time', timestamp)
+		uSat = result.get('uSat', 0)
+		nSat = result.get('nSat', 0)
+		return utc, uSat, nSat
+	return timestamp, 0, 0
+
+
+async def get_coordinates():
+	"""Get approximate latitude and longitude using IP address lookup."""
+	url = 'http://ip-api.com/json/'
+	try:
+		async with aiohttp.ClientSession() as session:
+			async with session.get(url) as response:
+				data = await response.json()
+	except Exception as err:
+		logging.error('Failed to fetch coordinates from %s: %s', url, err)
+		return 0, 0
+	else:
+		try:
+			logging.debug('IP-Position: %f, %f', data['lat'], data['lon'])
+			return data['lat'], data['lon']
+		except (KeyError, TypeError) as err:
+			logging.error('Unexpected response format: %s', err)
+			return 0, 0
+
+
+async def _get_current_location_data(cfg, gps_data=None):
+	"""Determines the current location data from GPS or fallback to config. Returns time, lat, lon, alt, spd, cse."""
+	if not gps_data and cfg.gpsd_enabled:
+		gps_data = await get_gpspos(cfg)
+	if gps_data:
+		timestamp, lat, lon, alt, spd, cse = gps_data
+		if isinstance(lat, (int, float)) and isinstance(lon, (int, float)) and (lat != 0 or lon != 0):
+			return timestamp, lat, lon, alt, spd, cse
+	lat = float(cfg.latitude)
+	lon = float(cfg.longitude)
+	alt = float(cfg.altitude)
+	return None, lat, lon, alt, 0, 0
+
+
 class SmartBeaconing(object):
 	"""Class to handle SmartBeaconing logic."""
 
@@ -943,261 +1198,6 @@ class APRSSender:
 				self.ais.close()
 			except Exception:
 				pass
-
-
-def _fetch_from_gpsd(host, port, filter_class):
-	"""Worker function to fetch data from GPSD synchronously."""
-	try:
-		with GPSDClient(host=host, port=port, timeout=10) as client:
-			for result in client.dict_stream(convert_datetime=True, filter=[filter_class]):
-				if filter_class == 'TPV':
-					if result.get('mode', 0) > 1:
-						return result
-				else:
-					return result
-			return None
-	except Exception as e:
-		return e
-
-
-async def _retrieve_gpsd_data(cfg, filter_class, log_name):
-	"""Retrieve data from GPSD."""
-	global GPSD_HEALTHY
-	if not cfg.gpsd_enabled or not GPSD_HEALTHY:
-		if cfg.gpsd_enabled and not GPSD_HEALTHY:
-			logging.warning('GPSD is marked as unhealthy, skipping retrieval for %s.', log_name)
-		return None
-	loop = asyncio.get_running_loop()
-	try:
-		result = await loop.run_in_executor(None, _fetch_from_gpsd, cfg.gpsd_host, cfg.gpsd_port, filter_class)
-		if isinstance(result, Exception):
-			raise result
-		if result:
-			if not GPSD_HEALTHY:
-				logging.info('GPSD connection restored during data retrieval.')
-			GPSD_HEALTHY = True
-			return result
-		else:
-			logging.warning('GPS %s unavailable.', log_name)
-			GPSD_HEALTHY = False
-	except Exception as e:
-		logging.error('GPSD (%s) connection error: %s', log_name, e)
-		GPSD_HEALTHY = False
-	return None
-
-
-def _get_fallback_location(cfg):
-	"""Retrieve location from cache or environment variables."""
-	lat, lon, alt = 0.0, 0.0, 0.0
-	gps_cache = PersistentDict(GPS_FILE)
-	if gps_cache:
-		try:
-			lat = float(gps_cache.get('lat', 0.0))
-			lon = float(gps_cache.get('lon', 0.0))
-			alt = float(gps_cache.get('alt', 0.0))
-		except (ValueError, TypeError):
-			pass
-	if lat == 0.0 and lon == 0.0:
-		try:
-			lat = float(cfg.latitude)
-			lon = float(cfg.longitude)
-			alt = float(cfg.altitude)
-		except ValueError:
-			lat, lon, alt = 0.0, 0.0, 0.0
-	logging.debug('Cached Position: %s, %s, %s', lat, lon, alt)
-	return lat, lon, alt
-
-
-def _save_gps_cache(lat, lon, alt):
-	"""Save GPS location to cache file."""
-	cache = PersistentDict(GPS_FILE)
-	cache.update({'lat': lat, 'lon': lon, 'alt': alt})
-	cache.flush()
-
-
-async def get_gpspos(cfg):
-	"""Get position from GPSD."""
-	timestamp = dt.datetime.now(dt.timezone.utc)
-	if not cfg.gpsd_enabled:
-		return timestamp, 0, 0, 0, 0, 0
-	result = await _retrieve_gpsd_data(cfg, 'TPV', 'position')
-	if result:
-		utc = result.get('time', timestamp)
-		lat = result.get('lat', 0.0)
-		lon = result.get('lon', 0.0)
-		alt = result.get('alt', 0.0)
-		spd = result.get('speed', 0)
-		cse = result.get('magtrack', 0) or result.get('track', 0)
-		logging.debug('%s | GPS Position: %s, %s, %s, %s, %s', utc, lat, lon, alt, spd, cse)
-		_save_gps_cache(lat, lon, alt)
-		return utc, lat, lon, alt, spd, cse
-	env_lat, env_lon, env_alt = _get_fallback_location(cfg)
-	return timestamp, env_lat, env_lon, env_alt, 0, 0
-
-
-async def get_gpssat(cfg):
-	"""Get satellite from GPSD."""
-	timestamp = dt.datetime.now(dt.timezone.utc)
-	if not cfg.gpsd_enabled:
-		return timestamp, 0, 0
-	result = await _retrieve_gpsd_data(cfg, 'SKY', 'satellite')
-	if result:
-		utc = result.get('time', timestamp)
-		uSat = result.get('uSat', 0)
-		nSat = result.get('nSat', 0)
-		return utc, uSat, nSat
-	return timestamp, 0, 0
-
-
-async def get_coordinates():
-	"""Get approximate latitude and longitude using IP address lookup."""
-	url = 'http://ip-api.com/json/'
-	try:
-		async with aiohttp.ClientSession() as session:
-			async with session.get(url) as response:
-				data = await response.json()
-	except Exception as err:
-		logging.error('Failed to fetch coordinates from %s: %s', url, err)
-		return 0, 0
-	else:
-		try:
-			logging.debug('IP-Position: %f, %f', data['lat'], data['lon'])
-			return data['lat'], data['lon']
-		except (KeyError, TypeError) as err:
-			logging.error('Unexpected response format: %s', err)
-			return 0, 0
-
-
-async def _get_current_location_data(cfg, gps_data=None):
-	"""Determines the current location data from GPS or fallback to config. Returns time, lat, lon, alt, spd, cse."""
-	if not gps_data and cfg.gpsd_enabled:
-		gps_data = await get_gpspos(cfg)
-	if gps_data:
-		timestamp, lat, lon, alt, spd, cse = gps_data
-		if isinstance(lat, (int, float)) and isinstance(lon, (int, float)) and (lat != 0 or lon != 0):
-			return timestamp, lat, lon, alt, spd, cse
-	lat = float(cfg.latitude)
-	lon = float(cfg.longitude)
-	alt = float(cfg.altitude)
-	return None, lat, lon, alt, 0, 0
-
-
-def _alt_to_aprs(alt):
-	"""Format altitude for APRS (meters to feet)."""
-	alt_ft = alt / 0.3048 if alt else 0
-	alt_ft = max(-999999, alt_ft)
-	alt_ft = min(999999, alt_ft)
-	return f'/A={alt_ft:06.0f}'
-
-
-def _cse_to_aprs(cse):
-	"""Format course for APRS."""
-	cse = cse % 360 if cse else 0
-	cse = max(0, cse)
-	cse = min(359, cse)
-	return f'{cse:03.0f}'
-
-
-def _to_aprs_coord(val, pos_char, neg_char, width):
-	"""Format coordinate for APRS."""
-	direction = pos_char if val >= 0 else neg_char
-	val = abs(val)
-	deg = int(val)
-	minutes = (val - deg) * 60
-	return f'{deg:0{width}d}{minutes:05.2f}{direction}'
-
-
-def _lat_to_aprs(lat):
-	"""Format latitude for APRS."""
-	return _to_aprs_coord(lat, 'N', 'S', 2)
-
-
-def _lon_to_aprs(lon):
-	"""Format longitude for APRS."""
-	return _to_aprs_coord(lon, 'E', 'W', 3)
-
-
-def _format_speed(val):
-	"""Format speed for APRS with clamping."""
-	val = max(0, min(999, val))
-	return f'{val:03.0f}'
-
-
-def _spd_to_kmh(spd):
-	"""Format speed for APRS (mps to kmh)."""
-	val = spd * 3.6 if spd else 0
-	return _format_speed(val)
-
-
-def _spd_to_knots(spd):
-	"""Format speed for APRS (mps to knots)."""
-	val = spd / 0.51444 if spd else 0
-	return _format_speed(val)
-
-
-def latlon_to_grid(lat, lon, precision=6):
-	"""Convert position to grid square."""
-	lon += 180
-	lat += 90
-	field_lon = int(lon // 20)
-	field_lat = int(lat // 10)
-	grid = chr(field_lon + ord('A')) + chr(field_lat + ord('A'))
-	if precision >= 4:
-		square_lon = int((lon % 20) // 2)
-		square_lat = int((lat % 10) // 1)
-		grid += str(square_lon) + str(square_lat)
-	if precision >= 6:
-		subsq_lon = int(((lon % 2) / 2) * 24)
-		subsq_lat = int(((lat % 1) / 1) * 24)
-		grid += chr(subsq_lon + ord('A')) + chr(subsq_lat + ord('A'))
-	return grid
-
-
-# Geolocation
-_GEOLOCATOR = None
-_NOMINATIM_CACHE = PersistentDict(NOMINATIM_CACHE_FILE)
-
-
-def get_add_from_pos(lat, lon):
-	"""Get address from coordinates, using a local cache."""
-	global _GEOLOCATOR
-	coord_key = f'{lat:.4f},{lon:.4f}'
-	if coord_key in _NOMINATIM_CACHE:
-		return _NOMINATIM_CACHE[coord_key]
-	if _GEOLOCATOR is None:
-		_GEOLOCATOR = Nominatim(user_agent=APP_NAME, timeout=10)
-	try:
-		location = _GEOLOCATOR.reverse((lat, lon), exactly_one=True, namedetails=True, addressdetails=True)
-		if location:
-			address = location.raw['address']
-			_NOMINATIM_CACHE[coord_key] = address
-			_NOMINATIM_CACHE.flush()
-			logging.debug(f'Address cached for requested coordinates: {coord_key}')
-			return address
-		else:
-			logging.warning(f'No address found for provided coordinates: {coord_key}')
-			return None
-	except Exception as e:
-		logging.error('Error getting address: %s', e)
-		return None
-
-
-def format_address(address, include_flag=False):
-	"""Format address dictionary into a string."""
-	if not address:
-		return ''
-	area = address.get('suburb') or address.get('town') or address.get('city') or address.get('district') or ''
-	state = address.get('state') or address.get('region') or address.get('province') or ''
-	full_area = ', '.join(filter(None, [area, state]))
-	cc_str = ''
-	if cc := address.get('country_code'):
-		cc = cc.upper()
-		if include_flag:
-			flag = ''.join(chr(ord(c) + 127397) for c in cc)
-			cc_str = f' [{flag} {cc}]'
-		else:
-			cc_str = f' ({cc})'
-	return f'in {full_area}{cc_str}'
 
 
 def setup_signal_handling(reload_event):
