@@ -1094,9 +1094,10 @@ class TelegramLogger(object):
 		if not self.enabled or not self.bot:
 			return
 		try:
+			message = f'{tg_message}\n\n<code>{APP_NAME}</code>'
 			msg_kwargs = {
 				'chat_id': self.chat_id,
-				'text': tg_message,
+				'text': message,
 				'parse_mode': 'HTML',
 				'link_preview_options': {'is_disabled': True, 'prefer_small_media': True, 'show_above_text': True},
 			}
@@ -1462,14 +1463,14 @@ async def main():
 		if cfg.gpsd_enabled:
 			health_check_task = asyncio.create_task(gps_handler.run_health_check())
 		async with tg_logger:
-			await tg_logger.log(f'🚀 <b>{FROMCALL}</b>, {APP_NAME} starting up...')
+			await tg_logger.log(f'🚀 <b>{FROMCALL}</b>, Started')
 			try:
 				await process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, scheduled_msg_handler, gps_handler)
 			finally:
 				if reload_event.is_set():
-					await tg_logger.log(f'🔄 <b>{FROMCALL}</b>, {APP_NAME} reloading configuration...')
+					await tg_logger.log(f'🔄 <b>{FROMCALL}</b>, Reloaded')
 				else:
-					await tg_logger.log(f'🛑 <b>{FROMCALL}</b>, {APP_NAME} shutting down...')
+					await tg_logger.log(f'🛑 <b>{FROMCALL}</b>, Stopped')
 				await tg_logger.stop_location()
 				if health_check_task:
 					health_check_task.cancel()
