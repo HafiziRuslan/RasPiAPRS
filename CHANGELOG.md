@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta7] - (2026-02-24T00:42:36+08:00)
+## [beta7] - (2026-02-24T08:05:39+08:00)
 
-- 71 commit(s) contributed to the release.
-- 6 day(s) passed between the first and last commit.
-- 7 day(s) passed between releases.
+- 72 commit(s) contributed to the release.
+- 7 day(s) passed between the first and last commit.
+- 8 day(s) passed between releases.
 
 ### 🚀 Features in beta7
 
@@ -45,6 +45,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta7
 
+- [417aaed](https://github.com/HafiziRuslan/RasPiAPRS/commit/417aaedeeaff34a930fcf21c2f3dcd2cb35b388f) fix(main): adjust tracking to use isoformat timestamp *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-24T08:05:39+08:00*
 - [096b392](https://github.com/HafiziRuslan/RasPiAPRS/commit/096b3925ad17c5f8a8fcf561ace9fd2eef38f169) fix(main): correct typo in geolocation comment *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T05:20:58+08:00*
 - [bf0af25](https://github.com/HafiziRuslan/RasPiAPRS/commit/bf0af25e77dbc59bc9445c580428fc4608e17eb5) fix(code): align strings and payload formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T04:54:46+08:00*
 - [18d1050](https://github.com/HafiziRuslan/RasPiAPRS/commit/18d105074aea3e94c39147ad80bf8727f3f4baec) fix(readme): update metrics wording and optional GPS label *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-23T04:54:15+08:00*
@@ -990,4 +991,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-24T00:43:35.021394770+08:00
+generated using git-cliff on 2026-02-24T08:07:14.694009107+08:00
