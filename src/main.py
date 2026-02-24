@@ -584,7 +584,8 @@ class ScheduledMessageHandler:
 		today = now.strftime('%Y-%m-%d')
 		source = from_call or FROMCALL
 		tracking_key = f'{name},{source}'
-		if self.tracking.get(tracking_key) == today:
+		last_sent = self.tracking.get(tracking_key)
+		if last_sent and last_sent.startswith(today):
 			return False
 		_, lat, lon, _, _, _ = await _get_current_location_data(self.cfg)
 		gridsquare = latlon_to_grid(lat, lon)
@@ -616,7 +617,7 @@ class ScheduledMessageHandler:
 			tg_msg += f'\nMessage No: <b>{parsed["msgNo"]}</b>'
 		await aprs_sender.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
 		seq_mgr._save()
-		self.tracking[tracking_key] = today
+		self.tracking[tracking_key] = now.isoformat()
 		self.tracking.flush()
 		return True
 
