@@ -2,20 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-02-25T04:31:27+08:00)
+## [beta8] - (2026-02-25T06:38:50+08:00)
 
-- 4 commit(s) contributed to the release.
-- 0 day(s) passed between the first and last commit.
+- 7 commit(s) contributed to the release.
 
 ### 🚀 Features in beta8
 
+- [dcb0f73](https://github.com/HafiziRuslan/RasPiAPRS/commit/dcb0f734c7f6700e0ed00993a8ac3470292c9567) feat(code): integrate memory history tracking in SystemStats *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T06:28:40+08:00*
 - [17a7f63](https://github.com/HafiziRuslan/RasPiAPRS/commit/17a7f6371f768849d5257c53e41c96763669aa09) feat(main): improve telegram logger messaging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T04:31:27+08:00*
 - [cd983b1](https://github.com/HafiziRuslan/RasPiAPRS/commit/cd983b1a81b219bcb917bb6cf6e658be7a75b88f) feat(release): update version to 0.1b8 across pipelines and artifacts *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T02:11:45+08:00*
 
 ### 🐛 Bug Fixes in beta8
 
+- [33a01c6](https://github.com/HafiziRuslan/RasPiAPRS/commit/33a01c669ba350d557502a68b69617c3ce9380b7) fix(toml): format cliff template for conditional timespan *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T06:31:56+08:00*
 - [df59769](https://github.com/HafiziRuslan/RasPiAPRS/commit/df59769be9cac11fd9d6be704802f973a40a2372) fix(main): update speed threshold to 1 for position updates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T04:07:05+08:00*
 - [22b167e](https://github.com/HafiziRuslan/RasPiAPRS/commit/22b167e11c9b62fcb62e13d521772cdf909a9276) fix(main): correct git sha retrieval for metadata *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T02:12:12+08:00*
+
+### 🚜 Refactor in beta8
+
+- [a90e895](https://github.com/HafiziRuslan/RasPiAPRS/commit/a90e8954788f7e111abbd9a502030c6173a0e4ed) refactor(main): simplify history handling and caching *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T06:38:50+08:00*
 
 ---
 
@@ -1018,4 +1023,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-25T04:32:00.365522244+08:00
+generated using git-cliff on 2026-02-25T06:39:22.347622611+08:00
