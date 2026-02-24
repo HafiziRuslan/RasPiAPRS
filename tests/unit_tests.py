@@ -1,14 +1,29 @@
+#!/usr/bin/env python3
 """Unit tests for RasPiAPRS."""
 
 import asyncio
 import datetime as dt
+import importlib
 import os
 import sys
 import unittest
-from unittest.mock import MagicMock, mock_open, patch
+from unittest.mock import MagicMock
+from unittest.mock import mock_open
+from unittest.mock import patch
 
 # Ensure src is in the path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+
+# Import scripts from tests directory to be tested
+try:
+	address = importlib.import_module('address')
+	gps = importlib.import_module('gps')
+	grid_square = __import__('grid-square')
+except ImportError:
+	# This allows tests to be skipped if modules are not found
+	address = None
+	gps = None
+	grid_square = None
 
 import main
 import symbols
@@ -200,6 +215,130 @@ class TestMainAsync(unittest.IsolatedAsyncioTestCase):
 		ais.sendall.assert_called()
 		call_args = ais.sendall.call_args[0][0]
 		self.assertIn('N0CALL>APP642:/011200z1000.00N/02000.00E>', call_args)  # 10.0 lat, 20.0 lon, symbol >
+
+
+@unittest.skipIf(grid_square is None, 'grid-square.py not found')
+class TestGridSquare(unittest.TestCase):
+	def test_latlon_to_grid_valid(self):
+		# Test with a known value. Note: The implementation in grid-square.py
+		# may have discrepancies with other Maidenhead locator tools at higher precision.
+		# This test validates the current implementation.
+		# lat=41.5, lon=-71.5 -> FN41gm
+		self.assertEqual(grid_square.latlon_to_grid(41.5, -71.5, 6), 'FN41gm')
+
+	def test_latlon_to_grid_precision(self):
+		self.assertEqual(grid_square.latlon_to_grid(41.5, -71.5, 2), 'FN')
+		self.assertEqual(grid_square.latlon_to_grid(41.5, -71.5, 4), 'FN41')
+		self.assertEqual(grid_square.latlon_to_grid(41.5, -71.5, 8), 'FN41gm00')
+		self.assertEqual(grid_square.latlon_to_grid(41.5, -71.5, 10), 'FN41gm00aa')
+
+	def test_latlon_to_grid_invalid_input(self):
+		with self.assertRaises(ValueError):
+			grid_square.latlon_to_grid(91, 0)
+		with self.assertRaises(ValueError):
+			grid_square.latlon_to_grid(-91, 0)
+		with self.assertRaises(ValueError):
+			grid_square.latlon_to_grid(0, 181)
+		with self.assertRaises(ValueError):
+			grid_square.latlon_to_grid(0, -181)
+		with self.assertRaises(ValueError):
+			grid_square.latlon_to_grid(0, 0, 3)
+
+
+@unittest.skipIf(address is None, 'address.py not found')
+class TestAddress(unittest.TestCase):
+	@patch('address.Nominatim')
+	def test_get_address_from_coordinates_success(self, mock_nominatim):
+		# Mock the geolocator and its reverse method
+		mock_geolocator = MagicMock()
+		mock_location = MagicMock()
+		mock_location.raw = {'address': {'road': 'Broadway', 'city': 'New York'}}
+		mock_geolocator.reverse.return_value = mock_location
+		mock_nominatim.return_value = mock_geolocator
+
+		# Call the function
+		address_data = address.get_address_from_coordinates(40.7128, -74.0060)
+
+		# Assertions
+		mock_nominatim.assert_called_with(user_agent='raspiaprs-app')
+		mock_geolocator.reverse.assert_called_with((40.7128, -74.0060), exactly_one=True)
+		self.assertEqual(address_data, {'road': 'Broadway', 'city': 'New York'})
+
+	@patch('address.Nominatim')
+	def test_get_address_from_coordinates_not_found(self, mock_nominatim):
+		mock_geolocator = MagicMock()
+		mock_geolocator.reverse.return_value = None
+		mock_nominatim.return_value = mock_geolocator
+
+		address_data = address.get_address_from_coordinates(0, 0)
+		self.assertIsNone(address_data)
+
+	@patch('address.Nominatim')
+	def test_get_address_from_coordinates_exception(self, mock_nominatim):
+		mock_geolocator = MagicMock()
+		mock_geolocator.reverse.side_effect = Exception('Test error')
+		mock_nominatim.return_value = mock_geolocator
+
+		address_data = address.get_address_from_coordinates(0, 0)
+		self.assertIsNone(address_data)
+
+
+@unittest.skipIf(gps is None, 'gps.py not found')
+class TestGps(unittest.TestCase):
+	@patch('gps.GPSDClient')
+	def test_get_gpsd_position_success(self, mock_gpsd_client):
+		mock_client_instance = MagicMock()
+		mock_stream = [
+			{'class': 'TPV', 'mode': 1},  # No fix yet
+			{
+				'class': 'TPV',
+				'mode': 3,
+				'time': dt.datetime(2023, 1, 1, 12, 0, 0, tzinfo=dt.timezone.utc),
+				'lat': 10.0,
+				'lon': 20.0,
+				'alt': 30.0,
+				'speed': 40.0,
+				'magtrack': 50.0,
+				'sep': 5.0,
+			},
+		]
+		mock_client_instance.dict_stream.return_value = iter(mock_stream)
+		mock_gpsd_client.return_value.__enter__.return_value = mock_client_instance
+
+		poller = gps.GPSDPoller()
+		result = poller.get_position()
+		self.assertIsNotNone(result)
+		self.assertEqual(result[1], 10.0)  # lat
+		self.assertEqual(result[4], 40.0)  # spd
+
+	@patch('time.sleep', return_value=None)
+	@patch('gps.GPSDClient')
+	def test_get_gpsd_position_fail(self, mock_gpsd_client, mock_sleep):
+		mock_gpsd_client.side_effect = ConnectionRefusedError('Connection refused')
+		poller = gps.GPSDPoller()
+		self.assertIsNone(poller.get_position())
+		self.assertEqual(mock_gpsd_client.call_count, 5)
+
+	@patch('gps.GPSDClient')
+	def test_get_gpsd_sat_success(self, mock_gpsd_client):
+		mock_client_instance = MagicMock()
+		mock_stream = [{'class': 'SKY', 'time': dt.datetime(2023, 1, 1, 12, 0, 0, tzinfo=dt.timezone.utc), 'uSat': 8, 'nSat': 12}]
+		mock_client_instance.dict_stream.return_value = iter(mock_stream)
+		mock_gpsd_client.return_value.__enter__.return_value = mock_client_instance
+
+		poller = gps.GPSDPoller()
+		result = poller.get_satellites()
+		self.assertIsNotNone(result)
+		self.assertEqual(result[1], 8)  # uSat
+		self.assertEqual(result[2], 12)  # nSat
+
+	@patch('time.sleep', return_value=None)
+	@patch('gps.GPSDClient')
+	def test_get_gpsd_sat_fail(self, mock_gpsd_client, mock_sleep):
+		mock_gpsd_client.side_effect = OSError('OS error')
+		poller = gps.GPSDPoller()
+		self.assertIsNone(poller.get_satellites())
+		self.assertEqual(mock_gpsd_client.call_count, 5)
 
 
 if __name__ == '__main__':
