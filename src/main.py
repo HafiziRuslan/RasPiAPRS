@@ -784,7 +784,7 @@ class SmartBeaconing(object):
 			self.parked_lat = lat
 			self.parked_lon = lon
 			self.initialized = True
-		spd_kmh = _spd_to_kmh(spd) if spd else 0
+		spd_kmh = spd * 3.6 if spd else 0
 		if not self.is_moving:
 			dist = GPSHandler.calculate_distance(lat, lon, self.parked_lat, self.parked_lon)
 			if dist > 10:
