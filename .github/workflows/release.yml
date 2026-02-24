@@ -18,7 +18,7 @@ jobs:
         uses: thedoctor0/zip-release@main
         with:
           type: 'zip'
-          filename: 'raspiaprs-0.1b7.zip'
+          filename: 'raspiaprs-0.1b8.zip'
           exclusions: '*.git* /.git* LICENSE /tests* *lock* sbom* *.md /misc*'
           recursive_exclusions: '*.md'
 
@@ -26,13 +26,13 @@ jobs:
         uses: ncipollo/release-action@main
         with:
           allowUpdates: true
-          artifacts: 'raspiaprs-0.1b7.zip'
+          artifacts: 'raspiaprs-0.1b8.zip'
           body: "${{ github.event.head_commit.message }}\n\nby: ${{ github.event.head_commit.author.username }} on ${{ github.event.head_commit.timestamp }}"
           commit: ${{ github.event.head_commit.id }}
-          name: 0.1b7
+          name: 0.1b8
           prerelease: true
           replacesArtifacts: true
-          tag: beta7
+          tag: beta8
           token: ${{ secrets.GITHUB_TOKEN }}
 
   deploy:
@@ -43,6 +43,6 @@ jobs:
       - name: Update Tag
         uses: richardsimko/update-tag@latest
         with:
-          tag_name: beta7
+          tag_name: beta8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
