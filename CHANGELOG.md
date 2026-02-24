@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-02-25T04:07:05+08:00)
+## [beta8] - (2026-02-25T04:31:27+08:00)
 
-- 3 commit(s) contributed to the release.
+- 4 commit(s) contributed to the release.
 - 0 day(s) passed between the first and last commit.
 
 ### 🚀 Features in beta8
 
+- [17a7f63](https://github.com/HafiziRuslan/RasPiAPRS/commit/17a7f6371f768849d5257c53e41c96763669aa09) feat(main): improve telegram logger messaging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T04:31:27+08:00*
 - [cd983b1](https://github.com/HafiziRuslan/RasPiAPRS/commit/cd983b1a81b219bcb917bb6cf6e658be7a75b88f) feat(release): update version to 0.1b8 across pipelines and artifacts *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T02:11:45+08:00*
 
 ### 🐛 Bug Fixes in beta8
@@ -1017,4 +1018,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-25T04:07:38.753815419+08:00
+generated using git-cliff on 2026-02-25T04:32:00.365522244+08:00
