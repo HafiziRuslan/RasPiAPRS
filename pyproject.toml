@@ -28,7 +28,6 @@ urls.repository = 'https://github.com/HafiziRuslan/RasPiAPRS.git'
 urls.sourcecode = 'https://github.com/0x9900/aprstar.git'
 urls.history = 'https://github.com/HafiziRuslan/RasPiAPRS/blob/master/CHANGELOG.md'
 urls.issuetracker = 'https://github.com/HafiziRuslan/RasPiAPRS/issues'
-
 requires-python = '>=3.13'
 dependencies = [
   'aiohttp>=3.13.3',
