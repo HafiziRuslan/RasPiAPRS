@@ -8,7 +8,7 @@ The metrics are:-
 
 1. CPU temperature (average 10 minutes)
 2. CPU load (average 10 minutes)
-3. Memory used
+3. Memory used (average 10 minutes)
 4. Disk usage
 5. GPS used [optional]
 

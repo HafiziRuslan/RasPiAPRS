@@ -820,6 +820,7 @@ class SystemStats(object):
 	def __init__(self):
 		self._cache = {}
 		self._temp_history = deque()
+		self._mem_history = deque()
 
 	def _get_cached(self, key, func, ttl=10, default=None):
 		now = time.time()
@@ -847,16 +848,6 @@ class SystemStats(object):
 		return self._get_cached('cpu_load', _fetch, ttl=5, default=0)
 
 	@property
-	def memory_used(self):
-		"""Get used memory in bits."""
-
-		def _fetch():
-			mem = psutil.virtual_memory()
-			return mem.total - mem.free - mem.buffers - mem.cached
-
-		return self._get_cached('memory_used', _fetch, ttl=5, default=0)
-
-	@property
 	def storage_used(self):
 		"""Get used disk space in bits."""
 
@@ -869,27 +860,68 @@ class SystemStats(object):
 		"""Fetch raw CPU temperature."""
 		return psutil.sensors_temperatures()['cpu_thermal'][0].current
 
-	def check_temp(self):
-		"""Check and record current temperature."""
+	def _fetch_raw_memory_used(self):
+		"""Fetch raw memory usage."""
+		mem = psutil.virtual_memory()
+		return mem.total - mem.free - mem.buffers - mem.cached
+
+	def _prune_history(self, history, now, window=600):
+		"""Prune old entries from history."""
+		while history and history[0][0] < now - window:
+			history.popleft()
+
+	def _record_history(self, history, value, now, window=600):
+		"""Records historical data points."""
+		history.append((now, value))
+		self._prune_history(history, now, window)
+
+	def _calculate_average(self, history):
+		"""Calculate average of historical data points."""
+		if history:
+			return sum(v for _, v in history) / len(history)
+		return None
+
+	def check_stats(self):
+		"""Check and record current temperature and memory."""
+		now = time.time()
 		try:
-			temperature = self._fetch_raw_cpu_temp()
-			now = time.time()
-			self._temp_history.append((now, temperature))
-			while self._temp_history and self._temp_history[0][0] < now - 600:
-				self._temp_history.popleft()
+			self._record_history(self._temp_history, self._fetch_raw_cpu_temp(), now)
 		except Exception:
 			pass
+		try:
+			self._record_history(self._mem_history, self._fetch_raw_memory_used(), now)
+		except Exception:
+			pass
+
+	def cleanup(self):
+		"""Clean up old history entries to ensure memory efficiency."""
+		now = time.time()
+		self._prune_history(self._temp_history, now)
+		self._prune_history(self._mem_history, now)
 
 	@property
 	def avg_temp(self):
 		"""Get CPU temperature in degC."""
-		if self._temp_history:
-			return int((sum(t for _, t in self._temp_history) / len(self._temp_history)) * 10)
+		avg = self._calculate_average(self._temp_history)
+		if avg is not None:
+			return int(avg * 10)
 
 		def _fetch():
 			return int(self._fetch_raw_cpu_temp() * 10)
 
 		return self._get_cached('avg_temp', _fetch, ttl=5, default=0)
+
+	@property
+	def avg_memory_used(self):
+		"""Get used memory in bits."""
+		avg = self._calculate_average(self._mem_history)
+		if avg is not None:
+			return int(avg)
+
+		def _fetch():
+			return self._fetch_raw_memory_used()
+
+		return self._get_cached('memory_used', _fetch, ttl=5, default=0)
 
 	@property
 	def uptime(self):
@@ -1304,7 +1336,7 @@ class APRSSender:
 			seq = seq_mgr.count
 		cputemp = self.sys_stats.avg_temp
 		cpuload = self.sys_stats.avg_cpu_load
-		memused = self.sys_stats.memory_used
+		memused = self.sys_stats.avg_memory_used
 		diskused = self.sys_stats.storage_used
 		telemmemused = int(memused / 1.0000e6)
 		telemdiskused = int(diskused / 1.0000e6)
@@ -1431,7 +1463,7 @@ async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, sch
 		if reload_event.is_set():
 			break
 		if timer_tick % 20 == 0:
-			sys_stats.check_temp()
+			sys_stats.check_stats()
 		gps_data = None
 		if cfg.gpsd_enabled:
 			gps_data = await gps_handler.get_position()
