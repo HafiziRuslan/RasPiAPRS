@@ -1152,6 +1152,7 @@ def latlon_to_grid(lat, lon, precision=6):
 		grid += chr(subsq_lon + ord('A')) + chr(subsq_lat + ord('A'))
 	return grid
 
+
 # Geolocation
 _GEOLOCATOR = None
 _NOMINATIM_CACHE = PersistentDict(NOMINATIM_CACHE_FILE)
@@ -1285,17 +1286,14 @@ async def gpsd_health_check(cfg):
 	if not cfg.gpsd_enabled:
 		GPSD_HEALTHY = False
 		return
-
 	loop = asyncio.get_running_loop()
-	check_interval = 30  # seconds
+	check_interval = 30
 	while True:
 		start_time = time.monotonic()
 		try:
-			# Try to get a version object, which should be lightweight
 			result = await loop.run_in_executor(None, _fetch_from_gpsd, cfg.gpsd_host, cfg.gpsd_port, 'VERSION')
 			if isinstance(result, Exception):
 				raise result
-
 			if result:
 				if not GPSD_HEALTHY:
 					logging.info('GPSD connection restored.')
@@ -1308,7 +1306,6 @@ async def gpsd_health_check(cfg):
 			if GPSD_HEALTHY:
 				logging.warning('GPSD connection lost: %s', e)
 			GPSD_HEALTHY = False
-
 		elapsed = time.monotonic() - start_time
 		await asyncio.sleep(max(0, check_interval - elapsed))
 
