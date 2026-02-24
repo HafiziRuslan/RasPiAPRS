@@ -470,6 +470,14 @@ class KalmanTracker:
 		dt = (current_time - self.last_time).total_seconds()
 		return self.x + self.v * dt, self.v
 
+	def reset(self, pos, vel, current_time):
+		self.x = pos
+		self.v = vel
+		self.p_xx = 1.0
+		self.p_xv = 0.0
+		self.p_vv = 1.0
+		self.last_time = current_time
+
 
 class GPSHandler:
 	"""Class to handle GPS data retrieval and management."""
@@ -564,6 +572,14 @@ class GPSHandler:
 			v_east = spd * math.sin(math.radians(cse))
 			v_lat = v_north / (r_earth * math.pi / 180.0)
 			v_lon = v_east / (r_earth * math.cos(math.radians(lat)) * math.pi / 180.0) if math.cos(math.radians(lat)) != 0 else 0
+			if self.last_valid_fix:
+				pred_lat, _ = self.kf_lat.predict(utc)
+				pred_lon, _ = self.kf_lon.predict(utc)
+				dist_jump = self.calculate_distance(pred_lat, pred_lon, lat, lon)
+				if dist_jump > 500:
+					logging.warning('GPS jump detected: %.2fm. Resetting Kalman filter.', dist_jump)
+					self.kf_lat.reset(lat, v_lat, utc)
+					self.kf_lon.reset(lon, v_lon, utc)
 			lat, v_lat = self.kf_lat.update(lat, v_lat, utc)
 			lon, v_lon = self.kf_lon.update(lon, v_lon, utc)
 			v_north_s = v_lat * (r_earth * math.pi / 180.0)
