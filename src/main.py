@@ -823,6 +823,7 @@ class SystemStats(object):
 		self._mem_history = deque()
 
 	def _get_cached(self, key, func, ttl=10, default=None):
+		"""Get cached data."""
 		now = time.time()
 		if key in self._cache:
 			val, ts = self._cache[key]
@@ -875,6 +876,13 @@ class SystemStats(object):
 		history.append((now, value))
 		self._prune_history(history, now, window)
 
+	def _update_history(self, history, fetch_func, now):
+		"""Update historical data points."""
+		try:
+			self._record_history(history, fetch_func(), now)
+		except Exception:
+			pass
+
 	def _calculate_average(self, history):
 		"""Calculate average of historical data points."""
 		if history:
@@ -884,14 +892,8 @@ class SystemStats(object):
 	def check_stats(self):
 		"""Check and record current temperature and memory."""
 		now = time.time()
-		try:
-			self._record_history(self._temp_history, self._fetch_raw_cpu_temp(), now)
-		except Exception:
-			pass
-		try:
-			self._record_history(self._mem_history, self._fetch_raw_memory_used(), now)
-		except Exception:
-			pass
+		self._update_history(self._temp_history, self._fetch_raw_cpu_temp, now)
+		self._update_history(self._mem_history, self._fetch_raw_memory_used, now)
 
 	def cleanup(self):
 		"""Clean up old history entries to ensure memory efficiency."""
@@ -899,29 +901,26 @@ class SystemStats(object):
 		self._prune_history(self._temp_history, now)
 		self._prune_history(self._mem_history, now)
 
+	def _get_stat_property(self, history, fetch_func, cache_key, scale=1):
+		"""Get historical data property."""
+		avg = self._calculate_average(history)
+		if avg is not None:
+			return int(avg * scale)
+
+		def _fetch():
+			return int(fetch_func() * scale)
+
+		return self._get_cached(cache_key, _fetch, ttl=5, default=0)
+
 	@property
 	def avg_temp(self):
 		"""Get CPU temperature in degC."""
-		avg = self._calculate_average(self._temp_history)
-		if avg is not None:
-			return int(avg * 10)
-
-		def _fetch():
-			return int(self._fetch_raw_cpu_temp() * 10)
-
-		return self._get_cached('avg_temp', _fetch, ttl=5, default=0)
+		return self._get_stat_property(self._temp_history, self._fetch_raw_cpu_temp, 'avg_temp', 10)
 
 	@property
 	def avg_memory_used(self):
 		"""Get used memory in bits."""
-		avg = self._calculate_average(self._mem_history)
-		if avg is not None:
-			return int(avg)
-
-		def _fetch():
-			return self._fetch_raw_memory_used()
-
-		return self._get_cached('memory_used', _fetch, ttl=5, default=0)
+		return self._get_stat_property(self._mem_history, self._fetch_raw_memory_used, 'memory_used')
 
 	@property
 	def uptime(self):
