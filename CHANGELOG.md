@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [beta8] - (2026-02-25T02:12:12+08:00)
+
+- 2 commit(s) contributed to the release.
+- 0 day(s) passed between the first and last commit.
+
+### 🚀 Features in beta8
+
+- [cd983b1](https://github.com/HafiziRuslan/RasPiAPRS/commit/cd983b1a81b219bcb917bb6cf6e658be7a75b88f) feat(release): update version to 0.1b8 across pipelines and artifacts *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T02:11:45+08:00*
+
+### 🐛 Bug Fixes in beta8
+
+- [22b167e](https://github.com/HafiziRuslan/RasPiAPRS/commit/22b167e11c9b62fcb62e13d521772cdf909a9276) fix(main): correct git sha retrieval for metadata *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T02:12:12+08:00*
+
+---
+
 ## [beta7] - (2026-02-25T01:48:56+08:00)
 
 - 82 commit(s) contributed to the release.
@@ -1001,4 +1016,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-25T01:49:32.199255397+08:00
+generated using git-cliff on 2026-02-25T02:13:03.325311576+08:00
