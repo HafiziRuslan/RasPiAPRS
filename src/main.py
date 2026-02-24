@@ -66,7 +66,6 @@ def get_app_metadata():
 APP_NAME, PROJECT_URL = get_app_metadata()
 FROMCALL = 'N0CALL'
 TOCALL = 'APP642'
-GPSD_HEALTHY = True
 
 
 def configure_logging():
@@ -411,6 +410,171 @@ def latlon_to_grid(lat, lon, precision=6):
 	return grid
 
 
+class GPSHandler:
+	"""Class to handle GPS data retrieval and management."""
+
+	def __init__(self, cfg):
+		self.cfg = cfg
+		self.healthy = True
+
+	def _fetch_from_gpsd(self, filter_class):
+		"""Worker function to fetch data from GPSD synchronously."""
+		try:
+			with GPSDClient(host=self.cfg.gpsd_host, port=self.cfg.gpsd_port, timeout=10) as client:
+				for result in client.dict_stream(convert_datetime=True, filter=[filter_class]):
+					if filter_class == 'TPV':
+						if result.get('mode', 0) > 1:
+							return result
+					else:
+						return result
+				return None
+		except Exception as e:
+			return e
+
+	async def _retrieve_data(self, filter_class, log_name):
+		"""Retrieve data from GPSD."""
+		if not self.cfg.gpsd_enabled or not self.healthy:
+			if self.cfg.gpsd_enabled and not self.healthy:
+				logging.warning('GPSD is marked as unhealthy, skipping retrieval for %s.', log_name)
+			return None
+		loop = asyncio.get_running_loop()
+		try:
+			result = await loop.run_in_executor(None, self._fetch_from_gpsd, filter_class)
+			if isinstance(result, Exception):
+				raise result
+			if result:
+				if not self.healthy:
+					logging.info('GPSD connection restored during data retrieval.')
+				self.healthy = True
+				return result
+			else:
+				logging.warning('GPS %s unavailable.', log_name)
+				self.healthy = False
+		except Exception as e:
+			logging.error('GPSD (%s) connection error: %s', log_name, e)
+			self.healthy = False
+		return None
+
+	def _get_fallback_location(self):
+		"""Retrieve location from cache or environment variables."""
+		lat, lon, alt = 0.0, 0.0, 0.0
+		gps_cache = PersistentDict(GPS_FILE)
+		if gps_cache:
+			try:
+				lat = float(gps_cache.get('lat', 0.0))
+				lon = float(gps_cache.get('lon', 0.0))
+				alt = float(gps_cache.get('alt', 0.0))
+			except (ValueError, TypeError):
+				pass
+		if lat == 0.0 and lon == 0.0:
+			try:
+				lat = float(self.cfg.latitude)
+				lon = float(self.cfg.longitude)
+				alt = float(self.cfg.altitude)
+			except ValueError:
+				lat, lon, alt = 0.0, 0.0, 0.0
+		logging.debug('Cached Position: %s, %s, %s', lat, lon, alt)
+		return lat, lon, alt
+
+	def _save_cache(self, lat, lon, alt):
+		"""Save GPS location to cache file."""
+		cache = PersistentDict(GPS_FILE)
+		cache.update({'lat': lat, 'lon': lon, 'alt': alt})
+		cache.flush()
+
+	async def get_position(self):
+		"""Get position from GPSD."""
+		timestamp = dt.datetime.now(dt.timezone.utc)
+		if not self.cfg.gpsd_enabled:
+			return timestamp, 0, 0, 0, 0, 0
+		result = await self._retrieve_data('TPV', 'position')
+		if result:
+			utc = result.get('time', timestamp)
+			lat = result.get('lat', 0.0)
+			lon = result.get('lon', 0.0)
+			alt = result.get('alt', 0.0)
+			spd = result.get('speed', 0)
+			cse = result.get('magtrack', 0) or result.get('track', 0)
+			logging.debug('%s | GPS Position: %s, %s, %s, %s, %s', utc, lat, lon, alt, spd, cse)
+			self._save_cache(lat, lon, alt)
+			return utc, lat, lon, alt, spd, cse
+		env_lat, env_lon, env_alt = self._get_fallback_location()
+		return timestamp, env_lat, env_lon, env_alt, 0, 0
+
+	async def get_satellites(self):
+		"""Get satellite from GPSD."""
+		timestamp = dt.datetime.now(dt.timezone.utc)
+		if not self.cfg.gpsd_enabled:
+			return timestamp, 0, 0
+		result = await self._retrieve_data('SKY', 'satellite')
+		if result:
+			utc = result.get('time', timestamp)
+			uSat = result.get('uSat', 0)
+			nSat = result.get('nSat', 0)
+			return utc, uSat, nSat
+		return timestamp, 0, 0
+
+	async def get_current_location_data(self, gps_data=None):
+		"""Determines the current location data from GPS or fallback to config. Returns time, lat, lon, alt, spd, cse."""
+		if not gps_data and self.cfg.gpsd_enabled:
+			gps_data = await self.get_position()
+		if gps_data:
+			timestamp, lat, lon, alt, spd, cse = gps_data
+			if isinstance(lat, (int, float)) and isinstance(lon, (int, float)) and (lat != 0 or lon != 0):
+				return timestamp, lat, lon, alt, spd, cse
+		lat = float(self.cfg.latitude)
+		lon = float(self.cfg.longitude)
+		alt = float(self.cfg.altitude)
+		return None, lat, lon, alt, 0, 0
+
+	async def run_health_check(self):
+		"""Periodically check the health of the GPSD service."""
+		if not self.cfg.gpsd_enabled:
+			self.healthy = False
+			return
+		loop = asyncio.get_running_loop()
+		check_interval = 30
+		while True:
+			start_time = time.monotonic()
+			try:
+				result = await loop.run_in_executor(None, self._fetch_from_gpsd, 'VERSION')
+				if isinstance(result, Exception):
+					raise result
+				if result:
+					if not self.healthy:
+						logging.info('GPSD connection restored.')
+					self.healthy = True
+				else:
+					if self.healthy:
+						logging.warning('GPSD connection lost.')
+					self.healthy = False
+			except Exception as e:
+				if self.healthy:
+					logging.warning('GPSD connection lost: %s', e)
+				self.healthy = False
+			elapsed = time.monotonic() - start_time
+			await asyncio.sleep(max(0, check_interval - elapsed))
+
+	@staticmethod
+	async def get_coordinates():
+		"""Get approximate latitude and longitude using IP address lookup."""
+		url = 'http://ip-api.com/json/'
+		try:
+			async with aiohttp.ClientSession() as session:
+				async with session.get(url) as response:
+					data = await response.json()
+		except Exception as err:
+			logging.error('Failed to fetch coordinates from %s: %s', url, err)
+			return 0, 0
+		else:
+			try:
+				logging.debug('IP-Position: %f, %f', data['lat'], data['lon'])
+				return data['lat'], data['lon']
+			except (KeyError, TypeError) as err:
+				logging.error('Unexpected response format: %s', err)
+				return 0, 0
+
+
 # Geolocation
 _GEOLOCATOR = None
 _NOMINATIM_CACHE = PersistentDict(NOMINATIM_CACHE_FILE)
@@ -456,143 +620,6 @@ def format_address(address, include_flag=False):
 		else:
 			cc_str = f' ({cc})'
 	return f'in {full_area}{cc_str}'
-
-
-def _fetch_from_gpsd(host, port, filter_class):
-	"""Worker function to fetch data from GPSD synchronously."""
-	try:
-		with GPSDClient(host=host, port=port, timeout=10) as client:
-			for result in client.dict_stream(convert_datetime=True, filter=[filter_class]):
-				if filter_class == 'TPV':
-					if result.get('mode', 0) > 1:
-						return result
-				else:
-					return result
-			return None
-	except Exception as e:
-		return e
-
-
-async def _retrieve_gpsd_data(cfg, filter_class, log_name):
-	"""Retrieve data from GPSD."""
-	global GPSD_HEALTHY
-	if not cfg.gpsd_enabled or not GPSD_HEALTHY:
-		if cfg.gpsd_enabled and not GPSD_HEALTHY:
-			logging.warning('GPSD is marked as unhealthy, skipping retrieval for %s.', log_name)
-		return None
-	loop = asyncio.get_running_loop()
-	try:
-		result = await loop.run_in_executor(None, _fetch_from_gpsd, cfg.gpsd_host, cfg.gpsd_port, filter_class)
-		if isinstance(result, Exception):
-			raise result
-		if result:
-			if not GPSD_HEALTHY:
-				logging.info('GPSD connection restored during data retrieval.')
-			GPSD_HEALTHY = True
-			return result
-		else:
-			logging.warning('GPS %s unavailable.', log_name)
-			GPSD_HEALTHY = False
-	except Exception as e:
-		logging.error('GPSD (%s) connection error: %s', log_name, e)
-		GPSD_HEALTHY = False
-	return None
-
-
-def _get_fallback_location(cfg):
-	"""Retrieve location from cache or environment variables."""
-	lat, lon, alt = 0.0, 0.0, 0.0
-	gps_cache = PersistentDict(GPS_FILE)
-	if gps_cache:
-		try:
-			lat = float(gps_cache.get('lat', 0.0))
-			lon = float(gps_cache.get('lon', 0.0))
-			alt = float(gps_cache.get('alt', 0.0))
-		except (ValueError, TypeError):
-			pass
-	if lat == 0.0 and lon == 0.0:
-		try:
-			lat = float(cfg.latitude)
-			lon = float(cfg.longitude)
-			alt = float(cfg.altitude)
-		except ValueError:
-			lat, lon, alt = 0.0, 0.0, 0.0
-	logging.debug('Cached Position: %s, %s, %s', lat, lon, alt)
-	return lat, lon, alt
-
-
-def _save_gps_cache(lat, lon, alt):
-	"""Save GPS location to cache file."""
-	cache = PersistentDict(GPS_FILE)
-	cache.update({'lat': lat, 'lon': lon, 'alt': alt})
-	cache.flush()
-
-
-async def get_gpspos(cfg):
-	"""Get position from GPSD."""
-	timestamp = dt.datetime.now(dt.timezone.utc)
-	if not cfg.gpsd_enabled:
-		return timestamp, 0, 0, 0, 0, 0
-	result = await _retrieve_gpsd_data(cfg, 'TPV', 'position')
-	if result:
-		utc = result.get('time', timestamp)
-		lat = result.get('lat', 0.0)
-		lon = result.get('lon', 0.0)
-		alt = result.get('alt', 0.0)
-		spd = result.get('speed', 0)
-		cse = result.get('magtrack', 0) or result.get('track', 0)
-		logging.debug('%s | GPS Position: %s, %s, %s, %s, %s', utc, lat, lon, alt, spd, cse)
-		_save_gps_cache(lat, lon, alt)
-		return utc, lat, lon, alt, spd, cse
-	env_lat, env_lon, env_alt = _get_fallback_location(cfg)
-	return timestamp, env_lat, env_lon, env_alt, 0, 0
-
-
-async def get_gpssat(cfg):
-	"""Get satellite from GPSD."""
-	timestamp = dt.datetime.now(dt.timezone.utc)
-	if not cfg.gpsd_enabled:
-		return timestamp, 0, 0
-	result = await _retrieve_gpsd_data(cfg, 'SKY', 'satellite')
-	if result:
-		utc = result.get('time', timestamp)
-		uSat = result.get('uSat', 0)
-		nSat = result.get('nSat', 0)
-		return utc, uSat, nSat
-	return timestamp, 0, 0
-
-
-async def get_coordinates():
-	"""Get approximate latitude and longitude using IP address lookup."""
-	url = 'http://ip-api.com/json/'
-	try:
-		async with aiohttp.ClientSession() as session:
-			async with session.get(url) as response:
-				data = await response.json()
-	except Exception as err:
-		logging.error('Failed to fetch coordinates from %s: %s', url, err)
-		return 0, 0
-	else:
-		try:
-			logging.debug('IP-Position: %f, %f', data['lat'], data['lon'])
-			return data['lat'], data['lon']
-		except (KeyError, TypeError) as err:
-			logging.error('Unexpected response format: %s', err)
-			return 0, 0
-
-
-async def _get_current_location_data(cfg, gps_data=None):
-	"""Determines the current location data from GPS or fallback to config. Returns time, lat, lon, alt, spd, cse."""
-	if not gps_data and cfg.gpsd_enabled:
-		gps_data = await get_gpspos(cfg)
-	if gps_data:
-		timestamp, lat, lon, alt, spd, cse = gps_data
-		if isinstance(lat, (int, float)) and isinstance(lon, (int, float)) and (lat != 0 or lon != 0):
-			return timestamp, lat, lon, alt, spd, cse
-	lat = float(cfg.latitude)
-	lon = float(cfg.longitude)
-	alt = float(cfg.altitude)
-	return None, lat, lon, alt, 0, 0
 
 
 class SmartBeaconing(object):
@@ -801,8 +828,9 @@ class SystemStats(object):
 class ScheduledMessageHandler:
 	"""Class to handle sending scheduled messages."""
 
-	def __init__(self, cfg):
+	def __init__(self, cfg, gps_handler):
 		self.cfg = cfg
+		self.gps_handler = gps_handler
 		self.tracking = PersistentDict(MSG_TRACKING_FILE)
 		self.messages = []
 		self._init_messages()
@@ -843,7 +871,7 @@ class ScheduledMessageHandler:
 		last_sent = self.tracking.get(tracking_key)
 		if last_sent and last_sent.startswith(today):
 			return False
-		_, lat, lon, _, _, _ = await _get_current_location_data(self.cfg)
+		_, lat, lon, _, _, _ = await self.gps_handler.get_current_location_data()
 		gridsquare = latlon_to_grid(lat, lon)
 		seq_mgr = Sequence(name='msg_sequence', modulo=100000)
 		seq_mgr._load()
@@ -1034,10 +1062,11 @@ class TelegramLogger(object):
 class APRSSender:
 	"""Class to handle APRS connection and packet sending."""
 
-	def __init__(self, cfg, tg_logger, sys_stats):
+	def __init__(self, cfg, tg_logger, sys_stats, gps_handler):
 		self.cfg = cfg
 		self.tg_logger = tg_logger
 		self.sys_stats = sys_stats
+		self.gps_handler = gps_handler
 		self.ais = None
 
 	async def connect(self):
@@ -1075,7 +1104,7 @@ class APRSSender:
 
 	async def send_position(self, gps_data=None):
 		"""Send APRS position packet to APRS-IS."""
-		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = await _get_current_location_data(self.cfg, gps_data)
+		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = await self.gps_handler.get_current_location_data(gps_data)
 		latstr = _lat_to_aprs(cur_lat)
 		lonstr = _lon_to_aprs(cur_lon)
 		altstr = _alt_to_aprs(cur_alt)
@@ -1148,7 +1177,7 @@ class APRSSender:
 			f'ROM Used: <b>{humanize.naturalsize(diskused, binary=True)}</b>'
 		)
 		if self.cfg.gpsd_enabled:
-			_, uSat, _ = await get_gpssat(self.cfg)
+			_, uSat, _ = await self.gps_handler.get_satellites()
 			payload += f',{uSat:d}'
 			tgtel += f'\nGPS Used: <b>{uSat}</b>'
 		await self.send_packet(payload, 'telemetry')
@@ -1156,7 +1185,7 @@ class APRSSender:
 
 	async def send_status(self, gps_data=None):
 		"""Send APRS status information to APRS-IS."""
-		_, lat, lon, _, _, _ = await _get_current_location_data(self.cfg, gps_data)
+		_, lat, lon, _, _, _ = await self.gps_handler.get_current_location_data(gps_data)
 		gridsquare = f'[{latlon_to_grid(lat, lon)}]'
 		address = get_add_from_pos(lat, lon)
 		near_add = format_address(address)
@@ -1165,7 +1194,7 @@ class APRSSender:
 		timestamp = ztime.strftime('%d%H%Mz')
 		sats_info = ''
 		if self.cfg.gpsd_enabled:
-			timez, u_sat, n_sat = await get_gpssat(self.cfg)
+			timez, u_sat, n_sat = await self.gps_handler.get_satellites()
 			if u_sat > 0:
 				timestamp = timez.strftime('%d%H%Mz')
 				sats_info = f'gps: {u_sat}/{n_sat}'
@@ -1217,19 +1246,21 @@ def setup_signal_handling(reload_event):
 async def initialize_session(cfg):
 	"""Initialize the APRS session components."""
 	cfg.reload()
+	# Use static method for initial IP-based coordinates if needed
 	if cfg.latitude == 0 and cfg.longitude == 0:
-		cfg.latitude, cfg.longitude = await get_coordinates()
+		cfg.latitude, cfg.longitude = await GPSHandler.get_coordinates()
+	gps_handler = GPSHandler(cfg)
 	if cfg.gpsd_enabled:
-		gps_data = await get_gpspos(cfg)
+		gps_data = await gps_handler.get_position()
 		_, cfg.latitude, cfg.longitude, cfg.altitude, _, _ = gps_data
 	tg_logger = TelegramLogger(cfg)
 	sys_stats = SystemStats()
-	aprs_sender = APRSSender(cfg, tg_logger, sys_stats)
+	aprs_sender = APRSSender(cfg, tg_logger, sys_stats, gps_handler)
 	await aprs_sender.connect()
 	timer = Timer()
 	sb = SmartBeaconing(cfg)
-	scheduled_msg_handler = ScheduledMessageHandler(cfg)
-	return aprs_sender, tg_logger, timer, sb, sys_stats, scheduled_msg_handler
+	scheduled_msg_handler = ScheduledMessageHandler(cfg, gps_handler)
+	return aprs_sender, tg_logger, timer, sb, sys_stats, scheduled_msg_handler, gps_handler
 
 
 def should_send_position(cfg, timer_tick, sb, gps_data):
@@ -1252,7 +1283,7 @@ def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, scheduled_msg_handler
 	]
 
 
-async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, scheduled_msg_handler):
+async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, scheduled_msg_handler, gps_handler):
 	"""Run the main processing loop."""
 	while True:
 		with timer:
@@ -1263,7 +1294,7 @@ async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, sch
 			sys_stats.check_temp()
 		gps_data = None
 		if cfg.gpsd_enabled:
-			gps_data = await get_gpspos(cfg)
+			gps_data = await gps_handler.get_position()
 		packet_sent = False
 		tasks = _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, scheduled_msg_handler)
 		for task in tasks:
@@ -1280,36 +1311,6 @@ async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, sch
 		await asyncio.sleep(0.5)
 
 
-async def gpsd_health_check(cfg):
-	"""Periodically check the health of the GPSD service."""
-	global GPSD_HEALTHY
-	if not cfg.gpsd_enabled:
-		GPSD_HEALTHY = False
-		return
-	loop = asyncio.get_running_loop()
-	check_interval = 30
-	while True:
-		start_time = time.monotonic()
-		try:
-			result = await loop.run_in_executor(None, _fetch_from_gpsd, cfg.gpsd_host, cfg.gpsd_port, 'VERSION')
-			if isinstance(result, Exception):
-				raise result
-			if result:
-				if not GPSD_HEALTHY:
-					logging.info('GPSD connection restored.')
-				GPSD_HEALTHY = True
-			else:
-				if GPSD_HEALTHY:
-					logging.warning('GPSD connection lost.')
-				GPSD_HEALTHY = False
-		except Exception as e:
-			if GPSD_HEALTHY:
-				logging.warning('GPSD connection lost: %s', e)
-			GPSD_HEALTHY = False
-		elapsed = time.monotonic() - start_time
-		await asyncio.sleep(max(0, check_interval - elapsed))
-
-
 async def main():
 	"""Main function to run the APRS reporting loop."""
 	reload_event = asyncio.Event()
@@ -1318,13 +1319,13 @@ async def main():
 	health_check_task = None
 	while True:
 		reload_event.clear()
-		aprs_sender, tg_logger, timer, sb, sys_stats, scheduled_msg_handler = await initialize_session(cfg)
+		aprs_sender, tg_logger, timer, sb, sys_stats, scheduled_msg_handler, gps_handler = await initialize_session(cfg)
 		if cfg.gpsd_enabled:
-			health_check_task = asyncio.create_task(gpsd_health_check(cfg))
+			health_check_task = asyncio.create_task(gps_handler.run_health_check())
 		async with tg_logger:
 			await tg_logger.log(f'🚀 <b>{FROMCALL}</b>, {APP_NAME} starting up...')
 			try:
-				await process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, scheduled_msg_handler)
+				await process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, scheduled_msg_handler, gps_handler)
 			finally:
 				if reload_event.is_set():
 					await tg_logger.log(f'🔄 <b>{FROMCALL}</b>, {APP_NAME} reloading configuration...')
