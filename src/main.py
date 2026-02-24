@@ -66,6 +66,7 @@ def get_app_metadata():
 APP_NAME, PROJECT_URL = get_app_metadata()
 FROMCALL = 'N0CALL'
 TOCALL = 'APP642'
+GPSD_HEALTHY = True
 
 
 def configure_logging():
@@ -947,7 +948,7 @@ class APRSSender:
 def _fetch_from_gpsd(host, port, filter_class):
 	"""Worker function to fetch data from GPSD synchronously."""
 	try:
-		with GPSDClient(host=host, port=port, timeout=15) as client:
+		with GPSDClient(host=host, port=port, timeout=10) as client:
 			for result in client.dict_stream(convert_datetime=True, filter=[filter_class]):
 				if filter_class == 'TPV':
 					if result.get('mode', 0) > 1:
@@ -960,28 +961,28 @@ def _fetch_from_gpsd(host, port, filter_class):
 
 
 async def _retrieve_gpsd_data(cfg, filter_class, log_name):
-	"""Retrieve data from GPSD with retries."""
-	if not cfg.gpsd_enabled:
+	"""Retrieve data from GPSD."""
+	global GPSD_HEALTHY
+	if not cfg.gpsd_enabled or not GPSD_HEALTHY:
+		if cfg.gpsd_enabled and not GPSD_HEALTHY:
+			logging.warning('GPSD is marked as unhealthy, skipping retrieval for %s.', log_name)
 		return None
-	max_retries = 5
-	retry_delay = 1
 	loop = asyncio.get_running_loop()
-	for attempt in range(max_retries):
-		try:
-			result = await loop.run_in_executor(None, _fetch_from_gpsd, cfg.gpsd_host, cfg.gpsd_port, filter_class)
-			if isinstance(result, Exception):
-				raise result
-			if result:
-				logging.debug('GPS %s acquired', log_name)
-				return result
-			else:
-				logging.warning('GPS %s unavailable, retrying...', log_name)
-		except Exception as e:
-			logging.error('GPSD (%s) connection error (attempt %d/%d): %s', log_name, attempt + 1, max_retries, e)
-		if attempt < max_retries - 1:
-			await asyncio.sleep(retry_delay)
-			retry_delay *= 5
-	logging.warning('Failed to get GPS %s data after %d attempts.', log_name, max_retries)
+	try:
+		result = await loop.run_in_executor(None, _fetch_from_gpsd, cfg.gpsd_host, cfg.gpsd_port, filter_class)
+		if isinstance(result, Exception):
+			raise result
+		if result:
+			if not GPSD_HEALTHY:
+				logging.info('GPSD connection restored during data retrieval.')
+			GPSD_HEALTHY = True
+			return result
+		else:
+			logging.warning('GPS %s unavailable.', log_name)
+			GPSD_HEALTHY = False
+	except Exception as e:
+		logging.error('GPSD (%s) connection error: %s', log_name, e)
+		GPSD_HEALTHY = False
 	return None
 
 
@@ -1068,7 +1069,7 @@ async def get_coordinates():
 
 
 async def _get_current_location_data(cfg, gps_data=None):
-	"""Determines the current location data from GPS or fallback to config.Returns a tuple of (timestamp, lat, lon, alt, spd, cse)."""
+	"""Determines the current location data from GPS or fallback to config. Returns time, lat, lon, alt, spd, cse."""
 	if not gps_data and cfg.gpsd_enabled:
 		gps_data = await get_gpspos(cfg)
 	if gps_data:
@@ -1278,14 +1279,51 @@ async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, sch
 		await asyncio.sleep(0.5)
 
 
+async def gpsd_health_check(cfg):
+	"""Periodically check the health of the GPSD service."""
+	global GPSD_HEALTHY
+	if not cfg.gpsd_enabled:
+		GPSD_HEALTHY = False
+		return
+
+	loop = asyncio.get_running_loop()
+	check_interval = 30  # seconds
+	while True:
+		start_time = time.monotonic()
+		try:
+			# Try to get a version object, which should be lightweight
+			result = await loop.run_in_executor(None, _fetch_from_gpsd, cfg.gpsd_host, cfg.gpsd_port, 'VERSION')
+			if isinstance(result, Exception):
+				raise result
+
+			if result:
+				if not GPSD_HEALTHY:
+					logging.info('GPSD connection restored.')
+				GPSD_HEALTHY = True
+			else:
+				if GPSD_HEALTHY:
+					logging.warning('GPSD connection lost.')
+				GPSD_HEALTHY = False
+		except Exception as e:
+			if GPSD_HEALTHY:
+				logging.warning('GPSD connection lost: %s', e)
+			GPSD_HEALTHY = False
+
+		elapsed = time.monotonic() - start_time
+		await asyncio.sleep(max(0, check_interval - elapsed))
+
+
 async def main():
 	"""Main function to run the APRS reporting loop."""
 	reload_event = asyncio.Event()
 	setup_signal_handling(reload_event)
 	cfg = Config()
+	health_check_task = None
 	while True:
 		reload_event.clear()
 		aprs_sender, tg_logger, timer, sb, sys_stats, scheduled_msg_handler = await initialize_session(cfg)
+		if cfg.gpsd_enabled:
+			health_check_task = asyncio.create_task(gpsd_health_check(cfg))
 		async with tg_logger:
 			await tg_logger.log(f'🚀 <b>{FROMCALL}</b>, {APP_NAME} starting up...')
 			try:
@@ -1296,6 +1334,8 @@ async def main():
 				else:
 					await tg_logger.log(f'🛑 <b>{FROMCALL}</b>, {APP_NAME} shutting down...')
 				await tg_logger.stop_location()
+				if health_check_task:
+					health_check_task.cancel()
 				aprs_sender.close()
 		if not reload_event.is_set():
 			break
