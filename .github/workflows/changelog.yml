@@ -34,5 +34,5 @@ jobs:
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           set +e
           git add CHANGELOG.md
-          git commit -m "📝 docs(changelog): update changes"
+          git commit -m "docs(changelog): update $(echo ${{ github.event.workflow_run.head_sha }} | cut -c1-7)"
           git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
