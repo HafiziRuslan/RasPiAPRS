@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-02-25T20:12:28+08:00)
+## [beta8] - (2026-02-25T21:06:15+08:00)
 
-- 9 commit(s) contributed to the release.
+- 10 commit(s) contributed to the release.
 - 1 day(s) passed between the first and last commit.
 - 1 day(s) passed between releases.
 
@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [701f94d](https://github.com/HafiziRuslan/RasPiAPRS/commit/701f94dfbabbf214812e3c46f747bdaf306fce62) fix(pyproject): standardize version string quotes *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T21:06:15+08:00*
 - [6e7711a](https://github.com/HafiziRuslan/RasPiAPRS/commit/6e7711a67de67decfa67f8ab7f308fccff136493) refactor(address): remove "in" prefix from formatted address *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T20:08:54+08:00*
 - [33a01c6](https://github.com/HafiziRuslan/RasPiAPRS/commit/33a01c669ba350d557502a68b69617c3ce9380b7) fix(toml): format cliff template for conditional timespan *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T06:31:56+08:00*
 - [df59769](https://github.com/HafiziRuslan/RasPiAPRS/commit/df59769be9cac11fd9d6be704802f973a40a2372) fix(main): update speed threshold to 1 for position updates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T04:07:05+08:00*
@@ -1027,4 +1028,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-25T20:17:49.847999768+08:00
+generated using git-cliff on 2026-02-25T21:06:54.595445951+08:00
