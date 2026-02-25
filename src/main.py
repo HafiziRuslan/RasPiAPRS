@@ -1370,8 +1370,6 @@ class APRSSender:
 			if u_sat > 0:
 				timestamp = timez.strftime('%d%H%Mz')
 				sats_info = f'gps: {u_sat}/{n_sat}'
-			else:
-				sats_info = f'gps: {u_sat}'
 		uptime = self.sys_stats.uptime
 		stat_text = f'{timestamp}{", ".join(filter(None, [gridsquare, near_add, uptime, sats_info]))}'
 		tele_text = f'{timestamp}{", ".join(filter(None, [gridsquare, near_add_tg, uptime, sats_info]))}'
