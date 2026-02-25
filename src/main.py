@@ -735,7 +735,7 @@ def format_address(address, include_flag=False):
 			cc_str = f' [{flag} {cc}]'
 		else:
 			cc_str = f' ({cc})'
-	return f'in {full_area}{cc_str}'
+	return f'{full_area}{cc_str}'
 
 
 class SmartBeaconing(object):
