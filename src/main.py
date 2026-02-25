@@ -1349,9 +1349,10 @@ class APRSSender:
 			f'ROM Used: <b>{humanize.naturalsize(diskused, binary=True)}</b>'
 		)
 		if self.cfg.gpsd_enabled:
-			_, uSat, _ = await self.gps_handler.get_satellites()
+			_, uSat, nSat = await self.gps_handler.get_satellites()
 			payload += f',{uSat:d}'
-			tgtel += f'\nGPS Used: <b>{uSat}</b>'
+			if uSat > 0:
+				tgtel += f'\nGPS Used: <b>{uSat}</b>\nGPS Avail: <b>{nSat}</b>'
 		await self.send_packet(payload, 'telemetry')
 		await self.tg_logger.log(tgtel)
 
