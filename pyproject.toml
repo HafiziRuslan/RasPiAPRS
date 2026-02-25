@@ -2,16 +2,7 @@
 name = 'RasPiAPRS'
 version = '0.1b8'
 description = 'APRS telemetry for Pi-Star/WPSD/AllStarLink'
-keywords = [
-  'amateur-radio',
-  'aprs',
-  'aprs-beacon',
-  'mmdvm',
-  'pi-star',
-  'aprs-telemetry',
-  'allstarlink',
-  'wpsd',
-]
+keywords = ['amateur-radio', 'aprs', 'aprs-beacon', 'aprs-telemetry', 'mmdvm', 'pi-star', 'wpsd', 'allstarlink']
 readme = 'README.md'
 license = 'BSD-3-Clause'
 authors = [
