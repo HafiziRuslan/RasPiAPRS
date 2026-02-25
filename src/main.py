@@ -1061,7 +1061,7 @@ class ScheduledMessageHandler:
 			logging.error('APRS packet parsing error at %s: %s', name, err)
 			return False
 		await aprs_sender.send_packet(payload, name)
-		tg_msg = f'<u>{parsed["from"]} Packet <b>{name}</b></u>\n\nFrom: <b>{parsed["from"]}</b>\nTo: <b>{parsed["addresse"]}</b>'
+		tg_msg = f'<u>{parsed["from"]} Message <b>{name}</b></u>\n\nFrom: <b>{parsed["from"]}</b>\nTo: <b>{parsed["addresse"]}</b>'
 		path_list = parsed.get('path')
 		if path_list:
 			tg_msg += f'\nPath: <b>{", ".join(path_list)}</b>'
