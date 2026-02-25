@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-02-25T21:06:15+08:00)
+## [beta8] - (2026-02-25T21:27:49+08:00)
 
-- 10 commit(s) contributed to the release.
+- 11 commit(s) contributed to the release.
 - 1 day(s) passed between the first and last commit.
 - 1 day(s) passed between releases.
 
@@ -21,6 +21,10 @@ All notable changes to this project will be documented in this file.
 - [33a01c6](https://github.com/HafiziRuslan/RasPiAPRS/commit/33a01c669ba350d557502a68b69617c3ce9380b7) fix(toml): format cliff template for conditional timespan *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T06:31:56+08:00*
 - [df59769](https://github.com/HafiziRuslan/RasPiAPRS/commit/df59769be9cac11fd9d6be704802f973a40a2372) fix(main): update speed threshold to 1 for position updates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T04:07:05+08:00*
 - [22b167e](https://github.com/HafiziRuslan/RasPiAPRS/commit/22b167e11c9b62fcb62e13d521772cdf909a9276) fix(main): correct git sha retrieval for metadata *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T02:12:12+08:00*
+
+### 💼 Other in beta8
+
+- [5980142](https://github.com/HafiziRuslan/RasPiAPRS/commit/59801429616fdd59c579553658c64248e7ac01ca) update(certifi): bump version to 2026.2.25 across multiple files *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T21:27:49+08:00*
 
 ### 🚜 Refactor in beta8
 
@@ -1028,4 +1032,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-25T21:06:54.595445951+08:00
+generated using git-cliff on 2026-02-25T21:28:23.135083593+08:00
