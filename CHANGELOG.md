@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-02-25T23:36:10+08:00)
+## [beta8] - (2026-02-26T00:02:34+08:00)
 
-- 14 commit(s) contributed to the release.
+- 15 commit(s) contributed to the release.
 - 1 day(s) passed between the first and last commit.
 - 1 day(s) passed between releases.
 
@@ -33,6 +33,10 @@ All notable changes to this project will be documented in this file.
 
 - [eef34d7](https://github.com/HafiziRuslan/RasPiAPRS/commit/eef34d7a36fec0518f000bb4d719d4ca285db6ec) refactor(status): simplify gps status reporting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T20:12:28+08:00*
 - [a90e895](https://github.com/HafiziRuslan/RasPiAPRS/commit/a90e8954788f7e111abbd9a502030c6173a0e4ed) refactor(main): simplify history handling and caching *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T06:38:50+08:00*
+
+### ⚙️ Miscellaneous Tasks in beta8
+
+- [a794021](https://github.com/HafiziRuslan/RasPiAPRS/commit/a7940211f9e63cb57092a0ea68ab4e39755ddc66) ci(changelog): include short SHA in changelog update commit message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-26T00:02:34+08:00*
 
 ---
 
@@ -1035,4 +1039,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-25T23:36:55.177688908+08:00
+generated using git-cliff on 2026-02-26T00:03:17.069509701+08:00
