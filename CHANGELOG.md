@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-02-25T23:21:24+08:00)
+## [beta8] - (2026-02-25T23:36:10+08:00)
 
-- 13 commit(s) contributed to the release.
+- 14 commit(s) contributed to the release.
 - 1 day(s) passed between the first and last commit.
 - 1 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [99d225a](https://github.com/HafiziRuslan/RasPiAPRS/commit/99d225af6fdacd36e1f368038df7a0f6fbce51d3) feat(main): trigger environment recreation when pyproject.toml changes and clear python bytecode cache on sync *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T23:36:10+08:00*
 - [dcb0f73](https://github.com/HafiziRuslan/RasPiAPRS/commit/dcb0f734c7f6700e0ed00993a8ac3470292c9567) feat(code): integrate memory history tracking in SystemStats *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T06:28:40+08:00*
 - [17a7f63](https://github.com/HafiziRuslan/RasPiAPRS/commit/17a7f6371f768849d5257c53e41c96763669aa09) feat(main): improve telegram logger messaging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T04:31:27+08:00*
 - [cd983b1](https://github.com/HafiziRuslan/RasPiAPRS/commit/cd983b1a81b219bcb917bb6cf6e658be7a75b88f) feat(release): update version to 0.1b8 across pipelines and artifacts *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T02:11:45+08:00*
@@ -1034,4 +1035,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-25T23:22:02.344554046+08:00
+generated using git-cliff on 2026-02-25T23:36:55.177688908+08:00
