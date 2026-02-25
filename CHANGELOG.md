@@ -2,9 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-02-25T06:38:50+08:00)
+## [beta8] - (2026-02-25T20:12:28+08:00)
 
-- 7 commit(s) contributed to the release.
+- 9 commit(s) contributed to the release.
+- 1 day(s) passed between the first and last commit.
+- 1 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
@@ -14,12 +16,14 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [6e7711a](https://github.com/HafiziRuslan/RasPiAPRS/commit/6e7711a67de67decfa67f8ab7f308fccff136493) refactor(address): remove "in" prefix from formatted address *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T20:08:54+08:00*
 - [33a01c6](https://github.com/HafiziRuslan/RasPiAPRS/commit/33a01c669ba350d557502a68b69617c3ce9380b7) fix(toml): format cliff template for conditional timespan *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T06:31:56+08:00*
 - [df59769](https://github.com/HafiziRuslan/RasPiAPRS/commit/df59769be9cac11fd9d6be704802f973a40a2372) fix(main): update speed threshold to 1 for position updates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T04:07:05+08:00*
 - [22b167e](https://github.com/HafiziRuslan/RasPiAPRS/commit/22b167e11c9b62fcb62e13d521772cdf909a9276) fix(main): correct git sha retrieval for metadata *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T02:12:12+08:00*
 
 ### 🚜 Refactor in beta8
 
+- [eef34d7](https://github.com/HafiziRuslan/RasPiAPRS/commit/eef34d7a36fec0518f000bb4d719d4ca285db6ec) refactor(status): simplify gps status reporting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T20:12:28+08:00*
 - [a90e895](https://github.com/HafiziRuslan/RasPiAPRS/commit/a90e8954788f7e111abbd9a502030c6173a0e4ed) refactor(main): simplify history handling and caching *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T06:38:50+08:00*
 
 ---
@@ -1023,4 +1027,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-25T06:39:22.347622611+08:00
+generated using git-cliff on 2026-02-25T20:17:49.847999768+08:00
