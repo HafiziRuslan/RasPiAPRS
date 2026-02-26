@@ -1062,9 +1062,7 @@ class ScheduledMessageHandler:
 			tg_msg += f'\nPath: <b>{", ".join(path_list)}</b>'
 		if parsed.get('via'):
 			tg_msg += f'\nvia: <b>{parsed["via"]}</b>'
-		tg_msg += f'\nMessage: <b>{parsed["message_text"]}</b>'
-		if parsed.get('msgNo'):
-			tg_msg += f'\nMessage No: <b>{parsed["msgNo"]}</b>'
+		tg_msg += f'\nMessage{'-' + parsed["msgNo"] if parsed.get("msgNo") else ""}: <b>{parsed["message_text"]}</b>'
 		await aprs_sender.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
 		self.tracking[tracking_key] = now.isoformat()
 		self.tracking.flush()
