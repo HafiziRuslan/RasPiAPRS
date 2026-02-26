@@ -262,6 +262,7 @@ class PersistentCounter:
 		self.file_path = path
 		self.modulo = modulo
 		self._count = 0
+		self._load()
 
 	def _load(self):
 		try:
@@ -279,16 +280,12 @@ class PersistentCounter:
 		except IOError:
 			pass
 
-	def __enter__(self):
-		self._load()
+	def __iter__(self):
 		return self
 
-	def __exit__(self, exc_type, exc_val, exc_tb):
-		self._save()
-
-	@property
-	def count(self):
+	def __next__(self):
 		self._count = (1 + self._count) % self.modulo
+		self._save()
 		return self._count
 
 
@@ -1044,9 +1041,7 @@ class ScheduledMessageHandler:
 			return False
 		_, lat, lon, _, _, _ = await self.gps_handler.get_current_location_data()
 		gridsquare = latlon_to_grid(lat, lon)
-		seq_mgr = Sequence(name=f'msg_sequence_{source}_{addrcall}', modulo=100000)
-		seq_mgr._load()
-		seq = seq_mgr.count
+		seq = next(Sequence(name=f'msg_sequence_{source}_{addrcall}', modulo=100000))
 		message = f'{template} from ({gridsquare}) via {APP_NAME}'
 		if len(message) > 67:
 			logging.error('Message length %d exceeds APRS limit of 67 characters: %s', len(message), message)
@@ -1071,7 +1066,6 @@ class ScheduledMessageHandler:
 		if parsed.get('msgNo'):
 			tg_msg += f'\nMessage No: <b>{parsed["msgNo"]}</b>'
 		await aprs_sender.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
-		seq_mgr._save()
 		self.tracking[tracking_key] = now.isoformat()
 		self.tracking.flush()
 		return True
@@ -1331,8 +1325,7 @@ class APRSSender:
 
 	async def send_telemetry(self):
 		"""Send APRS telemetry information to APRS-IS."""
-		with Sequence(name='telem_sequence', modulo=1000) as seq_mgr:
-			seq = seq_mgr.count
+		seq = next(Sequence(name='telem_sequence', modulo=1000))
 		cputemp = self.sys_stats.avg_temp
 		cpuload = self.sys_stats.avg_cpu_load
 		memused = self.sys_stats.avg_memory_used
@@ -1447,7 +1440,7 @@ def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, scheduled_msg_handler
 
 	return [
 		Task(should_send_position(cfg, timer_tick, sb, gps_data), aprs_sender.send_position, (), {'gps_data': gps_data}),
-		Task(timer_tick % 14400 == 1, aprs_sender.send_header, (), {}),
+		Task(timer_tick % 21600 == 1, aprs_sender.send_header, (), {}),
 		Task(timer_tick % cfg.sleep == 1, aprs_sender.send_telemetry, (), {}),
 		Task(True, scheduled_msg_handler.send_all, (aprs_sender,), {}),
 	]
@@ -1456,8 +1449,7 @@ def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, scheduled_msg_handler
 async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, scheduled_msg_handler, gps_handler):
 	"""Run the main processing loop."""
 	while True:
-		with timer:
-			timer_tick = timer.count
+		timer_tick = next(timer)
 		if reload_event.is_set():
 			break
 		if timer_tick % 20 == 0:
