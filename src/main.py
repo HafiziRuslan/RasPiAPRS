@@ -1038,13 +1038,13 @@ class ScheduledMessageHandler:
 			return False
 		today = now.strftime('%Y-%m-%d')
 		source = from_call or FROMCALL
-		tracking_key = f'{name},{source}'
+		tracking_key = f'{name},{source},{addrcall}'
 		last_sent = self.tracking.get(tracking_key)
 		if last_sent and last_sent.startswith(today):
 			return False
 		_, lat, lon, _, _, _ = await self.gps_handler.get_current_location_data()
 		gridsquare = latlon_to_grid(lat, lon)
-		seq_mgr = Sequence(name='msg_sequence', modulo=100000)
+		seq_mgr = Sequence(name=f'msg_sequence_{source}_{addrcall}', modulo=100000)
 		seq_mgr._load()
 		seq = seq_mgr.count
 		message = f'{template} from ({gridsquare}) via {APP_NAME}'
