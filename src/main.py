@@ -926,7 +926,7 @@ class SystemStats(object):
 		def _fetch():
 			uptime_seconds = dt.datetime.now(dt.timezone.utc).timestamp() - psutil.boot_time()
 			uptime = dt.timedelta(seconds=uptime_seconds)
-			return f'up: {humanize.naturaldelta(uptime)}'
+			return f'up: {humanize.precisedelta(uptime, minimum_unit="minutes", format="%0.0f")}'
 
 		return self._get_cached('uptime', _fetch, ttl=60, default='')
 
