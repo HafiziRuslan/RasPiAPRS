@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-02-26T16:11:11+08:00)
+## [beta8] - (2026-02-27T21:52:53+08:00)
 
-- 18 commit(s) contributed to the release.
-- 2 day(s) passed between the first and last commit.
-- 2 day(s) passed between releases.
+- 19 commit(s) contributed to the release.
+- 3 day(s) passed between the first and last commit.
+- 3 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [2eab036](https://github.com/HafiziRuslan/RasPiAPRS/commit/2eab03626115851bd3147502433ffcd282112ea6) refactor(uptime): switch to precisedelta for precise uptime output *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-27T21:52:53+08:00*
 - [bcd4bac](https://github.com/HafiziRuslan/RasPiAPRS/commit/bcd4bac6c07b52d2d7993c1b1a54d066f4865f20) refactor(main): consolidate message line formatting for Telegram log *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-26T16:11:11+08:00*
 - [87f570b](https://github.com/HafiziRuslan/RasPiAPRS/commit/87f570b56223a51139336158392eeee74c6c9cc4) refactor(main): adopt iterator protocol for Sequence and replace load/save with next() usage; update timer handling and header cadence *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-26T16:06:30+08:00*
 - [2f9a03f](https://github.com/HafiziRuslan/RasPiAPRS/commit/2f9a03fff50c4da00f7bc9fcb72007b0da08133e) refactor(main): include addrcall in tracking key and use per-source per-addrcall sequence *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-26T16:02:50+08:00*
@@ -1042,4 +1043,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-26T16:11:51.971693393+08:00
+generated using git-cliff on 2026-02-27T21:54:40.275729604+08:00
