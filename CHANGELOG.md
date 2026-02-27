@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-02-27T21:52:53+08:00)
+## [beta8] - (2026-02-28T01:36:30+08:00)
 
-- 19 commit(s) contributed to the release.
+- 20 commit(s) contributed to the release.
 - 3 day(s) passed between the first and last commit.
 - 3 day(s) passed between releases.
 
@@ -40,6 +40,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta8
 
+- [0dd21a0](https://github.com/HafiziRuslan/RasPiAPRS/commit/0dd21a03fcb5d1de0e16c92d7a486937e561b24b) chore(sbom): refresh SBOM metadata and bump uv to 0.10.7 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-28T01:36:30+08:00*
 - [a794021](https://github.com/HafiziRuslan/RasPiAPRS/commit/a7940211f9e63cb57092a0ea68ab4e39755ddc66) ci(changelog): include short SHA in changelog update commit message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-26T00:02:34+08:00*
 
 ---
@@ -1043,4 +1044,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-27T21:54:40.275729604+08:00
+generated using git-cliff on 2026-02-28T01:37:01.034444426+08:00
