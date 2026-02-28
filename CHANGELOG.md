@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-02-28T17:58:15+08:00)
+## [beta8] - (2026-03-01T01:48:12+08:00)
 
-- 22 commit(s) contributed to the release.
+- 23 commit(s) contributed to the release.
 - 4 day(s) passed between the first and last commit.
 - 4 day(s) passed between releases.
 
@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 
 ### 💼 Other in beta8
 
+- [5e6e2c5](https://github.com/HafiziRuslan/RasPiAPRS/commit/5e6e2c54cf0d7e7af74e34be564a2745f62bee9a) Update issue templates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-01T01:48:12+08:00*
 - [5980142](https://github.com/HafiziRuslan/RasPiAPRS/commit/59801429616fdd59c579553658c64248e7ac01ca) update(certifi): bump version to 2026.2.25 across multiple files *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T21:27:49+08:00*
 
 ### 🚜 Refactor in beta8
@@ -1046,4 +1047,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-28T18:02:35.962822075+08:00
+generated using git-cliff on 2026-03-01T01:48:39.504679294+08:00
