@@ -411,71 +411,6 @@ def latlon_to_grid(lat, lon, precision=6):
 	return grid
 
 
-class KalmanTracker:
-	"""Kalman filter for 1D position and velocity."""
-
-	def __init__(self, process_noise=1e-6, measurement_noise_pos=1e-4, measurement_noise_vel=1e-5):
-		self.x = 0.0
-		self.v = 0.0
-		self.p_xx = 1.0
-		self.p_xv = 0.0
-		self.p_vv = 1.0
-		self.q = process_noise
-		self.r_pos = measurement_noise_pos
-		self.r_vel = measurement_noise_vel
-		self.last_time = None
-
-	def update(self, pos, vel, current_time):
-		if self.last_time is None:
-			self.x = pos
-			self.v = vel
-			self.last_time = current_time
-			return pos, vel
-		dt = (current_time - self.last_time).total_seconds()
-		if dt <= 0:
-			return self.x, self.v
-		self.last_time = current_time
-		self.x += self.v * dt
-		self.p_xx += 2 * self.p_xv * dt + self.p_vv * dt * dt + self.q * dt**3 / 3
-		self.p_xv += self.p_vv * dt + self.q * dt**2 / 2
-		self.p_vv += self.q * dt
-		y = pos - self.x
-		s = self.p_xx + self.r_pos
-		k_x = self.p_xx / s
-		k_v = self.p_xv / s
-		self.x += k_x * y
-		self.v += k_v * y
-		p_xx_new = (1 - k_x) * self.p_xx
-		p_xv_new = (1 - k_x) * self.p_xv
-		p_vv_new = self.p_vv - k_v * self.p_xv
-		self.p_xx, self.p_xv, self.p_vv = p_xx_new, p_xv_new, p_vv_new
-		y_v = vel - self.v
-		s_v = self.p_vv + self.r_vel
-		k_x_v = self.p_xv / s_v
-		k_v_v = self.p_vv / s_v
-		self.x += k_x_v * y_v
-		self.v += k_v_v * y_v
-		p_xx_new = self.p_xx - k_x_v * self.p_xv
-		p_xv_new = self.p_xv - k_x_v * self.p_vv
-		p_vv_new = self.p_vv - k_v_v * self.p_vv
-		self.p_xx, self.p_xv, self.p_vv = p_xx_new, p_xv_new, p_vv_new
-		return self.x, self.v
-
-	def predict(self, current_time):
-		if self.last_time is None:
-			return self.x, self.v
-		dt = (current_time - self.last_time).total_seconds()
-		return self.x + self.v * dt, self.v
-
-	def reset(self, pos, vel, current_time):
-		self.x = pos
-		self.v = vel
-		self.p_xx = 1.0
-		self.p_xv = 0.0
-		self.p_vv = 1.0
-		self.last_time = current_time
-
-
 class GPSHandler:
 	"""Class to handle GPS data retrieval and management."""
 
@@ -483,8 +418,6 @@ class GPSHandler:
 		self.cfg = cfg
 		self.healthy = True
 		self.last_valid_fix = None
-		self.kf_lat = KalmanTracker()
-		self.kf_lon = KalmanTracker()
 
 	def _fetch_from_gpsd(self, filter_class):
 		"""Worker function to fetch data from GPSD synchronously."""
@@ -564,41 +497,14 @@ class GPSHandler:
 			alt = result.get('alt', 0.0)
 			spd = result.get('speed', 0)
 			cse = result.get('magtrack', 0) or result.get('track', 0)
-			r_earth = 6371000.0
-			v_north = spd * math.cos(math.radians(cse))
-			v_east = spd * math.sin(math.radians(cse))
-			v_lat = v_north / (r_earth * math.pi / 180.0)
-			v_lon = v_east / (r_earth * math.cos(math.radians(lat)) * math.pi / 180.0) if math.cos(math.radians(lat)) != 0 else 0
-			if self.last_valid_fix:
-				pred_lat, _ = self.kf_lat.predict(utc)
-				pred_lon, _ = self.kf_lon.predict(utc)
-				dist_jump = self.calculate_distance(pred_lat, pred_lon, lat, lon)
-				if dist_jump > 500:
-					logging.warning('GPS jump detected: %.2fm. Resetting Kalman filter.', dist_jump)
-					self.kf_lat.reset(lat, v_lat, utc)
-					self.kf_lon.reset(lon, v_lon, utc)
-			lat, v_lat = self.kf_lat.update(lat, v_lat, utc)
-			lon, v_lon = self.kf_lon.update(lon, v_lon, utc)
-			v_north_s = v_lat * (r_earth * math.pi / 180.0)
-			v_east_s = v_lon * (r_earth * math.cos(math.radians(lat)) * math.pi / 180.0)
-			spd = math.sqrt(v_north_s**2 + v_east_s**2)
-			cse = (math.degrees(math.atan2(v_east_s, v_north_s)) + 360) % 360
-			logging.debug('%s | GPS Position (Smoothed): %s, %s, %s, %s, %s', utc, lat, lon, alt, spd, cse)
+			logging.debug('%s | GPS Position (Raw): %s, %s, %s, %s, %s', utc, lat, lon, alt, spd, cse)
 			self._save_cache(lat, lon, alt)
 			self.last_valid_fix = (utc, lat, lon, alt, spd, cse)
 			return utc, lat, lon, alt, spd, cse
 		if self.last_valid_fix:
-			lat, v_lat = self.kf_lat.predict(timestamp)
-			lon, v_lon = self.kf_lon.predict(timestamp)
-			last_lat = self.last_valid_fix[1]
-			r_earth = 6371000.0
-			v_north_s = v_lat * (r_earth * math.pi / 180.0)
-			v_east_s = v_lon * (r_earth * math.cos(math.radians(last_lat)) * math.pi / 180.0)
-			spd = math.sqrt(v_north_s**2 + v_east_s**2)
-			cse = (math.degrees(math.atan2(v_east_s, v_north_s)) + 360) % 360
-			alt = self.last_valid_fix[3]
-			logging.debug('Using Dead Reckoning (KF): %s, %s, %s, %s, %s', lat, lon, alt, spd, cse)
-			return timestamp, lat, lon, alt, spd, cse
+			_, lat, lon, alt, _, _ = self.last_valid_fix
+			logging.debug('Using last known GPS position.')
+			return timestamp, lat, lon, alt, 0, 0
 		env_lat, env_lon, env_alt = self._get_fallback_location()
 		return timestamp, env_lat, env_lon, env_alt, 0, 0
 
