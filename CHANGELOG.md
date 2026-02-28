@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-02-28T17:51:43+08:00)
+## [beta8] - (2026-02-28T17:58:15+08:00)
 
-- 21 commit(s) contributed to the release.
+- 22 commit(s) contributed to the release.
 - 4 day(s) passed between the first and last commit.
 - 4 day(s) passed between releases.
 
@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [8a11675](https://github.com/HafiziRuslan/RasPiAPRS/commit/8a1167581b307eff5818013bf1815909c2934a2b) docs(changelog): drop 'update' from changelog commit message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-28T17:58:15+08:00*
 - [3fc3b6d](https://github.com/HafiziRuslan/RasPiAPRS/commit/3fc3b6d5d6a840e0c333072d48858fd09521a3cd) refactor(gps): remove Kalman filter smoothing for GPS data and simplify dead reckoning *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-28T17:51:43+08:00*
 - [f266c54](https://github.com/HafiziRuslan/RasPiAPRS/commit/f266c541e14fa9eed6dc62027c3a135e69c7b95b) fix(main): use Message label in Telegram notification instead of Packet *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T23:21:24+08:00*
 - [43a89de](https://github.com/HafiziRuslan/RasPiAPRS/commit/43a89de3e227a7b9a3ab0650d68e84b34752bf5f) fix(gps): include GPS availability in telemetry when satellites are detected *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T23:15:42+08:00*
@@ -1045,4 +1046,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-02-28T17:55:05.887306747+08:00
+generated using git-cliff on 2026-02-28T18:02:35.962822075+08:00
