@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-01T01:48:12+08:00)
+## [beta8] - (2026-03-01T02:12:07+08:00)
 
-- 23 commit(s) contributed to the release.
+- 26 commit(s) contributed to the release.
 - 4 day(s) passed between the first and last commit.
 - 4 day(s) passed between releases.
 
@@ -40,6 +40,12 @@ All notable changes to this project will be documented in this file.
 - [2f9a03f](https://github.com/HafiziRuslan/RasPiAPRS/commit/2f9a03fff50c4da00f7bc9fcb72007b0da08133e) refactor(main): include addrcall in tracking key and use per-source per-addrcall sequence *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-26T16:02:50+08:00*
 - [eef34d7](https://github.com/HafiziRuslan/RasPiAPRS/commit/eef34d7a36fec0518f000bb4d719d4ca285db6ec) refactor(status): simplify gps status reporting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T20:12:28+08:00*
 - [a90e895](https://github.com/HafiziRuslan/RasPiAPRS/commit/a90e8954788f7e111abbd9a502030c6173a0e4ed) refactor(main): simplify history handling and caching *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T06:38:50+08:00*
+
+### 📚 Documentation in beta8
+
+- [799b2ce](https://github.com/HafiziRuslan/RasPiAPRS/commit/799b2cef3c49f51558f8d9b35a896a3b801ce1fb) docs: add Code of Conduct guidelines *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-01T02:12:07+08:00*
+- [d559450](https://github.com/HafiziRuslan/RasPiAPRS/commit/d559450f35015c7b23378f5e41b5ebca74229e32) docs: add contributing guidelines to project *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-01T02:12:01+08:00*
+- [fe32d40](https://github.com/HafiziRuslan/RasPiAPRS/commit/fe32d40d4a06985148952bde45505f7cdecf0eae) docs: add pull request template with guidelines and checklist *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-01T02:07:25+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta8
 
@@ -1047,4 +1053,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-01T01:48:39.504679294+08:00
+generated using git-cliff on 2026-03-01T02:12:38.400769534+08:00
