@@ -6,6 +6,12 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
+LOG_FILE="/var/log/raspiaprs.log"
+# Save original stdout to fd 3 for display updates
+exec 3>&1
+# Redirect stdout and stderr to the log file
+exec >> "$LOG_FILE" 2>&1
+
 # Ensure we are in the script directory
 cd "$(dirname "$0")"
 
