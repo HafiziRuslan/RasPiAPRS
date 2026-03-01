@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-01T02:12:07+08:00)
+## [beta8] - (2026-03-02T06:05:08+08:00)
 
-- 26 commit(s) contributed to the release.
-- 4 day(s) passed between the first and last commit.
-- 4 day(s) passed between releases.
+- 27 commit(s) contributed to the release.
+- 5 day(s) passed between the first and last commit.
+- 5 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [a071a2c](https://github.com/HafiziRuslan/RasPiAPRS/commit/a071a2ccb3da1c9f3fb45fc0b17eff71e17b7b3a) feat(main): add file-based logging and stdout preservation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-02T06:05:08+08:00*
 - [99d225a](https://github.com/HafiziRuslan/RasPiAPRS/commit/99d225af6fdacd36e1f368038df7a0f6fbce51d3) feat(main): trigger environment recreation when pyproject.toml changes and clear python bytecode cache on sync *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T23:36:10+08:00*
 - [dcb0f73](https://github.com/HafiziRuslan/RasPiAPRS/commit/dcb0f734c7f6700e0ed00993a8ac3470292c9567) feat(code): integrate memory history tracking in SystemStats *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T06:28:40+08:00*
 - [17a7f63](https://github.com/HafiziRuslan/RasPiAPRS/commit/17a7f6371f768849d5257c53e41c96763669aa09) feat(main): improve telegram logger messaging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T04:31:27+08:00*
@@ -1053,4 +1054,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-01T02:12:38.400769534+08:00
+generated using git-cliff on 2026-03-02T06:05:39.264170545+08:00
