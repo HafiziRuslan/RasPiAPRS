@@ -82,11 +82,12 @@ class GPSDPoller:
 		"""Get satellite from GPSD."""
 
 		def process_sky(result):
-			if result['class'] == 'SKY':
+			if result['class'] == 'SKY' and result.get('satellites', []) != []:
 				utc = result.get('time', dt.datetime.now(dt.timezone.utc))
 				uSat = result.get('uSat', 0)
 				nSat = result.get('nSat', 0)
 				return utc, uSat, nSat
+			self.logger.info('No GPS fix yet, waiting for satellites...')
 			return None
 
 		return self._get_data(['SKY'], process_sky)

@@ -427,6 +427,9 @@ class GPSHandler:
 					if filter_class == 'TPV':
 						if result.get('mode', 0) > 1:
 							return result
+					elif filter_class == 'SKY':
+						if result.get('satellites', []) != []:
+							return result
 					else:
 						return result
 				return None
