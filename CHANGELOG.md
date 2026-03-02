@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-02T06:05:08+08:00)
+## [beta8] - (2026-03-02T08:17:04+08:00)
 
-- 27 commit(s) contributed to the release.
-- 5 day(s) passed between the first and last commit.
-- 5 day(s) passed between releases.
+- 28 commit(s) contributed to the release.
+- 6 day(s) passed between the first and last commit.
+- 6 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [7c8ee36](https://github.com/HafiziRuslan/RasPiAPRS/commit/7c8ee367be97582e25ab99688d9f269b21817cfe) fix(gps): require non-empty satellites for SKY data; align tests *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-02T08:17:04+08:00*
 - [8a11675](https://github.com/HafiziRuslan/RasPiAPRS/commit/8a1167581b307eff5818013bf1815909c2934a2b) docs(changelog): drop 'update' from changelog commit message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-28T17:58:15+08:00*
 - [3fc3b6d](https://github.com/HafiziRuslan/RasPiAPRS/commit/3fc3b6d5d6a840e0c333072d48858fd09521a3cd) refactor(gps): remove Kalman filter smoothing for GPS data and simplify dead reckoning *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-28T17:51:43+08:00*
 - [f266c54](https://github.com/HafiziRuslan/RasPiAPRS/commit/f266c541e14fa9eed6dc62027c3a135e69c7b95b) fix(main): use Message label in Telegram notification instead of Packet *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T23:21:24+08:00*
@@ -1054,4 +1055,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-02T06:05:39.264170545+08:00
+generated using git-cliff on 2026-03-02T08:17:36.628793595+08:00
