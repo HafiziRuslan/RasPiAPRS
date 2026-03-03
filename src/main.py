@@ -94,6 +94,30 @@ def configure_logging():
 	console_handler.setFormatter(formatter)
 	logger.addHandler(console_handler)
 
+	class NumberedRotatingFileHandler(logging.handlers.RotatingFileHandler):
+		"""RotatingFileHandler with backup number before the extension."""
+
+		def doRollover(self):
+			"""Do a rollover, with numbering before the extension."""
+			if self.stream:
+				self.stream.close()
+				self.stream = None
+			if self.backupCount > 0:
+				name, ext = os.path.splitext(self.baseFilename)
+				for i in range(self.backupCount - 1, 0, -1):
+					sfn = self.rotation_filename(f'{name}{i}{ext}')
+					dfn = self.rotation_filename(f'{name}{i + 1}{ext}')
+					if os.path.exists(sfn):
+						if os.path.exists(dfn):
+							os.remove(dfn)
+						os.rename(sfn, dfn)
+				dfn = self.rotation_filename(f'{name}1{ext}')
+				if os.path.exists(dfn):
+					os.remove(dfn)
+				self.rotate(self.baseFilename, dfn)
+			if not self.delay:
+				self.stream = self._open()
+
 	class LevelFilter(logging.Filter):
 		def __init__(self, level):
 			self.level = level
@@ -110,7 +134,7 @@ def configure_logging():
 	}
 	for level, filename in levels.items():
 		try:
-			handler = logging.handlers.RotatingFileHandler(os.path.join(log_dir, filename), maxBytes=1 * 1024 * 1024, backupCount=5)
+			handler = NumberedRotatingFileHandler(os.path.join(log_dir, filename), maxBytes=1 * 1024 * 1024, backupCount=5)
 			handler.setLevel(level)
 			handler.addFilter(LevelFilter(level))
 			handler.setFormatter(formatter)
@@ -971,7 +995,7 @@ class ScheduledMessageHandler:
 			tg_msg += f'\nPath: <b>{", ".join(path_list)}</b>'
 		if parsed.get('via'):
 			tg_msg += f'\nvia: <b>{parsed["via"]}</b>'
-		tg_msg += f'\nMessage{'-' + parsed["msgNo"] if parsed.get("msgNo") else ""}: <b>{parsed["message_text"]}</b>'
+		tg_msg += f'\nMessage{"-" + parsed["msgNo"] if parsed.get("msgNo") else ""}: <b>{parsed["message_text"]}</b>'
 		await aprs_sender.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
 		self.tracking[tracking_key] = now.isoformat()
 		self.tracking.flush()
