@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-04T02:14:51+08:00)
+## [beta8] - (2026-03-04T02:32:52+08:00)
 
-- 31 commit(s) contributed to the release.
+- 32 commit(s) contributed to the release.
 - 7 day(s) passed between the first and last commit.
 - 7 day(s) passed between releases.
 
@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [39091ce](https://github.com/HafiziRuslan/RasPiAPRS/commit/39091ce419ec010fa3575e9c4bda64105ad582a1) fix(main): use APP_NAME prefix for lifecycle logs and shorten sleep in loop *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T02:32:52+08:00*
 - [7c8ee36](https://github.com/HafiziRuslan/RasPiAPRS/commit/7c8ee367be97582e25ab99688d9f269b21817cfe) fix(gps): require non-empty satellites for SKY data; align tests *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-02T08:17:04+08:00*
 - [8a11675](https://github.com/HafiziRuslan/RasPiAPRS/commit/8a1167581b307eff5818013bf1815909c2934a2b) docs(changelog): drop 'update' from changelog commit message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-28T17:58:15+08:00*
 - [3fc3b6d](https://github.com/HafiziRuslan/RasPiAPRS/commit/3fc3b6d5d6a840e0c333072d48858fd09521a3cd) refactor(gps): remove Kalman filter smoothing for GPS data and simplify dead reckoning *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-28T17:51:43+08:00*
@@ -1061,4 +1062,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-04T02:16:12.381567476+08:00
+generated using git-cliff on 2026-03-04T02:33:50.001998984+08:00
