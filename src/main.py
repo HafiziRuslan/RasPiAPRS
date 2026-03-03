@@ -1401,7 +1401,7 @@ async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, sch
 					logging.error('Error executing task %s: %s', task.func.__name__, e, exc_info=True)
 		if packet_sent:
 			await aprs_sender.send_status(gps_data=gps_data)
-		await asyncio.sleep(0.5)
+		await asyncio.sleep(1)
 
 
 async def main():
