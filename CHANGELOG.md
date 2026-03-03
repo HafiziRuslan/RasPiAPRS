@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-02T08:17:04+08:00)
+## [beta8] - (2026-03-03T20:22:53+08:00)
 
-- 28 commit(s) contributed to the release.
-- 6 day(s) passed between the first and last commit.
-- 6 day(s) passed between releases.
+- 29 commit(s) contributed to the release.
+- 7 day(s) passed between the first and last commit.
+- 7 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [920a661](https://github.com/HafiziRuslan/RasPiAPRS/commit/920a6613a5f9b53a5b66f520b7076612681e33c8) feat(logging): introduce NumberedRotatingFileHandler for numbered log rotation and switch to it; fix telegram message f-string formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-03T20:22:53+08:00*
 - [a071a2c](https://github.com/HafiziRuslan/RasPiAPRS/commit/a071a2ccb3da1c9f3fb45fc0b17eff71e17b7b3a) feat(main): add file-based logging and stdout preservation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-02T06:05:08+08:00*
 - [99d225a](https://github.com/HafiziRuslan/RasPiAPRS/commit/99d225af6fdacd36e1f368038df7a0f6fbce51d3) feat(main): trigger environment recreation when pyproject.toml changes and clear python bytecode cache on sync *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T23:36:10+08:00*
 - [dcb0f73](https://github.com/HafiziRuslan/RasPiAPRS/commit/dcb0f734c7f6700e0ed00993a8ac3470292c9567) feat(code): integrate memory history tracking in SystemStats *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T06:28:40+08:00*
@@ -1055,4 +1056,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-02T08:17:36.628793595+08:00
+generated using git-cliff on 2026-03-03T20:23:31.243598985+08:00
