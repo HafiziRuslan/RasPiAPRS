@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-03T20:22:53+08:00)
+## [beta8] - (2026-03-04T02:14:51+08:00)
 
-- 29 commit(s) contributed to the release.
+- 31 commit(s) contributed to the release.
 - 7 day(s) passed between the first and last commit.
 - 7 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [62ca252](https://github.com/HafiziRuslan/RasPiAPRS/commit/62ca252e111df4bfccb3edbfc45dca11fba627ad) feat(gpsd): throttle unhealthy GPSD warnings and reset on recovery *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T02:14:51+08:00*
 - [920a661](https://github.com/HafiziRuslan/RasPiAPRS/commit/920a6613a5f9b53a5b66f520b7076612681e33c8) feat(logging): introduce NumberedRotatingFileHandler for numbered log rotation and switch to it; fix telegram message f-string formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-03T20:22:53+08:00*
 - [a071a2c](https://github.com/HafiziRuslan/RasPiAPRS/commit/a071a2ccb3da1c9f3fb45fc0b17eff71e17b7b3a) feat(main): add file-based logging and stdout preservation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-02T06:05:08+08:00*
 - [99d225a](https://github.com/HafiziRuslan/RasPiAPRS/commit/99d225af6fdacd36e1f368038df7a0f6fbce51d3) feat(main): trigger environment recreation when pyproject.toml changes and clear python bytecode cache on sync *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T23:36:10+08:00*
@@ -49,6 +50,10 @@ All notable changes to this project will be documented in this file.
 - [799b2ce](https://github.com/HafiziRuslan/RasPiAPRS/commit/799b2cef3c49f51558f8d9b35a896a3b801ce1fb) docs: add Code of Conduct guidelines *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-01T02:12:07+08:00*
 - [d559450](https://github.com/HafiziRuslan/RasPiAPRS/commit/d559450f35015c7b23378f5e41b5ebca74229e32) docs: add contributing guidelines to project *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-01T02:12:01+08:00*
 - [fe32d40](https://github.com/HafiziRuslan/RasPiAPRS/commit/fe32d40d4a06985148952bde45505f7cdecf0eae) docs: add pull request template with guidelines and checklist *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-01T02:07:25+08:00*
+
+### ⚡ Performance in beta8
+
+- [dabe631](https://github.com/HafiziRuslan/RasPiAPRS/commit/dabe6315ae46108881020e60c6a87fe652ca0113) perf(process_loop): extend sleep to 1s after sending status to reduce CPU usage *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T02:04:20+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta8
 
@@ -1056,4 +1061,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-03T20:23:31.243598985+08:00
+generated using git-cliff on 2026-03-04T02:16:12.381567476+08:00
