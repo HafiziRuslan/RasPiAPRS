@@ -1407,7 +1407,7 @@ async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, sch
 					logging.error('Error executing task %s: %s', task.func.__name__, e, exc_info=True)
 		if packet_sent:
 			await aprs_sender.send_status(gps_data=gps_data)
-		await asyncio.sleep(1)
+		await asyncio.sleep(0.7)
 
 
 async def main():
@@ -1422,14 +1422,14 @@ async def main():
 		if cfg.gpsd_enabled:
 			health_check_task = asyncio.create_task(gps_handler.run_health_check())
 		async with tg_logger:
-			await tg_logger.log(f'🚀 <b>{FROMCALL}</b>, Started')
+			await tg_logger.log(f'🚀 {APP_NAME.split("-")[0]} Started')
 			try:
 				await process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, scheduled_msg_handler, gps_handler)
 			finally:
 				if reload_event.is_set():
-					await tg_logger.log(f'🔄 <b>{FROMCALL}</b>, Reloaded')
+					await tg_logger.log(f'🔄 {APP_NAME.split("-")[0]} Reloaded')
 				else:
-					await tg_logger.log(f'🛑 <b>{FROMCALL}</b>, Stopped')
+					await tg_logger.log(f'🛑 {APP_NAME.split("-")[0]} Stopped')
 				await tg_logger.stop_location()
 				if health_check_task:
 					health_check_task.cancel()
