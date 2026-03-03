@@ -442,6 +442,7 @@ class GPSHandler:
 		self.cfg = cfg
 		self.healthy = True
 		self.last_valid_fix = None
+		self.unhealthy_warning_sent = False
 
 	def _fetch_from_gpsd(self, filter_class):
 		"""Worker function to fetch data from GPSD synchronously."""
@@ -462,9 +463,12 @@ class GPSHandler:
 
 	async def _retrieve_data(self, filter_class, log_name):
 		"""Retrieve data from GPSD."""
-		if not self.cfg.gpsd_enabled or not self.healthy:
-			if self.cfg.gpsd_enabled and not self.healthy:
+		if not self.cfg.gpsd_enabled:
+			return None
+		if not self.healthy:
+			if not self.unhealthy_warning_sent:
 				logging.warning('GPSD is marked as unhealthy, skipping retrieval for %s.', log_name)
+				self.unhealthy_warning_sent = True
 			return None
 		loop = asyncio.get_running_loop()
 		try:
@@ -474,6 +478,7 @@ class GPSHandler:
 			if result:
 				if not self.healthy:
 					logging.info('GPSD connection restored during data retrieval.')
+					self.unhealthy_warning_sent = False
 				self.healthy = True
 				return result
 			else:
@@ -577,6 +582,7 @@ class GPSHandler:
 				if result:
 					if not self.healthy:
 						logging.info('GPSD connection restored.')
+						self.unhealthy_warning_sent = False
 					self.healthy = True
 				else:
 					if self.healthy:
