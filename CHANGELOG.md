@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-04T22:29:18+08:00)
+## [beta8] - (2026-03-05T04:25:02+08:00)
 
-- 37 commit(s) contributed to the release.
+- 38 commit(s) contributed to the release.
 - 8 day(s) passed between the first and last commit.
 - 8 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [e9e3b76](https://github.com/HafiziRuslan/RasPiAPRS/commit/e9e3b76d1d1ed973950e1637639f95ba38d2d91f) feat(core): introduce library and log directories; migrate persistence to lib with pickle support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-05T04:25:02+08:00*
 - [62ca252](https://github.com/HafiziRuslan/RasPiAPRS/commit/62ca252e111df4bfccb3edbfc45dca11fba627ad) feat(gpsd): throttle unhealthy GPSD warnings and reset on recovery *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T02:14:51+08:00*
 - [920a661](https://github.com/HafiziRuslan/RasPiAPRS/commit/920a6613a5f9b53a5b66f520b7076612681e33c8) feat(logging): introduce NumberedRotatingFileHandler for numbered log rotation and switch to it; fix telegram message f-string formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-03T20:22:53+08:00*
 - [a071a2c](https://github.com/HafiziRuslan/RasPiAPRS/commit/a071a2ccb3da1c9f3fb45fc0b17eff71e17b7b3a) feat(main): add file-based logging and stdout preservation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-02T06:05:08+08:00*
@@ -1067,4 +1068,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-04T22:29:54.477097248+08:00
+generated using git-cliff on 2026-03-05T04:25:56.711933955+08:00
