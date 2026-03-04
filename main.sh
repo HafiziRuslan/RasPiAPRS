@@ -130,6 +130,7 @@ check_disk_space() {
 cleanup() {
   rm -rf /var/tmp/raspiaprs
   # rm -rf /var/log/raspiaprs
+  # rm -rf /var/lib/raspiaprs
 }
 cleanup
 
@@ -141,6 +142,11 @@ fi
 if [ ! -d "/var/log/raspiaprs" ]; then
   mkdir -p /var/log/raspiaprs
   chown -hR $dir_own:$dir_own /var/log/raspiaprs
+fi
+
+if [ ! -d "/var/lib/raspiaprs" ]; then
+  mkdir -p /var/lib/raspiaprs
+  chown -hR $dir_own:$dir_own /var/lib/raspiaprs
 fi
 
 if check_internet; then

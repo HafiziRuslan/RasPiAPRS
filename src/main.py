@@ -8,6 +8,7 @@ import logging
 import logging.handlers
 import math
 import os
+import pickle
 import random
 import re
 import shutil
@@ -37,15 +38,18 @@ from gpsdclient import GPSDClient
 # Default directory
 ETC_DIR = '/etc'
 TMP_DIR = '/var/tmp/raspiaprs'
+LIB_DIR = '/var/lib/raspiaprs'
+LOG_DIR = '/var/log/raspiaprs'
 # Default paths for system files
 OS_RELEASE_FILE = f'{ETC_DIR}/os-release'
 MMDVMHOST_FILE = f'{ETC_DIR}/mmdvmhost'
 # Temporary files path
 GPS_FILE = f'{TMP_DIR}/gps.json'
 LOCATION_ID_FILE = f'{TMP_DIR}/location_id.tmp'
-MSG_TRACKING_FILE = f'{TMP_DIR}/msg_tracking.json'
-NOMINATIM_CACHE_FILE = f'{TMP_DIR}/nominatim_cache.json'
 STATUS_FILE = f'{TMP_DIR}/status.tmp'
+# Library files path
+MSG_TRACKING_FILE = f'{LIB_DIR}/msg_tracking.pkl'
+NOMINATIM_CACHE_FILE = f'{LIB_DIR}/nominatim_cache.pkl'
 
 
 def get_app_metadata():
@@ -73,11 +77,11 @@ TOCALL = 'APP642'
 
 
 def configure_logging():
-	log_dir = '/var/log/raspiaprs'
-	if not os.path.exists(log_dir) or not os.access(log_dir, os.W_OK):
-		log_dir = 'logs'
-	if not os.path.exists(log_dir):
-		os.makedirs(log_dir)
+	global LOG_DIR
+	if not os.path.exists(LOG_DIR) or not os.access(LOG_DIR, os.W_OK):
+		LOG_DIR = 'logs'
+	if not os.path.exists(LOG_DIR):
+		os.makedirs(LOG_DIR)
 	logging.getLogger('aprslib').setLevel(logging.DEBUG)
 	logging.getLogger('asyncio').setLevel(logging.DEBUG)
 	logging.getLogger('hpack').setLevel(logging.DEBUG)
@@ -134,7 +138,7 @@ def configure_logging():
 	}
 	for level, filename in levels.items():
 		try:
-			handler = NumberedRotatingFileHandler(os.path.join(log_dir, filename), maxBytes=1 * 1024 * 1024, backupCount=5)
+			handler = NumberedRotatingFileHandler(os.path.join(LOG_DIR, filename), maxBytes=1 * 1024 * 1024, backupCount=5)
 			handler.setLevel(level)
 			handler.addFilter(LevelFilter(level))
 			handler.setFormatter(formatter)
@@ -314,32 +318,49 @@ class PersistentCounter:
 
 
 class PersistentDict(UserDict):
-	"""A dictionary that is persisted to a JSON file."""
+	"""A dictionary that is persisted to a JSON or pickle file."""
 
 	def __init__(self, path):
 		self.file_path = path
+		self._is_pickle = self.file_path.endswith('.pkl')
 		super().__init__(self._load())
 
 	def _load(self):
 		if not os.path.exists(self.file_path):
 			return {}
-		try:
-			with open(self.file_path, 'r') as f:
-				data = json.load(f)
-			if isinstance(data, dict):
-				return data
-			logging.warning('Data in %s is not a dictionary, ignoring.', self.file_path)
-			return {}
-		except (IOError, ValueError, json.JSONDecodeError) as e:
-			logging.warning('Failed to load persistent dict from %s: %s', self.file_path, e)
-			return {}
+
+		if self._is_pickle:
+			try:
+				with open(self.file_path, 'rb') as f:
+					data = pickle.load(f)
+			except (IOError, ValueError, pickle.UnpicklingError) as e:
+				logging.warning('Failed to load persistent dict from %s: %s', self.file_path, e)
+				return {}
+		else:
+			try:
+				with open(self.file_path, 'r') as f:
+					data = json.load(f)
+			except (IOError, ValueError, json.JSONDecodeError) as e:
+				logging.warning('Failed to load persistent dict from %s: %s', self.file_path, e)
+				return {}
+		if isinstance(data, dict):
+			return data
+		logging.warning('Data in %s is not a dictionary, ignoring.', self.file_path)
+		return {}
 
 	def _save(self):
-		try:
-			with open(self.file_path, 'w') as f:
-				json.dump(self.data, f)
-		except (IOError, OSError) as e:
-			logging.error('Failed to save persistent dict to %s: %s', self.file_path, e)
+		if self._is_pickle:
+			try:
+				with open(self.file_path, 'wb') as f:
+					pickle.dump(self.data, f)
+			except (IOError, OSError) as e:
+				logging.error('Failed to save persistent dict to %s: %s', self.file_path, e)
+		else:
+			try:
+				with open(self.file_path, 'w') as f:
+					json.dump(self.data, f)
+			except (IOError, OSError) as e:
+				logging.error('Failed to save persistent dict to %s: %s', self.file_path, e)
 
 	def reload(self):
 		"""Reload data from disk."""
