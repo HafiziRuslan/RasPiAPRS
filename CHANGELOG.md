@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-04T09:47:14+08:00)
+## [beta8] - (2026-03-04T10:06:27+08:00)
 
-- 33 commit(s) contributed to the release.
+- 35 commit(s) contributed to the release.
 - 8 day(s) passed between the first and last commit.
 - 8 day(s) passed between releases.
 
@@ -20,6 +20,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [a3c8525](https://github.com/HafiziRuslan/RasPiAPRS/commit/a3c852525c6f1118752240783e7895a1f8a9478f) fix(deps): update python-dotenv to 1.2.2 and yarl to 1.23.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T10:06:27+08:00*
+- [f5630f4](https://github.com/HafiziRuslan/RasPiAPRS/commit/f5630f4981c26030bca53fb7256b0142da40bf4c) fix(main.sh): remove unnecessary confirmation prompt from pyclean command *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T10:03:52+08:00*
 - [39091ce](https://github.com/HafiziRuslan/RasPiAPRS/commit/39091ce419ec010fa3575e9c4bda64105ad582a1) fix(main): use APP_NAME prefix for lifecycle logs and shorten sleep in loop *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T02:32:52+08:00*
 - [7c8ee36](https://github.com/HafiziRuslan/RasPiAPRS/commit/7c8ee367be97582e25ab99688d9f269b21817cfe) fix(gps): require non-empty satellites for SKY data; align tests *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-02T08:17:04+08:00*
 - [8a11675](https://github.com/HafiziRuslan/RasPiAPRS/commit/8a1167581b307eff5818013bf1815909c2934a2b) docs(changelog): drop 'update' from changelog commit message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-28T17:58:15+08:00*
@@ -1063,4 +1065,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-04T09:47:52.585787422+08:00
+generated using git-cliff on 2026-03-04T10:07:06.033025514+08:00
