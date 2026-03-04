@@ -249,12 +249,8 @@ fi
 sync_dependencies() {
   local action=$1
   if [ "$INTERNET_AVAILABLE" = true ]; then
-    log_msg INFO "Clearing Python bytecode cache"
-    find . -name '__pycache__' -type d -print0 | while IFS= read -r -d $'\0' dir; do
-      rm -rf "$dir"
-    done
-
     log_msg INFO "$action RasPiAPRS dependencies"
+    sudo -u $dir_own uv tool run pyclean . -d -y -q
     sudo -u $dir_own uv sync -q
   elif [ "$action" = "Installing" ]; then
     log_msg WARN "Internet unavailable. Skipping dependency installation."
