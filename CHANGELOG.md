@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-04T10:06:27+08:00)
+## [beta8] - (2026-03-04T22:29:18+08:00)
 
-- 35 commit(s) contributed to the release.
+- 37 commit(s) contributed to the release.
 - 8 day(s) passed between the first and last commit.
 - 8 day(s) passed between releases.
 
@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [0d8542a](https://github.com/HafiziRuslan/RasPiAPRS/commit/0d8542a76c0b0d857ec8c6e2f4ded097ca27498b) fix(supply-chain): update SBOM with latest tool versions and timestamps *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T22:29:18+08:00*
 - [a3c8525](https://github.com/HafiziRuslan/RasPiAPRS/commit/a3c852525c6f1118752240783e7895a1f8a9478f) fix(deps): update python-dotenv to 1.2.2 and yarl to 1.23.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T10:06:27+08:00*
 - [f5630f4](https://github.com/HafiziRuslan/RasPiAPRS/commit/f5630f4981c26030bca53fb7256b0142da40bf4c) fix(main.sh): remove unnecessary confirmation prompt from pyclean command *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T10:03:52+08:00*
 - [39091ce](https://github.com/HafiziRuslan/RasPiAPRS/commit/39091ce419ec010fa3575e9c4bda64105ad582a1) fix(main): use APP_NAME prefix for lifecycle logs and shorten sleep in loop *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T02:32:52+08:00*
@@ -51,6 +52,7 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation in beta8
 
+- [5fb2327](https://github.com/HafiziRuslan/RasPiAPRS/commit/5fb2327ebd9a47fe5d37faa2e513641ff09b2bdc) docs: update mirror repositories terminology *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T22:28:18+08:00*
 - [799b2ce](https://github.com/HafiziRuslan/RasPiAPRS/commit/799b2cef3c49f51558f8d9b35a896a3b801ce1fb) docs: add Code of Conduct guidelines *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-01T02:12:07+08:00*
 - [d559450](https://github.com/HafiziRuslan/RasPiAPRS/commit/d559450f35015c7b23378f5e41b5ebca74229e32) docs: add contributing guidelines to project *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-01T02:12:01+08:00*
 - [fe32d40](https://github.com/HafiziRuslan/RasPiAPRS/commit/fe32d40d4a06985148952bde45505f7cdecf0eae) docs: add pull request template with guidelines and checklist *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-01T02:07:25+08:00*
@@ -1065,4 +1067,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-04T10:07:06.033025514+08:00
+generated using git-cliff on 2026-03-04T22:29:54.477097248+08:00
