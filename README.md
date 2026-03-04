@@ -41,7 +41,7 @@ git clone https://github.com/HafiziRuslan/RasPiAPRS.git raspiaprs
 cd raspiaprs
 ```
 
-Mirror Repositories (delayed daily update):
+Mirrors (daily update):
 
 - GitLab: <https://gitlab.com/hafiziruslan/RasPiAPRS>
 - Codeberg: <https://codeberg.org/hafiziruslan/RasPiAPRS>
