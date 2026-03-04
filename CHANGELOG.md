@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-04T02:32:52+08:00)
+## [beta8] - (2026-03-04T09:47:14+08:00)
 
-- 32 commit(s) contributed to the release.
-- 7 day(s) passed between the first and last commit.
-- 7 day(s) passed between releases.
+- 33 commit(s) contributed to the release.
+- 8 day(s) passed between the first and last commit.
+- 8 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [8f725a3](https://github.com/HafiziRuslan/RasPiAPRS/commit/8f725a3f88c1ea09f16d975fa423af594df345d9) refactor(deps): remove manual pycache cleanup; use uv tool pyclean and uv sync when internet is available *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T09:47:14+08:00*
 - [2eab036](https://github.com/HafiziRuslan/RasPiAPRS/commit/2eab03626115851bd3147502433ffcd282112ea6) refactor(uptime): switch to precisedelta for precise uptime output *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-27T21:52:53+08:00*
 - [bcd4bac](https://github.com/HafiziRuslan/RasPiAPRS/commit/bcd4bac6c07b52d2d7993c1b1a54d066f4865f20) refactor(main): consolidate message line formatting for Telegram log *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-26T16:11:11+08:00*
 - [87f570b](https://github.com/HafiziRuslan/RasPiAPRS/commit/87f570b56223a51139336158392eeee74c6c9cc4) refactor(main): adopt iterator protocol for Sequence and replace load/save with next() usage; update timer handling and header cadence *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-26T16:06:30+08:00*
@@ -1062,4 +1063,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-04T02:33:50.001998984+08:00
+generated using git-cliff on 2026-03-04T09:47:52.585787422+08:00
