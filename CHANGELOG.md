@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-06T04:33:06+08:00)
+## [beta8] - (2026-03-06T04:48:29+08:00)
 
-- 47 commit(s) contributed to the release.
+- 48 commit(s) contributed to the release.
 - 9 day(s) passed between the first and last commit.
 - 9 day(s) passed between releases.
 
@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [74bae3b](https://github.com/HafiziRuslan/RasPiAPRS/commit/74bae3be4514f7f2b72e058894d8150f7a2ef15a) style(network): fix net output formatting and standardize status text separators *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-06T04:48:29+08:00*
 - [e49d7af](https://github.com/HafiziRuslan/RasPiAPRS/commit/e49d7afb342148789aaedbeb620182d2ae295e5f) fix(main): clamp APRS messages to fit limits and refine formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-05T23:15:52+08:00*
 - [18aee1c](https://github.com/HafiziRuslan/RasPiAPRS/commit/18aee1c473bebadcd8bdb2fce780fd16f3aa9e25) fix(aprs): include qAR in path when from_call is set *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-05T19:17:01+08:00*
 - [25b0ad3](https://github.com/HafiziRuslan/RasPiAPRS/commit/25b0ad3e2f3235ab405827f45fa87a27514d29bf) fix(aprs): adjust formatting of outgoing messages and position payload *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-05T18:08:54+08:00*
@@ -1077,4 +1078,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-06T04:33:39.399891926+08:00
+generated using git-cliff on 2026-03-06T04:49:01.224415252+08:00
