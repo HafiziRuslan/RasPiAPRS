@@ -968,6 +968,46 @@ class SystemStats(object):
 
 		return self._get_cached('mmdvm_info', _fetch, ttl=300, default='')
 
+	@property
+	def traffic_info(self):
+		"""Get network traffic info from vnstat."""
+
+		def _fetch():
+			try:
+				output = subprocess.check_output(['vnstat', '--json', 'f', '1'], text=True)
+				data = json.loads(output)
+				best_rx = 0
+				best_tx = 0
+				max_total = -1
+				best_iface = 'net'
+				best_time = ''
+				found = False
+				if data.get('interfaces'):
+					for iface in data['interfaces']:
+						fiveminute_traffic = iface.get('traffic', {}).get('fiveminute')
+						if fiveminute_traffic:
+							last_entry = fiveminute_traffic[-1]
+							rx_bytes = last_entry.get('rx', 0)
+							tx_bytes = last_entry.get('tx', 0)
+							total = rx_bytes + tx_bytes
+							if total > max_total:
+								max_total = total
+								best_rx = rx_bytes
+								best_tx = tx_bytes
+								best_iface = iface.get('name', 'net')
+								t = last_entry.get('time', {})
+								best_time = f'{t.get("hour", 0):02d}{t.get("minute", 0):02d}'
+								found = True
+				if found:
+					rx = humanize.naturalsize(best_rx, binary=True, gnu=True)
+					tx = humanize.naturalsize(best_tx, binary=True, gnu=True)
+					return f'{best_iface}@{best_time}:{rx}/{tx}'
+			except (FileNotFoundError, subprocess.CalledProcessError, IndexError, json.JSONDecodeError, KeyError) as e:
+				logging.warning('Could not fetch or parse vnstat 5-min traffic: %s', e)
+			return ''
+
+		return self._get_cached('traffic_info', _fetch, ttl=300, default='')
+
 
 class ScheduledMessageHandler:
 	"""Class to handle sending scheduled messages."""
@@ -1336,8 +1376,9 @@ class APRSSender:
 				timestamp = timez.strftime('%d%H%Mz')
 				sats_info = f'gps: {u_sat}/{n_sat}'
 		uptime = self.sys_stats.uptime
-		stat_text = f'{timestamp}{", ".join(filter(None, [gridsquare, near_add, uptime, sats_info]))}'[:55]
-		tele_text = f'{timestamp}{", ".join(filter(None, [gridsquare, near_add_tg, uptime, sats_info]))}'
+		traffic = self.sys_stats.traffic_info
+		stat_text = f'{timestamp}{", ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'[:55]
+		tele_text = f'{timestamp}{", ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}'
 		payload = f'{FROMCALL}>{TOCALL}:>{stat_text}'
 		tg_msg = f'<u>{FROMCALL} Status</u>\n\n<b>{tele_text}</b>'
 		if os.path.exists(STATUS_FILE):

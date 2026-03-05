@@ -16,11 +16,12 @@ The metrics are:-
 
 The following packages are required:
 
+- `curl`
 - `gcc`
 - `git`
 - `python3-dev`
-- `curl`
 - `uv`
+- `vnstat`
 
 The startup script will attempt to install them automatically if they are missing.
 
