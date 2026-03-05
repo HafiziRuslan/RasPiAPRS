@@ -1002,7 +1002,7 @@ class ScheduledMessageHandler:
 		_, lat, lon, _, _, _ = await self.gps_handler.get_current_location_data()
 		gridsquare = latlon_to_grid(lat, lon)
 		seq = next(Sequence(name=f'msg_sequence_{source}_{addrcall}', modulo=100000))
-		message = f'{template} from ({gridsquare}) via {APP_NAME}'
+		message = f'{template} from {gridsquare} via {APP_NAME}'
 		if len(message) > 67:
 			logging.error('Message length %d exceeds APRS limit of 67 characters: %s', len(message), message)
 			return False
@@ -1261,7 +1261,7 @@ class APRSSender:
 					symbt, symb = '/', '('
 		lookup_table = symbt if symbt in ['/', '\\'] else '\\'
 		sym_desc = symbols.get_desc(lookup_table, symb).split('(')[0].strip()
-		payload = f'{FROMCALL}>{TOCALL}:@{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
+		payload = f'{FROMCALL}>{TOCALL}:/{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
 		tgpos = f'<u>{FROMCALL} Position</u>\n\nTime: <b>{timestamp}</b>\nSymbol: {symbt}{symb} ({sym_desc})\nPosition:\n\tLatitude: <b>{cur_lat}</b>\n\tLongitude: <b>{cur_lon}</b>\n\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\nComment: <b>{comment}</b>'
 		await self.send_packet(payload, 'position')
 		await self.tg_logger.log(tgpos, cur_lat, cur_lon, int(csestr))
