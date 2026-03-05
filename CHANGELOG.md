@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-06T00:21:39+08:00)
+## [beta8] - (2026-03-06T01:09:41+08:00)
 
-- 43 commit(s) contributed to the release.
+- 45 commit(s) contributed to the release.
 - 9 day(s) passed between the first and last commit.
 - 9 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [aa456ba](https://github.com/HafiziRuslan/RasPiAPRS/commit/aa456ba32c1e0beb1432c49f0bbec7779a6f7c5e) feat(log): enhance log_msg with structured metadata and improved timestamp *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-06T00:59:23+08:00*
 - [9d62383](https://github.com/HafiziRuslan/RasPiAPRS/commit/9d6238332840428e62686d9ffd1500d7e772682c) feat(logging): add ISO8601Formatter and update log format to include iso timestamp and extra fields *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-06T00:21:39+08:00*
 - [92249c0](https://github.com/HafiziRuslan/RasPiAPRS/commit/92249c0595b45af5bdbfe04ef1829a3bc0fc3803) feat(vnstat): integrate vnstat traffic data into status output and update dependencies *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-05T23:54:10+08:00*
 - [e9e3b76](https://github.com/HafiziRuslan/RasPiAPRS/commit/e9e3b76d1d1ed973950e1637639f95ba38d2d91f) feat(core): introduce library and log directories; migrate persistence to lib with pickle support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-05T04:25:02+08:00*
@@ -43,6 +44,7 @@ All notable changes to this project will be documented in this file.
 
 ### 💼 Other in beta8
 
+- [2ea3f6c](https://github.com/HafiziRuslan/RasPiAPRS/commit/2ea3f6c95681cf29b496004e74960d79982c15a4) Add cron schedule for cache clearing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-06T01:09:41+08:00*
 - [5e6e2c5](https://github.com/HafiziRuslan/RasPiAPRS/commit/5e6e2c54cf0d7e7af74e34be564a2745f62bee9a) Update issue templates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-01T01:48:12+08:00*
 - [5980142](https://github.com/HafiziRuslan/RasPiAPRS/commit/59801429616fdd59c579553658c64248e7ac01ca) update(certifi): bump version to 2026.2.25 across multiple files *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T21:27:49+08:00*
 
@@ -1073,4 +1075,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-06T00:22:28.397733701+08:00
+generated using git-cliff on 2026-03-06T01:37:47.201685620+08:00
