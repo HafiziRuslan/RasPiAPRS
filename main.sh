@@ -20,7 +20,22 @@ dir_own=$(stat -c '%U' .)
 log_msg() {
   local level=$1
   shift
-  echo "$(date +'%FT%T') | $level | $*"
+  local message="$*"
+  local timestamp
+  timestamp=$(date +'%Y-%m-%dT%H:%M:%S.%3N%:z')
+  local level_padded
+  level_padded=$(printf "%-8s" "$level")
+  local thread_padded
+  thread_padded=$(printf "%-12s" "$$")
+
+  local caller_info
+  caller_info=$(caller 0)
+  local line_no func_name file_name
+  read -r line_no func_name file_name <<<"$caller_info"
+
+  local name_part="${file_name##*/}.${func_name}:${line_no}"
+
+  echo "$timestamp | $level_padded | $thread_padded | $name_part | $message"
 }
 
 get_env_var() {
