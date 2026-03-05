@@ -685,8 +685,6 @@ def format_address(address, include_flag=False):
 	if not address:
 		return ''
 	area = address.get('suburb') or address.get('town') or address.get('city') or address.get('district') or ''
-	state = address.get('state') or address.get('region') or address.get('province') or ''
-	full_area = ', '.join(filter(None, [area, state]))
 	cc_str = ''
 	if cc := address.get('country_code'):
 		cc = cc.upper()
@@ -695,7 +693,7 @@ def format_address(address, include_flag=False):
 			cc_str = f', {cc}{flag}'
 		else:
 			cc_str = f', {cc}'
-	return f'{full_area}{cc_str}'
+	return f'{area}{cc_str}'
 
 
 class SmartBeaconing(object):
@@ -982,8 +980,6 @@ class SystemStats(object):
 				best_rx = 0
 				best_tx = 0
 				max_total = -1
-				best_iface = 'net'
-				best_time = ''
 				found = False
 				if data.get('interfaces'):
 					for iface in data['interfaces']:
@@ -997,14 +993,10 @@ class SystemStats(object):
 								max_total = total
 								best_rx = rx_bytes
 								best_tx = tx_bytes
-								best_iface = iface.get('name', 'net')
-								t = last_entry.get('time', {})
-								best_time = f'{t.get("hour", 0):02d}{t.get("minute", 0):02d}'
 								found = True
 				if found:
-					rx = humanize.naturalsize(best_rx, binary=True, gnu=True)
-					tx = humanize.naturalsize(best_tx, binary=True, gnu=True)
-					return f'{best_iface}@{best_time}:{rx}/{tx}'
+					rxtx = humanize.naturalsize(best_rx + best_tx, binary=True).replace(' ', '')
+					return f'net :{rxtx}'
 			except (FileNotFoundError, subprocess.CalledProcessError, IndexError, json.JSONDecodeError, KeyError) as e:
 				logging.warning('Could not fetch or parse vnstat 5-min traffic: %s', e)
 			return ''
@@ -1293,7 +1285,7 @@ class APRSSender:
 		spdkmh = _spd_to_kmh(cur_spd)
 		mmdvminfo = self.sys_stats.mmdvm_info
 		osinfo = self.sys_stats.os_info
-		comment = ', '.join(filter(None, [mmdvminfo, osinfo, PROJECT_URL]))[:36]
+		comment = ', '.join(filter(None, [mmdvminfo, osinfo, PROJECT_URL]))
 		ztime = dt.datetime.now(dt.timezone.utc)
 		timestamp = cur_time.strftime('%d%H%Mz') if cur_time else ztime.strftime('%d%H%Mz')
 		symbt = self.cfg.symbol_table
@@ -1366,7 +1358,7 @@ class APRSSender:
 	async def send_status(self, gps_data=None):
 		"""Send APRS status information to APRS-IS."""
 		_, lat, lon, _, _, _ = await self.gps_handler.get_current_location_data(gps_data)
-		gridsquare = f'[{latlon_to_grid(lat, lon)}]'
+		gridsquare = f'{latlon_to_grid(lat, lon)}'
 		address = get_add_from_pos(lat, lon)
 		near_add = format_address(address)
 		near_add_tg = format_address(address, True)
@@ -1380,7 +1372,7 @@ class APRSSender:
 				sats_info = f'gps: {u_sat}/{n_sat}'
 		uptime = self.sys_stats.uptime
 		traffic = self.sys_stats.traffic_info
-		stat_text = f'{timestamp}{", ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'[:55]
+		stat_text = f'{timestamp}{", ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
 		tele_text = f'{timestamp}{", ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}'
 		payload = f'{FROMCALL}>{TOCALL}:>{stat_text}'
 		tg_msg = f'<u>{FROMCALL} Status</u>\n\n<b>{tele_text}</b>'
