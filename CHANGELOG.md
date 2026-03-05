@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-06T03:53:55+08:00)
+## [beta8] - (2026-03-06T04:33:06+08:00)
 
-- 46 commit(s) contributed to the release.
+- 47 commit(s) contributed to the release.
 - 9 day(s) passed between the first and last commit.
 - 9 day(s) passed between releases.
 
@@ -50,6 +50,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [e8243b9](https://github.com/HafiziRuslan/RasPiAPRS/commit/e8243b9c1cd0a60984e51e5728c23945cc2cd585) refactor(format_address): adjust spacing and separators to remove comma before flag and unify with space join *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-06T04:33:06+08:00*
 - [dc14831](https://github.com/HafiziRuslan/RasPiAPRS/commit/dc14831e0fcdeac5be765caa5d4483d2a456b47a) refactor(main): simplify address formatting and telemetry strings *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-06T03:53:55+08:00*
 - [8f725a3](https://github.com/HafiziRuslan/RasPiAPRS/commit/8f725a3f88c1ea09f16d975fa423af594df345d9) refactor(deps): remove manual pycache cleanup; use uv tool pyclean and uv sync when internet is available *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T09:47:14+08:00*
 - [2eab036](https://github.com/HafiziRuslan/RasPiAPRS/commit/2eab03626115851bd3147502433ffcd282112ea6) refactor(uptime): switch to precisedelta for precise uptime output *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-27T21:52:53+08:00*
@@ -1076,4 +1077,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-06T04:08:16.417276836+08:00
+generated using git-cliff on 2026-03-06T04:33:39.399891926+08:00
