@@ -2,14 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-05T19:17:01+08:00)
+## [beta8] - (2026-03-06T00:21:39+08:00)
 
-- 40 commit(s) contributed to the release.
+- 43 commit(s) contributed to the release.
 - 9 day(s) passed between the first and last commit.
 - 9 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [9d62383](https://github.com/HafiziRuslan/RasPiAPRS/commit/9d6238332840428e62686d9ffd1500d7e772682c) feat(logging): add ISO8601Formatter and update log format to include iso timestamp and extra fields *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-06T00:21:39+08:00*
+- [92249c0](https://github.com/HafiziRuslan/RasPiAPRS/commit/92249c0595b45af5bdbfe04ef1829a3bc0fc3803) feat(vnstat): integrate vnstat traffic data into status output and update dependencies *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-05T23:54:10+08:00*
 - [e9e3b76](https://github.com/HafiziRuslan/RasPiAPRS/commit/e9e3b76d1d1ed973950e1637639f95ba38d2d91f) feat(core): introduce library and log directories; migrate persistence to lib with pickle support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-05T04:25:02+08:00*
 - [62ca252](https://github.com/HafiziRuslan/RasPiAPRS/commit/62ca252e111df4bfccb3edbfc45dca11fba627ad) feat(gpsd): throttle unhealthy GPSD warnings and reset on recovery *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T02:14:51+08:00*
 - [920a661](https://github.com/HafiziRuslan/RasPiAPRS/commit/920a6613a5f9b53a5b66f520b7076612681e33c8) feat(logging): introduce NumberedRotatingFileHandler for numbered log rotation and switch to it; fix telegram message f-string formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-03T20:22:53+08:00*
@@ -21,6 +23,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [e49d7af](https://github.com/HafiziRuslan/RasPiAPRS/commit/e49d7afb342148789aaedbeb620182d2ae295e5f) fix(main): clamp APRS messages to fit limits and refine formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-05T23:15:52+08:00*
 - [18aee1c](https://github.com/HafiziRuslan/RasPiAPRS/commit/18aee1c473bebadcd8bdb2fce780fd16f3aa9e25) fix(aprs): include qAR in path when from_call is set *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-05T19:17:01+08:00*
 - [25b0ad3](https://github.com/HafiziRuslan/RasPiAPRS/commit/25b0ad3e2f3235ab405827f45fa87a27514d29bf) fix(aprs): adjust formatting of outgoing messages and position payload *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-05T18:08:54+08:00*
 - [0d8542a](https://github.com/HafiziRuslan/RasPiAPRS/commit/0d8542a76c0b0d857ec8c6e2f4ded097ca27498b) fix(supply-chain): update SBOM with latest tool versions and timestamps *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T22:29:18+08:00*
@@ -1070,4 +1073,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-05T19:18:39.939871776+08:00
+generated using git-cliff on 2026-03-06T00:22:28.397733701+08:00
