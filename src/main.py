@@ -690,10 +690,10 @@ def format_address(address, include_flag=False):
 		cc = cc.upper()
 		if include_flag:
 			flag = ''.join(chr(ord(c) + 127397) for c in cc)
-			cc_str = f', {cc}{flag}'
+			cc_str = f'{cc}{flag}'
 		else:
-			cc_str = f', {cc}'
-	return f'{area}{cc_str}'
+			cc_str = f'{cc}'
+	return ' '.join([area, cc_str])
 
 
 class SmartBeaconing(object):
