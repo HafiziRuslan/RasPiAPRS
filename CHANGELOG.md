@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-05T18:08:54+08:00)
+## [beta8] - (2026-03-05T19:17:01+08:00)
 
-- 39 commit(s) contributed to the release.
+- 40 commit(s) contributed to the release.
 - 9 day(s) passed between the first and last commit.
 - 9 day(s) passed between releases.
 
@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [18aee1c](https://github.com/HafiziRuslan/RasPiAPRS/commit/18aee1c473bebadcd8bdb2fce780fd16f3aa9e25) fix(aprs): include qAR in path when from_call is set *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-05T19:17:01+08:00*
 - [25b0ad3](https://github.com/HafiziRuslan/RasPiAPRS/commit/25b0ad3e2f3235ab405827f45fa87a27514d29bf) fix(aprs): adjust formatting of outgoing messages and position payload *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-05T18:08:54+08:00*
 - [0d8542a](https://github.com/HafiziRuslan/RasPiAPRS/commit/0d8542a76c0b0d857ec8c6e2f4ded097ca27498b) fix(supply-chain): update SBOM with latest tool versions and timestamps *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T22:29:18+08:00*
 - [a3c8525](https://github.com/HafiziRuslan/RasPiAPRS/commit/a3c852525c6f1118752240783e7895a1f8a9478f) fix(deps): update python-dotenv to 1.2.2 and yarl to 1.23.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T10:06:27+08:00*
@@ -1069,4 +1070,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-05T18:10:11.004278723+08:00
+generated using git-cliff on 2026-03-05T19:18:39.939871776+08:00
