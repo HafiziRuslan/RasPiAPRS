@@ -88,11 +88,14 @@ def configure_logging():
 	logging.getLogger('httpx').setLevel(logging.DEBUG)
 	logging.getLogger('telegram').setLevel(logging.DEBUG)
 	logging.getLogger('urllib3').setLevel(logging.DEBUG)
+
+	class ISO8601Formatter(logging.Formatter):
+		def formatTime(self, record, datefmt=None):
+			return dt.datetime.fromtimestamp(record.created, dt.timezone.utc).astimezone().isoformat(timespec='milliseconds')
+
 	logger = logging.getLogger()
 	logger.setLevel(logging.DEBUG)
-	formatter = logging.Formatter(
-		'%(asctime)s | %(levelname)s | %(threadName)s | %(name)s.%(funcName)s:%(lineno)d | %(message)s', datefmt='%Y-%m-%dT%H:%M:%S'
-	)
+	formatter = ISO8601Formatter('%(asctime)s | %(levelname)-8s | %(threadName)-12s | %(name)s.%(funcName)s:%(lineno)d | %(message)s')
 	console_handler = logging.StreamHandler()
 	console_handler.setLevel(logging.WARNING)
 	console_handler.setFormatter(formatter)
