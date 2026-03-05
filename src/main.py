@@ -689,9 +689,9 @@ def format_address(address, include_flag=False):
 		cc = cc.upper()
 		if include_flag:
 			flag = ''.join(chr(ord(c) + 127397) for c in cc)
-			cc_str = f' [{flag} {cc}]'
+			cc_str = f', {cc}{flag}'
 		else:
-			cc_str = f' ({cc})'
+			cc_str = f', {cc}'
 	return f'{full_area}{cc_str}'
 
 
@@ -886,7 +886,23 @@ class SystemStats(object):
 		def _fetch():
 			uptime_seconds = dt.datetime.now(dt.timezone.utc).timestamp() - psutil.boot_time()
 			uptime = dt.timedelta(seconds=uptime_seconds)
-			return f'up: {humanize.precisedelta(uptime, minimum_unit="minutes", format="%0.0f")}'
+			u_str = humanize.precisedelta(uptime, minimum_unit='minutes', format='%0.0f')
+			for unit, abbr in [
+				(' years', 'y'),
+				(' year', 'y'),
+				(' months', 'mo'),
+				(' month', 'mo'),
+				(' days', 'd'),
+				(' day', 'd'),
+				(' hours', 'h'),
+				(' hour', 'h'),
+				(' minutes', 'm'),
+				(' minute', 'm'),
+				(' and', ''),
+				(',', ''),
+			]:
+				u_str = u_str.replace(unit, abbr)
+			return f'up: {u_str}'
 
 		return self._get_cached('uptime', _fetch, ttl=60, default='')
 
@@ -1002,10 +1018,7 @@ class ScheduledMessageHandler:
 		_, lat, lon, _, _, _ = await self.gps_handler.get_current_location_data()
 		gridsquare = latlon_to_grid(lat, lon)
 		seq = next(Sequence(name=f'msg_sequence_{source}_{addrcall}', modulo=100000))
-		message = f'{template} from {gridsquare} via {APP_NAME}'
-		if len(message) > 67:
-			logging.error('Message length %d exceeds APRS limit of 67 characters: %s', len(message), message)
-			return False
+		message = f'{template} from {gridsquare} via {APP_NAME}'[:67]
 		path_str = ''
 		if from_call:
 			path_str = f',qAR,{FROMCALL}'
@@ -1237,7 +1250,7 @@ class APRSSender:
 		spdkmh = _spd_to_kmh(cur_spd)
 		mmdvminfo = self.sys_stats.mmdvm_info
 		osinfo = self.sys_stats.os_info
-		comment = ', '.join(filter(None, [mmdvminfo, osinfo, PROJECT_URL]))
+		comment = ', '.join(filter(None, [mmdvminfo, osinfo, PROJECT_URL]))[:36]
 		ztime = dt.datetime.now(dt.timezone.utc)
 		timestamp = cur_time.strftime('%d%H%Mz') if cur_time else ztime.strftime('%d%H%Mz')
 		symbt = self.cfg.symbol_table
@@ -1323,7 +1336,7 @@ class APRSSender:
 				timestamp = timez.strftime('%d%H%Mz')
 				sats_info = f'gps: {u_sat}/{n_sat}'
 		uptime = self.sys_stats.uptime
-		stat_text = f'{timestamp}{", ".join(filter(None, [gridsquare, near_add, uptime, sats_info]))}'
+		stat_text = f'{timestamp}{", ".join(filter(None, [gridsquare, near_add, uptime, sats_info]))}'[:55]
 		tele_text = f'{timestamp}{", ".join(filter(None, [gridsquare, near_add_tg, uptime, sats_info]))}'
 		payload = f'{FROMCALL}>{TOCALL}:>{stat_text}'
 		tg_msg = f'<u>{FROMCALL} Status</u>\n\n<b>{tele_text}</b>'
