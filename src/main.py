@@ -996,7 +996,7 @@ class SystemStats(object):
 								found = True
 				if found:
 					rxtx = humanize.naturalsize(best_rx + best_tx, binary=True).replace(' ', '')
-					return f'net :{rxtx}'
+					return f'net: {rxtx}'
 			except (FileNotFoundError, subprocess.CalledProcessError, IndexError, json.JSONDecodeError, KeyError) as e:
 				logging.warning('Could not fetch or parse vnstat 5-min traffic: %s', e)
 			return ''
@@ -1285,7 +1285,7 @@ class APRSSender:
 		spdkmh = _spd_to_kmh(cur_spd)
 		mmdvminfo = self.sys_stats.mmdvm_info
 		osinfo = self.sys_stats.os_info
-		comment = ', '.join(filter(None, [mmdvminfo, osinfo, PROJECT_URL]))
+		comment = '; '.join(filter(None, [mmdvminfo, osinfo, PROJECT_URL]))
 		ztime = dt.datetime.now(dt.timezone.utc)
 		timestamp = cur_time.strftime('%d%H%Mz') if cur_time else ztime.strftime('%d%H%Mz')
 		symbt = self.cfg.symbol_table
@@ -1372,8 +1372,8 @@ class APRSSender:
 				sats_info = f'gps: {u_sat}/{n_sat}'
 		uptime = self.sys_stats.uptime
 		traffic = self.sys_stats.traffic_info
-		stat_text = f'{timestamp}{", ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
-		tele_text = f'{timestamp}{", ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}'
+		stat_text = f'{timestamp}{"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
+		tele_text = f'{timestamp}{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}'
 		payload = f'{FROMCALL}>{TOCALL}:>{stat_text}'
 		tg_msg = f'<u>{FROMCALL} Status</u>\n\n<b>{tele_text}</b>'
 		if os.path.exists(STATUS_FILE):
