@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-06T04:48:29+08:00)
+## [beta8] - (2026-03-06T22:50:50+08:00)
 
-- 48 commit(s) contributed to the release.
-- 9 day(s) passed between the first and last commit.
-- 9 day(s) passed between releases.
+- 49 commit(s) contributed to the release.
+- 10 day(s) passed between the first and last commit.
+- 10 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
@@ -51,6 +51,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [33199bd](https://github.com/HafiziRuslan/RasPiAPRS/commit/33199bd68471fab05c669256bf56cc768560f3cf) refactor(aprs): rename header parameters and GPS field; update telemetry label *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-06T22:50:50+08:00*
 - [e8243b9](https://github.com/HafiziRuslan/RasPiAPRS/commit/e8243b9c1cd0a60984e51e5728c23945cc2cd585) refactor(format_address): adjust spacing and separators to remove comma before flag and unify with space join *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-06T04:33:06+08:00*
 - [dc14831](https://github.com/HafiziRuslan/RasPiAPRS/commit/dc14831e0fcdeac5be765caa5d4483d2a456b47a) refactor(main): simplify address formatting and telemetry strings *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-06T03:53:55+08:00*
 - [8f725a3](https://github.com/HafiziRuslan/RasPiAPRS/commit/8f725a3f88c1ea09f16d975fa423af594df345d9) refactor(deps): remove manual pycache cleanup; use uv tool pyclean and uv sync when internet is available *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T09:47:14+08:00*
@@ -1078,4 +1079,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-06T04:49:01.224415252+08:00
+generated using git-cliff on 2026-03-06T23:12:07.025813689+08:00
