@@ -1317,11 +1317,11 @@ class APRSSender:
 	async def send_header(self):
 		"""Send APRS header information to APRS-IS."""
 		caller = f'{FROMCALL}>{TOCALL}::{FROMCALL:9s}:'
-		params = ['CPUTemp', 'CPULoad', 'RAMUsed', 'ROMUsed']
+		params = ['Temp', 'Load', 'RAM', 'ROM']
 		units = ['deg.C', '%', 'GB', 'GB']
 		eqns = ['0,0.1,0', '0,0.001,0', '0,0.001,0', '0,0.001,0']
 		if self.cfg.gpsd_enabled:
-			params.append('GPSUsed')
+			params.append('GPS')
 			units.append('sats')
 			eqns.append('0,1,0')
 		payload = f'{caller}PARM.{",".join(params)}\r\n{caller}UNIT.{",".join(units)}\r\n{caller}EQNS.{",".join(eqns)}'
@@ -1351,7 +1351,7 @@ class APRSSender:
 			_, uSat, nSat = await self.gps_handler.get_satellites()
 			payload += f',{uSat:d}'
 			if uSat > 0:
-				tgtel += f'\nGPS Used: <b>{uSat}</b>\nGPS Avail: <b>{nSat}</b>'
+				tgtel += f'\nGPS Lock: <b>{uSat}</b>\nGPS Avail: <b>{nSat}</b>'
 		await self.send_packet(payload, 'telemetry')
 		await self.tg_logger.log(tgtel)
 
