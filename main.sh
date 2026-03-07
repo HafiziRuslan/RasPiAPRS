@@ -45,71 +45,6 @@ get_env_var() {
   fi
 }
 
-send_notification() {
-  if [ "$(get_env_var "TELEGRAM_ENABLE" | tr -d '[:space:]')" != "true" ]; then
-    return
-  fi
-
-  local message="⚠️ RasPiAPRS Alert: $1"
-  local log_file="/var/log/raspiaprs/error.log"
-
-  if [ -f "$log_file" ]; then
-    local log_tail=$(tail -n 10 "$log_file")
-    if [ -n "$log_tail" ]; then
-      message="$message"$'\n\n'"Last 10 error log lines:"$'\n'"$log_tail"
-    fi
-  fi
-
-  if [ -f .env ]; then
-    local token=$(get_env_var "TELEGRAM_TOKEN" | tr -d '[:space:]')
-    local chat_id=$(get_env_var "TELEGRAM_CHAT_ID" | tr -d '[:space:]')
-    local topic_id=$(get_env_var "TELEGRAM_TOPIC_ID" | tr -d '[:space:]')
-
-    if [ -z "$token" ] || [ -z "$chat_id" ]; then
-      return
-    fi
-
-    local curl_args=()
-    local json_data
-    local data
-
-    # Prefer jq for JSON construction
-    if command -v jq >/dev/null 2>&1; then
-      local jq_args=(--arg chat_id "$chat_id" --arg text "$message")
-      local jq_filter='{chat_id: $chat_id, text: $text}'
-      if [ -n "$topic_id" ]; then
-        jq_args+=(--arg topic_id "$topic_id")
-        jq_filter='{chat_id: $chat_id, text: $text, message_thread_id: ($topic_id | tonumber)}'
-      fi
-
-      if json_data=$(jq -n "${jq_args[@]}" "$jq_filter" 2>/dev/null); then
-        curl_args=("-H" "Content-Type: application/json" "-d" "$json_data")
-      fi
-    fi
-
-    # If jq method failed or is not available, use python fallback
-    if [ ${#curl_args[@]} -eq 0 ]; then
-      local encoded_message=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$message")
-      data="chat_id=$chat_id"
-      if [ -n "$topic_id" ]; then
-        data="$data&message_thread_id=$topic_id"
-      fi
-      data="$data&text=$encoded_message"
-      curl_args=("--data" "$data")
-    fi
-
-    local url="https://api.telegram.org/bot$token/sendMessage"
-    for i in {1..3}; do
-      if curl -s --fail "${curl_args[@]}" "$url" >/dev/null 2>&1; then
-        return 0 # Success
-      fi
-      log_msg WARN "Failed to send notification (attempt $i/3). Retrying in 2 seconds..."
-      sleep 2
-    done
-
-    log_msg ERROR "Failed to send notification after 3 attempts."
-  fi
-}
 
 check_internet() {
   local hosts=("1.1.1.1" "8.8.8.8" "github.com" "pypi.org")
@@ -304,7 +239,6 @@ RETRY_COUNT=0
 while true; do
   if [ ! -f .env ]; then
     log_msg ERROR "❌ .env file not found! Cannot start RasPiAPRS. Exiting."
-    send_notification ".env file not found! Service stopping."
     exit 1
   fi
 
@@ -331,12 +265,10 @@ while true; do
     RETRY_COUNT=$((RETRY_COUNT + 1))
     if [ "$RETRY_COUNT" -gt "$MAX_RETRIES" ]; then
       log_msg ERROR "Maximum retries ($MAX_RETRIES) reached. Exiting."
-      send_notification "Maximum retries ($MAX_RETRIES) reached. Service stopping."
       exit 1
     fi
 
     log_msg ERROR "RasPiAPRS exited with code $exit_code. Retry $RETRY_COUNT/$MAX_RETRIES. Re-run in ${RESTART_DELAY} seconds."
-    send_notification "RasPiAPRS exited with code $exit_code. Restarting (Retry $RETRY_COUNT/$MAX_RETRIES)..."
     sleep $RESTART_DELAY
 
     RESTART_DELAY=$((RESTART_DELAY * 2))
@@ -348,7 +280,6 @@ while true; do
     break
   else
     log_msg ERROR "RasPiAPRS exited with unrecoverable code $exit_code. Stopping."
-    send_notification "Script exited with unrecoverable code $exit_code. Service stopping."
     exit "$exit_code"
   fi
 done
