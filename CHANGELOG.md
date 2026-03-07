@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-06T22:50:50+08:00)
+## [beta8] - (2026-03-07T13:53:45+08:00)
 
-- 49 commit(s) contributed to the release.
-- 10 day(s) passed between the first and last commit.
-- 10 day(s) passed between releases.
+- 50 commit(s) contributed to the release.
+- 11 day(s) passed between the first and last commit.
+- 11 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [64fb651](https://github.com/HafiziRuslan/RasPiAPRS/commit/64fb651f0a968ee67aa3ebc421a0a0c149a967c6) fix(sbom): update sbom metadata and tool version *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-07T13:53:45+08:00*
 - [74bae3b](https://github.com/HafiziRuslan/RasPiAPRS/commit/74bae3be4514f7f2b72e058894d8150f7a2ef15a) style(network): fix net output formatting and standardize status text separators *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-06T04:48:29+08:00*
 - [e49d7af](https://github.com/HafiziRuslan/RasPiAPRS/commit/e49d7afb342148789aaedbeb620182d2ae295e5f) fix(main): clamp APRS messages to fit limits and refine formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-05T23:15:52+08:00*
 - [18aee1c](https://github.com/HafiziRuslan/RasPiAPRS/commit/18aee1c473bebadcd8bdb2fce780fd16f3aa9e25) fix(aprs): include qAR in path when from_call is set *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-05T19:17:01+08:00*
@@ -1079,4 +1080,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-06T23:12:07.025813689+08:00
+generated using git-cliff on 2026-03-07T13:54:18.014923884+08:00
