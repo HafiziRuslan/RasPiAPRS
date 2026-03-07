@@ -60,7 +60,7 @@ def get_app_metadata():
 			git_sha = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD^'], cwd=repo_path).decode('ascii').strip()
 		except Exception:
 			pass
-	meta = {'name': 'RasPiAPRS', 'version': '0.0.0', 'github': 'https://github.com/HafiziRuslan/RasPiAPRS'}
+	meta = {'name': 'RasPiAPRS', 'version': '0.0.0', 'github': 'https://git.new/RasPiAPRS'}
 	try:
 		with open(os.path.join(repo_path, 'pyproject.toml'), 'rb') as f:
 			data = tomllib.load(f).get('project', {})
