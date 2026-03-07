@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-07T21:43:22+08:00)
+## [beta8] - (2026-03-08T02:13:06+08:00)
 
-- 51 commit(s) contributed to the release.
+- 52 commit(s) contributed to the release.
 - 11 day(s) passed between the first and last commit.
 - 11 day(s) passed between releases.
 
@@ -52,6 +52,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [b1a5d08](https://github.com/HafiziRuslan/RasPiAPRS/commit/b1a5d08339f67cc038e0517e0aa6c1b63fd99e07) refactor(main): remove Telegram notification support by deleting send_notification function and its call sites *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-08T02:13:06+08:00*
 - [33199bd](https://github.com/HafiziRuslan/RasPiAPRS/commit/33199bd68471fab05c669256bf56cc768560f3cf) refactor(aprs): rename header parameters and GPS field; update telemetry label *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-06T22:50:50+08:00*
 - [e8243b9](https://github.com/HafiziRuslan/RasPiAPRS/commit/e8243b9c1cd0a60984e51e5728c23945cc2cd585) refactor(format_address): adjust spacing and separators to remove comma before flag and unify with space join *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-06T04:33:06+08:00*
 - [dc14831](https://github.com/HafiziRuslan/RasPiAPRS/commit/dc14831e0fcdeac5be765caa5d4483d2a456b47a) refactor(main): simplify address formatting and telemetry strings *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-06T03:53:55+08:00*
@@ -1081,4 +1082,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-07T21:44:15.914760559+08:00
+generated using git-cliff on 2026-03-08T02:13:44.127109273+08:00
