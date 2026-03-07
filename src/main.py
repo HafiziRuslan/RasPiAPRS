@@ -1056,7 +1056,7 @@ class ScheduledMessageHandler:
 		message = f'{template} from {gridsquare} via {APP_NAME}'[:67]
 		path_str = ''
 		if from_call:
-			path_str = f',qAR,{FROMCALL}'
+			path_str = f',{FROMCALL}*,qAR,{FROMCALL}'
 		payload = f'{source}>{TOCALL}{path_str}::{addrcall:9s}:{message}{{{seq}'
 		try:
 			parsed = aprslib.parse(payload)
@@ -1064,13 +1064,13 @@ class ScheduledMessageHandler:
 			logging.error('APRS packet parsing error at %s: %s', name, err)
 			return False
 		await aprs_sender.send_packet(payload, name)
-		tg_msg = f'<u>{parsed["from"]} Message <b>{name}</b></u>\n\nFrom: <b>{parsed["from"]}</b>\nTo: <b>{parsed["addresse"]}</b>'
+		tg_msg = f'<u>Message {name}</u>\n\nFrom: <b>{parsed["from"]}</b>'
+		if parsed.get('via'):
+			tg_msg += f'\nvia: <b>{parsed["via"]}</b>'
 		path_list = parsed.get('path')
 		if path_list:
 			tg_msg += f'\nPath: <b>{", ".join(path_list)}</b>'
-		if parsed.get('via'):
-			tg_msg += f'\nvia: <b>{parsed["via"]}</b>'
-		tg_msg += f'\nMessage{"-" + parsed["msgNo"] if parsed.get("msgNo") else ""}: <b>{parsed["message_text"]}</b>'
+		tg_msg += f'\nTo: <b>{parsed["addresse"]}</b>\n\nMessage{"-" + parsed["msgNo"] if parsed.get("msgNo") else ""}: <b>{parsed["message_text"]}</b>'
 		await aprs_sender.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
 		self.tracking[tracking_key] = now.isoformat()
 		self.tracking.flush()
