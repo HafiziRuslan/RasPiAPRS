@@ -957,15 +957,20 @@ class SystemStats(object):
 			rx_freq = int(mmdvm_info.get('RXFrequency', 0))
 			tx_freq = int(mmdvm_info.get('TXFrequency', 0))
 			color_code = int(mmdvm_info.get('ColorCode', 0))
+			slot1 = int(mmdvm_info.get('Slot1', 0))
+			slot2 = int(mmdvm_info.get('Slot2', 0))
 			rx = round(rx_freq / 1000000, 6)
 			tx = round(tx_freq / 1000000, 6)
 			shift = ''
 			if tx > rx:
-				shift = f' ({round(rx - tx, 6)}MHz)'
+				shift = f'({round(rx - tx, 6)}MHz)'
 			elif tx < rx:
-				shift = f' (+{round(rx - tx, 6)}MHz)'
-			cc = f' CC{color_code}' if dmr_enabled else ''
-			return str(tx) + 'MHz' + shift + cc
+				shift = f'(+{round(rx - tx, 6)}MHz)'
+			if dmr_enabled:
+				cc = f'C{color_code}'
+				s1 = 'S1' if slot1 == 1 else None
+				s2 = 'S2' if slot2 == 1 else None
+			return f'{str(tx)}MHz{" ".join([{shift}, {cc}, {s1}, {s2}])}'
 
 		return self._get_cached('mmdvm_info', _fetch, ttl=300, default='')
 
