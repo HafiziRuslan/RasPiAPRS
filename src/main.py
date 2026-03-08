@@ -935,7 +935,7 @@ class SystemStats(object):
 				logging.error('Unexpected error: %s', e)
 			return f'{osname} {kernelver}'
 
-		return self._get_cached('os_info', _fetch, ttl=300, default='')
+		return self._get_cached('os_info', _fetch, ttl=3600, default='')
 
 	@property
 	def mmdvm_info(self):
@@ -972,7 +972,7 @@ class SystemStats(object):
 				s2 = 'S2' if slot2 == 1 else None
 			return f'{tx}MHz{" ".join([{shift}, {cc}, {s1}, {s2}])}'
 
-		return self._get_cached('mmdvm_info', _fetch, ttl=300, default='')
+		return self._get_cached('mmdvm_info', _fetch, ttl=3600, default='')
 
 	@property
 	def traffic_info(self):
