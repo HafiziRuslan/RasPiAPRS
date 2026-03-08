@@ -970,7 +970,7 @@ class SystemStats(object):
 				cc = f'C{color_code}'
 				s1 = 'S1' if slot1 == 1 else None
 				s2 = 'S2' if slot2 == 1 else None
-			return f'{str(tx)}MHz{" ".join([{shift}, {cc}, {s1}, {s2}])}'
+			return f'{tx}MHz{" ".join([{shift}, {cc}, {s1}, {s2}])}'
 
 		return self._get_cached('mmdvm_info', _fetch, ttl=300, default='')
 
