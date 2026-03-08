@@ -378,14 +378,14 @@ class Sequence(PersistentCounter):
 	"""Class to manage APRS sequence."""
 
 	def __init__(self, name='sequence', modulo=100):
-		super().__init__(f'{TMP_DIR}/{name}.tmp', modulo)
+		super().__init__(f'{LIB_DIR}/{name}.seq', modulo)
 
 
 class Timer(PersistentCounter):
 	"""Class to manage persistent timer."""
 
 	def __init__(self, name='timer', modulo=86400):
-		super().__init__(f'{TMP_DIR}/{name}.tmp', modulo)
+		super().__init__(f'{TMP_DIR}/{name}.tmr', modulo)
 
 
 def _alt_to_aprs(alt):
