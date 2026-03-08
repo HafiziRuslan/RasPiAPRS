@@ -1373,7 +1373,7 @@ class APRSSender:
 		uptime = self.sys_stats.uptime
 		traffic = self.sys_stats.traffic_info
 		stat_text = f'{timestamp}{"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
-		tele_text = f'{timestamp}{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}'
+		tele_text = f'Time: <b>{timestamp}</b>\nText: <b>{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}</b>'
 		payload = f'{FROMCALL}>{TOCALL}:>{stat_text}'
 		tg_msg = f'<u>{FROMCALL} Status</u>\n\n<b>{tele_text}</b>'
 		if os.path.exists(STATUS_FILE):
