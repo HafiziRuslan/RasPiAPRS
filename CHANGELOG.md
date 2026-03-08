@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-08T02:41:46+08:00)
+## [beta8] - (2026-03-09T01:27:11+08:00)
 
-- 53 commit(s) contributed to the release.
-- 11 day(s) passed between the first and last commit.
-- 11 day(s) passed between releases.
+- 54 commit(s) contributed to the release.
+- 12 day(s) passed between the first and last commit.
+- 12 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
@@ -52,6 +52,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [20b47c5](https://github.com/HafiziRuslan/RasPiAPRS/commit/20b47c58a9ce3956be33384716a69ee0345806e2) refactor(main): update persistent counter storage paths for Sequence and Timer *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T01:27:11+08:00*
 - [9e43323](https://github.com/HafiziRuslan/RasPiAPRS/commit/9e43323ab9862b15293937e0bebb4fca51c5d5b7) refactor(main): refine APRS path formatting and Telegram message construction *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-08T02:41:46+08:00*
 - [b1a5d08](https://github.com/HafiziRuslan/RasPiAPRS/commit/b1a5d08339f67cc038e0517e0aa6c1b63fd99e07) refactor(main): remove Telegram notification support by deleting send_notification function and its call sites *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-08T02:13:06+08:00*
 - [33199bd](https://github.com/HafiziRuslan/RasPiAPRS/commit/33199bd68471fab05c669256bf56cc768560f3cf) refactor(aprs): rename header parameters and GPS field; update telemetry label *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-06T22:50:50+08:00*
@@ -1083,4 +1084,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-08T02:45:45.530744436+08:00
+generated using git-cliff on 2026-03-09T01:28:09.804990571+08:00
