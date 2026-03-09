@@ -959,18 +959,14 @@ class SystemStats(object):
 			color_code = int(mmdvm_info.get('ColorCode', 0))
 			slot1 = int(mmdvm_info.get('Slot1', 0))
 			slot2 = int(mmdvm_info.get('Slot2', 0))
-			rx = round(rx_freq / 1000000, 6)
-			tx = round(tx_freq / 1000000, 6)
-			shift = ''
-			if tx > rx:
-				shift = f'({round(rx - tx, 6)}MHz)'
-			elif tx < rx:
-				shift = f'(+{round(rx - tx, 6)}MHz)'
+			tx = humanize.metric(tx_freq, 'Hz', precision=6)
+			offset = rx_freq - tx_freq
+			shift = f'({"+" if offset > 0 else ""}{humanize.metric(offset, "Hz", precision=2)})' if offset != 0 else None
 			if dmr_enabled:
 				cc = f'C{color_code}'
 				s1 = 'S1' if slot1 == 1 else None
 				s2 = 'S2' if slot2 == 1 else None
-			return f'{tx}MHz{" ".join([{shift}, {cc}, {s1}, {s2}])}'
+			return f'{tx}{",".join([{shift}, {cc}, {s1}, {s2}])}'
 
 		return self._get_cached('mmdvm_info', _fetch, ttl=3600, default='')
 
