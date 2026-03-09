@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-09T09:14:23+08:00)
+## [beta8] - (2026-03-09T22:45:41+08:00)
 
-- 61 commit(s) contributed to the release.
+- 62 commit(s) contributed to the release.
 - 13 day(s) passed between the first and last commit.
 - 13 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [6e1b38b](https://github.com/HafiziRuslan/RasPiAPRS/commit/6e1b38b830512d91da0f6293e4ff86b085c795d0) feat(sequence): implement persistent per-message sequencing and telemetry sequencing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T22:45:41+08:00*
 - [37032fd](https://github.com/HafiziRuslan/RasPiAPRS/commit/37032fdf524aec96112d0ab68f51335583c99f9b) feat(dmr): include Slot1/Slot2 indicators and color code in mmdvm_info string; adjust shift formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T07:30:24+08:00*
 - [8703916](https://github.com/HafiziRuslan/RasPiAPRS/commit/870391656ec7971c7760481c899ee8847547fce0) feat(main): refine OS and kernel version string formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T07:05:16+08:00*
 - [aa456ba](https://github.com/HafiziRuslan/RasPiAPRS/commit/aa456ba32c1e0beb1432c49f0bbec7779a6f7c5e) feat(log): enhance log_msg with structured metadata and improved timestamp *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-06T00:59:23+08:00*
@@ -1091,4 +1092,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-09T09:14:56.981597227+08:00
+generated using git-cliff on 2026-03-09T22:46:33.888334209+08:00
