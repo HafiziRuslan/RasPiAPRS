@@ -1013,9 +1013,12 @@ class ScheduledMessageHandler:
 		self.gps_handler = gps_handler
 		self.tracking = PersistentDict(MSG_TRACKING_FILE)
 		self.messages = []
+		self.sequences = {}
 		self._init_messages()
+		self._init_sequences()
 
 	def _init_messages(self):
+		"""Initialize scheduled messages."""
 		self.messages = []
 		definitions = [
 			('aprsthursday_enabled', 'APRSThursday', 3, 'ANSRVR', 'CQ HOTG #{}', dt.timezone.utc),
@@ -1030,6 +1033,15 @@ class ScheduledMessageHandler:
 					self.messages.append(
 						{'name': name, 'weekday': weekday, 'addrcall': addrcall, 'template': template_fmt.format(name), 'from_call': sender, 'tz': tz}
 					)
+
+	def _init_sequences(self):
+		"""Initialize sequence counters for each message type."""
+		for msg_info in self.messages:
+			source = msg_info['from_call'] or FROMCALL
+			addrcall = msg_info['addrcall']
+			seq_name = f'msg_sequence_{source}_{addrcall}'
+			if seq_name not in self.sequences:
+				self.sequences[seq_name] = Sequence(name=seq_name, modulo=100000)
 
 	async def send_all(self, aprs_sender):
 		"""Send all due scheduled messages."""
@@ -1053,7 +1065,8 @@ class ScheduledMessageHandler:
 			return False
 		_, lat, lon, _, _, _ = await self.gps_handler.get_current_location_data()
 		gridsquare = latlon_to_grid(lat, lon)
-		seq = next(Sequence(name=f'msg_sequence_{source}_{addrcall}', modulo=100000))
+		seq_name = f'msg_sequence_{source}_{addrcall}'
+		seq = next(self.sequences[seq_name])
 		message = f'{template} from {gridsquare} via {APP_NAME}'[:67]
 		path_str = ''
 		if from_call:
@@ -1235,12 +1248,13 @@ class TelegramLogger(object):
 class APRSSender:
 	"""Class to handle APRS connection and packet sending."""
 
-	def __init__(self, cfg, tg_logger, sys_stats, gps_handler):
+	def __init__(self, cfg, tg_logger, sys_stats, gps_handler, telem_seq):
 		self.cfg = cfg
 		self.tg_logger = tg_logger
 		self.sys_stats = sys_stats
 		self.gps_handler = gps_handler
 		self.ais = None
+		self.telem_seq = telem_seq
 
 	async def connect(self):
 		"""Establish connection to APRS-IS with retries."""
@@ -1332,7 +1346,7 @@ class APRSSender:
 
 	async def send_telemetry(self):
 		"""Send APRS telemetry information to APRS-IS."""
-		seq = next(Sequence(name='telem_sequence', modulo=1000))
+		seq = next(self.telem_seq)
 		cputemp = self.sys_stats.avg_temp
 		cpuload = self.sys_stats.avg_cpu_load
 		memused = self.sys_stats.avg_memory_used
@@ -1426,7 +1440,8 @@ async def initialize_session(cfg):
 		_, cfg.latitude, cfg.longitude, cfg.altitude, _, _ = gps_data
 	tg_logger = TelegramLogger(cfg)
 	sys_stats = SystemStats()
-	aprs_sender = APRSSender(cfg, tg_logger, sys_stats, gps_handler)
+	telem_seq = Sequence(name='telem_sequence', modulo=1000)
+	aprs_sender = APRSSender(cfg, tg_logger, sys_stats, gps_handler, telem_seq)
 	await aprs_sender.connect()
 	timer = Timer()
 	sb = SmartBeaconing(cfg)
