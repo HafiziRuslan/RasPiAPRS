@@ -2,14 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-09T02:44:32+08:00)
+## [beta8] - (2026-03-09T08:20:46+08:00)
 
-- 55 commit(s) contributed to the release.
-- 12 day(s) passed between the first and last commit.
-- 12 day(s) passed between releases.
+- 60 commit(s) contributed to the release.
+- 13 day(s) passed between the first and last commit.
+- 13 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [37032fd](https://github.com/HafiziRuslan/RasPiAPRS/commit/37032fdf524aec96112d0ab68f51335583c99f9b) feat(dmr): include Slot1/Slot2 indicators and color code in mmdvm_info string; adjust shift formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T07:30:24+08:00*
+- [8703916](https://github.com/HafiziRuslan/RasPiAPRS/commit/870391656ec7971c7760481c899ee8847547fce0) feat(main): refine OS and kernel version string formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T07:05:16+08:00*
 - [aa456ba](https://github.com/HafiziRuslan/RasPiAPRS/commit/aa456ba32c1e0beb1432c49f0bbec7779a6f7c5e) feat(log): enhance log_msg with structured metadata and improved timestamp *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-06T00:59:23+08:00*
 - [9d62383](https://github.com/HafiziRuslan/RasPiAPRS/commit/9d6238332840428e62686d9ffd1500d7e772682c) feat(logging): add ISO8601Formatter and update log format to include iso timestamp and extra fields *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-06T00:21:39+08:00*
 - [92249c0](https://github.com/HafiziRuslan/RasPiAPRS/commit/92249c0595b45af5bdbfe04ef1829a3bc0fc3803) feat(vnstat): integrate vnstat traffic data into status output and update dependencies *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-05T23:54:10+08:00*
@@ -24,6 +26,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [9a147da](https://github.com/HafiziRuslan/RasPiAPRS/commit/9a147da3e3a847d2e85fbfcdd4a879f0c70ba5f2) refactor(main): format TX using humanize.metric and include offset, adjust output layout *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T08:20:46+08:00*
+- [93e4c64](https://github.com/HafiziRuslan/RasPiAPRS/commit/93e4c642a1e57ccfb79ef6af2ee9966aa588bc79) fix(main): use tx directly in _fetch MHz string instead of str(tx) *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T07:31:11+08:00*
 - [64fb651](https://github.com/HafiziRuslan/RasPiAPRS/commit/64fb651f0a968ee67aa3ebc421a0a0c149a967c6) fix(sbom): update sbom metadata and tool version *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-07T13:53:45+08:00*
 - [74bae3b](https://github.com/HafiziRuslan/RasPiAPRS/commit/74bae3be4514f7f2b72e058894d8150f7a2ef15a) style(network): fix net output formatting and standardize status text separators *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-06T04:48:29+08:00*
 - [e49d7af](https://github.com/HafiziRuslan/RasPiAPRS/commit/e49d7afb342148789aaedbeb620182d2ae295e5f) fix(main): clamp APRS messages to fit limits and refine formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-05T23:15:52+08:00*
@@ -76,6 +80,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚡ Performance in beta8
 
+- [db87055](https://github.com/HafiziRuslan/RasPiAPRS/commit/db87055d8bca103dead859181c285d39900d2cac) perf(cache): extend ttl for os_info and mmdvm_info from 300 to 3600 seconds *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T07:34:23+08:00*
 - [dabe631](https://github.com/HafiziRuslan/RasPiAPRS/commit/dabe6315ae46108881020e60c6a87fe652ca0113) perf(process_loop): extend sleep to 1s after sending status to reduce CPU usage *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T02:04:20+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta8
@@ -1085,4 +1090,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-09T02:45:01.994553293+08:00
+generated using git-cliff on 2026-03-09T08:21:20.192216684+08:00
