@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-09T08:20:46+08:00)
+## [beta8] - (2026-03-09T09:14:23+08:00)
 
-- 60 commit(s) contributed to the release.
+- 61 commit(s) contributed to the release.
 - 13 day(s) passed between the first and last commit.
 - 13 day(s) passed between releases.
 
@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [e8c1d7a](https://github.com/HafiziRuslan/RasPiAPRS/commit/e8c1d7a04942f319c3c0d24494d679ea54085432) fix(main): correct string join input in _fetch to avoid set literals *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T09:14:23+08:00*
 - [9a147da](https://github.com/HafiziRuslan/RasPiAPRS/commit/9a147da3e3a847d2e85fbfcdd4a879f0c70ba5f2) refactor(main): format TX using humanize.metric and include offset, adjust output layout *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T08:20:46+08:00*
 - [93e4c64](https://github.com/HafiziRuslan/RasPiAPRS/commit/93e4c642a1e57ccfb79ef6af2ee9966aa588bc79) fix(main): use tx directly in _fetch MHz string instead of str(tx) *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T07:31:11+08:00*
 - [64fb651](https://github.com/HafiziRuslan/RasPiAPRS/commit/64fb651f0a968ee67aa3ebc421a0a0c149a967c6) fix(sbom): update sbom metadata and tool version *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-07T13:53:45+08:00*
@@ -1090,4 +1091,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-09T08:21:20.192216684+08:00
+generated using git-cliff on 2026-03-09T09:14:56.981597227+08:00
