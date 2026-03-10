@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-11T02:09:52+08:00)
+## [beta8] - (2026-03-11T02:25:21+08:00)
 
-- 65 commit(s) contributed to the release.
+- 66 commit(s) contributed to the release.
 - 14 day(s) passed between the first and last commit.
 - 14 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [279746b](https://github.com/HafiziRuslan/RasPiAPRS/commit/279746b0eca6237a3d2512c37c8e71b10a9b019f) feat(main): add APRSHAMFINITY_ENABLE support and extend additional sender activation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T02:25:21+08:00*
 - [285f2ba](https://github.com/HafiziRuslan/RasPiAPRS/commit/285f2bac93e5599da73d6c57bd8aefa7523a4e7b) feat(aprs): add APRSHamfinity support and update env.sample docs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T01:46:00+08:00*
 - [6e1b38b](https://github.com/HafiziRuslan/RasPiAPRS/commit/6e1b38b830512d91da0f6293e4ff86b085c795d0) feat(sequence): implement persistent per-message sequencing and telemetry sequencing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T22:45:41+08:00*
 - [37032fd](https://github.com/HafiziRuslan/RasPiAPRS/commit/37032fdf524aec96112d0ab68f51335583c99f9b) feat(dmr): include Slot1/Slot2 indicators and color code in mmdvm_info string; adjust shift formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T07:30:24+08:00*
@@ -1095,4 +1096,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-11T02:10:34.862714958+08:00
+generated using git-cliff on 2026-03-11T02:25:49.034967755+08:00
