@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-11T01:50:42+08:00)
+## [beta8] - (2026-03-11T02:09:52+08:00)
 
-- 64 commit(s) contributed to the release.
+- 65 commit(s) contributed to the release.
 - 14 day(s) passed between the first and last commit.
 - 14 day(s) passed between releases.
 
@@ -60,6 +60,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [bbc7a56](https://github.com/HafiziRuslan/RasPiAPRS/commit/bbc7a568bddb9e4388d0a27a7305985017c2d89e) refactor(main): overhaul smart beaconing to remove parked coords and switch to time-based rate/turn logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T02:09:52+08:00*
 - [78326a5](https://github.com/HafiziRuslan/RasPiAPRS/commit/78326a55b143a9859ed745cb5c95ab4d575376e4) refactor(telegram): format status text with bold timestamp and labeled Time/Text sections *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T02:44:32+08:00*
 - [20b47c5](https://github.com/HafiziRuslan/RasPiAPRS/commit/20b47c58a9ce3956be33384716a69ee0345806e2) refactor(main): update persistent counter storage paths for Sequence and Timer *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T01:27:11+08:00*
 - [9e43323](https://github.com/HafiziRuslan/RasPiAPRS/commit/9e43323ab9862b15293937e0bebb4fca51c5d5b7) refactor(main): refine APRS path formatting and Telegram message construction *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-08T02:41:46+08:00*
@@ -1094,4 +1095,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-11T01:51:16.123521974+08:00
+generated using git-cliff on 2026-03-11T02:10:34.862714958+08:00
