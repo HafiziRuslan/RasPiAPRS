@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-11T02:25:21+08:00)
+## [beta8] - (2026-03-11T03:40:52+08:00)
 
-- 66 commit(s) contributed to the release.
+- 68 commit(s) contributed to the release.
 - 14 day(s) passed between the first and last commit.
 - 14 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [155bb81](https://github.com/HafiziRuslan/RasPiAPRS/commit/155bb8119d0144cfe82666e7518e07de5754a796) feat(core): add apt package verification helpers and uv installation guard; remove duplicate legacy blocks and replace venv cleanup with uv venv --clear *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T03:12:48+08:00*
 - [279746b](https://github.com/HafiziRuslan/RasPiAPRS/commit/279746b0eca6237a3d2512c37c8e71b10a9b019f) feat(main): add APRSHAMFINITY_ENABLE support and extend additional sender activation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T02:25:21+08:00*
 - [285f2ba](https://github.com/HafiziRuslan/RasPiAPRS/commit/285f2bac93e5599da73d6c57bd8aefa7523a4e7b) feat(aprs): add APRSHamfinity support and update env.sample docs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T01:46:00+08:00*
 - [6e1b38b](https://github.com/HafiziRuslan/RasPiAPRS/commit/6e1b38b830512d91da0f6293e4ff86b085c795d0) feat(sequence): implement persistent per-message sequencing and telemetry sequencing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T22:45:41+08:00*
@@ -61,6 +62,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [7825676](https://github.com/HafiziRuslan/RasPiAPRS/commit/782567601bc6228b8a0613436978bbaba9e27a1e) refactor(main): overhaul startup script for robustness, logging, and dependency management *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T03:40:52+08:00*
 - [bbc7a56](https://github.com/HafiziRuslan/RasPiAPRS/commit/bbc7a568bddb9e4388d0a27a7305985017c2d89e) refactor(main): overhaul smart beaconing to remove parked coords and switch to time-based rate/turn logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T02:09:52+08:00*
 - [78326a5](https://github.com/HafiziRuslan/RasPiAPRS/commit/78326a55b143a9859ed745cb5c95ab4d575376e4) refactor(telegram): format status text with bold timestamp and labeled Time/Text sections *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T02:44:32+08:00*
 - [20b47c5](https://github.com/HafiziRuslan/RasPiAPRS/commit/20b47c58a9ce3956be33384716a69ee0345806e2) refactor(main): update persistent counter storage paths for Sequence and Timer *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T01:27:11+08:00*
@@ -1096,4 +1098,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-11T02:25:49.034967755+08:00
+generated using git-cliff on 2026-03-11T06:49:58.742410471+08:00
