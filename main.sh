@@ -106,6 +106,44 @@ else
   log_msg WARN "⚠️ No internet connection detected. Skipping updates."
 fi
 
+ensure_apt_packages() {
+  local missing_packages=()
+  for pkg in "$@"; do
+    if ! dpkg -s "$pkg" >/dev/null 2>&1; then
+      missing_packages+=("$pkg")
+    fi
+  done
+
+  if [ ${#missing_packages[@]} -eq 0 ]; then
+    log_msg INFO "✅ Packages are installed: $*."
+  else
+    log_msg WARN "❌ Missing packages: ${missing_packages[*]}. -> Installing missing packages"
+    if [ "$INTERNET_AVAILABLE" = true ]; then
+      apt-get update -q && apt-get install -y -q "$@"
+    else
+      log_msg ERROR "Cannot install missing packages without internet connection."
+    fi
+  fi
+}
+
+command_exists() {
+  command -v "$1" >/dev/null 2>&1
+}
+
+ensure_apt_packages gcc git python3-dev curl vnstat
+
+if command_exists uv; then
+  log_msg INFO "✅ uv is installed."
+else
+  if [ "$INTERNET_AVAILABLE" = true ]; then
+    log_msg WARN "❌ uv is NOT installed. -> Installing uv"
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+  else
+    log_msg ERROR "❌ uv is NOT installed and cannot be installed without internet."
+    exit 1
+  fi
+fi
+
 if [ "$INTERNET_AVAILABLE" = true ] && check_disk_space; then
   log_msg INFO "Checking for updates..."
   fetch_success=false
@@ -159,44 +197,6 @@ if [ "$INTERNET_AVAILABLE" = true ] && check_disk_space; then
   fi
 fi
 
-ensure_apt_packages() {
-  local missing_packages=()
-  for pkg in "$@"; do
-    if ! dpkg -s "$pkg" >/dev/null 2>&1; then
-      missing_packages+=("$pkg")
-    fi
-  done
-
-  if [ ${#missing_packages[@]} -eq 0 ]; then
-    log_msg INFO "✅ Packages are installed: $*."
-  else
-    log_msg WARN "❌ Missing packages: ${missing_packages[*]}. -> Installing missing packages"
-    if [ "$INTERNET_AVAILABLE" = true ]; then
-      apt-get update -q && apt-get install -y -q "$@"
-    else
-      log_msg ERROR "Cannot install missing packages without internet connection."
-    fi
-  fi
-}
-
-command_exists() {
-  command -v "$1" >/dev/null 2>&1
-}
-
-ensure_apt_packages gcc git python3-dev curl vnstat
-
-if command_exists uv; then
-  log_msg INFO "✅ uv is installed."
-else
-  if [ "$INTERNET_AVAILABLE" = true ]; then
-    log_msg WARN "❌ uv is NOT installed. -> Installing uv"
-    curl -LsSf https://astral.sh/uv/install.sh | sh
-  else
-    log_msg ERROR "❌ uv is NOT installed and cannot be installed without internet."
-    exit 1
-  fi
-fi
-
 if [ ! -f .env ]; then
   log_msg ERROR "❌ .env file not found! Please copy .env.sample to .env and configure it."
   exit 1
@@ -216,7 +216,7 @@ sync_dependencies() {
 if [ -d ".venv" ]; then
   if ! sudo -u $dir_own ./.venv/bin/python3 -c "import sys" >/dev/null 2>&1; then
     log_msg WARN "⚠️ Virtual environment appears corrupted. Removing it..."
-    rm -rf .venv
+    sudo -u $dir_own uv venv --clear
   fi
 fi
 
