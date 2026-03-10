@@ -271,8 +271,9 @@ class Config:
 			self.telegram_loc_topic_id = _env_get_int_or_none('TELEGRAM_LOC_TOPIC_ID')
 		self.aprsthursday_enabled = _env_get_bool('APRSTHURSDAY_ENABLE')
 		self.aprsmysunday_enabled = _env_get_bool('APRSMYSUNDAY_ENABLE')
+		self.aprshamfinity_enabled = _env_get_bool('APRSHAMFINITY_ENABLE')
 		self.additional_sender = None
-		if self.aprsthursday_enabled or self.aprsmysunday_enabled:
+		if self.aprsthursday_enabled or self.aprsmysunday_enabled or self.aprshamfinity_enabled:
 			senders_str = os.getenv('ADDITIONAL_SENDER')
 			if senders_str:
 				valid_senders = []
