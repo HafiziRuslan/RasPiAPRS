@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-11T01:46:00+08:00)
+## [beta8] - (2026-03-11T01:50:42+08:00)
 
-- 63 commit(s) contributed to the release.
+- 64 commit(s) contributed to the release.
 - 14 day(s) passed between the first and last commit.
 - 14 day(s) passed between releases.
 
@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [b6c861b](https://github.com/HafiziRuslan/RasPiAPRS/commit/b6c861b74d2de440c886ae476f4afded2a5f087e) docs(env): fix APRS MySunday comment to APRSMYSunday to align with APRSMYSUNDAY_ENABLE in .env.sample *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T01:50:42+08:00*
 - [e8c1d7a](https://github.com/HafiziRuslan/RasPiAPRS/commit/e8c1d7a04942f319c3c0d24494d679ea54085432) fix(main): correct string join input in _fetch to avoid set literals *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T09:14:23+08:00*
 - [9a147da](https://github.com/HafiziRuslan/RasPiAPRS/commit/9a147da3e3a847d2e85fbfcdd4a879f0c70ba5f2) refactor(main): format TX using humanize.metric and include offset, adjust output layout *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T08:20:46+08:00*
 - [93e4c64](https://github.com/HafiziRuslan/RasPiAPRS/commit/93e4c642a1e57ccfb79ef6af2ee9966aa588bc79) fix(main): use tx directly in _fetch MHz string instead of str(tx) *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T07:31:11+08:00*
@@ -1093,4 +1094,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-11T01:49:25.903971240+08:00
+generated using git-cliff on 2026-03-11T01:51:16.123521974+08:00
