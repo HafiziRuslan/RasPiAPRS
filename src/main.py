@@ -703,8 +703,6 @@ class SmartBeaconing(object):
 		self.cfg = cfg
 		self.last_beacon_time = 0
 		self.last_course = 0
-		self.parked_lat = 0.0
-		self.parked_lon = 0.0
 		self.is_moving = False
 		self.initialized = False
 
@@ -737,39 +735,41 @@ class SmartBeaconing(object):
 		"""Determine if a beacon should be sent based on GPS data."""
 		if not gps_data:
 			return False
-		_, lat, lon, _, spd, cse = gps_data
+		_, _, _, _, spd, cse = gps_data
+		now = time.time()
 		if not self.initialized:
-			self.parked_lat = lat
-			self.parked_lon = lon
 			self.initialized = True
-		spd_kmh = spd * 3.6 if spd else 0
-		if not self.is_moving:
-			dist = GPSHandler.calculate_distance(lat, lon, self.parked_lat, self.parked_lon)
-			if dist > 10:
-				self.is_moving = True
-				logging.info('SmartBeaconing: Movement detected (>10m), enabled.')
-			else:
-				return False
-		if spd_kmh <= 3:
-			self.is_moving = False
-			self.parked_lat = lat
-			self.parked_lon = lon
-			logging.info('SmartBeaconing: Stopped moving, disabled.')
-			return False
-		rate = self._calculate_rate(spd_kmh)
-		turn_detected, heading_change, turn_threshold = self._check_turn(cse, spd_kmh)
-		time_since_last = time.time() - self.last_beacon_time
-		should_send = False
-		if turn_detected and time_since_last > self.cfg.smartbeaconing_min_turn_time:
-			logging.debug('SmartBeaconing: Turn detected (Heading difference: %.1f, Threshold: %.1f)', heading_change, turn_threshold)
-			should_send = True
-		elif time_since_last > rate:
-			logging.debug('SmartBeaconing: Rate expired (Rate: %d, Speed: %d)', rate, spd_kmh)
-			should_send = True
-		if should_send:
-			self.last_beacon_time = time.time()
+			self.last_beacon_time = now
 			self.last_course = cse
-		return should_send
+			return False
+		spd_kmh = spd * 3.6 if spd else 0
+		if self.is_moving:
+			if spd_kmh <= 3:
+				self.is_moving = False
+				logging.info('SmartBeaconing disabled: Stopped moving.')
+				return False
+			rate = self._calculate_rate(spd_kmh)
+			turn_detected, heading_change, turn_threshold = self._check_turn(cse, spd_kmh)
+			time_since_last = now - self.last_beacon_time
+			should_send = False
+			if turn_detected and time_since_last > self.cfg.smartbeaconing_min_turn_time:
+				logging.debug('SmartBeaconing: Turn detected (Heading difference: %.1f, Threshold: %.1f)', heading_change, turn_threshold)
+				should_send = True
+			elif time_since_last > rate:
+				logging.debug('SmartBeaconing: Rate expired (Rate: %d, Speed: %d)', rate, spd_kmh)
+				should_send = True
+			if should_send:
+				self.last_beacon_time = now
+				self.last_course = cse
+			return should_send
+		else:
+			if spd_kmh > 3:
+				self.is_moving = True
+				logging.info('SmartBeaconing enabled: Movement detected.')
+				self.last_beacon_time = now
+				self.last_course = cse
+				return True
+			return False
 
 
 class SystemStats(object):
