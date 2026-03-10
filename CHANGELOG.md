@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-09T22:45:41+08:00)
+## [beta8] - (2026-03-11T01:46:00+08:00)
 
-- 62 commit(s) contributed to the release.
-- 13 day(s) passed between the first and last commit.
-- 13 day(s) passed between releases.
+- 63 commit(s) contributed to the release.
+- 14 day(s) passed between the first and last commit.
+- 14 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [285f2ba](https://github.com/HafiziRuslan/RasPiAPRS/commit/285f2bac93e5599da73d6c57bd8aefa7523a4e7b) feat(aprs): add APRSHamfinity support and update env.sample docs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T01:46:00+08:00*
 - [6e1b38b](https://github.com/HafiziRuslan/RasPiAPRS/commit/6e1b38b830512d91da0f6293e4ff86b085c795d0) feat(sequence): implement persistent per-message sequencing and telemetry sequencing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T22:45:41+08:00*
 - [37032fd](https://github.com/HafiziRuslan/RasPiAPRS/commit/37032fdf524aec96112d0ab68f51335583c99f9b) feat(dmr): include Slot1/Slot2 indicators and color code in mmdvm_info string; adjust shift formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T07:30:24+08:00*
 - [8703916](https://github.com/HafiziRuslan/RasPiAPRS/commit/870391656ec7971c7760481c899ee8847547fce0) feat(main): refine OS and kernel version string formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T07:05:16+08:00*
@@ -1092,4 +1093,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-09T22:46:33.888334209+08:00
+generated using git-cliff on 2026-03-11T01:49:25.903971240+08:00
