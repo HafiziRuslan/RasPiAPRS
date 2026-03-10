@@ -261,12 +261,6 @@ MAX_RETRIES=10
 RETRY_COUNT=0
 
 while true; do
-  if [ ! -f .env ]; then
-    log_msg ERROR \
-      "❌ .env file not found! Cannot start RasPiAPRS. Exiting."
-    exit 1
-  fi
-
   START_TIME=$(date +%s)
   set +e
   sudo -u "$dir_own" uv run -s ./src/main.py
