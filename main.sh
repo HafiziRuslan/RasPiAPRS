@@ -1,27 +1,15 @@
 #!/bin/bash
 set -e
 
-# ---------------------------------------------------------
-# basic pre‑flight
-# ---------------------------------------------------------
-if [ "$EUID" -ne 0 ]; then
-  echo "Please run as root"
-  exit 1
-fi
-
+# --- Constants and Globals ---
 LOG_FILE="/var/log/raspiaprs.log"
-# save original stdout so that the pager/updater can still use it
-exec 3>&1
-exec >>"$LOG_FILE" 2>&1
+RESTART_DELAY=5
+MAX_DELAY=300
+MAX_RETRIES=10
+dir_own=""
+INTERNET_AVAILABLE=false
 
-# make sure we are running from the repository root
-cd "$(dirname "$0")"
-dir_own=$(stat -c '%U' .)
-
-# ---------------------------------------------------------
-# utility functions
-# ---------------------------------------------------------
-
+# --- Logging and Utilities ---
 log_msg() {
   local level=$1; shift
   local message="$*"
@@ -48,18 +36,42 @@ get_env_var() {
     # strip comments and surrounding quotes
     sed -n "s/^${var_name}=//p" .env \
       | cut -d'#' -f1 \
-      | sed 's/^["'\'']\{0,1\}//;s/["'\'']\{0,1\}$//'
+      | sed "s/^['\"]\{0,1\}//;s/['\"]\{0,1\}$//"
   fi
+}
+
+# --- Setup and Pre-flight ---
+setup_environment() {
+  if [ "$EUID" -ne 0 ]; then
+    echo "Please run as root"
+    exit 1
+  fi
+
+  # save original stdout so that the pager/updater can still use it
+  exec 3>&1
+  exec >>"$LOG_FILE" 2>&1
+
+  # make sure we are running from the repository root
+  cd "$(dirname "$0")"
+  dir_own=$(stat -c '%U' .)
 }
 
 cleanup() {
   rm -rf /var/tmp/raspiaprs
 }
 
-# ---------------------------------------------------------
-# system checks
-# ---------------------------------------------------------
+setup_directories() {
+  cleanup
+  local dirs=("/var/tmp/raspiaprs" "/var/log/raspiaprs" "/var/lib/raspiaprs")
+  for dir in "${dirs[@]}"; do
+    if [ ! -d "$dir" ]; then
+      mkdir -p "$dir"
+      chown -hR "$dir_own:$dir_own" "$dir"
+    fi
+  done
+}
 
+# --- System Checks ---
 check_internet() {
   local hosts=(1.1.1.1 8.8.8.8 github.com pypi.org)
   for host in "${hosts[@]}"; do
@@ -90,10 +102,7 @@ check_disk_space() {
   return 0
 }
 
-# ---------------------------------------------------------
-# package helpers
-# ---------------------------------------------------------
-
+# --- Dependency and Application Management ---
 command_exists() {
   command -v "$1" >/dev/null 2>&1
 }
@@ -118,9 +127,17 @@ ensure_apt_packages() {
   fi
 }
 
-# ---------------------------------------------------------
-# dependency manager
-# ---------------------------------------------------------
+ensure_uv_installed() {
+  if command_exists uv; then
+    log_msg INFO "✅ uv is installed."
+  elif [ "$INTERNET_AVAILABLE" = true ]; then
+    log_msg WARN "❌ uv is NOT installed. -> Installing uv"
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+  else
+    log_msg ERROR "❌ uv is NOT installed and cannot be installed without internet."
+    exit 1
+  fi
+}
 
 sync_dependencies() {
   local action=$1
@@ -133,49 +150,11 @@ sync_dependencies() {
   fi
 }
 
-# ---------------------------------------------------------
-# main
-# ---------------------------------------------------------
-
-cleanup
-
-if [ ! -d "/var/tmp/raspiaprs" ]; then
-  mkdir -p /var/tmp/raspiaprs
-  chown -hR "$dir_own:$dir_own" /var/tmp/raspiaprs
-fi
-
-if [ ! -d "/var/log/raspiaprs" ]; then
-  mkdir -p /var/log/raspiaprs
-  chown -hR "$dir_own:$dir_own" /var/log/raspiaprs
-fi
-
-if [ ! -d "/var/lib/raspiaprs" ]; then
-  mkdir -p /var/lib/raspiaprs
-  chown -hR "$dir_own:$dir_own" /var/lib/raspiaprs
-fi
-
-if check_internet; then
-  INTERNET_AVAILABLE=true
-else
-  INTERNET_AVAILABLE=false
-  log_msg WARN "⚠️ No internet connection detected. Skipping updates."
-fi
-
-ensure_apt_packages gcc git python3-dev curl vnstat
-
-if command_exists uv; then
-  log_msg INFO "✅ uv is installed."
-else
-  if [ "$INTERNET_AVAILABLE" = true ]; then
-    log_msg WARN "❌ uv is NOT installed. -> Installing uv"
-    curl -LsSf https://astral.sh/uv/install.sh | sh
-  else
-    log_msg ERROR "❌ uv is NOT installed and cannot be installed without internet."
-    exit 1
+update_application() {
+  if [ "$INTERNET_AVAILABLE" = false ] || ! check_disk_space; then
+    log_msg INFO "Skipping application update check due to no internet or insufficient disk space."
+    return
   fi
-fi
-
-if [ "$INTERNET_AVAILABLE" = true ] && check_disk_space; then
   log_msg INFO "Checking for updates..."
   fetch_success=false
   for i in {1..3}; do
@@ -188,8 +167,7 @@ if [ "$INTERNET_AVAILABLE" = true ] && check_disk_space; then
   done
 
   if [ "$fetch_success" = false ]; then
-    log_msg WARN \
-      "⚠️ Failed to fetch updates after multiple attempts. Skipping update check."
+    log_msg WARN "⚠️ Failed to fetch updates after multiple attempts. Skipping update check."
   else
     LOCAL=$(sudo -u "$dir_own" git rev-parse HEAD)
     REMOTE=$(sudo -u "$dir_own" git rev-parse @{u})
@@ -200,16 +178,14 @@ if [ "$INTERNET_AVAILABLE" = true ] && check_disk_space; then
       if sudo -u "$dir_own" timeout 60 git pull --autostash -q; then
         UPDATE_SUCCESS=true
       else
-        log_msg WARN \
-          "Git pull failed. Attempting to resolve conflicts by resetting to remote..."
+        log_msg WARN "Git pull failed. Attempting to resolve conflicts by resetting to remote..."
         if sudo -u "$dir_own" git reset --hard @{u}; then
           UPDATE_SUCCESS=true
           log_msg INFO "Reset to remote successful."
         fi
       fi
 
-      if [ "$UPDATE_SUCCESS" = true ] && \
-         [ "$(sudo -u "$dir_own" git rev-parse HEAD)" = "$REMOTE" ]; then
+      if [ "$UPDATE_SUCCESS" = true ] && [ "$(sudo -u "$dir_own" git rev-parse HEAD)" = "$REMOTE" ]; then
         if ! sudo -u "$dir_own" git diff --quiet "$LOCAL" HEAD -- pyproject.toml; then
           log_msg INFO "Application updated. Forcing environement recreation."
           sudo -u "$dir_own" uv venv --clear
@@ -229,79 +205,97 @@ if [ "$INTERNET_AVAILABLE" = true ] && check_disk_space; then
       log_msg INFO "Application is up to date."
     fi
   fi
-fi
+}
 
-if [ -d ".venv" ]; then
-  if ! sudo -u "$dir_own" ./.venv/bin/python3 -c 'import sys' >/dev/null 2>&1; then
-    log_msg WARN "⚠️ Virtual environment appears corrupted. Removing it..."
-    sudo -u "$dir_own" uv venv --clear
-  fi
-fi
-
-if [ ! -d ".venv" ]; then
-  log_msg INFO "RasPiAPRS environment not found, creating one."
-  sudo -u "$dir_own" uv venv
-  log_msg INFO "Activating RasPiAPRS environment"
-  sync_dependencies "Installing"
-else
-  log_msg INFO "RasPiAPRS environment exists. -> Activating RasPiAPRS environment"
-  sync_dependencies "Updating"
-fi
-
-if [ ! -f .env ]; then
-  log_msg ERROR \
-    "❌ .env file not found! Please copy .env.sample to .env and configure it."
-  exit 1
-fi
-
-log_msg INFO "Running RasPiAPRS"
-RESTART_DELAY=5
-MAX_DELAY=300
-MAX_RETRIES=10
-RETRY_COUNT=0
-
-while true; do
-  START_TIME=$(date +%s)
-  set +e
-  sudo -u "$dir_own" uv run -s ./src/main.py
-  exit_code=$?
-  set -e
-  END_TIME=$(date +%s)
-
-  if [ $((END_TIME - START_TIME)) -gt 60 ]; then
-    RESTART_DELAY=5
-    RETRY_COUNT=0
+setup_venv() {
+  if [ -d ".venv" ]; then
+    if ! sudo -u "$dir_own" ./.venv/bin/python3 -c 'import sys' >/dev/null 2>&1; then
+      log_msg WARN "⚠️ Virtual environment appears corrupted. Removing it..."
+      sudo -u "$dir_own" uv venv --clear
+    fi
   fi
 
-  if [ "$exit_code" -ne 0 ] && \
-     [ "$exit_code" -ne 130 ] && \
-     [ "$exit_code" -ne 143 ]; then
-    should_restart=true
+  if [ ! -d ".venv" ]; then
+    log_msg INFO "RasPiAPRS environment not found, creating one."
+    sudo -u "$dir_own" uv venv
+    log_msg INFO "Activating RasPiAPRS environment"
+    sync_dependencies "Installing"
   else
-    should_restart=false
+    log_msg INFO "RasPiAPRS environment exists. -> Activating RasPiAPRS environment"
+    sync_dependencies "Updating"
   fi
+}
 
-  if [ "$should_restart" = true ]; then
-    RETRY_COUNT=$((RETRY_COUNT + 1))
-    if [ "$RETRY_COUNT" -gt "$MAX_RETRIES" ]; then
-      log_msg ERROR "Maximum retries ($MAX_RETRIES) reached. Exiting."
-      exit 1
+# --- Main Execution ---
+run_app() {
+  log_msg INFO "Running RasPiAPRS"
+  local RETRY_COUNT=0
+
+  while true; do
+    local START_TIME
+    START_TIME=$(date +%s)
+    set +e
+    sudo -u "$dir_own" uv run -s ./src/main.py
+    local exit_code=$?
+    set -e
+    local END_TIME
+    END_TIME=$(date +%s)
+
+    if [ $((END_TIME - START_TIME)) -gt 60 ]; then
+      RESTART_DELAY=5
+      RETRY_COUNT=0
     fi
 
-    log_msg ERROR \
-      "RasPiAPRS exited with code $exit_code. Retry $RETRY_COUNT/$MAX_RETRIES. " \
-      "Re-run in ${RESTART_DELAY} seconds."
-    sleep "$RESTART_DELAY"
-
-    RESTART_DELAY=$((RESTART_DELAY * 2))
-    if [ "$RESTART_DELAY" -gt "$MAX_DELAY" ]; then
-      RESTART_DELAY=$MAX_DELAY
+    local should_restart=false
+    if [ "$exit_code" -ne 0 ] && [ "$exit_code" -ne 130 ] && [ "$exit_code" -ne 143 ]; then
+      should_restart=true
     fi
-  elif [ "$exit_code" -eq 0 ]; then
-    log_msg INFO "RasPiAPRS exited normally. Stopping."
-    break
+
+    if [ "$should_restart" = true ]; then
+      RETRY_COUNT=$((RETRY_COUNT + 1))
+      if [ "$RETRY_COUNT" -gt "$MAX_RETRIES" ]; then
+        log_msg ERROR "Maximum retries ($MAX_RETRIES) reached. Exiting."
+        exit 1
+      fi
+
+      log_msg ERROR "RasPiAPRS exited with code $exit_code. Retry $RETRY_COUNT/$MAX_RETRIES. Re-run in ${RESTART_DELAY} seconds."
+      sleep "$RESTART_DELAY"
+
+      RESTART_DELAY=$((RESTART_DELAY * 2))
+      if [ "$RESTART_DELAY" -gt "$MAX_DELAY" ]; then
+        RESTART_DELAY=$MAX_DELAY
+      fi
+    elif [ "$exit_code" -eq 0 ]; then
+      log_msg INFO "RasPiAPRS exited normally. Stopping."
+      break
+    else
+      log_msg ERROR "RasPiAPRS exited with unrecoverable code $exit_code. Stopping."
+      exit "$exit_code"
+    fi
+  done
+}
+
+main() {
+  setup_environment
+  setup_directories
+
+  if check_internet; then
+    INTERNET_AVAILABLE=true
   else
-    log_msg ERROR "RasPiAPRS exited with unrecoverable code $exit_code. Stopping."
-    exit "$exit_code"
+    log_msg WARN "⚠️ No internet connection detected. Skipping updates."
   fi
-done
+
+  ensure_apt_packages gcc git python3-dev curl vnstat
+  ensure_uv_installed
+  update_application
+  setup_venv
+
+  if [ ! -f .env ]; then
+    log_msg ERROR "❌ .env file not found! Please copy .env.sample to .env and configure it."
+    exit 1
+  fi
+
+  run_app
+}
+
+main "$@"
