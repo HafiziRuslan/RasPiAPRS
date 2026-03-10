@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-11T03:40:52+08:00)
+## [beta8] - (2026-03-11T07:08:48+08:00)
 
-- 68 commit(s) contributed to the release.
+- 70 commit(s) contributed to the release.
 - 14 day(s) passed between the first and last commit.
 - 14 day(s) passed between releases.
 
@@ -62,6 +62,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [bf77e72](https://github.com/HafiziRuslan/RasPiAPRS/commit/bf77e7271e825c2c06adc031492420f2085adcba) refactor(main.sh): simplify script structure and improve organization *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T07:08:48+08:00*
+- [ae77b99](https://github.com/HafiziRuslan/RasPiAPRS/commit/ae77b998812a3b240c7345c5384fcd421d3c936d) refactor(main.sh): remove .env file existence check *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T06:53:39+08:00*
 - [7825676](https://github.com/HafiziRuslan/RasPiAPRS/commit/782567601bc6228b8a0613436978bbaba9e27a1e) refactor(main): overhaul startup script for robustness, logging, and dependency management *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T03:40:52+08:00*
 - [bbc7a56](https://github.com/HafiziRuslan/RasPiAPRS/commit/bbc7a568bddb9e4388d0a27a7305985017c2d89e) refactor(main): overhaul smart beaconing to remove parked coords and switch to time-based rate/turn logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T02:09:52+08:00*
 - [78326a5](https://github.com/HafiziRuslan/RasPiAPRS/commit/78326a55b143a9859ed745cb5c95ab4d575376e4) refactor(telegram): format status text with bold timestamp and labeled Time/Text sections *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T02:44:32+08:00*
@@ -1098,4 +1100,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-11T06:49:58.742410471+08:00
+generated using git-cliff on 2026-03-11T07:09:19.525743943+08:00
