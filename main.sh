@@ -1,53 +1,67 @@
 #!/bin/bash
 set -e
 
+# ---------------------------------------------------------
+# basic pre‑flight
+# ---------------------------------------------------------
 if [ "$EUID" -ne 0 ]; then
   echo "Please run as root"
   exit 1
 fi
 
 LOG_FILE="/var/log/raspiaprs.log"
-# Save original stdout to fd 3 for display updates
+# save original stdout so that the pager/updater can still use it
 exec 3>&1
-# Redirect stdout and stderr to the log file
-exec >> "$LOG_FILE" 2>&1
+exec >>"$LOG_FILE" 2>&1
 
-# Ensure we are in the script directory
+# make sure we are running from the repository root
 cd "$(dirname "$0")"
-
 dir_own=$(stat -c '%U' .)
 
+# ---------------------------------------------------------
+# utility functions
+# ---------------------------------------------------------
+
 log_msg() {
-  local level=$1
-  shift
+  local level=$1; shift
   local message="$*"
   local timestamp
   timestamp=$(date +'%Y-%m-%dT%H:%M:%S.%3N%:z')
   local level_padded
-  level_padded=$(printf "%-8s" "$level")
+  level_padded=$(printf '%-8s' "$level")
   local thread_padded
-  thread_padded=$(printf "%-12s" "$$")
+  thread_padded=$(printf '%-12s' "$$")
 
-  local caller_info
+  # caller gives: "<line> <func> <file>"
+  local caller_info line_no func_name file_name
   caller_info=$(caller 0)
-  local line_no func_name file_name
   read -r line_no func_name file_name <<<"$caller_info"
-
   local name_part="${file_name##*/}.${func_name}:${line_no}"
 
-  echo "$timestamp | $level_padded | $thread_padded | $name_part | $message"
+  printf '%s | %s | %s | %s | %s\n' \
+    "$timestamp" "$level_padded" "$thread_padded" "$name_part" "$message"
 }
 
 get_env_var() {
-  local var_name="$1"
+  local var_name=$1
   if [ -f .env ]; then
-    grep "^${var_name}=" .env | cut -d '=' -f2- | cut -d '#' -f1 | sed 's/^"//;s/"$//;s/^'"'"'//;s/'"'"'$//'
+    # strip comments and surrounding quotes
+    sed -n "s/^${var_name}=//p" .env \
+      | cut -d'#' -f1 \
+      | sed 's/^["'\'']\{0,1\}//;s/["'\'']\{0,1\}$//'
   fi
 }
 
+cleanup() {
+  rm -rf /var/tmp/raspiaprs
+}
+
+# ---------------------------------------------------------
+# system checks
+# ---------------------------------------------------------
 
 check_internet() {
-  local hosts=("1.1.1.1" "8.8.8.8" "github.com" "pypi.org")
+  local hosts=(1.1.1.1 8.8.8.8 github.com pypi.org)
   for host in "${hosts[@]}"; do
     if timeout 5 ping -q -c 1 -W 1 "$host" >/dev/null 2>&1; then
       return 0
@@ -59,44 +73,85 @@ check_internet() {
 }
 
 check_disk_space() {
-  local required_space_mb=100 # 100MB
-  local available_space_mb
-  # Get the last line of df output to be robust against outputs with or without a header.
-  available_space_mb=$(df -mP . | tail -n 1 | awk '{print $4}')
+  local required_mb=100
+  local available_mb
+  available_mb=$(df -mP . | tail -n1 | awk '{print $4}')
 
-  # Validate that we received a numeric value before comparison.
-  if ! [[ "$available_space_mb" =~ ^[0-9]+$ ]]; then
+  if ! [[ $available_mb =~ ^[0-9]+$ ]]; then
     log_msg WARN "⚠️ Could not determine available disk space."
     return 1
   fi
 
-  if [ "$available_space_mb" -lt "$required_space_mb" ]; then
-    log_msg WARN "⚠️ Insufficient disk space for update. Required: ${required_space_mb}MB, Available: ${available_space_mb}MB."
+  if [ "$available_mb" -lt "$required_mb" ]; then
+    log_msg WARN "⚠️ Insufficient disk space for update. " \
+      "Required: ${required_mb}MB, Available: ${available_mb}MB."
     return 1
   fi
   return 0
 }
 
-cleanup() {
-  rm -rf /var/tmp/raspiaprs
-  # rm -rf /var/log/raspiaprs
-  # rm -rf /var/lib/raspiaprs
+# ---------------------------------------------------------
+# package helpers
+# ---------------------------------------------------------
+
+command_exists() {
+  command -v "$1" >/dev/null 2>&1
 }
+
+ensure_apt_packages() {
+  local missing=()
+  for pkg in "$@"; do
+    if ! dpkg -s "$pkg" >/dev/null 2>&1; then
+      missing+=("$pkg")
+    fi
+  done
+
+  if [ ${#missing[@]} -eq 0 ]; then
+    log_msg INFO "✅ Packages are installed: $*."
+  else
+    log_msg WARN "❌ Missing packages: ${missing[*]}. -> Installing"
+    if [ "$INTERNET_AVAILABLE" = true ]; then
+      apt-get update -q && apt-get install -y -q "${missing[@]}"
+    else
+      log_msg ERROR "Cannot install missing packages without internet connection."
+    fi
+  fi
+}
+
+# ---------------------------------------------------------
+# dependency manager
+# ---------------------------------------------------------
+
+sync_dependencies() {
+  local action=$1
+  if [ "$INTERNET_AVAILABLE" = true ]; then
+    log_msg INFO "$action RasPiAPRS dependencies"
+    sudo -u "$dir_own" uv tool run pyclean . -d -q
+    sudo -u "$dir_own" uv sync -q
+  elif [ "$action" = "Installing" ]; then
+    log_msg WARN "Internet unavailable. Skipping dependency installation."
+  fi
+}
+
+# ---------------------------------------------------------
+# main
+# ---------------------------------------------------------
+
 cleanup
 
 if [ ! -d "/var/tmp/raspiaprs" ]; then
   mkdir -p /var/tmp/raspiaprs
-  chown -hR $dir_own:$dir_own /var/tmp/raspiaprs
+  chown -hR "$dir_own:$dir_own" /var/tmp/raspiaprs
 fi
 
 if [ ! -d "/var/log/raspiaprs" ]; then
   mkdir -p /var/log/raspiaprs
-  chown -hR $dir_own:$dir_own /var/log/raspiaprs
+  chown -hR "$dir_own:$dir_own" /var/log/raspiaprs
 fi
 
 if [ ! -d "/var/lib/raspiaprs" ]; then
   mkdir -p /var/lib/raspiaprs
-  chown -hR $dir_own:$dir_own /var/lib/raspiaprs
+  chown -hR "$dir_own:$dir_own" /var/lib/raspiaprs
 fi
 
 if check_internet; then
@@ -105,30 +160,6 @@ else
   INTERNET_AVAILABLE=false
   log_msg WARN "⚠️ No internet connection detected. Skipping updates."
 fi
-
-ensure_apt_packages() {
-  local missing_packages=()
-  for pkg in "$@"; do
-    if ! dpkg -s "$pkg" >/dev/null 2>&1; then
-      missing_packages+=("$pkg")
-    fi
-  done
-
-  if [ ${#missing_packages[@]} -eq 0 ]; then
-    log_msg INFO "✅ Packages are installed: $*."
-  else
-    log_msg WARN "❌ Missing packages: ${missing_packages[*]}. -> Installing missing packages"
-    if [ "$INTERNET_AVAILABLE" = true ]; then
-      apt-get update -q && apt-get install -y -q "$@"
-    else
-      log_msg ERROR "Cannot install missing packages without internet connection."
-    fi
-  fi
-}
-
-command_exists() {
-  command -v "$1" >/dev/null 2>&1
-}
 
 ensure_apt_packages gcc git python3-dev curl vnstat
 
@@ -148,7 +179,7 @@ if [ "$INTERNET_AVAILABLE" = true ] && check_disk_space; then
   log_msg INFO "Checking for updates..."
   fetch_success=false
   for i in {1..3}; do
-    if sudo -u $dir_own git fetch -q; then
+    if sudo -u "$dir_own" git fetch -q; then
       fetch_success=true
       break
     fi
@@ -157,77 +188,70 @@ if [ "$INTERNET_AVAILABLE" = true ] && check_disk_space; then
   done
 
   if [ "$fetch_success" = false ]; then
-    log_msg WARN "⚠️ Failed to fetch updates after multiple attempts. Skipping update check."
+    log_msg WARN \
+      "⚠️ Failed to fetch updates after multiple attempts. Skipping update check."
   else
-    LOCAL=$(sudo -u $dir_own git rev-parse HEAD)
-    REMOTE=$(sudo -u $dir_own git rev-parse @{u})
+    LOCAL=$(sudo -u "$dir_own" git rev-parse HEAD)
+    REMOTE=$(sudo -u "$dir_own" git rev-parse @{u})
 
     if [ "$LOCAL" != "$REMOTE" ]; then
-      log_msg INFO "Updating RaspiAPRS repository"
+      log_msg INFO "Updating RaspiAPRS"
       UPDATE_SUCCESS=false
-      if sudo -u $dir_own timeout 60 git pull --autostash -q; then
+      if sudo -u "$dir_own" timeout 60 git pull --autostash -q; then
         UPDATE_SUCCESS=true
       else
-        log_msg WARN "Git pull failed. Attempting to resolve conflicts by resetting to remote..."
-        if sudo -u $dir_own git reset --hard @{u}; then
+        log_msg WARN \
+          "Git pull failed. Attempting to resolve conflicts by resetting to remote..."
+        if sudo -u "$dir_own" git reset --hard @{u}; then
           UPDATE_SUCCESS=true
           log_msg INFO "Reset to remote successful."
         fi
       fi
 
-      if [ "$UPDATE_SUCCESS" = true ] && [ "$(sudo -u $dir_own git rev-parse HEAD)" = "$REMOTE" ]; then
-        if ! sudo -u $dir_own git diff --quiet "$LOCAL" HEAD -- pyproject.toml; then
+      if [ "$UPDATE_SUCCESS" = true ] && \
+         [ "$(sudo -u "$dir_own" git rev-parse HEAD)" = "$REMOTE" ]; then
+        if ! sudo -u "$dir_own" git diff --quiet "$LOCAL" HEAD -- pyproject.toml; then
           log_msg INFO "Application updated. Forcing environement recreation."
-          rm -rf .venv
+          sudo -u "$dir_own" uv venv --clear
         fi
 
-        log_msg INFO "Verifying repository integrity..."
-        if sudo -u $dir_own git fsck --full >/dev/null 2>&1; then
+        log_msg INFO "Verifying application integrity..."
+        if sudo -u "$dir_own" git fsck --full >/dev/null 2>&1; then
           log_msg INFO "Update applied and verified. Restarting script..."
           exec "$0" "$@"
         else
-          log_msg ERROR "Repository integrity check failed! Skipping restart."
+          log_msg ERROR "Application integrity check failed! Skipping restart."
         fi
       else
         log_msg WARN "Update failed or HEAD does not match remote. Skipping restart."
       fi
     else
-      log_msg INFO "Repository is up to date."
+      log_msg INFO "Application is up to date."
     fi
   fi
 fi
 
-if [ ! -f .env ]; then
-  log_msg ERROR "❌ .env file not found! Please copy .env.sample to .env and configure it."
-  exit 1
-fi
-
-sync_dependencies() {
-  local action=$1
-  if [ "$INTERNET_AVAILABLE" = true ]; then
-    log_msg INFO "$action RasPiAPRS dependencies"
-    sudo -u $dir_own uv tool run pyclean . -d -q
-    sudo -u $dir_own uv sync -q
-  elif [ "$action" = "Installing" ]; then
-    log_msg WARN "Internet unavailable. Skipping dependency installation."
-  fi
-}
-
 if [ -d ".venv" ]; then
-  if ! sudo -u $dir_own ./.venv/bin/python3 -c "import sys" >/dev/null 2>&1; then
+  if ! sudo -u "$dir_own" ./.venv/bin/python3 -c 'import sys' >/dev/null 2>&1; then
     log_msg WARN "⚠️ Virtual environment appears corrupted. Removing it..."
-    sudo -u $dir_own uv venv --clear
+    sudo -u "$dir_own" uv venv --clear
   fi
 fi
 
 if [ ! -d ".venv" ]; then
   log_msg INFO "RasPiAPRS environment not found, creating one."
-  sudo -u $dir_own uv venv
+  sudo -u "$dir_own" uv venv
   log_msg INFO "Activating RasPiAPRS environment"
   sync_dependencies "Installing"
 else
   log_msg INFO "RasPiAPRS environment exists. -> Activating RasPiAPRS environment"
   sync_dependencies "Updating"
+fi
+
+if [ ! -f .env ]; then
+  log_msg ERROR \
+    "❌ .env file not found! Please copy .env.sample to .env and configure it."
+  exit 1
 fi
 
 log_msg INFO "Running RasPiAPRS"
@@ -238,13 +262,14 @@ RETRY_COUNT=0
 
 while true; do
   if [ ! -f .env ]; then
-    log_msg ERROR "❌ .env file not found! Cannot start RasPiAPRS. Exiting."
+    log_msg ERROR \
+      "❌ .env file not found! Cannot start RasPiAPRS. Exiting."
     exit 1
   fi
 
   START_TIME=$(date +%s)
   set +e
-  sudo -u $dir_own uv run -s ./src/main.py
+  sudo -u "$dir_own" uv run -s ./src/main.py
   exit_code=$?
   set -e
   END_TIME=$(date +%s)
@@ -254,8 +279,9 @@ while true; do
     RETRY_COUNT=0
   fi
 
-  # Restart on any error code except 0 (success), 130 (SIGINT), 143 (SIGTERM)
-  if [ "$exit_code" -ne 0 ] && [ "$exit_code" -ne 130 ] && [ "$exit_code" -ne 143 ]; then
+  if [ "$exit_code" -ne 0 ] && \
+     [ "$exit_code" -ne 130 ] && \
+     [ "$exit_code" -ne 143 ]; then
     should_restart=true
   else
     should_restart=false
@@ -268,8 +294,10 @@ while true; do
       exit 1
     fi
 
-    log_msg ERROR "RasPiAPRS exited with code $exit_code. Retry $RETRY_COUNT/$MAX_RETRIES. Re-run in ${RESTART_DELAY} seconds."
-    sleep $RESTART_DELAY
+    log_msg ERROR \
+      "RasPiAPRS exited with code $exit_code. Retry $RETRY_COUNT/$MAX_RETRIES. " \
+      "Re-run in ${RESTART_DELAY} seconds."
+    sleep "$RESTART_DELAY"
 
     RESTART_DELAY=$((RESTART_DELAY * 2))
     if [ "$RESTART_DELAY" -gt "$MAX_DELAY" ]; then
