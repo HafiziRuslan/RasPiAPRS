@@ -1022,6 +1022,7 @@ class ScheduledMessageHandler:
 		self.messages = []
 		definitions = [
 			('aprsthursday_enabled', 'APRSThursday', 3, 'ANSRVR', 'CQ HOTG #{}', dt.timezone.utc),
+			('aprshamfinity_enabled', 'APRSHamfinity', 6, '9M4GKS', 'CQ HAMFINITY #{}', dt.timezone.utc),
 			('aprsmysunday_enabled', 'APRSMYSunday', 6, 'APRSMY', 'CHECK #{}', dt.timezone(dt.timedelta(hours=8))),
 		]
 		for attr, name, weekday, addrcall, template_fmt, tz in definitions:
