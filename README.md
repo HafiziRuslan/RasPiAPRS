@@ -2,8 +2,6 @@
 
 With this simple python program you can monitor your Pi-Star / WPSD / AllStarLink health using APRS metrics.
 
-You can see an example of the metrics logged by my WPSD node [9W4GPA](https://aprs.fi/telemetry/a/9W4GPA?range=day).
-
 The metrics are:-
 
 1. CPU temperature (average 10 minutes)
@@ -11,6 +9,16 @@ The metrics are:-
 3. Memory used (average 10 minutes)
 4. Disk usage
 5. GPS used [optional]
+
+You can see an example of the metrics logged by my WPSD node [9W4GPA](https://aprs.fi/telemetry/a/9W4GPA?range=day).
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/hafiziruslan)
+
+Mirrors (daily update):
+
+- GitLab: <https://gitlab.com/hafiziruslan/RasPiAPRS>
+- Codeberg: <https://codeberg.org/hafiziruslan/RasPiAPRS>
+- Gitea: <https://gitea.com/HafiziRuslan/RasPiAPRS>
 
 ## Requirements
 
@@ -41,12 +49,6 @@ sudo apt update && sudo apt install uv
 git clone https://github.com/HafiziRuslan/RasPiAPRS.git raspiaprs
 cd raspiaprs
 ```
-
-Mirrors (daily update):
-
-- GitLab: <https://gitlab.com/hafiziruslan/RasPiAPRS>
-- Codeberg: <https://codeberg.org/hafiziruslan/RasPiAPRS>
-- Gitea: <https://gitea.com/HafiziRuslan/RasPiAPRS>
 
 ## Configurations
 
