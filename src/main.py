@@ -1050,12 +1050,30 @@ class ScheduledMessageHandler:
 			if seq_name not in self.sequences:
 				self.sequences[seq_name] = Sequence(name=seq_name, modulo=100000)
 
+	async def _is_due(self, msg_info) -> bool:
+		"""Return True if the message described by *msg_info* should be sent now."""
+		now = dt.datetime.now(msg_info['tz'])
+		if now.weekday() != msg_info['weekday']:
+			return False
+		today = now.strftime('%Y-%m-%d')
+		source = msg_info['from_call'] or FROMCALL
+		tracking_key = f'{msg_info["name"]},{source},{msg_info["addrcall"]}'
+		last_sent = self.tracking.get(tracking_key)
+		if last_sent and last_sent.startswith(today):
+			return False
+		return True
+
+	async def _send_one_with_delay(self, aprs_sender, name, weekday, addrcall, template, from_call=None, tz=dt.timezone.utc):
+		"""Perform ``_send_one`` after a random pause"""
+		await asyncio.sleep(random.uniform(1, 15))
+		await self._send_one(aprs_sender, name, weekday, addrcall, template, from_call=from_call, tz=tz)
+
 	async def send_all(self, aprs_sender):
 		"""Send all due scheduled messages."""
 		sent_any = False
 		for msg_info in self.messages:
-			sent = await self._send_one(aprs_sender, **msg_info)
-			if sent:
+			if await self._is_due(msg_info):
+				asyncio.create_task(self._send_one_with_delay(aprs_sender, **msg_info))
 				sent_any = True
 		return sent_any
 
