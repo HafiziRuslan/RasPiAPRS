@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [beta] - (2026-03-12T03:29:21+08:00)
+
+- 6 commit(s) contributed to the release.
+
+### 🚀 Features in beta
+
+- [da24878](https://github.com/HafiziRuslan/RasPiAPRS/commit/da2487890c7400c15f12c2b51e6b910346c6508b) feat(release): make version and tag dynamic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:15:16+08:00*
+
+### 🐛 Bug Fixes in beta
+
+- [6aa3485](https://github.com/HafiziRuslan/RasPiAPRS/commit/6aa3485ca30d667cb9e671ab9221a0fcd32ec870) ci(release): update release tag generation logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:28:34+08:00*
+
+### ⚙️ Miscellaneous Tasks in beta
+
+- [3a176d4](https://github.com/HafiziRuslan/RasPiAPRS/commit/3a176d49314c51630c7492cc3f35e746912c2455) chore(release): bump project version to 0.1b8 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:29:21+08:00*
+- [a81f195](https://github.com/HafiziRuslan/RasPiAPRS/commit/a81f195055dd16f7a8137a7eb1ee25c12bc728fa) build(ci): improve version extraction from pyproject.toml *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:25:04+08:00*
+- [6c9c23b](https://github.com/HafiziRuslan/RasPiAPRS/commit/6c9c23bce490a970bad128af3c131234537f2368) chore(gitignore): unignore .github directory *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:24:38+08:00*
+- [963f446](https://github.com/HafiziRuslan/RasPiAPRS/commit/963f4460e49fd431a3f91c12a249b592c2531a4e) chore(release): bump version to 0.1.1 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:20:50+08:00*
+
+---
+
 ## [beta8] - (2026-03-12T03:02:04+08:00)
 
 - 76 commit(s) contributed to the release.
@@ -436,9 +457,8 @@ All notable changes to this project will be documented in this file.
 
 ## [beta4] - (2025-12-31T17:03:49+08:00)
 
-- 130 commit(s) contributed to the release.
-- 9 day(s) passed between the first and last commit.
-- 9 day(s) passed between releases.
+- 616 commit(s) contributed to the release.
+- 2057 day(s) passed between the first and last commit.
 
 ### 🚀 Features in beta4
 
@@ -452,6 +472,48 @@ All notable changes to this project will be documented in this file.
 - [5a3f9c5](https://github.com/HafiziRuslan/RasPiAPRS/commit/5a3f9c5baa79ad4569d5ba42658cd2b9e00d7574) feat(config): add smartbeaconing support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-24T01:40:02+08:00*
 - [95d7c44](https://github.com/HafiziRuslan/RasPiAPRS/commit/95d7c44fa76809f3d840d1aa4989e7f04e1c1edd) feat(gps): include speed and course in data extraction *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-23T07:23:45+08:00*
 - [b966b7b](https://github.com/HafiziRuslan/RasPiAPRS/commit/b966b7b505b8dd31cbfdd22891af770db091d925) feat(gps): add speed and course to position reports *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-23T06:47:10+08:00*
+- [8295a35](https://github.com/HafiziRuslan/RasPiAPRS/commit/8295a359584cec1ed719e61617186eaeb12b18b1) feat(gps): use gps time for position reports *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-19T18:39:09+08:00*
+- [b55aac1](https://github.com/HafiziRuslan/RasPiAPRS/commit/b55aac1efeb360f2cd347fa4e2657889ce435bec) feat(telemetry): add disk usage metric to aprs telemetry *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-18T18:38:33+08:00*
+- [55360a3](https://github.com/HafiziRuslan/RasPiAPRS/commit/55360a308af9e8e7aedb2185f0126bf02bcfc49e) feat(telegram): enhance logging with sequence numbers and reply parameters *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-17T21:28:49+08:00*
+- [d3dafae](https://github.com/HafiziRuslan/RasPiAPRS/commit/d3dafae09949bd962cc5a3245add6ddd1ccd90d0) feat(gpsd): enable gpsd functionality with environment variable *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-17T04:48:48+08:00*
+- [82222e6](https://github.com/HafiziRuslan/RasPiAPRS/commit/82222e62a1ea1dfde684dbf29b969c1323c35fac) feat(gpsd): return both used and total satellites *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-12T00:28:06+08:00*
+- [e2559bb](https://github.com/HafiziRuslan/RasPiAPRS/commit/e2559bb78eb8482f99e9e05f89e9ac81fc33efa2) feat(gps): add gpsd client for position and satellite data *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-11T18:37:29+08:00*
+- [9a49ed2](https://github.com/HafiziRuslan/RasPiAPRS/commit/9a49ed2602c78ccfb463d6f28e31c46da263ceb1) feat(gpsd): enhance GPS data reporting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-11T08:23:07+08:00*
+- [7817358](https://github.com/HafiziRuslan/RasPiAPRS/commit/7817358fb16cb4e5032babbe82018ea40edb5da2) feat(readme): update installation instructions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-11T00:22:56+08:00*
+- [a92dea9](https://github.com/HafiziRuslan/RasPiAPRS/commit/a92dea9d06b5a2c6dec336e053993af1ef7db6bd) feat(deps): update project dependencies and tooling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-10T20:28:57+08:00*
+- [ef66719](https://github.com/HafiziRuslan/RasPiAPRS/commit/ef66719277d66d019716877636150c2a180f7f06) feat(ci): change changelog file extension to md *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-09T22:41:13+08:00*
+- [ecb7762](https://github.com/HafiziRuslan/RasPiAPRS/commit/ecb7762feb05b806093a163369085a1e87422548) feat(ci): add merge schedule workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-09T03:18:39+08:00*
+- [e2a22c0](https://github.com/HafiziRuslan/RasPiAPRS/commit/e2a22c0eb5890c7fe234cfd8467157f1235f3f10) feat(ci): add changelog generation workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-09T02:18:45+08:00*
+- [8659f3a](https://github.com/HafiziRuslan/RasPiAPRS/commit/8659f3a9f9239c20042f32601fb7fc07115c8a4f) feat(config): consolidate APRS sleep time and update GPSD settings *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-07T11:58:37+08:00*
+- [4e3dba8](https://github.com/HafiziRuslan/RasPiAPRS/commit/4e3dba8d29168c6aafb33746ea858991689f6a2c) feat(telegram): enhance telegram message link previews *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-04T00:57:49+08:00*
+- [ca4c11e](https://github.com/HafiziRuslan/RasPiAPRS/commit/ca4c11ef49c4e0371b3b9c43cfde02e3b038df92) feat(telegram): enhance telegram logging with location support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-04T00:54:29+08:00*
+- [ff89b9c](https://github.com/HafiziRuslan/RasPiAPRS/commit/ff89b9c2604e32a55bb9b566cb353621ded91155) feat(gps): enhance gps data handling and aprs message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-03T17:40:25+08:00*
+- [44fc04c](https://github.com/HafiziRuslan/RasPiAPRS/commit/44fc04c0e27b0688025dee5edf7c9312d9b670c5) feat(main): enhance application lifecycle logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-03T01:02:55+08:00*
+- [9575256](https://github.com/HafiziRuslan/RasPiAPRS/commit/9575256bd40be6c4a18de306caa9a1f0aa2612d7) feat(deps): add aprslib and gpsdclient dependencies *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-02T01:42:34+08:00*
+- [278fc85](https://github.com/HafiziRuslan/RasPiAPRS/commit/278fc8504705ca3e3637bf338b9473a2ff41da98) refactor(core): migrate from configparser to dotenv for config management *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-02T01:31:11+08:00*
+- [a56e64d](https://github.com/HafiziRuslan/RasPiAPRS/commit/a56e64d0a8a693bca616520fbcc19f5a90f3714a) feat(gps): add gpsd socket configuration and improve data handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-11-26T03:17:30+08:00*
+- [0e27d88](https://github.com/HafiziRuslan/RasPiAPRS/commit/0e27d8868940d79d0c743f3d037df0ce1ed21c3b) feat(telegram): add telegram bot integration for notifications *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-11-22T00:03:00+08:00*
+- [8016394](https://github.com/HafiziRuslan/RasPiAPRS/commit/8016394657b0a42635aeedbdf9b1740fdf8607d9) feat(gps): integrate modemmanager coordinates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-11-21T21:25:34+08:00*
+- [19d7572](https://github.com/HafiziRuslan/RasPiAPRS/commit/19d7572e2ad133287c3ef38ed7e8fba991b4a58e) feat(gps): persist gpsd coordinates to config *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-11-21T21:12:35+08:00*
+- [c30007a](https://github.com/HafiziRuslan/RasPiAPRS/commit/c30007a03c26e83b350a247d79e85b64559dd9dc) feat(gps): integrate gpsdclient for gps data *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-11-21T00:20:04+08:00*
+- [be55166](https://github.com/HafiziRuslan/RasPiAPRS/commit/be5516617dd0fff552d8cee5f1d1540bdc439518) feat(gps): integrate gpsd for precise location data *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-11-20T23:43:30+08:00*
+- [4562e7c](https://github.com/HafiziRuslan/RasPiAPRS/commit/4562e7c6661f6ef54a2d2e2f70022e43417884f1) feat(raspiaprs): add gpsd support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-11-11T01:47:20+08:00*
+- [9bbdc47](https://github.com/HafiziRuslan/RasPiAPRS/commit/9bbdc47e274e05317e6005925e0af314bb9116f1) build(ci): update gitlab sync action version to v2.1.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-10-21T15:44:28+08:00*
+- [58372ed](https://github.com/HafiziRuslan/RasPiAPRS/commit/58372ed6f9972ac922b686436d1e0bc58dffd040) feat(aprs): enhance telemetry and status reporting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-10-21T15:02:04+08:00*
+- [7079486](https://github.com/HafiziRuslan/RasPiAPRS/commit/7079486195bfe57c959716b0223f48baf2dc4def) feat(position): add altitude support to APRS position reports *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-10-21T00:52:05+08:00*
+- [7dcb4c5](https://github.com/HafiziRuslan/RasPiAPRS/commit/7dcb4c516aa15fe1561d269e40969b33cb4f0b1e) feat(position): enhance aprs position reporting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-10-20T02:41:58+08:00*
+- [8cdeb76](https://github.com/HafiziRuslan/RasPiAPRS/commit/8cdeb76e863ac6c951d0b88e86f1b345bd40e0c0) feat(aprs): add AX.25 support to APRS *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-09-09T10:11:44+08:00*
+- [4213fc9](https://github.com/HafiziRuslan/RasPiAPRS/commit/4213fc9bc5ed66c08535a7be04f1194e10248c66) feat(mmdvm): add POCSAG support and update telemetry *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-09-09T10:04:54+08:00*
+- [00a10ed](https://github.com/HafiziRuslan/RasPiAPRS/commit/00a10edcb7e5e7af7548cfa7d4d357d312ca50ea) feat(mmdvm): add mmdvm mode reporting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-09-09T10:00:59+08:00*
+- [848be69](https://github.com/HafiziRuslan/RasPiAPRS/commit/848be69c68588b1dca55558b30eae7dcab4dfcde) feat(uptime): include local time in uptime string *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-09-04T04:23:58+08:00*
+- [4e83e74](https://github.com/HafiziRuslan/RasPiAPRS/commit/4e83e746882640f8829c5a28123829beb420f0c8) feat(dmr): Add DMR master connection status to status output *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-09-04T04:06:07+08:00*
+- [2f1e85e](https://github.com/HafiziRuslan/RasPiAPRS/commit/2f1e85e4e6c4ec718bab6655ae0a21808b6f9ae5) feat(system): add DMRGateway status and master info *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-09-03T21:46:51+08:00*
+- [9bea76d](https://github.com/HafiziRuslan/RasPiAPRS/commit/9bea76d1b202fc661c350b108b47ce3f5cd498d9) feat(main): add network traffic monitoring *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-08-28T03:11:13+08:00*
+- [ce3ac1a](https://github.com/HafiziRuslan/RasPiAPRS/commit/ce3ac1aea60713fd70ef72bdeff41069f2385687) feat(config): enhance configuration management and data handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-08-28T02:22:21+08:00*
+- [bf0690e](https://github.com/HafiziRuslan/RasPiAPRS/commit/bf0690e8bc6a0581e122507d6a3bef8fa5c38099) feat(main): add github link to position comment *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-08-28T02:13:54+08:00*
+- [c421616](https://github.com/HafiziRuslan/RasPiAPRS/commit/c4216168f8d3fd09bd14df3016a2ab19057bfbe4) feat(aprs): add modem firmware version to aprs comment *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-08-28T02:00:38+08:00*
+- [54b3759](https://github.com/HafiziRuslan/RasPiAPRS/commit/54b3759fcfdb109b389692814cff3fd511e88b5c) feat(readme): add disk usage metric *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-08-27T21:37:32+08:00*
+- [07fb14d](https://github.com/HafiziRuslan/RasPiAPRS/commit/07fb14dbc8fdff83cbac550d3fef93c22d7a6e87) feat(telemetry): add disk usage to APRS telemetry *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-08-27T21:36:55+08:00*
 
 ### 🐛 Bug Fixes in beta4
 
@@ -498,157 +560,6 @@ All notable changes to this project will be documented in this file.
 - [ca70d9b](https://github.com/HafiziRuslan/RasPiAPRS/commit/ca70d9b1daeeed6b7d28b2f11835643117d3580e) fix(main): await telemetry and status coroutines *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-24T02:18:28+08:00*
 - [553f7cd](https://github.com/HafiziRuslan/RasPiAPRS/commit/553f7cd1347275beaad3e99467d994338a3eb0d1) fix(telemetry): update temperature unit label *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-24T01:38:29+08:00*
 - [3255cb8](https://github.com/HafiziRuslan/RasPiAPRS/commit/3255cb843e41f80207f2fdcbd2ad0d00bd4ac43d) fix(main): remove prefix and comma from timestamp *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-23T07:23:13+08:00*
-
-### 💼 Other in beta4
-
-- [0a2c74c](https://github.com/HafiziRuslan/RasPiAPRS/commit/0a2c74c5c25cbff348469cfeb9e5b62f74cd9af8) debug telemetry *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T06:55:21+08:00*
-- [38c3fb0](https://github.com/HafiziRuslan/RasPiAPRS/commit/38c3fb078df63dec6d241bdad4bbf676a5dec24f) debug sleep *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T06:46:45+08:00*
-- [431d32e](https://github.com/HafiziRuslan/RasPiAPRS/commit/431d32e67299beee03869531b63456053fa93772) another timer debug *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T06:37:55+08:00*
-- [76547ff](https://github.com/HafiziRuslan/RasPiAPRS/commit/76547ff246668f71a6e5f40ad306ffa8dba45c24) debug tmr *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T06:34:45+08:00*
-- [b6af481](https://github.com/HafiziRuslan/RasPiAPRS/commit/b6af4813eecb7bda782695aa44bf18ad27f97830) debug value of tmr%cfg.sleep *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T06:31:56+08:00*
-
-### 🚜 Refactor in beta4
-
-- [8efc3d9](https://github.com/HafiziRuslan/RasPiAPRS/commit/8efc3d9f508c1a4850c7280e411c8f7000a650c6) refactor(timing): adjust beacon rate calculation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-31T00:35:04+08:00*
-- [88d108f](https://github.com/HafiziRuslan/RasPiAPRS/commit/88d108f4011774bf5dec2b91776c5e54077b7039) refactor(utils): rename commented coordinate function *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-30T19:30:24+08:00*
-- [3ad21d6](https://github.com/HafiziRuslan/RasPiAPRS/commit/3ad21d683c4757db9e930b33e184346fe8d9e8e4) refactor(aprs): simplify gpsd environment check *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-30T19:25:53+08:00*
-- [187cce3](https://github.com/HafiziRuslan/RasPiAPRS/commit/187cce317f34e54b9385831ab3c05c415793368f) refactor(gps): cleanup unused time variables *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-30T18:16:45+08:00*
-- [dfc7156](https://github.com/HafiziRuslan/RasPiAPRS/commit/dfc7156c91c2476ceb3ab9a726873a671e8d7ceb) refactor(main): clean up unused imports and logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-29T16:57:17+08:00*
-- [ba2083a](https://github.com/HafiziRuslan/RasPiAPRS/commit/ba2083a52a79c988d495bda16ecd75d3e7dc74cf) refactor(main): clean up imports and update string formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-29T05:35:25+08:00*
-- [f608d5a](https://github.com/HafiziRuslan/RasPiAPRS/commit/f608d5a59da49283e811648ad80841936777f8a1) refactor(status): simplify status message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-29T03:28:06+08:00*
-- [ff085a0](https://github.com/HafiziRuslan/RasPiAPRS/commit/ff085a02004aaae2208fb2e326f402929dfe4cd1) refactor(status): adjust status message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-29T03:24:38+08:00*
-- [f7cfdeb](https://github.com/HafiziRuslan/RasPiAPRS/commit/f7cfdeb2ea6561aec07cf023008d5fd7948d94d8) refactor(location): rename function for address retrieval *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-29T02:58:13+08:00*
-- [936ec2c](https://github.com/HafiziRuslan/RasPiAPRS/commit/936ec2c3862e8344f7fc806da840b4bdfd302940) refactor(status): simplify status string formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T15:42:04+08:00*
-- [7a0ff7d](https://github.com/HafiziRuslan/RasPiAPRS/commit/7a0ff7d4c9a6a9eaa6790b6786e7a1c616225b5c) refactor(config): update MMDVM path construction *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T15:01:26+08:00*
-- [a8674e3](https://github.com/HafiziRuslan/RasPiAPRS/commit/a8674e3a39a781b646221ea45c10249726f43999) refactor(config): update MMDVMDaemon path construction *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T14:58:12+08:00*
-- [075acfe](https://github.com/HafiziRuslan/RasPiAPRS/commit/075acfe9c897890039835ecf33d6ec0a71002150) refactor(main): remove DMR gateway logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T14:27:13+08:00*
-- [670e3d6](https://github.com/HafiziRuslan/RasPiAPRS/commit/670e3d67148d3dfabaaef4c59e22e220e2d3626b) refactor(logging): enhance log format and suppress noisy libraries *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T14:09:14+08:00*
-- [1a7f7d4](https://github.com/HafiziRuslan/RasPiAPRS/commit/1a7f7d4ad4341e32dee7aad63c7b62b955b16c9d) refactor(logging): adjust log format to include function name *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T13:10:00+08:00*
-- [2b1702c](https://github.com/HafiziRuslan/RasPiAPRS/commit/2b1702ca0d3e1f3ecb53971dd888f38615a0bb1c) refactor(logging): enhance logging format and suppress noisy libraries *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T12:33:45+08:00*
-- [f622919](https://github.com/HafiziRuslan/RasPiAPRS/commit/f6229197fa4972e8fc3dd7b06c9f9e778ba374c1) refactor(telemetry): reorder logging and telegram calls *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T10:32:20+08:00*
-- [ee23ae0](https://github.com/HafiziRuslan/RasPiAPRS/commit/ee23ae00c2347eb21fa1bef5011d6ea6fe05597f) refactor(aprs): improve CSE boundary handling and initialization *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T10:24:43+08:00*
-- [900a5de](https://github.com/HafiziRuslan/RasPiAPRS/commit/900a5de3598787c5464b321a1daddccbfb0b775b) refactor(logging): enable warning level for common libraries *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T09:12:51+08:00*
-- [106f4da](https://github.com/HafiziRuslan/RasPiAPRS/commit/106f4da20f99424be2bbdf402c6068d29d08c826) refactor(telemetry): use proper method for sequence number *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T07:17:32+08:00*
-- [11ccc13](https://github.com/HafiziRuslan/RasPiAPRS/commit/11ccc134da348f1e244c080633bc0410befef4bd) refactor(scheduling): adjust main loop timing and logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T05:58:46+08:00*
-- [047c932](https://github.com/HafiziRuslan/RasPiAPRS/commit/047c9328c321f568c5a9017d431f5cfc6bda5627) refactor(aprs): make send_header synchronous *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T05:49:57+08:00*
-- [b23e228](https://github.com/HafiziRuslan/RasPiAPRS/commit/b23e2282bafe631ba7c92f2f47b1cf2eac17e8d3) refactor(scheduling): improve transmission initialization and timing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T05:34:43+08:00*
-- [ca76f93](https://github.com/HafiziRuslan/RasPiAPRS/commit/ca76f930225438bf611d39f76f6c9562a8264705) refactor(main): remove unused random import *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T04:15:38+08:00*
-- [901fd31](https://github.com/HafiziRuslan/RasPiAPRS/commit/901fd31be38d3c9d4a9e570ed40c010cf5c6d288) refactor(status): simplify timestamp and gps logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-26T18:51:35+08:00*
-- [bfa9150](https://github.com/HafiziRuslan/RasPiAPRS/commit/bfa91509c02987b2237e45d2515d6a17daf4289a) refactor(main): simplify sleep interval logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-26T18:01:47+08:00*
-- [ca12e3d](https://github.com/HafiziRuslan/RasPiAPRS/commit/ca12e3dbe8b3f43e4e9228dedf635c7b0a6ac5c8) refactor(main): simplify telemetry and status message logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-26T17:14:31+08:00*
-- [6c4eb0e](https://github.com/HafiziRuslan/RasPiAPRS/commit/6c4eb0e05779360848ceeb75c5d23bcdde0a4595) refactor(status): optimize status update logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-26T16:26:10+08:00*
-- [3829071](https://github.com/HafiziRuslan/RasPiAPRS/commit/38290710b6a8e18f073969efeda13d87c2dcbbcc) refactor(gps): include timestamp in satellite data *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-25T13:53:26+08:00*
-- [85847c8](https://github.com/HafiziRuslan/RasPiAPRS/commit/85847c8979822735855fb1c1c3d5e9376afe272b) refactor(main): simplify sleep calculation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-24T18:16:07+08:00*
-- [4d19301](https://github.com/HafiziRuslan/RasPiAPRS/commit/4d19301859d5578d538fd7635cdf52f84a01aa3e) refactor(telemetry): narrow scope of try-except blocks *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-24T01:42:31+08:00*
-- [34ef9eb](https://github.com/HafiziRuslan/RasPiAPRS/commit/34ef9eb04a55bcda8357869413c80fcc75d30775) refactor(telemetry): extract reporting functions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-24T01:37:58+08:00*
-
-### 📚 Documentation in beta4
-
-- [6a328e9](https://github.com/HafiziRuslan/RasPiAPRS/commit/6a328e924336d3ee3449dee4f6769f331ce8caa5) docs(symbols): add comprehensive reference for aprs symbols *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-30T14:48:52+08:00*
-- [7f21c5d](https://github.com/HafiziRuslan/RasPiAPRS/commit/7f21c5df4d7672bfe4a8ca8c9b1ab18930c2c877) docs(aprs): add aprs symbol specification *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-30T14:24:47+08:00*
-- [5131739](https://github.com/HafiziRuslan/RasPiAPRS/commit/5131739904cf2a5218eb727d782504cae81fad43) docs(config): clarify aprs sleep variable description *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T07:35:47+08:00*
-- [40b2529](https://github.com/HafiziRuslan/RasPiAPRS/commit/40b2529c8fc977993a32e0135e96b77ed9ebeef5) docs(APRS): add foundational specification documents *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T04:41:52+08:00*
-- [6e88c90](https://github.com/HafiziRuslan/RasPiAPRS/commit/6e88c906d9c23f18a5346b2c2db85358d9335044) docs(aprs): remove redundant packet comment *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T01:08:41+08:00*
-- [9e5130f](https://github.com/HafiziRuslan/RasPiAPRS/commit/9e5130fd0eae91926684fccab2eb061c9be9f6ea) docs(misc): add aprs protocol specification *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-25T13:34:32+08:00*
-- [f099d35](https://github.com/HafiziRuslan/RasPiAPRS/commit/f099d3594cb9cc30121b396e4a286d640f34d1f5) docs(license): add bsd-3-clause *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-25T10:16:24+08:00*
-
-### ⚡ Performance in beta4
-
-- [44d7103](https://github.com/HafiziRuslan/RasPiAPRS/commit/44d71030d45ccc1463e6b188faea01f866c524f3) perf(beaconing): increase header send interval *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-30T09:24:20+08:00*
-- [a29b4fc](https://github.com/HafiziRuslan/RasPiAPRS/commit/a29b4fc7a77313d42dfb7023839ccce5204d6b2a) perf(ci): suppress git and uv output in main script *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T12:17:31+08:00*
-- [f2ce5d4](https://github.com/HafiziRuslan/RasPiAPRS/commit/f2ce5d40f4859c93efd60dc5637b7fedbbb14215) perf(telemetry): optimize telemetry string formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T07:39:26+08:00*
-- [ea1d546](https://github.com/HafiziRuslan/RasPiAPRS/commit/ea1d546260fa5bde8b36d82666cb9890e444ce66) perf(config): adjust slow beaconing rate default *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T07:29:39+08:00*
-- [2f5dfc3](https://github.com/HafiziRuslan/RasPiAPRS/commit/2f5dfc32eab3c04d7e9138c942b8073f1a504965) chore(script): update git pull logic to use directory owner *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-24T15:19:36+08:00*
-
-### 🎨 Styling in beta4
-
-- [f919b00](https://github.com/HafiziRuslan/RasPiAPRS/commit/f919b00376f78ce805a8e173a8e4c8337ec7c312) style(status): bold telegram status metrics *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-31T17:03:49+08:00*
-- [ed7085d](https://github.com/HafiziRuslan/RasPiAPRS/commit/ed7085d6dbc084ce7271adf1e6ddd7578a343669) style(telegram): adjust message output style *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-31T00:01:19+08:00*
-- [e5f4c0c](https://github.com/HafiziRuslan/RasPiAPRS/commit/e5f4c0c606b84ac73ce43d9f9f1fdbffbcf1a67e) style(status): add space after gpssat label *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-30T19:23:53+08:00*
-- [c44e0f9](https://github.com/HafiziRuslan/RasPiAPRS/commit/c44e0f9f88646c7e136223264ceba2557349d449) style(formatting): add blank line after function definition *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-30T14:53:28+08:00*
-- [cc061b1](https://github.com/HafiziRuslan/RasPiAPRS/commit/cc061b13eda0d15b146a93a1301dd6baeed53804) style(config): use nanosecond precision for timestamps *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T06:12:47+08:00*
-- [1256cd4](https://github.com/HafiziRuslan/RasPiAPRS/commit/1256cd44cc2b0cbcd46a6ce1e499d35aa8554b28) style(formatting): standardize indentation and code formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-25T23:26:39+08:00*
-- [cfea409](https://github.com/HafiziRuslan/RasPiAPRS/commit/cfea409b2a007c6209ed1fe4b5a5f1c2a14a2d14) style(logging): update telegram log message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-25T05:55:47+08:00*
-
-### 🧪 Testing in beta4
-
-- [87ad872](https://github.com/HafiziRuslan/RasPiAPRS/commit/87ad872146e7861b80861b5e2fc1e7b5a8f90529) test(gps): expand gps data fields in test utility *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T03:37:13+08:00*
-
-### ⚙️ Miscellaneous Tasks in beta4
-
-- [349e7ea](https://github.com/HafiziRuslan/RasPiAPRS/commit/349e7eaf74a3a89aeebab5d31d9ab5a3ce158d9b) chore(aprs-is): add logging on successful connection *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-30T19:04:02+08:00*
-- [656200f](https://github.com/HafiziRuslan/RasPiAPRS/commit/656200fef40f456a68424c752725362c5dcd6436) chore(config): remove unused APRS path logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T15:16:25+08:00*
-- [339de49](https://github.com/HafiziRuslan/RasPiAPRS/commit/339de49bfee44098b9eb6e05c2f796a2a836b1ce) chore(logging): temporarily silence external library warnings *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T14:06:50+08:00*
-- [cae3045](https://github.com/HafiziRuslan/RasPiAPRS/commit/cae3045b369f3ca639e441e7fb10f7377877cfb6) chore(config): remove whitespace around '=' in default env file *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T12:09:53+08:00*
-- [6cfe3d0](https://github.com/HafiziRuslan/RasPiAPRS/commit/6cfe3d0a286fe56a1269420fd16cb5bc03d7f30a) chore(logging): adjust logging levels for GPS and IP lookups *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T09:11:44+08:00*
-- [70628fa](https://github.com/HafiziRuslan/RasPiAPRS/commit/70628fae0c9096a457762ced7567c3158a619066) chore(config): add millisecond precision to log timestamps *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T06:05:05+08:00*
-- [4e5eae4](https://github.com/HafiziRuslan/RasPiAPRS/commit/4e5eae4e0ab8e1b6e781c1515bf005365c8ebb28) chore(dev): temporarily disable data sending *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T05:54:36+08:00*
-- [dd78d9d](https://github.com/HafiziRuslan/RasPiAPRS/commit/dd78d9d913f31638374f8c6911ef61e8e14c3cb3) build(cliff): enhance changelog template output *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T05:09:42+08:00*
-- [1077229](https://github.com/HafiziRuslan/RasPiAPRS/commit/1077229d79c2c28975264cfa4312fa8185648a94) chore(scripts): add autostash to git pull *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-26T16:32:10+08:00*
-- [f458dd8](https://github.com/HafiziRuslan/RasPiAPRS/commit/f458dd85264de702d31175900fac9f78ad5415ba) build(deps): bump psutil and update sbom *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-25T23:26:13+08:00*
-- [9437440](https://github.com/HafiziRuslan/RasPiAPRS/commit/94374405b5a63e464c58e96edca50b950fd3c57f) chore(license): switch project license to gpl-3.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-25T10:11:38+08:00*
-- [f7afdac](https://github.com/HafiziRuslan/RasPiAPRS/commit/f7afdac0437a64fb2fb6062a321b8257c798bcc4) chore(scripts): remove mmcli location retrieval script *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-25T06:42:38+08:00*
-- [60a9f42](https://github.com/HafiziRuslan/RasPiAPRS/commit/60a9f42d9601336714a4e60a9769e521e70237f9) ci(workflow): update auto-merge trigger logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-24T15:42:37+08:00*
-- [e8d075b](https://github.com/HafiziRuslan/RasPiAPRS/commit/e8d075b247dd1c8d0c1e4fa5ca7a132e747442b2) build(deps): bump psutil from 7.1.3 to 7.2.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-24T15:37:30+08:00*
-- [3a104eb](https://github.com/HafiziRuslan/RasPiAPRS/commit/3a104eb01428d601a082765a9d8c9bb7ac034cf9) chore(cliff): adjust changelog template whitespace *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-24T15:23:51+08:00*
-- [58e559f](https://github.com/HafiziRuslan/RasPiAPRS/commit/58e559f696c5b8fe86ccb41a6b10142297dd6199) build(deps): update humanize and add lock files *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-24T03:02:03+08:00*
-- [7df6495](https://github.com/HafiziRuslan/RasPiAPRS/commit/7df6495be779b2faca1145464cd6ff9686706936) chore(cliff): update changelog template layout *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-23T07:02:04+08:00*
-- [2fe2d84](https://github.com/HafiziRuslan/RasPiAPRS/commit/2fe2d849eca3ab4f0fb9beed797b391c7eee2449) chore(release): bump version to v0.1-beta.4 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-23T06:46:58+08:00*
-
----
-
-## [beta] - (2025-12-22T19:26:39+08:00)
-
-- 486 commit(s) contributed to the release.
-- 2048 day(s) passed between the first and last commit.
-
-### 🚀 Features in beta
-
-- [8295a35](https://github.com/HafiziRuslan/RasPiAPRS/commit/8295a359584cec1ed719e61617186eaeb12b18b1) feat(gps): use gps time for position reports *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-19T18:39:09+08:00*
-- [b55aac1](https://github.com/HafiziRuslan/RasPiAPRS/commit/b55aac1efeb360f2cd347fa4e2657889ce435bec) feat(telemetry): add disk usage metric to aprs telemetry *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-18T18:38:33+08:00*
-- [55360a3](https://github.com/HafiziRuslan/RasPiAPRS/commit/55360a308af9e8e7aedb2185f0126bf02bcfc49e) feat(telegram): enhance logging with sequence numbers and reply parameters *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-17T21:28:49+08:00*
-- [d3dafae](https://github.com/HafiziRuslan/RasPiAPRS/commit/d3dafae09949bd962cc5a3245add6ddd1ccd90d0) feat(gpsd): enable gpsd functionality with environment variable *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-17T04:48:48+08:00*
-- [82222e6](https://github.com/HafiziRuslan/RasPiAPRS/commit/82222e62a1ea1dfde684dbf29b969c1323c35fac) feat(gpsd): return both used and total satellites *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-12T00:28:06+08:00*
-- [e2559bb](https://github.com/HafiziRuslan/RasPiAPRS/commit/e2559bb78eb8482f99e9e05f89e9ac81fc33efa2) feat(gps): add gpsd client for position and satellite data *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-11T18:37:29+08:00*
-- [9a49ed2](https://github.com/HafiziRuslan/RasPiAPRS/commit/9a49ed2602c78ccfb463d6f28e31c46da263ceb1) feat(gpsd): enhance GPS data reporting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-11T08:23:07+08:00*
-- [7817358](https://github.com/HafiziRuslan/RasPiAPRS/commit/7817358fb16cb4e5032babbe82018ea40edb5da2) feat(readme): update installation instructions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-11T00:22:56+08:00*
-- [a92dea9](https://github.com/HafiziRuslan/RasPiAPRS/commit/a92dea9d06b5a2c6dec336e053993af1ef7db6bd) feat(deps): update project dependencies and tooling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-10T20:28:57+08:00*
-- [ef66719](https://github.com/HafiziRuslan/RasPiAPRS/commit/ef66719277d66d019716877636150c2a180f7f06) feat(ci): change changelog file extension to md *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-09T22:41:13+08:00*
-- [ecb7762](https://github.com/HafiziRuslan/RasPiAPRS/commit/ecb7762feb05b806093a163369085a1e87422548) feat(ci): add merge schedule workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-09T03:18:39+08:00*
-- [e2a22c0](https://github.com/HafiziRuslan/RasPiAPRS/commit/e2a22c0eb5890c7fe234cfd8467157f1235f3f10) feat(ci): add changelog generation workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-09T02:18:45+08:00*
-- [8659f3a](https://github.com/HafiziRuslan/RasPiAPRS/commit/8659f3a9f9239c20042f32601fb7fc07115c8a4f) feat(config): consolidate APRS sleep time and update GPSD settings *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-07T11:58:37+08:00*
-- [4e3dba8](https://github.com/HafiziRuslan/RasPiAPRS/commit/4e3dba8d29168c6aafb33746ea858991689f6a2c) feat(telegram): enhance telegram message link previews *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-04T00:57:49+08:00*
-- [ca4c11e](https://github.com/HafiziRuslan/RasPiAPRS/commit/ca4c11ef49c4e0371b3b9c43cfde02e3b038df92) feat(telegram): enhance telegram logging with location support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-04T00:54:29+08:00*
-- [ff89b9c](https://github.com/HafiziRuslan/RasPiAPRS/commit/ff89b9c2604e32a55bb9b566cb353621ded91155) feat(gps): enhance gps data handling and aprs message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-03T17:40:25+08:00*
-- [44fc04c](https://github.com/HafiziRuslan/RasPiAPRS/commit/44fc04c0e27b0688025dee5edf7c9312d9b670c5) feat(main): enhance application lifecycle logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-03T01:02:55+08:00*
-- [9575256](https://github.com/HafiziRuslan/RasPiAPRS/commit/9575256bd40be6c4a18de306caa9a1f0aa2612d7) feat(deps): add aprslib and gpsdclient dependencies *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-02T01:42:34+08:00*
-- [278fc85](https://github.com/HafiziRuslan/RasPiAPRS/commit/278fc8504705ca3e3637bf338b9473a2ff41da98) refactor(core): migrate from configparser to dotenv for config management *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-02T01:31:11+08:00*
-- [a56e64d](https://github.com/HafiziRuslan/RasPiAPRS/commit/a56e64d0a8a693bca616520fbcc19f5a90f3714a) feat(gps): add gpsd socket configuration and improve data handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-11-26T03:17:30+08:00*
-- [0e27d88](https://github.com/HafiziRuslan/RasPiAPRS/commit/0e27d8868940d79d0c743f3d037df0ce1ed21c3b) feat(telegram): add telegram bot integration for notifications *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-11-22T00:03:00+08:00*
-- [8016394](https://github.com/HafiziRuslan/RasPiAPRS/commit/8016394657b0a42635aeedbdf9b1740fdf8607d9) feat(gps): integrate modemmanager coordinates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-11-21T21:25:34+08:00*
-- [19d7572](https://github.com/HafiziRuslan/RasPiAPRS/commit/19d7572e2ad133287c3ef38ed7e8fba991b4a58e) feat(gps): persist gpsd coordinates to config *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-11-21T21:12:35+08:00*
-- [c30007a](https://github.com/HafiziRuslan/RasPiAPRS/commit/c30007a03c26e83b350a247d79e85b64559dd9dc) feat(gps): integrate gpsdclient for gps data *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-11-21T00:20:04+08:00*
-- [be55166](https://github.com/HafiziRuslan/RasPiAPRS/commit/be5516617dd0fff552d8cee5f1d1540bdc439518) feat(gps): integrate gpsd for precise location data *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-11-20T23:43:30+08:00*
-- [4562e7c](https://github.com/HafiziRuslan/RasPiAPRS/commit/4562e7c6661f6ef54a2d2e2f70022e43417884f1) feat(raspiaprs): add gpsd support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-11-11T01:47:20+08:00*
-- [9bbdc47](https://github.com/HafiziRuslan/RasPiAPRS/commit/9bbdc47e274e05317e6005925e0af314bb9116f1) build(ci): update gitlab sync action version to v2.1.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-10-21T15:44:28+08:00*
-- [58372ed](https://github.com/HafiziRuslan/RasPiAPRS/commit/58372ed6f9972ac922b686436d1e0bc58dffd040) feat(aprs): enhance telemetry and status reporting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-10-21T15:02:04+08:00*
-- [7079486](https://github.com/HafiziRuslan/RasPiAPRS/commit/7079486195bfe57c959716b0223f48baf2dc4def) feat(position): add altitude support to APRS position reports *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-10-21T00:52:05+08:00*
-- [7dcb4c5](https://github.com/HafiziRuslan/RasPiAPRS/commit/7dcb4c516aa15fe1561d269e40969b33cb4f0b1e) feat(position): enhance aprs position reporting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-10-20T02:41:58+08:00*
-- [8cdeb76](https://github.com/HafiziRuslan/RasPiAPRS/commit/8cdeb76e863ac6c951d0b88e86f1b345bd40e0c0) feat(aprs): add AX.25 support to APRS *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-09-09T10:11:44+08:00*
-- [4213fc9](https://github.com/HafiziRuslan/RasPiAPRS/commit/4213fc9bc5ed66c08535a7be04f1194e10248c66) feat(mmdvm): add POCSAG support and update telemetry *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-09-09T10:04:54+08:00*
-- [00a10ed](https://github.com/HafiziRuslan/RasPiAPRS/commit/00a10edcb7e5e7af7548cfa7d4d357d312ca50ea) feat(mmdvm): add mmdvm mode reporting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-09-09T10:00:59+08:00*
-- [848be69](https://github.com/HafiziRuslan/RasPiAPRS/commit/848be69c68588b1dca55558b30eae7dcab4dfcde) feat(uptime): include local time in uptime string *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-09-04T04:23:58+08:00*
-- [4e83e74](https://github.com/HafiziRuslan/RasPiAPRS/commit/4e83e746882640f8829c5a28123829beb420f0c8) feat(dmr): Add DMR master connection status to status output *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-09-04T04:06:07+08:00*
-- [2f1e85e](https://github.com/HafiziRuslan/RasPiAPRS/commit/2f1e85e4e6c4ec718bab6655ae0a21808b6f9ae5) feat(system): add DMRGateway status and master info *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-09-03T21:46:51+08:00*
-- [9bea76d](https://github.com/HafiziRuslan/RasPiAPRS/commit/9bea76d1b202fc661c350b108b47ce3f5cd498d9) feat(main): add network traffic monitoring *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-08-28T03:11:13+08:00*
-- [ce3ac1a](https://github.com/HafiziRuslan/RasPiAPRS/commit/ce3ac1aea60713fd70ef72bdeff41069f2385687) feat(config): enhance configuration management and data handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-08-28T02:22:21+08:00*
-- [bf0690e](https://github.com/HafiziRuslan/RasPiAPRS/commit/bf0690e8bc6a0581e122507d6a3bef8fa5c38099) feat(main): add github link to position comment *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-08-28T02:13:54+08:00*
-- [c421616](https://github.com/HafiziRuslan/RasPiAPRS/commit/c4216168f8d3fd09bd14df3016a2ab19057bfbe4) feat(aprs): add modem firmware version to aprs comment *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-08-28T02:00:38+08:00*
-- [54b3759](https://github.com/HafiziRuslan/RasPiAPRS/commit/54b3759fcfdb109b389692814cff3fd511e88b5c) feat(readme): add disk usage metric *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-08-27T21:37:32+08:00*
-- [07fb14d](https://github.com/HafiziRuslan/RasPiAPRS/commit/07fb14dbc8fdff83cbac550d3fef93c22d7a6e87) feat(telemetry): add disk usage to APRS telemetry *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-08-27T21:36:55+08:00*
-
-### 🐛 Bug Fixes in beta
-
 - [97208c2](https://github.com/HafiziRuslan/RasPiAPRS/commit/97208c26567649dbf4450d474e65ae269255abde) fix(cpu): correct cpu load calculation scaling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-22T19:03:31+08:00*
 - [83ad8a9](https://github.com/HafiziRuslan/RasPiAPRS/commit/83ad8a9a6f1a6378c675aeec29782a7d7850d809) fix telegram precision error *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-21T13:06:32+08:00*
 - [4f1234c](https://github.com/HafiziRuslan/RasPiAPRS/commit/4f1234c9237a0247a1bdd92f0b7848d9ff1782bd) fix telegram precision value *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-21T11:19:53+08:00*
@@ -867,8 +778,13 @@ All notable changes to this project will be documented in this file.
 - [2d2c250](https://github.com/HafiziRuslan/RasPiAPRS/commit/2d2c25030bc87582e2c5642d478374b3a43c735f) Fix logging message and adjust indentation in get_uptime function *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-08-14T05:45:09+08:00*
 - [f624040](https://github.com/HafiziRuslan/RasPiAPRS/commit/f624040d774311b4c972cab33219693f35002d9b) fix connection error *by [@0x9900](https://github.com/0x9900) on 2021-04-02T01:31:58+08:00*
 
-### 💼 Other in beta
+### 💼 Other in beta4
 
+- [0a2c74c](https://github.com/HafiziRuslan/RasPiAPRS/commit/0a2c74c5c25cbff348469cfeb9e5b62f74cd9af8) debug telemetry *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T06:55:21+08:00*
+- [38c3fb0](https://github.com/HafiziRuslan/RasPiAPRS/commit/38c3fb078df63dec6d241bdad4bbf676a5dec24f) debug sleep *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T06:46:45+08:00*
+- [431d32e](https://github.com/HafiziRuslan/RasPiAPRS/commit/431d32e67299beee03869531b63456053fa93772) another timer debug *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T06:37:55+08:00*
+- [76547ff](https://github.com/HafiziRuslan/RasPiAPRS/commit/76547ff246668f71a6e5f40ad306ffa8dba45c24) debug tmr *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T06:34:45+08:00*
+- [b6af481](https://github.com/HafiziRuslan/RasPiAPRS/commit/b6af4813eecb7bda782695aa44bf18ad27f97830) debug value of tmr%cfg.sleep *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T06:31:56+08:00*
 - [7ca5fea](https://github.com/HafiziRuslan/RasPiAPRS/commit/7ca5feab8dadcc31d36ca8a00001e106c445d290) Make script executable *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-19T03:38:27+08:00*
 - [baaca4d](https://github.com/HafiziRuslan/RasPiAPRS/commit/baaca4daea8ec51adb2f4fd173d18d34f8699ac6) run changelog on push *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-09T06:54:38+08:00*
 - [519de53](https://github.com/HafiziRuslan/RasPiAPRS/commit/519de532f31462fbe0373d2c060fe80a585d2e45) Update Python versions in pylint workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-04T03:29:29+08:00*
@@ -933,8 +849,40 @@ All notable changes to this project will be documented in this file.
 - [d356232](https://github.com/HafiziRuslan/RasPiAPRS/commit/d356232e4bc6477b628d3af5ee993dae7fd91861) Adding FreeMemory metric *by [@0x9900](https://github.com/0x9900) on 2020-05-15T08:13:18+08:00*
 - [4de42c9](https://github.com/HafiziRuslan/RasPiAPRS/commit/4de42c9871d686e6e5c3a936b1c1acc2b81bfbaf) Initial version *by [@0x9900](https://github.com/0x9900) on 2020-05-15T04:56:39+08:00*
 
-### 🚜 Refactor in beta
+### 🚜 Refactor in beta4
 
+- [8efc3d9](https://github.com/HafiziRuslan/RasPiAPRS/commit/8efc3d9f508c1a4850c7280e411c8f7000a650c6) refactor(timing): adjust beacon rate calculation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-31T00:35:04+08:00*
+- [88d108f](https://github.com/HafiziRuslan/RasPiAPRS/commit/88d108f4011774bf5dec2b91776c5e54077b7039) refactor(utils): rename commented coordinate function *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-30T19:30:24+08:00*
+- [3ad21d6](https://github.com/HafiziRuslan/RasPiAPRS/commit/3ad21d683c4757db9e930b33e184346fe8d9e8e4) refactor(aprs): simplify gpsd environment check *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-30T19:25:53+08:00*
+- [187cce3](https://github.com/HafiziRuslan/RasPiAPRS/commit/187cce317f34e54b9385831ab3c05c415793368f) refactor(gps): cleanup unused time variables *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-30T18:16:45+08:00*
+- [dfc7156](https://github.com/HafiziRuslan/RasPiAPRS/commit/dfc7156c91c2476ceb3ab9a726873a671e8d7ceb) refactor(main): clean up unused imports and logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-29T16:57:17+08:00*
+- [ba2083a](https://github.com/HafiziRuslan/RasPiAPRS/commit/ba2083a52a79c988d495bda16ecd75d3e7dc74cf) refactor(main): clean up imports and update string formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-29T05:35:25+08:00*
+- [f608d5a](https://github.com/HafiziRuslan/RasPiAPRS/commit/f608d5a59da49283e811648ad80841936777f8a1) refactor(status): simplify status message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-29T03:28:06+08:00*
+- [ff085a0](https://github.com/HafiziRuslan/RasPiAPRS/commit/ff085a02004aaae2208fb2e326f402929dfe4cd1) refactor(status): adjust status message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-29T03:24:38+08:00*
+- [f7cfdeb](https://github.com/HafiziRuslan/RasPiAPRS/commit/f7cfdeb2ea6561aec07cf023008d5fd7948d94d8) refactor(location): rename function for address retrieval *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-29T02:58:13+08:00*
+- [936ec2c](https://github.com/HafiziRuslan/RasPiAPRS/commit/936ec2c3862e8344f7fc806da840b4bdfd302940) refactor(status): simplify status string formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T15:42:04+08:00*
+- [7a0ff7d](https://github.com/HafiziRuslan/RasPiAPRS/commit/7a0ff7d4c9a6a9eaa6790b6786e7a1c616225b5c) refactor(config): update MMDVM path construction *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T15:01:26+08:00*
+- [a8674e3](https://github.com/HafiziRuslan/RasPiAPRS/commit/a8674e3a39a781b646221ea45c10249726f43999) refactor(config): update MMDVMDaemon path construction *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T14:58:12+08:00*
+- [075acfe](https://github.com/HafiziRuslan/RasPiAPRS/commit/075acfe9c897890039835ecf33d6ec0a71002150) refactor(main): remove DMR gateway logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T14:27:13+08:00*
+- [670e3d6](https://github.com/HafiziRuslan/RasPiAPRS/commit/670e3d67148d3dfabaaef4c59e22e220e2d3626b) refactor(logging): enhance log format and suppress noisy libraries *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T14:09:14+08:00*
+- [1a7f7d4](https://github.com/HafiziRuslan/RasPiAPRS/commit/1a7f7d4ad4341e32dee7aad63c7b62b955b16c9d) refactor(logging): adjust log format to include function name *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T13:10:00+08:00*
+- [2b1702c](https://github.com/HafiziRuslan/RasPiAPRS/commit/2b1702ca0d3e1f3ecb53971dd888f38615a0bb1c) refactor(logging): enhance logging format and suppress noisy libraries *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T12:33:45+08:00*
+- [f622919](https://github.com/HafiziRuslan/RasPiAPRS/commit/f6229197fa4972e8fc3dd7b06c9f9e778ba374c1) refactor(telemetry): reorder logging and telegram calls *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T10:32:20+08:00*
+- [ee23ae0](https://github.com/HafiziRuslan/RasPiAPRS/commit/ee23ae00c2347eb21fa1bef5011d6ea6fe05597f) refactor(aprs): improve CSE boundary handling and initialization *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T10:24:43+08:00*
+- [900a5de](https://github.com/HafiziRuslan/RasPiAPRS/commit/900a5de3598787c5464b321a1daddccbfb0b775b) refactor(logging): enable warning level for common libraries *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T09:12:51+08:00*
+- [106f4da](https://github.com/HafiziRuslan/RasPiAPRS/commit/106f4da20f99424be2bbdf402c6068d29d08c826) refactor(telemetry): use proper method for sequence number *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T07:17:32+08:00*
+- [11ccc13](https://github.com/HafiziRuslan/RasPiAPRS/commit/11ccc134da348f1e244c080633bc0410befef4bd) refactor(scheduling): adjust main loop timing and logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T05:58:46+08:00*
+- [047c932](https://github.com/HafiziRuslan/RasPiAPRS/commit/047c9328c321f568c5a9017d431f5cfc6bda5627) refactor(aprs): make send_header synchronous *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T05:49:57+08:00*
+- [b23e228](https://github.com/HafiziRuslan/RasPiAPRS/commit/b23e2282bafe631ba7c92f2f47b1cf2eac17e8d3) refactor(scheduling): improve transmission initialization and timing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T05:34:43+08:00*
+- [ca76f93](https://github.com/HafiziRuslan/RasPiAPRS/commit/ca76f930225438bf611d39f76f6c9562a8264705) refactor(main): remove unused random import *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T04:15:38+08:00*
+- [901fd31](https://github.com/HafiziRuslan/RasPiAPRS/commit/901fd31be38d3c9d4a9e570ed40c010cf5c6d288) refactor(status): simplify timestamp and gps logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-26T18:51:35+08:00*
+- [bfa9150](https://github.com/HafiziRuslan/RasPiAPRS/commit/bfa91509c02987b2237e45d2515d6a17daf4289a) refactor(main): simplify sleep interval logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-26T18:01:47+08:00*
+- [ca12e3d](https://github.com/HafiziRuslan/RasPiAPRS/commit/ca12e3dbe8b3f43e4e9228dedf635c7b0a6ac5c8) refactor(main): simplify telemetry and status message logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-26T17:14:31+08:00*
+- [6c4eb0e](https://github.com/HafiziRuslan/RasPiAPRS/commit/6c4eb0e05779360848ceeb75c5d23bcdde0a4595) refactor(status): optimize status update logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-26T16:26:10+08:00*
+- [3829071](https://github.com/HafiziRuslan/RasPiAPRS/commit/38290710b6a8e18f073969efeda13d87c2dcbbcc) refactor(gps): include timestamp in satellite data *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-25T13:53:26+08:00*
+- [85847c8](https://github.com/HafiziRuslan/RasPiAPRS/commit/85847c8979822735855fb1c1c3d5e9376afe272b) refactor(main): simplify sleep calculation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-24T18:16:07+08:00*
+- [4d19301](https://github.com/HafiziRuslan/RasPiAPRS/commit/4d19301859d5578d538fd7635cdf52f84a01aa3e) refactor(telemetry): narrow scope of try-except blocks *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-24T01:42:31+08:00*
+- [34ef9eb](https://github.com/HafiziRuslan/RasPiAPRS/commit/34ef9eb04a55bcda8357869413c80fcc75d30775) refactor(telemetry): extract reporting functions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-24T01:37:58+08:00*
 - [5a45092](https://github.com/HafiziRuslan/RasPiAPRS/commit/5a450928eb2a75622ecc02c6cec17dfa7d1cc6fc) refactor(telemetry): adjust cpu temperature scaling and precision *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-22T00:22:17+08:00*
 - [75239aa](https://github.com/HafiziRuslan/RasPiAPRS/commit/75239aadc61235cc6488e080facfb0a99cbde3ec) refactor(telemetry): increase precision of system metrics *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-21T02:32:04+08:00*
 - [b089121](https://github.com/HafiziRuslan/RasPiAPRS/commit/b089121a648731aea5144e8b006be725a7f03c44) refactor(gps): rename gpsd utility functions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-19T18:41:08+08:00*
@@ -971,8 +919,15 @@ All notable changes to this project will be documented in this file.
 - [8d9e854](https://github.com/HafiziRuslan/RasPiAPRS/commit/8d9e854bc8afe5d060dff1a20f85c389133e58a7) Enhance modem information retrieval: update get_modem function and modify packet comment to include modem details *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-08-15T04:43:09+08:00*
 - [540fb36](https://github.com/HafiziRuslan/RasPiAPRS/commit/540fb3684de4067d09a6f3e0ad96cca631de7afb) Enhance rpiaprs configuration: add altitude parameter and improve comments for clarity *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-08-14T13:58:22+08:00*
 
-### 📚 Documentation in beta
+### 📚 Documentation in beta4
 
+- [6a328e9](https://github.com/HafiziRuslan/RasPiAPRS/commit/6a328e924336d3ee3449dee4f6769f331ce8caa5) docs(symbols): add comprehensive reference for aprs symbols *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-30T14:48:52+08:00*
+- [7f21c5d](https://github.com/HafiziRuslan/RasPiAPRS/commit/7f21c5df4d7672bfe4a8ca8c9b1ab18930c2c877) docs(aprs): add aprs symbol specification *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-30T14:24:47+08:00*
+- [5131739](https://github.com/HafiziRuslan/RasPiAPRS/commit/5131739904cf2a5218eb727d782504cae81fad43) docs(config): clarify aprs sleep variable description *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T07:35:47+08:00*
+- [40b2529](https://github.com/HafiziRuslan/RasPiAPRS/commit/40b2529c8fc977993a32e0135e96b77ed9ebeef5) docs(APRS): add foundational specification documents *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T04:41:52+08:00*
+- [6e88c90](https://github.com/HafiziRuslan/RasPiAPRS/commit/6e88c906d9c23f18a5346b2c2db85358d9335044) docs(aprs): remove redundant packet comment *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T01:08:41+08:00*
+- [9e5130f](https://github.com/HafiziRuslan/RasPiAPRS/commit/9e5130fd0eae91926684fccab2eb061c9be9f6ea) docs(misc): add aprs protocol specification *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-25T13:34:32+08:00*
+- [f099d35](https://github.com/HafiziRuslan/RasPiAPRS/commit/f099d3594cb9cc30121b396e4a286d640f34d1f5) docs(license): add bsd-3-clause *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-25T10:16:24+08:00*
 - [fc6c4e6](https://github.com/HafiziRuslan/RasPiAPRS/commit/fc6c4e60c471942919583b25bc2dea3ba7420d4a) docs(cliff.toml): skip commits from github actions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-17T20:50:30+08:00*
 - [57367b5](https://github.com/HafiziRuslan/RasPiAPRS/commit/57367b58aee0642183f3c5c5efc5a3ae77924bee) docs(changelog): update changelog generation workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-17T20:23:56+08:00*
 - [48070b5](https://github.com/HafiziRuslan/RasPiAPRS/commit/48070b5289188927ecca55d287ad1bb957415ad2) docs(pyproject): update readme filename *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-10T23:22:22+08:00*
@@ -999,8 +954,13 @@ All notable changes to this project will be documented in this file.
 - [e8f0a5c](https://github.com/HafiziRuslan/RasPiAPRS/commit/e8f0a5cc598671a666bb1ee869fa80c24e09cb04) docs(readme): update service installation instructions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-09-02T21:19:01+08:00*
 - [b8b0dc1](https://github.com/HafiziRuslan/RasPiAPRS/commit/b8b0dc1325ea86bbd785cd549e703bd884ceb33d) Update README and rpiaprs.py: enhance documentation clarity and add default APRS-IS server settings *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-08-20T14:01:00+08:00*
 
-### ⚡ Performance in beta
+### ⚡ Performance in beta4
 
+- [44d7103](https://github.com/HafiziRuslan/RasPiAPRS/commit/44d71030d45ccc1463e6b188faea01f866c524f3) perf(beaconing): increase header send interval *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-30T09:24:20+08:00*
+- [a29b4fc](https://github.com/HafiziRuslan/RasPiAPRS/commit/a29b4fc7a77313d42dfb7023839ccce5204d6b2a) perf(ci): suppress git and uv output in main script *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T12:17:31+08:00*
+- [f2ce5d4](https://github.com/HafiziRuslan/RasPiAPRS/commit/f2ce5d40f4859c93efd60dc5637b7fedbbb14215) perf(telemetry): optimize telemetry string formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T07:39:26+08:00*
+- [ea1d546](https://github.com/HafiziRuslan/RasPiAPRS/commit/ea1d546260fa5bde8b36d82666cb9890e444ce66) perf(config): adjust slow beaconing rate default *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T07:29:39+08:00*
+- [2f5dfc3](https://github.com/HafiziRuslan/RasPiAPRS/commit/2f5dfc32eab3c04d7e9138c942b8073f1a504965) chore(script): update git pull logic to use directory owner *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-24T15:19:36+08:00*
 - [b6fb062](https://github.com/HafiziRuslan/RasPiAPRS/commit/b6fb062cb0e49bab30b80a5ec24d1243ac1c9a19) perf(aprs): reduce precision for some telegram values *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-09T06:19:20+08:00*
 - [e4da69d](https://github.com/HafiziRuslan/RasPiAPRS/commit/e4da69db4ae46ad50556d8a8fbd1e3d16f00d23a) perf(aprs): reduce precision for some EQNS values *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-09T06:16:22+08:00*
 - [cbd32f3](https://github.com/HafiziRuslan/RasPiAPRS/commit/cbd32f32ddc01f0eabdbc621564ea2ab050c5959) perf(monitoring): remove unnecessary rounding in system metric calculations *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-09T05:21:01+08:00*
@@ -1009,8 +969,19 @@ All notable changes to this project will be documented in this file.
 - [84911fc](https://github.com/HafiziRuslan/RasPiAPRS/commit/84911fc8271cd0142db099f5a1cdfa622316ad98) perf(disk, memory): optimize disk and memory usage calculation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-09-09T01:26:56+08:00*
 - [47cef97](https://github.com/HafiziRuslan/RasPiAPRS/commit/47cef9783adb364e14842edabdaf8f0e5f5e40f7) Implement code changes to enhance functionality and improve performance *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-08-15T00:17:29+08:00*
 
-### 🧪 Testing in beta
+### 🎨 Styling in beta4
 
+- [f919b00](https://github.com/HafiziRuslan/RasPiAPRS/commit/f919b00376f78ce805a8e173a8e4c8337ec7c312) style(status): bold telegram status metrics *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-31T17:03:49+08:00*
+- [ed7085d](https://github.com/HafiziRuslan/RasPiAPRS/commit/ed7085d6dbc084ce7271adf1e6ddd7578a343669) style(telegram): adjust message output style *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-31T00:01:19+08:00*
+- [e5f4c0c](https://github.com/HafiziRuslan/RasPiAPRS/commit/e5f4c0c606b84ac73ce43d9f9f1fdbffbcf1a67e) style(status): add space after gpssat label *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-30T19:23:53+08:00*
+- [c44e0f9](https://github.com/HafiziRuslan/RasPiAPRS/commit/c44e0f9f88646c7e136223264ceba2557349d449) style(formatting): add blank line after function definition *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-30T14:53:28+08:00*
+- [cc061b1](https://github.com/HafiziRuslan/RasPiAPRS/commit/cc061b13eda0d15b146a93a1301dd6baeed53804) style(config): use nanosecond precision for timestamps *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T06:12:47+08:00*
+- [1256cd4](https://github.com/HafiziRuslan/RasPiAPRS/commit/1256cd44cc2b0cbcd46a6ce1e499d35aa8554b28) style(formatting): standardize indentation and code formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-25T23:26:39+08:00*
+- [cfea409](https://github.com/HafiziRuslan/RasPiAPRS/commit/cfea409b2a007c6209ed1fe4b5a5f1c2a14a2d14) style(logging): update telegram log message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-25T05:55:47+08:00*
+
+### 🧪 Testing in beta4
+
+- [87ad872](https://github.com/HafiziRuslan/RasPiAPRS/commit/87ad872146e7861b80861b5e2fc1e7b5a8f90529) test(gps): expand gps data fields in test utility *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T03:37:13+08:00*
 - [325a882](https://github.com/HafiziRuslan/RasPiAPRS/commit/325a8829ea5e11f59a69b1c016d2a76bd323cd78) chore(script): add git pull to main script *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-22T03:20:40+08:00*
 - [b405cd0](https://github.com/HafiziRuslan/RasPiAPRS/commit/b405cd01f09d06a2ae617f58b7003063c1311f5b) ci(release): use latest version tag of deploy *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-18T00:12:25+08:00*
 - [0a3cf62](https://github.com/HafiziRuslan/RasPiAPRS/commit/0a3cf623c18ff66a62758bb0b49fe9131f4db113) ci(release): add deploy job for beta tag *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-18T00:10:00+08:00*
@@ -1018,8 +989,26 @@ All notable changes to this project will be documented in this file.
 - [9800215](https://github.com/HafiziRuslan/RasPiAPRS/commit/980021522d54ff2115a617c5c176345ab793cc6b) test(gps): improve gpsd data handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-11T18:51:42+08:00*
 - [5dae7f6](https://github.com/HafiziRuslan/RasPiAPRS/commit/5dae7f6969c22363ca647e695131c60e64f3ce9c) ci(release): update GitHub Actions versions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-10T18:28:46+08:00*
 
-### ⚙️ Miscellaneous Tasks in beta
+### ⚙️ Miscellaneous Tasks in beta4
 
+- [349e7ea](https://github.com/HafiziRuslan/RasPiAPRS/commit/349e7eaf74a3a89aeebab5d31d9ab5a3ce158d9b) chore(aprs-is): add logging on successful connection *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-30T19:04:02+08:00*
+- [656200f](https://github.com/HafiziRuslan/RasPiAPRS/commit/656200fef40f456a68424c752725362c5dcd6436) chore(config): remove unused APRS path logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T15:16:25+08:00*
+- [339de49](https://github.com/HafiziRuslan/RasPiAPRS/commit/339de49bfee44098b9eb6e05c2f796a2a836b1ce) chore(logging): temporarily silence external library warnings *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T14:06:50+08:00*
+- [cae3045](https://github.com/HafiziRuslan/RasPiAPRS/commit/cae3045b369f3ca639e441e7fb10f7377877cfb6) chore(config): remove whitespace around '=' in default env file *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-28T12:09:53+08:00*
+- [6cfe3d0](https://github.com/HafiziRuslan/RasPiAPRS/commit/6cfe3d0a286fe56a1269420fd16cb5bc03d7f30a) chore(logging): adjust logging levels for GPS and IP lookups *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T09:11:44+08:00*
+- [70628fa](https://github.com/HafiziRuslan/RasPiAPRS/commit/70628fae0c9096a457762ced7567c3158a619066) chore(config): add millisecond precision to log timestamps *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T06:05:05+08:00*
+- [4e5eae4](https://github.com/HafiziRuslan/RasPiAPRS/commit/4e5eae4e0ab8e1b6e781c1515bf005365c8ebb28) chore(dev): temporarily disable data sending *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T05:54:36+08:00*
+- [dd78d9d](https://github.com/HafiziRuslan/RasPiAPRS/commit/dd78d9d913f31638374f8c6911ef61e8e14c3cb3) build(cliff): enhance changelog template output *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-27T05:09:42+08:00*
+- [1077229](https://github.com/HafiziRuslan/RasPiAPRS/commit/1077229d79c2c28975264cfa4312fa8185648a94) chore(scripts): add autostash to git pull *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-26T16:32:10+08:00*
+- [f458dd8](https://github.com/HafiziRuslan/RasPiAPRS/commit/f458dd85264de702d31175900fac9f78ad5415ba) build(deps): bump psutil and update sbom *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-25T23:26:13+08:00*
+- [9437440](https://github.com/HafiziRuslan/RasPiAPRS/commit/94374405b5a63e464c58e96edca50b950fd3c57f) chore(license): switch project license to gpl-3.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-25T10:11:38+08:00*
+- [f7afdac](https://github.com/HafiziRuslan/RasPiAPRS/commit/f7afdac0437a64fb2fb6062a321b8257c798bcc4) chore(scripts): remove mmcli location retrieval script *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-25T06:42:38+08:00*
+- [60a9f42](https://github.com/HafiziRuslan/RasPiAPRS/commit/60a9f42d9601336714a4e60a9769e521e70237f9) ci(workflow): update auto-merge trigger logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-24T15:42:37+08:00*
+- [e8d075b](https://github.com/HafiziRuslan/RasPiAPRS/commit/e8d075b247dd1c8d0c1e4fa5ca7a132e747442b2) build(deps): bump psutil from 7.1.3 to 7.2.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-24T15:37:30+08:00*
+- [3a104eb](https://github.com/HafiziRuslan/RasPiAPRS/commit/3a104eb01428d601a082765a9d8c9bb7ac034cf9) chore(cliff): adjust changelog template whitespace *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-24T15:23:51+08:00*
+- [58e559f](https://github.com/HafiziRuslan/RasPiAPRS/commit/58e559f696c5b8fe86ccb41a6b10142297dd6199) build(deps): update humanize and add lock files *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-24T03:02:03+08:00*
+- [7df6495](https://github.com/HafiziRuslan/RasPiAPRS/commit/7df6495be779b2faca1145464cd6ff9686706936) chore(cliff): update changelog template layout *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-23T07:02:04+08:00*
+- [2fe2d84](https://github.com/HafiziRuslan/RasPiAPRS/commit/2fe2d849eca3ab4f0fb9beed797b391c7eee2449) chore(release): bump version to v0.1-beta.4 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-23T06:46:58+08:00*
 - [9c45e60](https://github.com/HafiziRuslan/RasPiAPRS/commit/9c45e605a7008daa01f42b002915780fe04b398c) chore(cliff): improve changelog layout and commit filtering *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-22T19:26:39+08:00*
 - [94dc7fb](https://github.com/HafiziRuslan/RasPiAPRS/commit/94dc7fbbcdf30ef8c118ec87f16a7ad0268eff8d) chore(version): bump raspiaprs to 0.1b3 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-22T18:56:19+08:00*
 - [1a53f2e](https://github.com/HafiziRuslan/RasPiAPRS/commit/1a53f2e08369d2cf97f807419f7753e0c6fd7e74) chore(scripts): disable automatic git pull *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-12-22T03:48:31+08:00*
@@ -1100,10 +1089,10 @@ All notable changes to this project will be documented in this file.
 - [d940085](https://github.com/HafiziRuslan/RasPiAPRS/commit/d94008562c2c0c0e959bb2a2c352a5eba24ad3aa) Remove aprstar.py file: eliminate unused code and dependencies *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-08-14T12:23:17+08:00*
 - [973bb0a](https://github.com/HafiziRuslan/RasPiAPRS/commit/973bb0ad852e455b57d15e537120f73fa9b18cda) The symbol and symbol table can be speicified in the config *by [@0x9900](https://github.com/0x9900) on 2020-05-24T00:57:16+08:00*
 
-### ◀️ Revert in beta
+### ◀️ Revert in beta4
 
 - [7256ea7](https://github.com/HafiziRuslan/RasPiAPRS/commit/7256ea7477412d40292fa3c7416c801a1f0e3e21) revert to ec381c1 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2025-11-20T12:39:09+08:00*
 
 ---
 
-generated using git-cliff on 2026-03-12T03:02:36.296821501+08:00
+generated using git-cliff on 2026-03-12T03:30:17.551726664+08:00
