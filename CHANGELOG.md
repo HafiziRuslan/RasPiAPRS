@@ -2,41 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [beta8] - (2026-03-12T03:52:11+08:00)
+
+- 1 commit(s) contributed to the release.
+
+### 🐛 Bug Fixes in beta8
+
+- [a44555a](https://github.com/HafiziRuslan/RasPiAPRS/commit/a44555a7096a2e669d5cd8b4849e6bb30823ad9c) fix(release): update version extraction in release workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:52:11+08:00*
+
+---
+
 ## [beta] - (2026-03-12T03:48:57+08:00)
 
-- 9 commit(s) contributed to the release.
+- 85 commit(s) contributed to the release.
+- 15 day(s) passed between the first and last commit.
+- 15 day(s) passed between releases.
 
 ### 🚀 Features in beta
 
 - [394bfac](https://github.com/HafiziRuslan/RasPiAPRS/commit/394bfac84ddf37acc66967b33c030655f4011919) feat(ci): enhance version extraction in release workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:48:57+08:00*
 - [da24878](https://github.com/HafiziRuslan/RasPiAPRS/commit/da2487890c7400c15f12c2b51e6b910346c6508b) feat(release): make version and tag dynamic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:15:16+08:00*
-
-### 🐛 Bug Fixes in beta
-
-- [6aa3485](https://github.com/HafiziRuslan/RasPiAPRS/commit/6aa3485ca30d667cb9e671ab9221a0fcd32ec870) ci(release): update release tag generation logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:28:34+08:00*
-
-### 🚜 Refactor in beta
-
-- [dcb831d](https://github.com/HafiziRuslan/RasPiAPRS/commit/dcb831d69c2b5b3ed44e04a221dfbb3c0faaa56a) refactor(ci): split release workflow into version and build jobs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:37:10+08:00*
-
-### ⚙️ Miscellaneous Tasks in beta
-
-- [9fa3d9e](https://github.com/HafiziRuslan/RasPiAPRS/commit/9fa3d9ea1fe57c16ab73601c947916ae98381654) chore(ci): remove paths-ignore for .github/ changes *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:37:32+08:00*
-- [3a176d4](https://github.com/HafiziRuslan/RasPiAPRS/commit/3a176d49314c51630c7492cc3f35e746912c2455) chore(release): bump project version to 0.1b8 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:29:21+08:00*
-- [a81f195](https://github.com/HafiziRuslan/RasPiAPRS/commit/a81f195055dd16f7a8137a7eb1ee25c12bc728fa) build(ci): improve version extraction from pyproject.toml *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:25:04+08:00*
-- [6c9c23b](https://github.com/HafiziRuslan/RasPiAPRS/commit/6c9c23bce490a970bad128af3c131234537f2368) chore(gitignore): unignore .github directory *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:24:38+08:00*
-- [963f446](https://github.com/HafiziRuslan/RasPiAPRS/commit/963f4460e49fd431a3f91c12a249b592c2531a4e) chore(release): bump version to 0.1.1 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:20:50+08:00*
-
----
-
-## [beta8] - (2026-03-12T03:02:04+08:00)
-
-- 76 commit(s) contributed to the release.
-- 15 day(s) passed between the first and last commit.
-- 15 day(s) passed between releases.
-
-### 🚀 Features in beta8
-
 - [155bb81](https://github.com/HafiziRuslan/RasPiAPRS/commit/155bb8119d0144cfe82666e7518e07de5754a796) feat(core): add apt package verification helpers and uv installation guard; remove duplicate legacy blocks and replace venv cleanup with uv venv --clear *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T03:12:48+08:00*
 - [279746b](https://github.com/HafiziRuslan/RasPiAPRS/commit/279746b0eca6237a3d2512c37c8e71b10a9b019f) feat(main): add APRSHAMFINITY_ENABLE support and extend additional sender activation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T02:25:21+08:00*
 - [285f2ba](https://github.com/HafiziRuslan/RasPiAPRS/commit/285f2bac93e5599da73d6c57bd8aefa7523a4e7b) feat(aprs): add APRSHamfinity support and update env.sample docs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T01:46:00+08:00*
@@ -55,8 +40,9 @@ All notable changes to this project will be documented in this file.
 - [17a7f63](https://github.com/HafiziRuslan/RasPiAPRS/commit/17a7f6371f768849d5257c53e41c96763669aa09) feat(main): improve telegram logger messaging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T04:31:27+08:00*
 - [cd983b1](https://github.com/HafiziRuslan/RasPiAPRS/commit/cd983b1a81b219bcb917bb6cf6e658be7a75b88f) feat(release): update version to 0.1b8 across pipelines and artifacts *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T02:11:45+08:00*
 
-### 🐛 Bug Fixes in beta8
+### 🐛 Bug Fixes in beta
 
+- [6aa3485](https://github.com/HafiziRuslan/RasPiAPRS/commit/6aa3485ca30d667cb9e671ab9221a0fcd32ec870) ci(release): update release tag generation logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:28:34+08:00*
 - [b6c861b](https://github.com/HafiziRuslan/RasPiAPRS/commit/b6c861b74d2de440c886ae476f4afded2a5f087e) docs(env): fix APRS MySunday comment to APRSMYSunday to align with APRSMYSUNDAY_ENABLE in .env.sample *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T01:50:42+08:00*
 - [e8c1d7a](https://github.com/HafiziRuslan/RasPiAPRS/commit/e8c1d7a04942f319c3c0d24494d679ea54085432) fix(main): correct string join input in _fetch to avoid set literals *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T09:14:23+08:00*
 - [9a147da](https://github.com/HafiziRuslan/RasPiAPRS/commit/9a147da3e3a847d2e85fbfcdd4a879f0c70ba5f2) refactor(main): format TX using humanize.metric and include offset, adjust output layout *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T08:20:46+08:00*
@@ -81,7 +67,7 @@ All notable changes to this project will be documented in this file.
 - [df59769](https://github.com/HafiziRuslan/RasPiAPRS/commit/df59769be9cac11fd9d6be704802f973a40a2372) fix(main): update speed threshold to 1 for position updates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T04:07:05+08:00*
 - [22b167e](https://github.com/HafiziRuslan/RasPiAPRS/commit/22b167e11c9b62fcb62e13d521772cdf909a9276) fix(main): correct git sha retrieval for metadata *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T02:12:12+08:00*
 
-### 💼 Other in beta8
+### 💼 Other in beta
 
 - [3475509](https://github.com/HafiziRuslan/RasPiAPRS/commit/3475509ea1219978db50d53788fe292ecdc485a6) Correct GitHub username casing in FUNDING.yml *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T01:30:09+08:00*
 - [89f212a](https://github.com/HafiziRuslan/RasPiAPRS/commit/89f212a7b54c1f4ed0f84e3d3782a63d713d2bc5) Add funding usernames for GitHub, Ko-fi, and Buy Me a Coffee *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T01:28:12+08:00*
@@ -89,8 +75,9 @@ All notable changes to this project will be documented in this file.
 - [5e6e2c5](https://github.com/HafiziRuslan/RasPiAPRS/commit/5e6e2c54cf0d7e7af74e34be564a2745f62bee9a) Update issue templates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-01T01:48:12+08:00*
 - [5980142](https://github.com/HafiziRuslan/RasPiAPRS/commit/59801429616fdd59c579553658c64248e7ac01ca) update(certifi): bump version to 2026.2.25 across multiple files *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T21:27:49+08:00*
 
-### 🚜 Refactor in beta8
+### 🚜 Refactor in beta
 
+- [dcb831d](https://github.com/HafiziRuslan/RasPiAPRS/commit/dcb831d69c2b5b3ed44e04a221dfbb3c0faaa56a) refactor(ci): split release workflow into version and build jobs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:37:10+08:00*
 - [5e70c65](https://github.com/HafiziRuslan/RasPiAPRS/commit/5e70c655a8c68db858d5ae1503b4f3289c5f592a) refactor(sys_stats): improve MMDVMHost info formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T02:52:25+08:00*
 - [bf77e72](https://github.com/HafiziRuslan/RasPiAPRS/commit/bf77e7271e825c2c06adc031492420f2085adcba) refactor(main.sh): simplify script structure and improve organization *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T07:08:48+08:00*
 - [ae77b99](https://github.com/HafiziRuslan/RasPiAPRS/commit/ae77b998812a3b240c7345c5384fcd421d3c936d) refactor(main.sh): remove .env file existence check *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T06:53:39+08:00*
@@ -111,7 +98,7 @@ All notable changes to this project will be documented in this file.
 - [eef34d7](https://github.com/HafiziRuslan/RasPiAPRS/commit/eef34d7a36fec0518f000bb4d719d4ca285db6ec) refactor(status): simplify gps status reporting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T20:12:28+08:00*
 - [a90e895](https://github.com/HafiziRuslan/RasPiAPRS/commit/a90e8954788f7e111abbd9a502030c6173a0e4ed) refactor(main): simplify history handling and caching *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T06:38:50+08:00*
 
-### 📚 Documentation in beta8
+### 📚 Documentation in beta
 
 - [8bd168f](https://github.com/HafiziRuslan/RasPiAPRS/commit/8bd168f6cebd90b022ba5e6ad38d8c603527886e) docs: update README with mirrors and donation link *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T01:48:29+08:00*
 - [5fb2327](https://github.com/HafiziRuslan/RasPiAPRS/commit/5fb2327ebd9a47fe5d37faa2e513641ff09b2bdc) docs: update mirror repositories terminology *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T22:28:18+08:00*
@@ -119,13 +106,18 @@ All notable changes to this project will be documented in this file.
 - [d559450](https://github.com/HafiziRuslan/RasPiAPRS/commit/d559450f35015c7b23378f5e41b5ebca74229e32) docs: add contributing guidelines to project *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-01T02:12:01+08:00*
 - [fe32d40](https://github.com/HafiziRuslan/RasPiAPRS/commit/fe32d40d4a06985148952bde45505f7cdecf0eae) docs: add pull request template with guidelines and checklist *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-01T02:07:25+08:00*
 
-### ⚡ Performance in beta8
+### ⚡ Performance in beta
 
 - [db87055](https://github.com/HafiziRuslan/RasPiAPRS/commit/db87055d8bca103dead859181c285d39900d2cac) perf(cache): extend ttl for os_info and mmdvm_info from 300 to 3600 seconds *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-09T07:34:23+08:00*
 - [dabe631](https://github.com/HafiziRuslan/RasPiAPRS/commit/dabe6315ae46108881020e60c6a87fe652ca0113) perf(process_loop): extend sleep to 1s after sending status to reduce CPU usage *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T02:04:20+08:00*
 
-### ⚙️ Miscellaneous Tasks in beta8
+### ⚙️ Miscellaneous Tasks in beta
 
+- [9fa3d9e](https://github.com/HafiziRuslan/RasPiAPRS/commit/9fa3d9ea1fe57c16ab73601c947916ae98381654) chore(ci): remove paths-ignore for .github/ changes *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:37:32+08:00*
+- [3a176d4](https://github.com/HafiziRuslan/RasPiAPRS/commit/3a176d49314c51630c7492cc3f35e746912c2455) chore(release): bump project version to 0.1b8 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:29:21+08:00*
+- [a81f195](https://github.com/HafiziRuslan/RasPiAPRS/commit/a81f195055dd16f7a8137a7eb1ee25c12bc728fa) build(ci): improve version extraction from pyproject.toml *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:25:04+08:00*
+- [6c9c23b](https://github.com/HafiziRuslan/RasPiAPRS/commit/6c9c23bce490a970bad128af3c131234537f2368) chore(gitignore): unignore .github directory *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:24:38+08:00*
+- [963f446](https://github.com/HafiziRuslan/RasPiAPRS/commit/963f4460e49fd431a3f91c12a249b592c2531a4e) chore(release): bump version to 0.1.1 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:20:50+08:00*
 - [3e72935](https://github.com/HafiziRuslan/RasPiAPRS/commit/3e72935402eba781977f63c82edaa1e34e2d97e4) ci(release-workflow): ignore .github path for push events *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:02:04+08:00*
 - [01b3452](https://github.com/HafiziRuslan/RasPiAPRS/commit/01b3452a5bb632a6921d67c95690780113bde242) chore(gitignore): add rule to ignore hidden files at root *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T02:55:26+08:00*
 - [9537de9](https://github.com/HafiziRuslan/RasPiAPRS/commit/9537de981e16ad9a44a31bea14a2cb15b6d2c271) chore: update GitHub repository URLs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-07T21:43:22+08:00*
@@ -1101,4 +1093,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-12T03:49:52.177496407+08:00
+generated using git-cliff on 2026-03-12T03:53:17.628830442+08:00
