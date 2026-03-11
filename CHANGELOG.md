@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta] - (2026-03-12T03:29:21+08:00)
+## [beta] - (2026-03-12T03:37:32+08:00)
 
-- 6 commit(s) contributed to the release.
+- 8 commit(s) contributed to the release.
 
 ### 🚀 Features in beta
 
@@ -14,8 +14,13 @@ All notable changes to this project will be documented in this file.
 
 - [6aa3485](https://github.com/HafiziRuslan/RasPiAPRS/commit/6aa3485ca30d667cb9e671ab9221a0fcd32ec870) ci(release): update release tag generation logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:28:34+08:00*
 
+### 🚜 Refactor in beta
+
+- [dcb831d](https://github.com/HafiziRuslan/RasPiAPRS/commit/dcb831d69c2b5b3ed44e04a221dfbb3c0faaa56a) refactor(ci): split release workflow into version and build jobs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:37:10+08:00*
+
 ### ⚙️ Miscellaneous Tasks in beta
 
+- [9fa3d9e](https://github.com/HafiziRuslan/RasPiAPRS/commit/9fa3d9ea1fe57c16ab73601c947916ae98381654) chore(ci): remove paths-ignore for .github/ changes *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:37:32+08:00*
 - [3a176d4](https://github.com/HafiziRuslan/RasPiAPRS/commit/3a176d49314c51630c7492cc3f35e746912c2455) chore(release): bump project version to 0.1b8 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:29:21+08:00*
 - [a81f195](https://github.com/HafiziRuslan/RasPiAPRS/commit/a81f195055dd16f7a8137a7eb1ee25c12bc728fa) build(ci): improve version extraction from pyproject.toml *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:25:04+08:00*
 - [6c9c23b](https://github.com/HafiziRuslan/RasPiAPRS/commit/6c9c23bce490a970bad128af3c131234537f2368) chore(gitignore): unignore .github directory *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:24:38+08:00*
@@ -1095,4 +1100,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-12T03:30:17.551726664+08:00
+generated using git-cliff on 2026-03-12T03:38:22.577050272+08:00
