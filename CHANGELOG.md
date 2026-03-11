@@ -2,12 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta] - (2026-03-12T03:37:32+08:00)
+## [beta] - (2026-03-12T03:48:57+08:00)
 
-- 8 commit(s) contributed to the release.
+- 9 commit(s) contributed to the release.
 
 ### 🚀 Features in beta
 
+- [394bfac](https://github.com/HafiziRuslan/RasPiAPRS/commit/394bfac84ddf37acc66967b33c030655f4011919) feat(ci): enhance version extraction in release workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:48:57+08:00*
 - [da24878](https://github.com/HafiziRuslan/RasPiAPRS/commit/da2487890c7400c15f12c2b51e6b910346c6508b) feat(release): make version and tag dynamic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:15:16+08:00*
 
 ### 🐛 Bug Fixes in beta
@@ -1100,4 +1101,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-12T03:38:22.577050272+08:00
+generated using git-cliff on 2026-03-12T03:49:52.177496407+08:00
