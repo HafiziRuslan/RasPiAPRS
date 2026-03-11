@@ -2,34 +2,32 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.1b8] - (2026-03-12T04:34:11+08:00)
+## [beta8] - (2026-03-12T05:01:46+08:00)
 
-- 6 commit(s) contributed to the release.
+- 11 commit(s) contributed to the release.
 
-### 🚀 Features in 0.1b8
+### 🚀 Features in beta8
 
 - [320e2ea](https://github.com/HafiziRuslan/RasPiAPRS/commit/320e2ea3480b9d32975d9667bb4e161953f80dff) feat(ci): implement dynamic tagging based on PEP 440 specifiers *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:11:05+08:00*
 
-### 🚜 Refactor in 0.1b8
+### 🐛 Bug Fixes in beta8
 
+- [eaf2ee0](https://github.com/HafiziRuslan/RasPiAPRS/commit/eaf2ee074c3822191584701a0586bc29976275a5) fix(release): update version parsing to support pre-release suffixes *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:47:50+08:00*
+- [7f49aef](https://github.com/HafiziRuslan/RasPiAPRS/commit/7f49aefa9516cfd5d47052385dd6080e7cd869b6) fix(ci): tighten version parsing regex to disallow dots in pre-release strings *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:44:45+08:00*
+- [5214058](https://github.com/HafiziRuslan/RasPiAPRS/commit/5214058a99772842abdb50b85e24e9557265a93b) fix(release): update version parsing to support two-part version numbers *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:43:34+08:00*
+- [a44555a](https://github.com/HafiziRuslan/RasPiAPRS/commit/a44555a7096a2e669d5cd8b4849e6bb30823ad9c) fix(release): update version extraction in release workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:52:11+08:00*
+
+### 🚜 Refactor in beta8
+
+- [e41fb92](https://github.com/HafiziRuslan/RasPiAPRS/commit/e41fb92a90d7441d4b4969cdf37a532320e5997d) refactor(message): improve scheduled message sending concurrency *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T05:01:46+08:00*
 - [c981c81](https://github.com/HafiziRuslan/RasPiAPRS/commit/c981c8123850befebb5492d53cd39d963ef6fda5) refactor(core): improve app metadata generation and update default version *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:34:11+08:00*
 - [a17b7ea](https://github.com/HafiziRuslan/RasPiAPRS/commit/a17b7ea1f88660819d040aa0ff2b9f997cfa1eeb) refactor(release): simplify version parsing logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:18:25+08:00*
 - [e08f40c](https://github.com/HafiziRuslan/RasPiAPRS/commit/e08f40ce1f210ff7a7f80a6141ee988b9fa0592d) refactor(release): extract project name from pyproject.toml for release filename and logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:04:34+08:00*
 
-### ⚙️ Miscellaneous Tasks in 0.1b8
+### ⚙️ Miscellaneous Tasks in beta8
 
 - [b34e9d5](https://github.com/HafiziRuslan/RasPiAPRS/commit/b34e9d519df9b28399c3dc3a384fd4ea919b4779) chore(ci): add read permission to release workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:23:58+08:00*
 - [b9cb294](https://github.com/HafiziRuslan/RasPiAPRS/commit/b9cb294d368c09ce6531248ea930dc9bf939fa71) chore: enable paths-ignore for .github directory in release workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:55:57+08:00*
-
----
-
-## [beta8] - (2026-03-12T03:52:11+08:00)
-
-- 1 commit(s) contributed to the release.
-
-### 🐛 Bug Fixes in beta8
-
-- [a44555a](https://github.com/HafiziRuslan/RasPiAPRS/commit/a44555a7096a2e669d5cd8b4849e6bb30823ad9c) fix(release): update version extraction in release workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:52:11+08:00*
 
 ---
 
@@ -1114,4 +1112,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-12T04:35:10.712645223+08:00
+generated using git-cliff on 2026-03-12T05:02:31.423032325+08:00
