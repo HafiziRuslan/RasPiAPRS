@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-12T01:30:09+08:00)
+## [beta8] - (2026-03-12T01:48:29+08:00)
 
-- 72 commit(s) contributed to the release.
+- 73 commit(s) contributed to the release.
 - 15 day(s) passed between the first and last commit.
 - 15 day(s) passed between releases.
 
@@ -85,6 +85,7 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation in beta8
 
+- [8bd168f](https://github.com/HafiziRuslan/RasPiAPRS/commit/8bd168f6cebd90b022ba5e6ad38d8c603527886e) docs: update README with mirrors and donation link *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T01:48:29+08:00*
 - [5fb2327](https://github.com/HafiziRuslan/RasPiAPRS/commit/5fb2327ebd9a47fe5d37faa2e513641ff09b2bdc) docs: update mirror repositories terminology *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T22:28:18+08:00*
 - [799b2ce](https://github.com/HafiziRuslan/RasPiAPRS/commit/799b2cef3c49f51558f8d9b35a896a3b801ce1fb) docs: add Code of Conduct guidelines *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-01T02:12:07+08:00*
 - [d559450](https://github.com/HafiziRuslan/RasPiAPRS/commit/d559450f35015c7b23378f5e41b5ebca74229e32) docs: add contributing guidelines to project *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-01T02:12:01+08:00*
@@ -1102,4 +1103,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-12T01:30:35.915757618+08:00
+generated using git-cliff on 2026-03-12T01:49:41.984058350+08:00
