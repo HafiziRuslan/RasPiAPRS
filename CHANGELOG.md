@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-12T01:48:29+08:00)
+## [beta8] - (2026-03-12T02:52:25+08:00)
 
-- 73 commit(s) contributed to the release.
+- 74 commit(s) contributed to the release.
 - 15 day(s) passed between the first and last commit.
 - 15 day(s) passed between releases.
 
@@ -64,6 +64,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [5e70c65](https://github.com/HafiziRuslan/RasPiAPRS/commit/5e70c655a8c68db858d5ae1503b4f3289c5f592a) refactor(sys_stats): improve MMDVMHost info formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T02:52:25+08:00*
 - [bf77e72](https://github.com/HafiziRuslan/RasPiAPRS/commit/bf77e7271e825c2c06adc031492420f2085adcba) refactor(main.sh): simplify script structure and improve organization *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T07:08:48+08:00*
 - [ae77b99](https://github.com/HafiziRuslan/RasPiAPRS/commit/ae77b998812a3b240c7345c5384fcd421d3c936d) refactor(main.sh): remove .env file existence check *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T06:53:39+08:00*
 - [7825676](https://github.com/HafiziRuslan/RasPiAPRS/commit/782567601bc6228b8a0613436978bbaba9e27a1e) refactor(main): overhaul startup script for robustness, logging, and dependency management *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-11T03:40:52+08:00*
@@ -1103,4 +1104,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-12T01:49:41.984058350+08:00
+generated using git-cliff on 2026-03-12T02:53:09.712853740+08:00
