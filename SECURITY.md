@@ -4,7 +4,7 @@
 
 We actively support the following versions:
 
-- Version 0.1-beta.x (Latest)
+- Version 0.1.x (Latest)
 
 ## Reporting a Vulnerability
 
