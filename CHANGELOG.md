@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-12T02:52:25+08:00)
+## [beta8] - (2026-03-12T03:02:04+08:00)
 
-- 74 commit(s) contributed to the release.
+- 76 commit(s) contributed to the release.
 - 15 day(s) passed between the first and last commit.
 - 15 day(s) passed between releases.
 
@@ -99,6 +99,8 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta8
 
+- [3e72935](https://github.com/HafiziRuslan/RasPiAPRS/commit/3e72935402eba781977f63c82edaa1e34e2d97e4) ci(release-workflow): ignore .github path for push events *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:02:04+08:00*
+- [01b3452](https://github.com/HafiziRuslan/RasPiAPRS/commit/01b3452a5bb632a6921d67c95690780113bde242) chore(gitignore): add rule to ignore hidden files at root *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T02:55:26+08:00*
 - [9537de9](https://github.com/HafiziRuslan/RasPiAPRS/commit/9537de981e16ad9a44a31bea14a2cb15b6d2c271) chore: update GitHub repository URLs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-07T21:43:22+08:00*
 - [0dd21a0](https://github.com/HafiziRuslan/RasPiAPRS/commit/0dd21a03fcb5d1de0e16c92d7a486937e561b24b) chore(sbom): refresh SBOM metadata and bump uv to 0.10.7 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-28T01:36:30+08:00*
 - [a794021](https://github.com/HafiziRuslan/RasPiAPRS/commit/a7940211f9e63cb57092a0ea68ab4e39755ddc66) ci(changelog): include short SHA in changelog update commit message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-26T00:02:34+08:00*
@@ -1104,4 +1106,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-12T02:53:09.712853740+08:00
+generated using git-cliff on 2026-03-12T03:02:36.296821501+08:00
