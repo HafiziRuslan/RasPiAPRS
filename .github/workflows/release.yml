@@ -8,6 +8,8 @@ on:
 jobs:
   version:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       name: ${{ steps.vars.outputs.name }}
       version: ${{ steps.vars.outputs.version }}
