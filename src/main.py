@@ -965,9 +965,14 @@ class SystemStats(object):
 			shift = f'({"+" if offset > 0 else ""}{humanize.metric(offset, "Hz", precision=2)})' if offset != 0 else None
 			if dmr_enabled:
 				cc = f'C{color_code}'
-				s1 = 'S1' if slot1 == 1 else None
-				s2 = 'S2' if slot2 == 1 else None
-			return f'{tx}{",".join([shift, cc, s1, s2])}'
+				ts = ''
+				if slot1 == 1 and slot2 == 1:
+					ts = 'S1S2'
+				elif slot1 == 1:
+					ts = 'S1'
+				elif slot2 == 1:
+					ts = 'S2'
+			return f'{", ".join([tx, shift, cc, ts])}'
 
 		return self._get_cached('mmdvm_info', _fetch, ttl=3600, default='')
 
