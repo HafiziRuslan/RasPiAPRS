@@ -24,8 +24,7 @@ jobs:
         run: |
           version=$(awk -F'"' '/^version\s*=\s*"/ {print $2}' pyproject.toml)
           echo "version=$version" >> "$GITHUB_OUTPUT"
-          tag="${version#0.}"
-          tag="${tag//./}"
+          tag="beta${version#0.1b}"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
 
       - name: Archive Release
