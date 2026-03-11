@@ -10,17 +10,29 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      tag: ${{ steps.vars.outputs.tag }}
+      version: ${{ steps.vars.outputs.version }}
     steps:
       - name: Checkout
         uses: actions/checkout@main
         with:
           fetch-depth: 0
 
+      - name: read version from pyproject
+        id: vars
+        run: |
+          version=$(grep -Po '(?<=^version\s*=\s*")[^"]+' pyproject.toml)
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          tag="${version#0.}"
+          tag="${tag//./}"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
       - name: Archive Release
         uses: thedoctor0/zip-release@main
         with:
           type: 'zip'
-          filename: 'raspiaprs-0.1b8.zip'
+          filename: "raspiaprs-${{ steps.vars.outputs.version }}.zip"
           exclusions: '*.git* /.git* LICENSE /tests* *lock* sbom* *.md /misc*'
           recursive_exclusions: '*.md'
 
@@ -28,16 +40,17 @@ jobs:
         uses: ncipollo/release-action@main
         with:
           allowUpdates: true
-          artifacts: 'raspiaprs-0.1b8.zip'
+          artifacts: "raspiaprs-${{ steps.vars.outputs.version }}.zip"
           body: "${{ github.event.head_commit.message }}\n\nby: ${{ github.event.head_commit.author.username }} on ${{ github.event.head_commit.timestamp }}"
           commit: ${{ github.event.head_commit.id }}
-          name: 0.1b8
+          name: ${{ steps.vars.outputs.version }}
           prerelease: true
           replacesArtifacts: true
-          tag: beta8
+          tag: ${{ steps.vars.outputs.tag }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -45,6 +58,6 @@ jobs:
       - name: Update Tag
         uses: richardsimko/update-tag@latest
         with:
-          tag_name: beta8
+          tag_name: ${{ needs.build.outputs.tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
