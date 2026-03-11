@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-11T07:08:48+08:00)
+## [beta8] - (2026-03-12T01:28:12+08:00)
 
-- 70 commit(s) contributed to the release.
-- 14 day(s) passed between the first and last commit.
-- 14 day(s) passed between releases.
+- 71 commit(s) contributed to the release.
+- 15 day(s) passed between the first and last commit.
+- 15 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
@@ -56,6 +56,7 @@ All notable changes to this project will be documented in this file.
 
 ### 💼 Other in beta8
 
+- [89f212a](https://github.com/HafiziRuslan/RasPiAPRS/commit/89f212a7b54c1f4ed0f84e3d3782a63d713d2bc5) Add funding usernames for GitHub, Ko-fi, and Buy Me a Coffee *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T01:28:12+08:00*
 - [2ea3f6c](https://github.com/HafiziRuslan/RasPiAPRS/commit/2ea3f6c95681cf29b496004e74960d79982c15a4) Add cron schedule for cache clearing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-06T01:09:41+08:00*
 - [5e6e2c5](https://github.com/HafiziRuslan/RasPiAPRS/commit/5e6e2c54cf0d7e7af74e34be564a2745f62bee9a) Update issue templates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-01T01:48:12+08:00*
 - [5980142](https://github.com/HafiziRuslan/RasPiAPRS/commit/59801429616fdd59c579553658c64248e7ac01ca) update(certifi): bump version to 2026.2.25 across multiple files *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-02-25T21:27:49+08:00*
@@ -1100,4 +1101,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-11T07:09:19.525743943+08:00
+generated using git-cliff on 2026-03-12T01:28:46.615667335+08:00
