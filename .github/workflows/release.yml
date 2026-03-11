@@ -2,8 +2,8 @@ name: 'Release'
 
 on:
   push:
-    paths-ignore:
-      - '.github/**'          # don't run when only files under .github/ change
+    # paths-ignore:
+    #   - '.github/**'          # don't run when only files under .github/ change
 
 jobs:
   version:
