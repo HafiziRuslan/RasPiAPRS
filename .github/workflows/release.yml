@@ -37,7 +37,7 @@ jobs:
           fi
 
           # Parse version for dynamic tag according to PEP 440 specifiers
-          if [[ $version =~ ^([0-9]+\.[0-9]+)([\.a-zA-Z0-9]*)$ ]]; then
+          if [[ $version =~ ^([0-9]+\.[0-9]+)([a-zA-Z0-9]*)$ ]]; then
             base=${BASH_REMATCH[1]}
             pre=${BASH_REMATCH[2]}
             # Normalize and expand pre-release spelling
