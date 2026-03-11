@@ -23,14 +23,14 @@ jobs:
           echo "=== Lines matching 'version' ==="
           grep -i version pyproject.toml
 
-          version=$(awk -F'"' '/^version\s*=\s*"/ {print $2}' pyproject.toml)
+          version=$(awk -F"'" "/^version\s*=\s*'/ {print \$2}" pyproject.toml)
           echo "Extracted version: '$version'"
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
           if [ -z "$version" ]; then
-            echo "WARNING: version is empty, trying alternative pattern..."
-            version=$(grep -oP '(?<=version\s*=\s*")[^"]+' pyproject.toml | head -1)
-            echo "Alternative version: '$version'"
+            echo "WARNING: version is empty, trying grep fallback..."
+            version=$(grep -oP "(?<=version\s*=\s*')[^']+" pyproject.toml | head -1)
+            echo "Fallback version: '$version'"
             echo "version=$version" >> "$GITHUB_OUTPUT"
           fi
 
