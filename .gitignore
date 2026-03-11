@@ -1,4 +1,5 @@
 /sample
+/.*
 
 # Created by https://www.toptal.com/developers/gitignore/api/dotenv,linux,python,pythonvanilla,venv,virtualenv,visualstudiocode,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=dotenv,linux,python,pythonvanilla,venv,virtualenv,visualstudiocode,windows
