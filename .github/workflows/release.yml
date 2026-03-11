@@ -22,7 +22,7 @@ jobs:
       - name: read version from pyproject
         id: vars
         run: |
-          version=$(grep -Po '(?<=^version\s*=\s*")[^"]+' pyproject.toml)
+          version=$(awk -F'"' '/^version\s*=\s*"/ {print $2}' pyproject.toml)
           echo "version=$version" >> "$GITHUB_OUTPUT"
           tag="${version#0.}"
           tag="${tag//./}"
