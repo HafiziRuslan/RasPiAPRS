@@ -18,8 +18,22 @@ jobs:
       - name: read version from pyproject
         id: vars
         run: |
+          echo "=== Full pyproject.toml ==="
+          cat pyproject.toml
+          echo "=== Lines matching 'version' ==="
+          grep -i version pyproject.toml
+
           version=$(awk -F'"' '/^version\s*=\s*"/ {print $2}' pyproject.toml)
+          echo "Extracted version: '$version'"
           echo "version=$version" >> "$GITHUB_OUTPUT"
+
+          if [ -z "$version" ]; then
+            echo "WARNING: version is empty, trying alternative pattern..."
+            version=$(grep -oP '(?<=version\s*=\s*")[^"]+' pyproject.toml | head -1)
+            echo "Alternative version: '$version'"
+            echo "version=$version" >> "$GITHUB_OUTPUT"
+          fi
+
           tag="beta${version#0.1b}"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
 
