@@ -9,8 +9,9 @@ jobs:
   version:
     runs-on: ubuntu-latest
     outputs:
-      tag: ${{ steps.vars.outputs.tag }}
+      name: ${{ steps.vars.outputs.name }}
       version: ${{ steps.vars.outputs.version }}
+      tag: ${{ steps.vars.outputs.tag }}
     steps:
       - name: Checkout
         uses: actions/checkout@main
@@ -18,10 +19,9 @@ jobs:
       - name: read version from pyproject
         id: vars
         run: |
-          echo "=== Full pyproject.toml ==="
-          cat pyproject.toml
-          echo "=== Lines matching 'version' ==="
-          grep -i version pyproject.toml
+          name=$(awk -F"'" "/^name\s*=\s*'/ {print \$2}" pyproject.toml)
+          echo "Extracted name: '$name'"
+          echo "name=$name" >> "$GITHUB_OUTPUT"
 
           version=$(awk -F"'" "/^version\s*=\s*'/ {print \$2}" pyproject.toml)
           echo "Extracted version: '$version'"
@@ -39,6 +39,7 @@ jobs:
 
       - name: Log version info
         run: |
+          echo "Name: ${{ steps.vars.outputs.name }}"
           echo "Version: ${{ steps.vars.outputs.version }}"
           echo "Tag: ${{ steps.vars.outputs.tag }}"
 
@@ -57,7 +58,7 @@ jobs:
         uses: thedoctor0/zip-release@main
         with:
           type: 'zip'
-          filename: "raspiaprs-${{ needs.version.outputs.version }}.zip"
+          filename: "${{ needs.version.outputs.name }}-${{ needs.version.outputs.version }}.zip"
           exclusions: '*.git* /.git* LICENSE /tests* *lock* sbom* *.md /misc*'
           recursive_exclusions: '*.md'
 
@@ -65,7 +66,7 @@ jobs:
         uses: ncipollo/release-action@main
         with:
           allowUpdates: true
-          artifacts: "raspiaprs-${{ needs.version.outputs.version }}.zip"
+          artifacts: "${{ needs.version.outputs.name }}-${{ needs.version.outputs.version }}.zip"
           body: "${{ github.event.head_commit.message }}\n\nby: ${{ github.event.head_commit.author.username }} on ${{ github.event.head_commit.timestamp }}"
           commit: ${{ github.event.head_commit.id }}
           name: ${{ needs.version.outputs.version }}
