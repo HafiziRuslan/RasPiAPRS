@@ -34,7 +34,48 @@ jobs:
             echo "version=$version" >> "$GITHUB_OUTPUT"
           fi
 
-          tag="beta${version#0.1b}"
+          # Parse version for dynamic tag according to PEP 440 specifiers
+          if [[ $version =~ ^([0-9]+\.[0-9]+\.[0-9]+)(.*)$ ]]; then
+            base=${BASH_REMATCH[1]}
+            suffix=${BASH_REMATCH[2]}
+            if [[ -z "$suffix" ]]; then
+              tag="v$version"
+            elif [[ $suffix =~ ^\.post([0-9]*)$ ]]; then
+              num=${BASH_REMATCH[1]:-1}
+              tag="post$num"
+            elif [[ $suffix =~ ^\.dev([0-9]*)$ ]]; then
+              num=${BASH_REMATCH[1]:-1}
+              tag="dev$num"
+            elif [[ $suffix =~ ^-([a-zA-Z]+)([0-9]*)$ ]]; then
+              pre=${BASH_REMATCH[1]}
+              num=${BASH_REMATCH[2]:-1}
+              if [[ $pre == "a" ]]; then
+                tag="alpha$num"
+              elif [[ $pre == "b" ]]; then
+                tag="beta$num"
+              elif [[ $pre == "rc" ]]; then
+                tag="rc$num"
+              else
+                tag="$pre$num"
+              fi
+            elif [[ $suffix =~ ^([a-zA-Z]+)([0-9]*)$ ]]; then
+              pre=${BASH_REMATCH[1]}
+              num=${BASH_REMATCH[2]:-1}
+              if [[ $pre == "a" ]]; then
+                tag="alpha$num"
+              elif [[ $pre == "b" ]]; then
+                tag="beta$num"
+              elif [[ $pre == "rc" ]]; then
+                tag="rc$num"
+              else
+                tag="$pre$num"
+              fi
+            else
+              tag="v$version"
+            fi
+          else
+            tag="v$version"
+          fi
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
 
       - name: Log version info
