@@ -488,6 +488,14 @@ class GPSFix(NamedTuple):
 	cse: float
 
 
+class SATFix(NamedTuple):
+	"""Named structure for GPS position data."""
+
+	timestamp: dt.datetime
+	uSat: float
+	nSat: float
+
+
 class GPSHandler:
 	"""Class to handle GPS data retrieval and management."""
 
@@ -499,7 +507,7 @@ class GPSHandler:
 		# Initialize state with fallback data to avoid blocking I/O in the main loop
 		fallback_lat, fallback_lon, fallback_alt = self._get_fallback_location()
 		self._current_fix = GPSFix(dt.datetime.now(dt.timezone.utc), fallback_lat, fallback_lon, fallback_alt, 0.0, 0.0)
-		self._current_sat = (dt.datetime.now(dt.timezone.utc), 0, 0)
+		self._current_sat = SATFix(dt.datetime.now(dt.timezone.utc), 0, 0)
 		self.last_valid_fix = None
 
 	def _fetch_from_gpsd(self, filter_class):
@@ -564,7 +572,9 @@ class GPSHandler:
 			# Update Satellites
 			sat_res = await self._retrieve_data('SKY', 'satellite')
 			if sat_res:
-				self._current_sat = (sat_res.get('time', dt.datetime.now(dt.timezone.utc)), sat_res.get('uSat', 0), sat_res.get('nSat', 0))
+				self._current_sat = SATFix(
+					timestamp=sat_res.get('time', dt.datetime.now(dt.timezone.utc)), uSat=sat_res.get('uSat', 0), nSat=sat_res.get('nSat', 0)
+				)
 
 			await asyncio.sleep(1)
 
@@ -595,8 +605,19 @@ class GPSHandler:
 			return gps_data
 
 		# Return internal memory state - no I/O or network calls here
-		logging.debug(f'GPSD data: pos: {self._current_fix}, sat: {self._current_sat}')
-		return tuple(self._current_fix), self._current_sat
+		logging.debug(
+			'GPSD data: {{pos: {{time: %s, lat: %f, lon: %f, alt: %f, spd: %f, cse: %f}}, sat: {{time: %s, uSat: %f, nSat: %f}}}}',
+			self._current_fix.timestamp.astimezone().isoformat(timespec='seconds'),
+			self._current_fix.lat,
+			self._current_fix.lon,
+			self._current_fix.alt,
+			self._current_fix.spd,
+			self._current_fix.cse,
+			self._current_sat.timestamp.astimezone().isoformat(timespec='seconds'),
+			self._current_sat.uSat,
+			self._current_sat.nSat,
+		)
+		return self._current_fix, self._current_sat
 
 	async def run_health_check(self):
 		"""Periodically check the health of the GPSD service."""
