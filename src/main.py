@@ -559,9 +559,9 @@ class GPSHandler:
 			self.last_valid_fix = (utc, lat, lon, alt, spd, cse)
 			return utc, lat, lon, alt, spd, cse
 		if self.last_valid_fix:
-			_, lat, lon, alt, _, _ = self.last_valid_fix
+			utc, lat, lon, alt, _, _ = self.last_valid_fix
 			logging.debug('Using last known GPS position.')
-			return timestamp, lat, lon, alt, 0, 0
+			return utc, lat, lon, alt, 0, 0
 		env_lat, env_lon, env_alt = self._get_fallback_location()
 		return timestamp, env_lat, env_lon, env_alt, 0, 0
 
