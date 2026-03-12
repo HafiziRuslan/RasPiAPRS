@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-12T21:41:47+08:00)
+## [beta8] - (2026-03-12T21:46:44+08:00)
 
-- 22 commit(s) contributed to the release.
+- 23 commit(s) contributed to the release.
 - 1 day(s) passed between the first and last commit.
 - 1 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [0a6c5c2](https://github.com/HafiziRuslan/RasPiAPRS/commit/0a6c5c2bc3ef1ed2680e334b30d419b6887b7ab5) feat(logging): add log file prefix for better sorting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T21:46:44+08:00*
 - [fe37472](https://github.com/HafiziRuslan/RasPiAPRS/commit/fe37472fa03a59307334abd660be175f322d4cae) feat(logging): add debug log for gps data, increase sleep to 1s *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T21:41:47+08:00*
 - [3dcb654](https://github.com/HafiziRuslan/RasPiAPRS/commit/3dcb654bbeebd566001f8defb288dcfafae157af) feat(GPSHandler): restructure GPS data handling with background polling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T21:29:59+08:00*
 - [c4a8fc8](https://github.com/HafiziRuslan/RasPiAPRS/commit/c4a8fc8d5f0c24658d940d3c1b61ab592a5b99b6) feat(logging): add configurable logging system *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T20:25:17+08:00*
@@ -1125,4 +1126,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-12T21:42:38.644807072+08:00
+generated using git-cliff on 2026-03-12T21:47:32.681394145+08:00
