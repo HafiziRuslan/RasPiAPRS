@@ -606,7 +606,7 @@ class GPSHandler:
 
 		# Return internal memory state - no I/O or network calls here
 		logging.debug(
-			'GPSD data: {{pos: {{time: %s, lat: %f, lon: %f, alt: %f, spd: %f, cse: %f}}, sat: {{time: %s, uSat: %f, nSat: %f}}}}',
+			'GPSD data: pos: [time: %s, lat: %f, lon: %f, alt: %0.1f, spd: %0.0f, cse: %0.0f], sat: [time: %s, uSat: %0.0f, nSat: %0.0f]',
 			self._current_fix.timestamp.astimezone().isoformat(timespec='seconds'),
 			self._current_fix.lat,
 			self._current_fix.lon,
