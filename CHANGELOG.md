@@ -2,12 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-12T05:01:46+08:00)
+## [beta8] - (2026-03-12T17:51:20+08:00)
 
-- 11 commit(s) contributed to the release.
+- 15 commit(s) contributed to the release.
+- 1 day(s) passed between the first and last commit.
+- 1 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [d764bcf](https://github.com/HafiziRuslan/RasPiAPRS/commit/d764bcf86b674003c08624594edd63bd6ac78d21) feat(message): improve message formatting for better readability *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T17:51:20+08:00*
 - [320e2ea](https://github.com/HafiziRuslan/RasPiAPRS/commit/320e2ea3480b9d32975d9667bb4e161953f80dff) feat(ci): implement dynamic tagging based on PEP 440 specifiers *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:11:05+08:00*
 
 ### 🐛 Bug Fixes in beta8
@@ -19,6 +22,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [e862455](https://github.com/HafiziRuslan/RasPiAPRS/commit/e86245579caeb4761f043de6aa08a5e2012781ff) refactor(main): filter None values in string joins *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T17:50:51+08:00*
+- [e898df2](https://github.com/HafiziRuslan/RasPiAPRS/commit/e898df2e5e46825352f3e1a7f8833fa7007cd94c) refactor(aprs): centralize timestamp generation and unify time source *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T17:46:58+08:00*
 - [e41fb92](https://github.com/HafiziRuslan/RasPiAPRS/commit/e41fb92a90d7441d4b4969cdf37a532320e5997d) refactor(message): improve scheduled message sending concurrency *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T05:01:46+08:00*
 - [c981c81](https://github.com/HafiziRuslan/RasPiAPRS/commit/c981c8123850befebb5492d53cd39d963ef6fda5) refactor(core): improve app metadata generation and update default version *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:34:11+08:00*
 - [a17b7ea](https://github.com/HafiziRuslan/RasPiAPRS/commit/a17b7ea1f88660819d040aa0ff2b9f997cfa1eeb) refactor(release): simplify version parsing logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:18:25+08:00*
@@ -26,6 +31,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta8
 
+- [9ddc6c7](https://github.com/HafiziRuslan/RasPiAPRS/commit/9ddc6c731bceb4efa0bbb96878d7536a7c433d4f) chore(config): update funding URLs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T10:25:44+08:00*
 - [b34e9d5](https://github.com/HafiziRuslan/RasPiAPRS/commit/b34e9d519df9b28399c3dc3a384fd4ea919b4779) chore(ci): add read permission to release workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:23:58+08:00*
 - [b9cb294](https://github.com/HafiziRuslan/RasPiAPRS/commit/b9cb294d368c09ce6531248ea930dc9bf939fa71) chore: enable paths-ignore for .github directory in release workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:55:57+08:00*
 
@@ -1112,4 +1118,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-12T05:02:31.423032325+08:00
+generated using git-cliff on 2026-03-12T17:52:22.018586344+08:00
