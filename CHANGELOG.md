@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-12T21:29:59+08:00)
+## [beta8] - (2026-03-12T21:41:47+08:00)
 
-- 21 commit(s) contributed to the release.
+- 22 commit(s) contributed to the release.
 - 1 day(s) passed between the first and last commit.
 - 1 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [fe37472](https://github.com/HafiziRuslan/RasPiAPRS/commit/fe37472fa03a59307334abd660be175f322d4cae) feat(logging): add debug log for gps data, increase sleep to 1s *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T21:41:47+08:00*
 - [3dcb654](https://github.com/HafiziRuslan/RasPiAPRS/commit/3dcb654bbeebd566001f8defb288dcfafae157af) feat(GPSHandler): restructure GPS data handling with background polling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T21:29:59+08:00*
 - [c4a8fc8](https://github.com/HafiziRuslan/RasPiAPRS/commit/c4a8fc8d5f0c24658d940d3c1b61ab592a5b99b6) feat(logging): add configurable logging system *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T20:25:17+08:00*
 - [2afe1cb](https://github.com/HafiziRuslan/RasPiAPRS/commit/2afe1cb5d3c0174f7bfd2bcdca52b91ad6d26ccd) feat(gps): restructure GPS data handling and add satellite information *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T18:40:40+08:00*
@@ -1124,4 +1125,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-12T21:30:54.479095984+08:00
+generated using git-cliff on 2026-03-12T21:42:38.644807072+08:00
