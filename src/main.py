@@ -77,29 +77,47 @@ TOCALL = 'APP642'
 
 
 def configure_logging():
+	"""Sets up logging."""
 	global LOG_DIR
+	dotenv.load_dotenv('.env')
+
 	if not os.path.exists(LOG_DIR) or not os.access(LOG_DIR, os.W_OK):
 		LOG_DIR = 'logs'
-	if not os.path.exists(LOG_DIR):
-		os.makedirs(LOG_DIR)
-	logging.getLogger('aprslib').setLevel(logging.DEBUG)
-	logging.getLogger('asyncio').setLevel(logging.DEBUG)
-	logging.getLogger('hpack').setLevel(logging.DEBUG)
-	logging.getLogger('httpx').setLevel(logging.DEBUG)
-	logging.getLogger('telegram').setLevel(logging.DEBUG)
-	logging.getLogger('urllib3').setLevel(logging.DEBUG)
+	os.makedirs(LOG_DIR, exist_ok=True)
+
+	log_level_map = {
+		0: 100,  # OFF
+		1: logging.DEBUG,
+		2: logging.INFO,
+		3: logging.WARNING,
+		4: logging.ERROR,
+		5: logging.CRITICAL,
+	}
+	log_level = log_level_map.get(_env_get_int('LOG_LEVEL', 2))
+
+	logger = logging.getLogger()
+	logger.setLevel(log_level)
+
+	for name in ['aprslib', 'asyncio', 'hpack', 'httpx', 'telegram', 'urllib3']:
+		logging.getLogger(name).setLevel(max(log_level, logging.WARNING))
 
 	class ISO8601Formatter(logging.Formatter):
 		def formatTime(self, record, datefmt=None):
 			return dt.datetime.fromtimestamp(record.created, dt.timezone.utc).astimezone().isoformat(timespec='milliseconds')
 
-	logger = logging.getLogger()
-	logger.setLevel(logging.DEBUG)
+	class LevelFilter(logging.Filter):
+		def __init__(self, level):
+			self.level = level
+
+		def filter(self, record):
+			return record.levelno == self.level
+
 	formatter = ISO8601Formatter('%(asctime)s | %(levelname)-8s | %(threadName)-12s | %(name)s.%(funcName)s:%(lineno)d | %(message)s')
-	console_handler = logging.StreamHandler()
-	console_handler.setLevel(logging.WARNING)
-	console_handler.setFormatter(formatter)
-	logger.addHandler(console_handler)
+
+	console = logging.StreamHandler()
+	console.setLevel(logging.WARNING)
+	console.setFormatter(formatter)
+	logger.addHandler(console)
 
 	class NumberedRotatingFileHandler(logging.handlers.RotatingFileHandler):
 		"""RotatingFileHandler with backup number before the extension."""
@@ -112,36 +130,35 @@ def configure_logging():
 			if self.backupCount > 0:
 				name, ext = os.path.splitext(self.baseFilename)
 				for i in range(self.backupCount - 1, 0, -1):
-					sfn = self.rotation_filename(f'{name}{i}{ext}')
-					dfn = self.rotation_filename(f'{name}{i + 1}{ext}')
+					sfn, dfn = f'{name}{i}{ext}', f'{name}{i + 1}{ext}'
 					if os.path.exists(sfn):
 						if os.path.exists(dfn):
 							os.remove(dfn)
 						os.rename(sfn, dfn)
-				dfn = self.rotation_filename(f'{name}1{ext}')
+				dfn = f'{name}1{ext}'
 				if os.path.exists(dfn):
 					os.remove(dfn)
 				self.rotate(self.baseFilename, dfn)
 			if not self.delay:
 				self.stream = self._open()
 
-	class LevelFilter(logging.Filter):
-		def __init__(self, level):
-			self.level = level
-
-		def filter(self, record):
-			return record.levelno == self.level
-
-	levels = {
+	log_files = {
 		logging.DEBUG: 'debug.log',
 		logging.INFO: 'info.log',
 		logging.WARNING: 'warning.log',
 		logging.ERROR: 'error.log',
 		logging.CRITICAL: 'critical.log',
 	}
-	for level, filename in levels.items():
+
+	max_bytes = _env_get_int('LOG_MAX_BYTES', 1.5) * 1000 * 1000
+	max_count = _env_get_int('LOG_MAX_COUNT', 5)
+
+	for level, filename in log_files.items():
+		if level < log_level:
+			continue
 		try:
-			handler = NumberedRotatingFileHandler(os.path.join(LOG_DIR, filename), maxBytes=1 * 1024 * 1024, backupCount=5)
+			path = os.path.join(LOG_DIR, filename)
+			handler = NumberedRotatingFileHandler(path, maxBytes=max_bytes, backupCount=max_count)
 			handler.setLevel(level)
 			handler.addFilter(LevelFilter(level))
 			handler.setFormatter(formatter)
@@ -1291,7 +1308,7 @@ class APRSSender:
 	def _get_timestamps(self, source_time: dt.datetime | None = None) -> tuple[str, str]:
 		"""Generate APRS and ISO8601 timestamps."""
 		ctime = source_time or dt.datetime.now(dt.timezone.utc)
-		return ctime.strftime('%d%H%Mz'), ctime.astimezone().isoformat(timespec='milliseconds')
+		return ctime.strftime('%d%H%Mz'), ctime.astimezone().isoformat(timespec='seconds')
 
 	async def connect(self):
 		"""Establish connection to APRS-IS with retries."""
