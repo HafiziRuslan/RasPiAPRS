@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-12T18:40:40+08:00)
+## [beta8] - (2026-03-12T18:56:55+08:00)
 
-- 17 commit(s) contributed to the release.
+- 18 commit(s) contributed to the release.
 - 1 day(s) passed between the first and last commit.
 - 1 day(s) passed between releases.
 
@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [904a9af](https://github.com/HafiziRuslan/RasPiAPRS/commit/904a9af636720ca9795a51d47bedd12b8560235a) refactor(gps): use utc from last_valid_fix *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T18:56:55+08:00*
 - [eaf2ee0](https://github.com/HafiziRuslan/RasPiAPRS/commit/eaf2ee074c3822191584701a0586bc29976275a5) fix(release): update version parsing to support pre-release suffixes *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:47:50+08:00*
 - [7f49aef](https://github.com/HafiziRuslan/RasPiAPRS/commit/7f49aefa9516cfd5d47052385dd6080e7cd869b6) fix(ci): tighten version parsing regex to disallow dots in pre-release strings *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:44:45+08:00*
 - [5214058](https://github.com/HafiziRuslan/RasPiAPRS/commit/5214058a99772842abdb50b85e24e9557265a93b) fix(release): update version parsing to support two-part version numbers *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:43:34+08:00*
@@ -1120,4 +1121,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-12T18:41:29.717428794+08:00
+generated using git-cliff on 2026-03-12T18:57:44.618138153+08:00
