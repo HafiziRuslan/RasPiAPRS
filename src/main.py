@@ -68,7 +68,7 @@ def get_app_metadata():
 			meta['github'] = data.get('urls', {}).get('github', meta['github'])
 	except Exception as e:
 		logging.warning('Failed to load project metadata: %s', e)
-	return f'{"-".join([meta["name"], meta["version"], git_sha])}', meta['github']
+	return f'{"-".join(filter(None, [meta["name"], meta["version"], git_sha]))}', meta['github']
 
 
 APP_NAME, PROJECT_URL = get_app_metadata()
@@ -934,7 +934,7 @@ class SystemStats(object):
 				kernelver = f'[{kernel.sysname}{kernel.release}{kernel.version.split(" ", 1)[0]}-{kernel.machine}]'
 			except Exception as e:
 				logging.error('Unexpected error: %s', e)
-			return f'{osname} {kernelver}'
+			return f'{" ".join(filter(None, [osname, kernelver]))}'
 
 		return self._get_cached('os_info', _fetch, ttl=3600, default='')
 
@@ -972,7 +972,7 @@ class SystemStats(object):
 					ts = 'S1'
 				elif slot2 == 1:
 					ts = 'S2'
-			return f'{", ".join([tx, shift, cc, ts])}'
+			return f'{", ".join(filter(None, [tx, shift, cc, ts]))}'
 
 		return self._get_cached('mmdvm_info', _fetch, ttl=3600, default='')
 
