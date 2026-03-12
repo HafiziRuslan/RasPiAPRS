@@ -143,11 +143,11 @@ def configure_logging():
 				self.stream = self._open()
 
 	log_files = {
-		logging.DEBUG: 'debug.log',
-		logging.INFO: 'info.log',
-		logging.WARNING: 'warning.log',
-		logging.ERROR: 'error.log',
-		logging.CRITICAL: 'critical.log',
+		logging.DEBUG: '1-debug.log',
+		logging.INFO: '2-info.log',
+		logging.WARNING: '3-warning.log',
+		logging.ERROR: '4-error.log',
+		logging.CRITICAL: '5-critical.log',
 	}
 
 	max_bytes = _env_get_int('LOG_MAX_BYTES', 1.5) * 1000 * 1000
