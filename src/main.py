@@ -595,6 +595,7 @@ class GPSHandler:
 			return gps_data
 
 		# Return internal memory state - no I/O or network calls here
+		logging.debug(f'GPSD data: pos: {self._current_fix}, sat: {self._current_sat}')
 		return tuple(self._current_fix), self._current_sat
 
 	async def run_health_check(self):
@@ -1532,7 +1533,7 @@ async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, sch
 					logging.error('Error executing task %s: %s', task.func.__name__, e, exc_info=True)
 		if packet_sent:
 			await aprs_sender.send_status(gps_data=gps_data)
-		await asyncio.sleep(0.7)
+		await asyncio.sleep(1)
 
 
 async def main():
