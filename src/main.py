@@ -1285,8 +1285,8 @@ class APRSSender:
 
 	def _get_timestamps(self, source_time: dt.datetime | None = None) -> tuple[str, str]:
 		"""Generate APRS and ISO8601 timestamps."""
-		ztime = source_time or dt.datetime.now(dt.timezone.utc)
-		return ztime.strftime('%d%H%Mz'), ztime.isoformat(timespec='seconds')
+		ctime = source_time or dt.datetime.now(dt.timezone.utc)
+		return ctime.strftime('%d%H%Mz'), ctime.astimezone().isoformat(timespec='milliseconds')
 
 	async def connect(self):
 		"""Establish connection to APRS-IS with retries."""
@@ -1408,12 +1408,12 @@ class APRSSender:
 		address = get_add_from_pos(lat, lon)
 		near_add = format_address(address)
 		near_add_tg = format_address(address, True)
-		timestamp, tg_timestamp = self._get_timestamps(cur_time)
 		sats_info = ''
 		if self.cfg.gpsd_enabled:
-			_, u_sat, n_sat = await self.gps_handler.get_satellites()
+			cur_time, u_sat, n_sat = await self.gps_handler.get_satellites()
 			if u_sat > 0:
 				sats_info = f'gps: {u_sat}/{n_sat}'
+		timestamp, tg_timestamp = self._get_timestamps(cur_time)
 		uptime = self.sys_stats.uptime
 		traffic = self.sys_stats.traffic_info
 		stat_text = f'{timestamp}{"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
