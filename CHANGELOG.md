@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-12T18:56:55+08:00)
+## [beta8] - (2026-03-12T19:00:47+08:00)
 
-- 18 commit(s) contributed to the release.
+- 19 commit(s) contributed to the release.
 - 1 day(s) passed between the first and last commit.
 - 1 day(s) passed between releases.
 
@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [c852b1c](https://github.com/HafiziRuslan/RasPiAPRS/commit/c852b1c026410a60fa5d7ea0ca65e84ae497bb32) refactor(logging): enhance debug message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T19:00:47+08:00*
 - [0ec677d](https://github.com/HafiziRuslan/RasPiAPRS/commit/0ec677d9facc7f5ef246b22b78995d4b0e05b97a) refactor(timestamps): formatting and GPS sync *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T18:06:13+08:00*
 - [e862455](https://github.com/HafiziRuslan/RasPiAPRS/commit/e86245579caeb4761f043de6aa08a5e2012781ff) refactor(main): filter None values in string joins *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T17:50:51+08:00*
 - [e898df2](https://github.com/HafiziRuslan/RasPiAPRS/commit/e898df2e5e46825352f3e1a7f8833fa7007cd94c) refactor(aprs): centralize timestamp generation and unify time source *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T17:46:58+08:00*
@@ -1121,4 +1122,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-12T18:57:44.618138153+08:00
+generated using git-cliff on 2026-03-12T19:01:33.129725782+08:00
