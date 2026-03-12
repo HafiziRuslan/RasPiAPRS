@@ -98,7 +98,7 @@ def configure_logging():
 	logger = logging.getLogger()
 	logger.setLevel(log_level)
 
-	for name in ['aprslib', 'asyncio', 'hpack', 'httpx', 'telegram', 'urllib3']:
+	for name in ['aiohttp', 'aprslib', 'asyncio', 'geopy', 'gpsdclient', 'hpack', 'httpx', 'telegram', 'urllib3']:
 		logging.getLogger(name).setLevel(max(log_level, logging.WARNING))
 
 	class ISO8601Formatter(logging.Formatter):
