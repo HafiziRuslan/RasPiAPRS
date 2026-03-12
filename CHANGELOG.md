@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-12T19:00:47+08:00)
+## [beta8] - (2026-03-12T20:25:17+08:00)
 
-- 19 commit(s) contributed to the release.
+- 20 commit(s) contributed to the release.
 - 1 day(s) passed between the first and last commit.
 - 1 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [c4a8fc8](https://github.com/HafiziRuslan/RasPiAPRS/commit/c4a8fc8d5f0c24658d940d3c1b61ab592a5b99b6) feat(logging): add configurable logging system *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T20:25:17+08:00*
 - [2afe1cb](https://github.com/HafiziRuslan/RasPiAPRS/commit/2afe1cb5d3c0174f7bfd2bcdca52b91ad6d26ccd) feat(gps): restructure GPS data handling and add satellite information *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T18:40:40+08:00*
 - [d764bcf](https://github.com/HafiziRuslan/RasPiAPRS/commit/d764bcf86b674003c08624594edd63bd6ac78d21) feat(message): improve message formatting for better readability *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T17:51:20+08:00*
 - [320e2ea](https://github.com/HafiziRuslan/RasPiAPRS/commit/320e2ea3480b9d32975d9667bb4e161953f80dff) feat(ci): implement dynamic tagging based on PEP 440 specifiers *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:11:05+08:00*
@@ -1122,4 +1123,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-12T19:01:33.129725782+08:00
+generated using git-cliff on 2026-03-12T20:26:14.710343579+08:00
