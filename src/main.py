@@ -578,18 +578,22 @@ class GPSHandler:
 			return utc, uSat, nSat
 		return timestamp, 0, 0
 
-	async def get_current_location_data(self, gps_data=None):
-		"""Determines the current location data from GPS or fallback to config. Returns time, lat, lon, alt, spd, cse."""
+	async def get_loc_and_sat(self, gps_data=None):
+		"""Determines the current location data and satellite data. Returns (loc_data, sat_data)."""
 		if not gps_data and self.cfg.gpsd_enabled:
 			gps_data = await self.get_position()
+
 		if gps_data:
 			timestamp, lat, lon, alt, spd, cse = gps_data
 			if isinstance(lat, (int, float)) and isinstance(lon, (int, float)) and (lat != 0 or lon != 0):
-				return timestamp, lat, lon, alt, spd, cse
-		lat = float(self.cfg.latitude)
-		lon = float(self.cfg.longitude)
-		alt = float(self.cfg.altitude)
-		return None, lat, lon, alt, 0, 0
+				loc_data = (timestamp, lat, lon, alt, spd, cse)
+			else:
+				loc_data = (None, float(self.cfg.latitude), float(self.cfg.longitude), float(self.cfg.altitude), 0, 0)
+		else:
+			loc_data = (None, float(self.cfg.latitude), float(self.cfg.longitude), float(self.cfg.altitude), 0, 0)
+
+		sat_data = await self.get_satellites()
+		return loc_data, sat_data
 
 	async def run_health_check(self):
 		"""Periodically check the health of the GPSD service."""
@@ -1063,21 +1067,21 @@ class ScheduledMessageHandler:
 			return False
 		return True
 
-	async def _send_one_with_delay(self, aprs_sender, name, weekday, addrcall, template, from_call=None, tz=dt.timezone.utc):
+	async def _send_one_with_delay(self, aprs_sender, gps_data=None, **msg_info):
 		"""Perform ``_send_one`` after a random pause"""
 		await asyncio.sleep(random.uniform(1, 15))
-		await self._send_one(aprs_sender, name, weekday, addrcall, template, from_call=from_call, tz=tz)
+		await self._send_one(aprs_sender, gps_data=gps_data, **msg_info)
 
-	async def send_all(self, aprs_sender):
+	async def send_all(self, aprs_sender, gps_data=None):
 		"""Send all due scheduled messages."""
 		sent_any = False
 		for msg_info in self.messages:
 			if await self._is_due(msg_info):
-				asyncio.create_task(self._send_one_with_delay(aprs_sender, **msg_info))
+				asyncio.create_task(self._send_one_with_delay(aprs_sender, gps_data=gps_data, **msg_info))
 				sent_any = True
 		return sent_any
 
-	async def _send_one(self, aprs_sender, name, weekday, addrcall, template, from_call=None, tz=dt.timezone.utc):
+	async def _send_one(self, aprs_sender, name, weekday, addrcall, template, from_call=None, tz=dt.timezone.utc, gps_data=None):
 		"""Send a single scheduled message to APRS-IS if it's due."""
 		now = dt.datetime.now(tz)
 		if now.weekday() != weekday:
@@ -1088,7 +1092,8 @@ class ScheduledMessageHandler:
 		last_sent = self.tracking.get(tracking_key)
 		if last_sent and last_sent.startswith(today):
 			return False
-		_, lat, lon, _, _, _ = await self.gps_handler.get_current_location_data()
+		loc_data, _ = gps_data if gps_data else await self.gps_handler.get_loc_and_sat()
+		_, lat, lon, _, _, _ = loc_data
 		gridsquare = latlon_to_grid(lat, lon)
 		seq_name = f'msg_sequence_{source}_{addrcall}'
 		seq = next(self.sequences[seq_name])
@@ -1323,7 +1328,8 @@ class APRSSender:
 
 	async def send_position(self, gps_data=None):
 		"""Send APRS position packet to APRS-IS."""
-		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = await self.gps_handler.get_current_location_data(gps_data)
+		loc_data, _ = gps_data if gps_data else await self.gps_handler.get_loc_and_sat()
+		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = loc_data
 		latstr = _lat_to_aprs(cur_lat)
 		lonstr = _lon_to_aprs(cur_lon)
 		altstr = _alt_to_aprs(cur_alt)
@@ -1375,7 +1381,7 @@ class APRSSender:
 		await self.send_packet(payload, 'header')
 		await self.tg_logger.log(tg_msg)
 
-	async def send_telemetry(self):
+	async def send_telemetry(self, gps_data=None):
 		"""Send APRS telemetry information to APRS-IS."""
 		seq = next(self.telem_seq)
 		cputemp = self.sys_stats.avg_temp
@@ -1394,7 +1400,8 @@ class APRSSender:
 			f'ROM Used: <b>{humanize.naturalsize(diskused, binary=True)}</b>'
 		)
 		if self.cfg.gpsd_enabled:
-			_, uSat, nSat = await self.gps_handler.get_satellites()
+			_, sat_data = gps_data if gps_data else await self.gps_handler.get_loc_and_sat()
+			_, uSat, nSat = sat_data
 			payload += f',{uSat:d}'
 			if uSat > 0:
 				tgtel += f'\nGPS Lock: <b>{uSat}</b>\nGPS Avail: <b>{nSat}</b>'
@@ -1403,19 +1410,20 @@ class APRSSender:
 
 	async def send_status(self, gps_data=None):
 		"""Send APRS status information to APRS-IS."""
-		cur_time, lat, lon, _, _, _ = await self.gps_handler.get_current_location_data(gps_data)
+		loc_data, sat_data = gps_data if gps_data else await self.gps_handler.get_loc_and_sat()
+		cur_time, lat, lon, _, _, _ = loc_data
+		timestamp, tg_timestamp = self._get_timestamps(cur_time)
 		gridsquare = f'{latlon_to_grid(lat, lon)}'
 		address = get_add_from_pos(lat, lon)
 		near_add = format_address(address)
 		near_add_tg = format_address(address, True)
-		sats_info = ''
-		if self.cfg.gpsd_enabled:
-			cur_time, u_sat, n_sat = await self.gps_handler.get_satellites()
-			if u_sat > 0:
-				sats_info = f'gps: {u_sat}/{n_sat}'
-		timestamp, tg_timestamp = self._get_timestamps(cur_time)
 		uptime = self.sys_stats.uptime
 		traffic = self.sys_stats.traffic_info
+		sats_info = ''
+		if self.cfg.gpsd_enabled:
+			_, u_sat, n_sat = sat_data
+			if u_sat > 0:
+				sats_info = f'gps: {u_sat}/{n_sat}'
 		stat_text = f'{timestamp}{"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
 		tele_text = f'Time: <b>{tg_timestamp}</b>\nText: <b>{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}</b>'
 		payload = f'{FROMCALL}>{TOCALL}:>{stat_text}'
@@ -1465,8 +1473,8 @@ async def initialize_session(cfg):
 		cfg.latitude, cfg.longitude = await GPSHandler.get_coordinates()
 	gps_handler = GPSHandler(cfg)
 	if cfg.gpsd_enabled:
-		gps_data = await gps_handler.get_position()
-		_, cfg.latitude, cfg.longitude, cfg.altitude, _, _ = gps_data
+		loc_data, _ = await gps_handler.get_loc_and_sat()
+		_, cfg.latitude, cfg.longitude, cfg.altitude, _, _ = loc_data
 	tg_logger = TelegramLogger(cfg)
 	sys_stats = SystemStats()
 	telem_seq = Sequence(name='telem_sequence', modulo=1000)
@@ -1490,11 +1498,13 @@ def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, scheduled_msg_handler
 		args: tuple
 		kwargs: dict
 
+	loc_data, _ = gps_data if gps_data else None
+
 	return [
-		Task(should_send_position(cfg, timer_tick, sb, gps_data), aprs_sender.send_position, (), {'gps_data': gps_data}),
+		Task(should_send_position(cfg, timer_tick, sb, loc_data), aprs_sender.send_position, (), {'gps_data': gps_data}),
 		Task(timer_tick % 21600 == 1, aprs_sender.send_header, (), {}),
-		Task(timer_tick % cfg.sleep == 1, aprs_sender.send_telemetry, (), {}),
-		Task(True, scheduled_msg_handler.send_all, (aprs_sender,), {}),
+		Task(timer_tick % cfg.sleep == 1, aprs_sender.send_telemetry, (), {'gps_data': gps_data}),
+		Task(True, scheduled_msg_handler.send_all, (aprs_sender,), {'gps_data': gps_data}),
 	]
 
 
@@ -1506,9 +1516,7 @@ async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, sch
 			break
 		if timer_tick % 20 == 0:
 			sys_stats.check_stats()
-		gps_data = None
-		if cfg.gpsd_enabled:
-			gps_data = await gps_handler.get_position()
+		gps_data = await gps_handler.get_loc_and_sat()
 		packet_sent = False
 		tasks = _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, scheduled_msg_handler)
 		for task in tasks:
