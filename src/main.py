@@ -1109,7 +1109,9 @@ class ScheduledMessageHandler:
 		path_list = parsed.get('path')
 		if path_list:
 			tg_msg += f'\nPath: <b>{", ".join(path_list)}</b>'
-		tg_msg += f'\nTo: <b>{parsed["addresse"]}</b>\n\nMessage{"-" + parsed["msgNo"] if parsed.get("msgNo") else ""}: <b>{parsed["message_text"]}</b>'
+		tg_msg += (
+			f'\nTo: <b>{parsed["addresse"]}</b>\n\nMessage{"-" + parsed["msgNo"] if parsed.get("msgNo") else ""}: <b>{parsed["message_text"]}</b>'
+		)
 		await aprs_sender.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
 		self.tracking[tracking_key] = now.isoformat()
 		self.tracking.flush()
