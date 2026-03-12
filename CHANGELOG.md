@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-12T21:46:44+08:00)
+## [beta8] - (2026-03-12T22:39:53+08:00)
 
-- 23 commit(s) contributed to the release.
+- 24 commit(s) contributed to the release.
 - 1 day(s) passed between the first and last commit.
 - 1 day(s) passed between releases.
 
@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [12faf11](https://github.com/HafiziRuslan/RasPiAPRS/commit/12faf11f7c882c16c577d56aba63815ae234554c) refactor(satellite): introduce SATFix and improve satellite data logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T22:39:53+08:00*
 - [904a9af](https://github.com/HafiziRuslan/RasPiAPRS/commit/904a9af636720ca9795a51d47bedd12b8560235a) refactor(gps): use utc from last_valid_fix *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T18:56:55+08:00*
 - [eaf2ee0](https://github.com/HafiziRuslan/RasPiAPRS/commit/eaf2ee074c3822191584701a0586bc29976275a5) fix(release): update version parsing to support pre-release suffixes *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:47:50+08:00*
 - [7f49aef](https://github.com/HafiziRuslan/RasPiAPRS/commit/7f49aefa9516cfd5d47052385dd6080e7cd869b6) fix(ci): tighten version parsing regex to disallow dots in pre-release strings *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:44:45+08:00*
@@ -1126,4 +1127,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-12T21:47:32.681394145+08:00
+generated using git-cliff on 2026-03-12T22:40:51.302472175+08:00
