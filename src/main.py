@@ -1281,6 +1281,11 @@ class APRSSender:
 		self.ais = None
 		self.telem_seq = telem_seq
 
+	def _get_timestamps(self, source_time: dt.datetime | None = None) -> tuple[str, str]:
+		"""Generate APRS and ISO8601 timestamps."""
+		ztime = source_time or dt.datetime.now(dt.timezone.utc)
+		return ztime.strftime('%d%H%Mz'), ztime.isoformat(timespec='seconds')
+
 	async def connect(self):
 		"""Establish connection to APRS-IS with retries."""
 		logging.info('Connecting to APRS-IS server %s:%d as %s', self.cfg.server, self.cfg.port, FROMCALL)
@@ -1326,8 +1331,7 @@ class APRSSender:
 		mmdvminfo = self.sys_stats.mmdvm_info
 		osinfo = self.sys_stats.os_info
 		comment = '; '.join(filter(None, [mmdvminfo, osinfo, PROJECT_URL]))
-		ztime = dt.datetime.now(dt.timezone.utc)
-		timestamp = cur_time.strftime('%d%H%Mz') if cur_time else ztime.strftime('%d%H%Mz')
+		timestamp, tg_timestamp = self._get_timestamps(cur_time)
 		symbt = self.cfg.symbol_table
 		symb = self.cfg.symbol
 		if self.cfg.symbol_overlay:
@@ -1350,9 +1354,9 @@ class APRSSender:
 		lookup_table = symbt if symbt in ['/', '\\'] else '\\'
 		sym_desc = symbols.get_desc(lookup_table, symb).split('(')[0].strip()
 		payload = f'{FROMCALL}>{TOCALL}:/{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
-		tgpos = f'<u>{FROMCALL} Position</u>\n\nTime: <b>{timestamp}</b>\nSymbol: {symbt}{symb} ({sym_desc})\nPosition:\n\tLatitude: <b>{cur_lat}</b>\n\tLongitude: <b>{cur_lon}</b>\n\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\nComment: <b>{comment}</b>'
+		tg_pos = f'<u>{FROMCALL} Position</u>\n\nTime: <b>{tg_timestamp}</b>\nSymbol: {symbt}{symb} ({sym_desc})\nPosition:\n\tLatitude: <b>{cur_lat}</b>\n\tLongitude: <b>{cur_lon}</b>\n\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\nComment: <b>{comment}</b>'
 		await self.send_packet(payload, 'position')
-		await self.tg_logger.log(tgpos, cur_lat, cur_lon, int(csestr))
+		await self.tg_logger.log(tg_pos, cur_lat, cur_lon, int(csestr))
 
 	async def send_header(self):
 		"""Send APRS header information to APRS-IS."""
@@ -1397,23 +1401,21 @@ class APRSSender:
 
 	async def send_status(self, gps_data=None):
 		"""Send APRS status information to APRS-IS."""
-		_, lat, lon, _, _, _ = await self.gps_handler.get_current_location_data(gps_data)
+		cur_time, lat, lon, _, _, _ = await self.gps_handler.get_current_location_data(gps_data)
 		gridsquare = f'{latlon_to_grid(lat, lon)}'
 		address = get_add_from_pos(lat, lon)
 		near_add = format_address(address)
 		near_add_tg = format_address(address, True)
-		ztime = dt.datetime.now(dt.timezone.utc)
-		timestamp = ztime.strftime('%d%H%Mz')
+		timestamp, tg_timestamp = self._get_timestamps(cur_time)
 		sats_info = ''
 		if self.cfg.gpsd_enabled:
-			timez, u_sat, n_sat = await self.gps_handler.get_satellites()
+			_, u_sat, n_sat = await self.gps_handler.get_satellites()
 			if u_sat > 0:
-				timestamp = timez.strftime('%d%H%Mz')
 				sats_info = f'gps: {u_sat}/{n_sat}'
 		uptime = self.sys_stats.uptime
 		traffic = self.sys_stats.traffic_info
 		stat_text = f'{timestamp}{"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
-		tele_text = f'Time: <b>{timestamp}</b>\nText: <b>{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}</b>'
+		tele_text = f'Time: <b>{tg_timestamp}</b>\nText: <b>{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}</b>'
 		payload = f'{FROMCALL}>{TOCALL}:>{stat_text}'
 		tg_msg = f'<u>{FROMCALL} Status</u>\n\n<b>{tele_text}</b>'
 		if os.path.exists(STATUS_FILE):
