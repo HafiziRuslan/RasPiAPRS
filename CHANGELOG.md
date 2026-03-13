@@ -2,14 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-13T23:52:23+08:00)
+## [beta8] - (2026-03-14T03:24:13+08:00)
 
-- 34 commit(s) contributed to the release.
+- 39 commit(s) contributed to the release.
 - 2 day(s) passed between the first and last commit.
 - 2 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [2e3335d](https://github.com/HafiziRuslan/RasPiAPRS/commit/2e3335dae598fd4096e9b622bd23c8f255df92a1) feat(ci): add read permission for workflow contents *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T00:12:32+08:00*
+- [6f7f93a](https://github.com/HafiziRuslan/RasPiAPRS/commit/6f7f93afa7bfc56216a5c0360d0a37a23a6c7b96) feat(telegram): update workflow to send commit messages on workflow completion *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T00:05:38+08:00*
 - [656c018](https://github.com/HafiziRuslan/RasPiAPRS/commit/656c0187e62d4ae7f38f30d87f7a1ee2ea3eb86d) feat(telegram): add line breaks to commit message in Telegram notification *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T22:07:01+08:00*
 - [7924edb](https://github.com/HafiziRuslan/RasPiAPRS/commit/7924edb4b43c33538cda411b117020c10d47e85a) feat(logging): add additional library loggers to warning level filtering *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T01:21:35+08:00*
 - [0a6c5c2](https://github.com/HafiziRuslan/RasPiAPRS/commit/0a6c5c2bc3ef1ed2680e334b30d419b6887b7ab5) feat(logging): add log file prefix for better sorting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T21:46:44+08:00*
@@ -22,6 +24,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [f7211ac](https://github.com/HafiziRuslan/RasPiAPRS/commit/f7211ac17d29399f254d526f2d60c059c228b5db) fix(main): correct log max bytes environment variable type *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T03:22:56+08:00*
+- [da14e89](https://github.com/HafiziRuslan/RasPiAPRS/commit/da14e891c79d51a49bd78a59b229f43e0c91aa2e) fix(logging): correct log file size calculation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T03:21:14+08:00*
 - [0b9cf00](https://github.com/HafiziRuslan/RasPiAPRS/commit/0b9cf00c12e4a967bbea22e6a7c14ba55bbd53ce) fix(telegram): update notification message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T22:08:58+08:00*
 - [f8a203f](https://github.com/HafiziRuslan/RasPiAPRS/commit/f8a203f6ca88f3568bf1b4026cae00877dc8aff8) fix(telegram): fix committer URL to use username *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T22:00:29+08:00*
 - [12faf11](https://github.com/HafiziRuslan/RasPiAPRS/commit/12faf11f7c882c16c577d56aba63815ae234554c) refactor(satellite): introduce SATFix and improve satellite data logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T22:39:53+08:00*
@@ -54,6 +58,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta8
 
+- [dcccbec](https://github.com/HafiziRuslan/RasPiAPRS/commit/dcccbecc4db3842b57a3d13d2a466fb7948b2395) chore(main): reduce log rotation defaults *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T03:24:13+08:00*
 - [703eccb](https://github.com/HafiziRuslan/RasPiAPRS/commit/703eccbb634e2a81a905087d326b4c5d3db3d1a2) build(env): Optimize environment recreation with uv venv -c *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T23:52:23+08:00*
 - [34cf38b](https://github.com/HafiziRuslan/RasPiAPRS/commit/34cf38bfc22d77777f5752a75ca7b035894672f2) ci(github): add telegram notification workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T21:57:31+08:00*
 - [9ddc6c7](https://github.com/HafiziRuslan/RasPiAPRS/commit/9ddc6c731bceb4efa0bbb96878d7536a7c433d4f) chore(config): update funding URLs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T10:25:44+08:00*
@@ -1143,4 +1148,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-13T23:57:02.679406168+08:00
+generated using git-cliff on 2026-03-14T03:25:13.892510629+08:00
