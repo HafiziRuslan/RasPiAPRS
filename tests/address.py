@@ -14,7 +14,7 @@ def get_address_from_coordinates(latitude, longitude):
 	Returns:
 		str: The formatted address string, or None if not found.
 	"""
-	geolocator = Nominatim(user_agent='raspiaprs-app')
+	geolocator = Nominatim(user_agent='RasPiAPRS-app')
 	try:
 		location = geolocator.reverse((latitude, longitude), exactly_one=True)
 		if location:

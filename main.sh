@@ -2,7 +2,7 @@
 set -e
 
 # --- Constants and Globals ---
-LOG_FILE="/var/log/raspiaprs.log"
+LOG_FILE="/var/log/RasPiAPRS.log"
 RESTART_DELAY=5
 MAX_DELAY=300
 MAX_RETRIES=10
@@ -57,12 +57,12 @@ setup_environment() {
 }
 
 cleanup() {
-  rm -rf /var/tmp/raspiaprs
+  rm -rf /var/tmp/RasPiAPRS
 }
 
 setup_directories() {
   cleanup
-  local dirs=("/var/tmp/raspiaprs" "/var/log/raspiaprs" "/var/lib/raspiaprs")
+  local dirs=("/var/tmp/RasPiAPRS" "/var/log/RasPiAPRS" "/var/lib/RasPiAPRS")
   for dir in "${dirs[@]}"; do
     if [ ! -d "$dir" ]; then
       mkdir -p "$dir"

@@ -260,7 +260,7 @@ class TestAddress(unittest.TestCase):
 		address_data = address.get_address_from_coordinates(40.7128, -74.0060)
 
 		# Assertions
-		mock_nominatim.assert_called_with(user_agent='raspiaprs-app')
+		mock_nominatim.assert_called_with(user_agent='RasPiAPRS-app')
 		mock_geolocator.reverse.assert_called_with((40.7128, -74.0060), exactly_one=True)
 		self.assertEqual(address_data, {'road': 'Broadway', 'city': 'New York'})
 
