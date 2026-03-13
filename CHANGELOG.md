@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-14T06:24:51+08:00)
+## [beta8] - (2026-03-14T06:49:05+08:00)
 
-- 49 commit(s) contributed to the release.
+- 50 commit(s) contributed to the release.
 - 2 day(s) passed between the first and last commit.
 - 2 day(s) passed between releases.
 
@@ -41,6 +41,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [10072a2](https://github.com/HafiziRuslan/RasPiAPRS/commit/10072a22841c95250242e14b8563aeb2f7a58caf) refactor(main): split GPSD debug logs into position and satellite *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T06:49:05+08:00*
 - [d9ebfee](https://github.com/HafiziRuslan/RasPiAPRS/commit/d9ebfee709791603d098bcfe6fa01dc71cfafc77) refactor(main): move logging from get_loc_and_sat to run_polling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T06:24:51+08:00*
 - [8d319d8](https://github.com/HafiziRuslan/RasPiAPRS/commit/8d319d855375463f8c7984e35a4ac402d855d0a0) refactor(system_stats): use cfg.sleep for history window *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T04:51:32+08:00*
 - [050032f](https://github.com/HafiziRuslan/RasPiAPRS/commit/050032fa41c966fb8010dbdec67555e1ff60ecff) refactor(system-stats): rename memory metrics to VRAM *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T04:34:54+08:00*
@@ -1158,4 +1159,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-14T06:25:32.382951214+08:00
+generated using git-cliff on 2026-03-14T06:50:25.831666085+08:00
