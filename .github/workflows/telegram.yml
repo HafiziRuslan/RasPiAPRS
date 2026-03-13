@@ -1,0 +1,28 @@
+name: send-telegram
+
+on:
+  push:
+
+jobs:
+  send-message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Send Inline Telegram Message
+        uses: cbrgm/telegram-github-action@main
+        with:
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          message: |
+            New commit by <b><a href="https://github.com/${{ github.event.head_commit.committer }}">@${{ github.event.head_commit.committer }}</a></b>!
+            Date: ${{ github.event.head_commit.timestamp }}
+            SHA: <code>${{ github.sha }}</code>
+            Reference: ${{ github.ref }}
+            Repository: <a href="https://github.com/${{ github.repository }}/commit/${{ github.sha }}">${{ github.repository }}</a>
+            Commit: ${{ github.event.head_commit.message }}
+          parse-mode: 'html'
+          disable-web-page-preview: true
+          disable-notification: false
+          protect-content: true
