@@ -558,23 +558,24 @@ class GPSHandler:
 			# Update Position
 			pos_res = await self._retrieve_data('TPV', 'position')
 			if pos_res:
-				self._current_fix = GPSFix(
-					timestamp=pos_res.get('time', dt.datetime.now(dt.timezone.utc)),
-					lat=pos_res.get('lat', 0.0),
-					lon=pos_res.get('lon', 0.0),
-					alt=pos_res.get('alt', 0.0),
-					spd=pos_res.get('speed', 0.0),
-					cse=pos_res.get('magtrack', 0.0) or pos_res.get('track', 0.0),
+				new_fix_data = (
+					pos_res.get('lat', 0.0),
+					pos_res.get('lon', 0.0),
+					pos_res.get('alt', 0.0),
+					pos_res.get('speed', 0.0),
+					pos_res.get('magtrack', 0.0) or pos_res.get('track', 0.0),
 				)
-				self.last_valid_fix = self._current_fix
-				self._save_cache(self._current_fix.lat, self._current_fix.lon, self._current_fix.alt)
+				if new_fix_data != self._current_fix[1:]:
+					self._current_fix = GPSFix(timestamp=pos_res.get('time', dt.datetime.now(dt.timezone.utc)), *new_fix_data)
+					self.last_valid_fix = self._current_fix
+					self._save_cache(self._current_fix.lat, self._current_fix.lon, self._current_fix.alt)
 
 			# Update Satellites
 			sat_res = await self._retrieve_data('SKY', 'satellite')
 			if sat_res:
-				self._current_sat = SATFix(
-					timestamp=sat_res.get('time', dt.datetime.now(dt.timezone.utc)), uSat=sat_res.get('uSat', 0), nSat=sat_res.get('nSat', 0)
-				)
+				new_sat_data = (sat_res.get('uSat', 0), sat_res.get('nSat', 0))
+				if new_sat_data != self._current_sat[1:]:
+					self._current_sat = SATFix(timestamp=sat_res.get('time', dt.datetime.now(dt.timezone.utc)), *new_sat_data)
 
 			await asyncio.sleep(1)
 
