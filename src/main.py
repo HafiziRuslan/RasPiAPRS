@@ -580,6 +580,18 @@ class GPSHandler:
 					nSat=sat_res.get('nSat', 0)
 				)
 
+			logging.debug(
+				'GPSD data: pos: [time: %s, lat: %f, lon: %f, alt: %0.1f, spd: %0.0f, cse: %0.0f], sat: [time: %s, uSat: %0.0f, nSat: %0.0f]',
+				self._current_fix.timestamp.astimezone().isoformat(timespec='seconds'),
+				self._current_fix.lat,
+				self._current_fix.lon,
+				self._current_fix.alt,
+				self._current_fix.spd,
+				self._current_fix.cse,
+				self._current_sat.timestamp.astimezone().isoformat(timespec='seconds'),
+				self._current_sat.uSat,
+				self._current_sat.nSat,
+			)
 			await asyncio.sleep(1)
 
 	def _get_fallback_location(self):
@@ -609,18 +621,6 @@ class GPSHandler:
 			return gps_data
 
 		# Return internal memory state - no I/O or network calls here
-		logging.debug(
-			'GPSD data: pos: [time: %s, lat: %f, lon: %f, alt: %0.1f, spd: %0.0f, cse: %0.0f], sat: [time: %s, uSat: %0.0f, nSat: %0.0f]',
-			self._current_fix.timestamp.astimezone().isoformat(timespec='seconds'),
-			self._current_fix.lat,
-			self._current_fix.lon,
-			self._current_fix.alt,
-			self._current_fix.spd,
-			self._current_fix.cse,
-			self._current_sat.timestamp.astimezone().isoformat(timespec='seconds'),
-			self._current_sat.uSat,
-			self._current_sat.nSat,
-		)
 		return self._current_fix, self._current_sat
 
 	async def run_health_check(self):
