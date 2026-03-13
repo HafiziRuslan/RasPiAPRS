@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-13T23:41:06+08:00)
+## [beta8] - (2026-03-13T23:52:23+08:00)
 
-- 33 commit(s) contributed to the release.
+- 34 commit(s) contributed to the release.
 - 2 day(s) passed between the first and last commit.
 - 2 day(s) passed between releases.
 
@@ -54,6 +54,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta8
 
+- [703eccb](https://github.com/HafiziRuslan/RasPiAPRS/commit/703eccbb634e2a81a905087d326b4c5d3db3d1a2) build(env): Optimize environment recreation with uv venv -c *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T23:52:23+08:00*
 - [34cf38b](https://github.com/HafiziRuslan/RasPiAPRS/commit/34cf38bfc22d77777f5752a75ca7b035894672f2) ci(github): add telegram notification workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T21:57:31+08:00*
 - [9ddc6c7](https://github.com/HafiziRuslan/RasPiAPRS/commit/9ddc6c731bceb4efa0bbb96878d7536a7c433d4f) chore(config): update funding URLs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T10:25:44+08:00*
 - [b34e9d5](https://github.com/HafiziRuslan/RasPiAPRS/commit/b34e9d519df9b28399c3dc3a384fd4ea919b4779) chore(ci): add read permission to release workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:23:58+08:00*
@@ -1142,4 +1143,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-13T23:51:26.198173374+08:00
+generated using git-cliff on 2026-03-13T23:57:02.679406168+08:00
