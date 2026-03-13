@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-14T04:57:53+08:00)
+## [beta8] - (2026-03-14T06:15:15+08:00)
 
-- 47 commit(s) contributed to the release.
+- 48 commit(s) contributed to the release.
 - 2 day(s) passed between the first and last commit.
 - 2 day(s) passed between releases.
 
@@ -66,6 +66,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta8
 
+- [ee64b48](https://github.com/HafiziRuslan/RasPiAPRS/commit/ee64b4822bb44531448227b63775a4ce6708bb5b) chore(gps): revert commit 57ebde3 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T06:15:15+08:00*
 - [dcccbec](https://github.com/HafiziRuslan/RasPiAPRS/commit/dcccbecc4db3842b57a3d13d2a466fb7948b2395) chore(main): reduce log rotation defaults *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T03:24:13+08:00*
 - [703eccb](https://github.com/HafiziRuslan/RasPiAPRS/commit/703eccbb634e2a81a905087d326b4c5d3db3d1a2) build(env): Optimize environment recreation with uv venv -c *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T23:52:23+08:00*
 - [34cf38b](https://github.com/HafiziRuslan/RasPiAPRS/commit/34cf38bfc22d77777f5752a75ca7b035894672f2) ci(github): add telegram notification workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T21:57:31+08:00*
@@ -1156,4 +1157,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-14T04:58:42.950109547+08:00
+generated using git-cliff on 2026-03-14T06:18:30.757968292+08:00
