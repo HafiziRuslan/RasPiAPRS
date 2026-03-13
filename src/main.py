@@ -570,6 +570,15 @@ class GPSHandler:
 				)
 				self.last_valid_fix = self._current_fix
 				self._save_cache(self._current_fix.lat, self._current_fix.lon, self._current_fix.alt)
+				logging.debug(
+					'GPSD pos data: [time: %s, lat: %f, lon: %f, alt: %0.1f, spd: %0.0f, cse: %0.0f]',
+					self._current_fix.timestamp.astimezone().isoformat(timespec='seconds'),
+					self._current_fix.lat,
+					self._current_fix.lon,
+					self._current_fix.alt,
+					self._current_fix.spd,
+					self._current_fix.cse,
+				)
 
 			# Update Satellites
 			sat_res = await self._retrieve_data('SKY', 'satellite')
@@ -579,22 +588,13 @@ class GPSHandler:
 					uSat=sat_res.get('uSat', 0),
 					nSat=sat_res.get('nSat', 0)
 				)
+				logging.debug(
+					'GPSD sat data: [time: %s, uSat: %0.0f, nSat: %0.0f]',
+					self._current_sat.timestamp.astimezone().isoformat(timespec='seconds'),
+					self._current_sat.uSat,
+					self._current_sat.nSat,
+				)
 
-			logging.debug(
-				'GPSD pos data: [time: %s, lat: %f, lon: %f, alt: %0.1f, spd: %0.0f, cse: %0.0f]',
-				self._current_fix.timestamp.astimezone().isoformat(timespec='seconds'),
-				self._current_fix.lat,
-				self._current_fix.lon,
-				self._current_fix.alt,
-				self._current_fix.spd,
-				self._current_fix.cse,
-			)
-			logging.debug(
-				'GPSD sat data: [time: %s, uSat: %0.0f, nSat: %0.0f]',
-				self._current_sat.timestamp.astimezone().isoformat(timespec='seconds'),
-				self._current_sat.uSat,
-				self._current_sat.nSat,
-			)
 			await asyncio.sleep(1)
 
 	def _get_fallback_location(self):
