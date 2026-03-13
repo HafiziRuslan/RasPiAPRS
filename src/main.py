@@ -1396,7 +1396,16 @@ class APRSSender:
 		lookup_table = symbt if symbt in ['/', '\\'] else '\\'
 		sym_desc = symbols.get_desc(lookup_table, symb).split('(')[0].strip()
 		payload = f'{FROMCALL}>{TOCALL}:/{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
-		tg_pos = f'<u>{FROMCALL} Position</u>\n\nTime: <b>{tg_timestamp}</b>\nSymbol: <b>{symbt}{symb} ({sym_desc})</b>\nPosition:\n\tLatitude: <b>{cur_lat}</b>\n\tLongitude: <b>{cur_lon}</b>\n\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\nComment: <b>{comment}</b>'
+		tg_pos = (
+			f'<u>{FROMCALL} Position</u>\n\n'
+			f'Time: <b>{tg_timestamp}</b>\n'
+			f'Symbol: <b>{symbt}{symb} ({sym_desc})</b>\n'
+			f'Position:\n'
+			f'\tLatitude: <b>{cur_lat}</b>\n'
+			f'\tLongitude: <b>{cur_lon}</b>\n'
+			f'\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\n'
+			f'Comment: <b>{comment}</b>'
+		)
 		await self.send_packet(payload, 'position')
 		await self.tg_logger.log(tg_pos, cur_lat, cur_lon, int(csestr))
 
@@ -1411,9 +1420,15 @@ class APRSSender:
 			units.append('sats')
 			eqns.append('0,1,0')
 		payload = f'{caller}PARM.{",".join(params)}\r\n{caller}UNIT.{",".join(units)}\r\n{caller}EQNS.{",".join(eqns)}'
-		tg_msg = f'<u>{FROMCALL} Header</u>\n\nParameters: <b>{",".join(params)}</b>\nUnits: <b>{",".join(units)}</b>\nEquations: <b>{",".join(eqns)}</b>\n\nValue: <code>[a,b,c]=(a×v²)+(b×v)+c</code>'
+		tg_hdr = (
+			f'<u>{FROMCALL} Header</u>\n\n'
+			f'Parameters: <b>{",".join(params)}</b>\n'
+			f'Units: <b>{",".join(units)}</b>\n'
+			f'Equations: <b>{",".join(eqns)}</b>\n\n'
+			f'Value: <code>[a,b,c]=(a×v²)+(b×v)+c</code>'
+		)
 		await self.send_packet(payload, 'header')
-		await self.tg_logger.log(tg_msg)
+		await self.tg_logger.log(tg_hdr)
 
 	async def send_telemetry(self, gps_data=None):
 		"""Send APRS telemetry information to APRS-IS."""
@@ -1425,7 +1440,7 @@ class APRSSender:
 		telemmemused = int(memused / 1.0000e6)
 		telemdiskused = int(diskused / 1.0000e6)
 		payload = f'{FROMCALL}>{TOCALL}:T#{seq:03d},{cputemp:d},{cpuload:d},{telemmemused:d},{telemdiskused:d}'
-		tgtel = (
+		tg_tlm = (
 			f'<u>{FROMCALL} Telemetry</u>\n\n'
 			f'Sequence: <b>#{seq}</b>\n'
 			f'CPU Temp: <b>{cputemp / 10:.1f} °C</b>\n'
@@ -1438,9 +1453,9 @@ class APRSSender:
 			_, uSat, nSat = sat_data
 			payload += f',{uSat:d}'
 			if uSat > 0:
-				tgtel += f'\nGPS Lock: <b>{uSat}</b>\nGPS Avail: <b>{nSat}</b>'
+				tg_tlm += f'\nGPS Lock: <b>{uSat}</b>\nGPS Avail: <b>{nSat}</b>'
 		await self.send_packet(payload, 'telemetry')
-		await self.tg_logger.log(tgtel)
+		await self.tg_logger.log(tg_tlm)
 
 	async def send_status(self, gps_data=None):
 		"""Send APRS status information to APRS-IS."""
@@ -1461,7 +1476,7 @@ class APRSSender:
 		stat_text = f'{timestamp}{"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
 		tele_text = f'Time: <b>{tg_timestamp}</b>\nText: <b>{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}</b>'
 		payload = f'{FROMCALL}>{TOCALL}:>{stat_text}'
-		tg_msg = f'<u>{FROMCALL} Status</u>\n\n<b>{tele_text}</b>'
+		tg_stat = f'<u>{FROMCALL} Status</u>\n\n<b>{tele_text}</b>'
 		if os.path.exists(STATUS_FILE):
 			try:
 				with open(STATUS_FILE, 'r') as f:
@@ -1475,7 +1490,7 @@ class APRSSender:
 				f.write(payload)
 		except (IOError, OSError):
 			pass
-		await self.tg_logger.log(tg_msg)
+		await self.tg_logger.log(tg_stat)
 
 	def close(self):
 		"""Close the APRS-IS connection."""
