@@ -37,9 +37,9 @@ from gpsdclient import GPSDClient
 
 # Default directory
 ETC_DIR = '/etc'
-TMP_DIR = '/var/tmp/raspiaprs'
-LIB_DIR = '/var/lib/raspiaprs'
-LOG_DIR = '/var/log/raspiaprs'
+TMP_DIR = '/var/tmp/RasPiAPRS'
+LIB_DIR = '/var/lib/RasPiAPRS'
+LOG_DIR = '/var/log/RasPiAPRS'
 # Default paths for system files
 OS_RELEASE_FILE = f'{ETC_DIR}/os-release'
 MMDVMHOST_FILE = f'{ETC_DIR}/mmdvmhost'

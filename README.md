@@ -46,8 +46,8 @@ sudo apt update && sudo apt install uv
 ## Installation (Pi-Star / WPSD / AllStarLink)
 
 ```bash
-git clone https://github.com/HafiziRuslan/RasPiAPRS.git raspiaprs
-cd raspiaprs
+git clone https://github.com/HafiziRuslan/RasPiAPRS.git RasPiAPRS
+cd RasPiAPRS
 ```
 
 ## Configurations
@@ -72,7 +72,7 @@ note: `sudo` required for write access on `/var` directories.
 Copy & Paste this line into last line (before blank line) of `/etc/crontab` or any other cron program that you're using.
 
 ```bash
-@reboot pi-star cd /home/pi-star/raspiaprs && ./main.sh > /var/log/raspiaprs.log 2>&1
+@reboot pi-star cd /home/pi-star/RasPiAPRS && ./main.sh > /var/log/RasPiAPRS.log 2>&1
 ```
 
 change the `pi-star` username into your username
