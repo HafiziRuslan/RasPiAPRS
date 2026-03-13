@@ -188,7 +188,7 @@ update_application() {
       if [ "$UPDATE_SUCCESS" = true ] && [ "$(sudo -u "$dir_own" git rev-parse HEAD)" = "$REMOTE" ]; then
         if ! sudo -u "$dir_own" git diff --quiet "$LOCAL" HEAD -- pyproject.toml; then
           log_msg INFO "Application updated. Forcing environement recreation."
-          sudo -u "$dir_own" uv venv --clear
+          sudo -u "$dir_own" uv venv -c
         fi
 
         log_msg INFO "Verifying application integrity..."
@@ -211,7 +211,7 @@ setup_venv() {
   if [ -d ".venv" ]; then
     if ! sudo -u "$dir_own" ./.venv/bin/python3 -c 'import sys' >/dev/null 2>&1; then
       log_msg WARN "⚠️ Virtual environment appears corrupted. Removing it..."
-      sudo -u "$dir_own" uv venv --clear
+      sudo -u "$dir_own" uv venv -c
     fi
   fi
 
