@@ -805,7 +805,8 @@ class SmartBeaconing(object):
 class SystemStats(object):
 	"""Class to handle system statistics."""
 
-	def __init__(self):
+	def __init__(self, cfg):
+		self.cfg = cfg
 		self._cache = {}
 		self._temp_history = deque()
 		self._mem_history = deque()
@@ -838,13 +839,15 @@ class SystemStats(object):
 		"""Fetch raw memory usage."""
 		return psutil.virtual_memory().used
 
-	def _prune_history(self, history, now, window=600):
+	def _prune_history(self, history, now, window=None):
 		"""Prune old entries from history."""
+		window = window or self.cfg.sleep
 		while history and history[0][0] < now - window:
 			history.popleft()
 
-	def _record_history(self, history, value, now, window=600):
+	def _record_history(self, history, value, now, window=None):
 		"""Records historical data points."""
+		window = window or self.cfg.sleep
 		history.append((now, value))
 		self._prune_history(history, now, window)
 
@@ -1501,7 +1504,7 @@ async def initialize_session(cfg):
 		loc_data, _ = await gps_handler.get_loc_and_sat()
 		_, cfg.latitude, cfg.longitude, cfg.altitude, _, _ = loc_data
 	tg_logger = TelegramLogger(cfg)
-	sys_stats = SystemStats()
+	sys_stats = SystemStats(cfg)
 	telem_seq = Sequence(name='telem_sequence', modulo=1000)
 	aprs_sender = APRSSender(cfg, tg_logger, sys_stats, gps_handler, telem_seq)
 	await aprs_sender.connect()
