@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-14T03:41:34+08:00)
+## [beta8] - (2026-03-14T04:26:14+08:00)
 
-- 41 commit(s) contributed to the release.
+- 43 commit(s) contributed to the release.
 - 2 day(s) passed between the first and last commit.
 - 2 day(s) passed between releases.
 
@@ -39,6 +39,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [9506133](https://github.com/HafiziRuslan/RasPiAPRS/commit/9506133b9b5f0f8d69d79e838e7ad2c2281acddc) refactor(stats): standardize CPU load tracking *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T04:26:14+08:00*
+- [5441167](https://github.com/HafiziRuslan/RasPiAPRS/commit/5441167403cd913b9221bb11f3e63145427a7975) refactor(telegram workflow): simplify commit message format *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T03:45:12+08:00*
 - [c28edad](https://github.com/HafiziRuslan/RasPiAPRS/commit/c28edadc128070be354f54666055f2aca9a56683) refactor: standardize project naming convention *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T23:41:06+08:00*
 - [a4afd9f](https://github.com/HafiziRuslan/RasPiAPRS/commit/a4afd9f99ff705ed90537163577ab272f0ea671e) refactor(GPS): enhance logging format for position and satellite data *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T22:53:56+08:00*
 - [c852b1c](https://github.com/HafiziRuslan/RasPiAPRS/commit/c852b1c026410a60fa5d7ea0ca65e84ae497bb32) refactor(logging): enhance debug message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T19:00:47+08:00*
@@ -1150,4 +1152,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-14T03:42:24.528702539+08:00
+generated using git-cliff on 2026-03-14T04:27:07.494881689+08:00
