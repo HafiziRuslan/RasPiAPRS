@@ -1040,7 +1040,7 @@ class SystemStats(object):
 								best_tx = tx_bytes
 								found = True
 				if found:
-					rxtx = humanize.naturalsize(best_rx + best_tx, binary=True).replace(' ', '')
+					rxtx = humanize.naturalsize(best_rx + best_tx).replace(' ', '')
 					return f'net: {rxtx}'
 			except (FileNotFoundError, subprocess.CalledProcessError, IndexError, json.JSONDecodeError, KeyError) as e:
 				logging.warning('Could not fetch or parse vnstat 5-min traffic: %s', e)
