@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-14T04:51:32+08:00)
+## [beta8] - (2026-03-14T04:57:53+08:00)
 
-- 46 commit(s) contributed to the release.
+- 47 commit(s) contributed to the release.
 - 2 day(s) passed between the first and last commit.
 - 2 day(s) passed between releases.
 
@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [acdf634](https://github.com/HafiziRuslan/RasPiAPRS/commit/acdf6346d6fade131e68782b4c057196d2082078) fix(main): ensure iterator count never zero  - reset count to 1 when it becomes zero to avoid invalid state *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T04:57:53+08:00*
 - [f7211ac](https://github.com/HafiziRuslan/RasPiAPRS/commit/f7211ac17d29399f254d526f2d60c059c228b5db) fix(main): correct log max bytes environment variable type *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T03:22:56+08:00*
 - [da14e89](https://github.com/HafiziRuslan/RasPiAPRS/commit/da14e891c79d51a49bd78a59b229f43e0c91aa2e) fix(logging): correct log file size calculation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T03:21:14+08:00*
 - [0b9cf00](https://github.com/HafiziRuslan/RasPiAPRS/commit/0b9cf00c12e4a967bbea22e6a7c14ba55bbd53ce) fix(telegram): update notification message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T22:08:58+08:00*
@@ -1155,4 +1156,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-14T04:52:28.952747938+08:00
+generated using git-cliff on 2026-03-14T04:58:42.950109547+08:00
