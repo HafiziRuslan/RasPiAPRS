@@ -334,6 +334,8 @@ class PersistentCounter:
 
 	def __next__(self):
 		self._count = (1 + self._count) % self.modulo
+		if self._count == 0:
+			self._count = 1
 		self._save()
 		return self._count
 
