@@ -27,13 +27,11 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           message: |
-            New commit by <b><a href="https://github.com/${{ github.event.sender.login }}">@${{ github.event.sender.login }}</a></b>!
-            -----
+            New commit by <b><a href="https://github.com/${{ github.event.sender.login }}">@${{ github.event.sender.login }}</a></b>!\n\n
             Date: ${{ github.event.workflow_run.head_commit.timestamp }}
             SHA: <code>${{ steps.vars.outputs.sha_short }}</code>
             Reference: ${{ github.event.workflow_run.head_branch }}
             Repository: <a href="https://github.com/${{ github.repository }}/commit/${{ github.event.workflow_run.head_sha }}">${{ github.repository }}</a>
-            -----
             Commit: <pre>${{ github.event.workflow_run.head_commit.message }}</pre>
           parse-mode: 'html'
           disable-web-page-preview: true
