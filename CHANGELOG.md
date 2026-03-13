@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-14T04:34:54+08:00)
+## [beta8] - (2026-03-14T04:51:32+08:00)
 
-- 44 commit(s) contributed to the release.
+- 46 commit(s) contributed to the release.
 - 2 day(s) passed between the first and last commit.
 - 2 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [633440f](https://github.com/HafiziRuslan/RasPiAPRS/commit/633440f0582dcfc1c86ab58c3bd5a3ed57eca4f1) feat(notifications): improve Telegram commit notification format *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T04:37:52+08:00*
 - [57ebde3](https://github.com/HafiziRuslan/RasPiAPRS/commit/57ebde3b2a0d45e50cfe7b1a60752a60c2df5780) feat(gps): optimize GPS data processing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T03:41:34+08:00*
 - [bb140ba](https://github.com/HafiziRuslan/RasPiAPRS/commit/bb140ba8190ccf69b02309ed547b6e2d0ace35dd) feat(telegram): shorten commit SHA in workflow messages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T03:31:56+08:00*
 - [2e3335d](https://github.com/HafiziRuslan/RasPiAPRS/commit/2e3335dae598fd4096e9b622bd23c8f255df92a1) feat(ci): add read permission for workflow contents *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T00:12:32+08:00*
@@ -39,6 +40,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [8d319d8](https://github.com/HafiziRuslan/RasPiAPRS/commit/8d319d855375463f8c7984e35a4ac402d855d0a0) refactor(system_stats): use cfg.sleep for history window *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T04:51:32+08:00*
 - [050032f](https://github.com/HafiziRuslan/RasPiAPRS/commit/050032fa41c966fb8010dbdec67555e1ff60ecff) refactor(system-stats): rename memory metrics to VRAM *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T04:34:54+08:00*
 - [9506133](https://github.com/HafiziRuslan/RasPiAPRS/commit/9506133b9b5f0f8d69d79e838e7ad2c2281acddc) refactor(stats): standardize CPU load tracking *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T04:26:14+08:00*
 - [5441167](https://github.com/HafiziRuslan/RasPiAPRS/commit/5441167403cd913b9221bb11f3e63145427a7975) refactor(telegram workflow): simplify commit message format *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T03:45:12+08:00*
@@ -1153,4 +1155,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-14T04:35:47.451890160+08:00
+generated using git-cliff on 2026-03-14T04:52:28.952747938+08:00
