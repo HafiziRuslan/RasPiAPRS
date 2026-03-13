@@ -1396,7 +1396,7 @@ class APRSSender:
 		lookup_table = symbt if symbt in ['/', '\\'] else '\\'
 		sym_desc = symbols.get_desc(lookup_table, symb).split('(')[0].strip()
 		payload = f'{FROMCALL}>{TOCALL}:/{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
-		tg_pos = f'<u>{FROMCALL} Position</u>\n\nTime: <b>{tg_timestamp}</b>\nSymbol: {symbt}{symb} ({sym_desc})\nPosition:\n\tLatitude: <b>{cur_lat}</b>\n\tLongitude: <b>{cur_lon}</b>\n\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\nComment: <b>{comment}</b>'
+		tg_pos = f'<u>{FROMCALL} Position</u>\n\nTime: <b>{tg_timestamp}</b>\nSymbol: <b>{symbt}{symb} ({sym_desc})</b>\nPosition:\n\tLatitude: <b>{cur_lat}</b>\n\tLongitude: <b>{cur_lon}</b>\n\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\nComment: <b>{comment}</b>'
 		await self.send_packet(payload, 'position')
 		await self.tg_logger.log(tg_pos, cur_lat, cur_lon, int(csestr))
 
