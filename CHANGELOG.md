@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-13T01:21:35+08:00)
+## [beta8] - (2026-03-13T23:24:37+08:00)
 
-- 26 commit(s) contributed to the release.
-- 1 day(s) passed between the first and last commit.
-- 1 day(s) passed between releases.
+- 32 commit(s) contributed to the release.
+- 2 day(s) passed between the first and last commit.
+- 2 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [656c018](https://github.com/HafiziRuslan/RasPiAPRS/commit/656c0187e62d4ae7f38f30d87f7a1ee2ea3eb86d) feat(telegram): add line breaks to commit message in Telegram notification *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T22:07:01+08:00*
 - [7924edb](https://github.com/HafiziRuslan/RasPiAPRS/commit/7924edb4b43c33538cda411b117020c10d47e85a) feat(logging): add additional library loggers to warning level filtering *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T01:21:35+08:00*
 - [0a6c5c2](https://github.com/HafiziRuslan/RasPiAPRS/commit/0a6c5c2bc3ef1ed2680e334b30d419b6887b7ab5) feat(logging): add log file prefix for better sorting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T21:46:44+08:00*
 - [fe37472](https://github.com/HafiziRuslan/RasPiAPRS/commit/fe37472fa03a59307334abd660be175f322d4cae) feat(logging): add debug log for gps data, increase sleep to 1s *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T21:41:47+08:00*
@@ -21,6 +22,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [0b9cf00](https://github.com/HafiziRuslan/RasPiAPRS/commit/0b9cf00c12e4a967bbea22e6a7c14ba55bbd53ce) fix(telegram): update notification message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T22:08:58+08:00*
+- [f8a203f](https://github.com/HafiziRuslan/RasPiAPRS/commit/f8a203f6ca88f3568bf1b4026cae00877dc8aff8) fix(telegram): fix committer URL to use username *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T22:00:29+08:00*
 - [12faf11](https://github.com/HafiziRuslan/RasPiAPRS/commit/12faf11f7c882c16c577d56aba63815ae234554c) refactor(satellite): introduce SATFix and improve satellite data logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T22:39:53+08:00*
 - [904a9af](https://github.com/HafiziRuslan/RasPiAPRS/commit/904a9af636720ca9795a51d47bedd12b8560235a) refactor(gps): use utc from last_valid_fix *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T18:56:55+08:00*
 - [eaf2ee0](https://github.com/HafiziRuslan/RasPiAPRS/commit/eaf2ee074c3822191584701a0586bc29976275a5) fix(release): update version parsing to support pre-release suffixes *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:47:50+08:00*
@@ -40,8 +43,17 @@ All notable changes to this project will be documented in this file.
 - [a17b7ea](https://github.com/HafiziRuslan/RasPiAPRS/commit/a17b7ea1f88660819d040aa0ff2b9f997cfa1eeb) refactor(release): simplify version parsing logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:18:25+08:00*
 - [e08f40c](https://github.com/HafiziRuslan/RasPiAPRS/commit/e08f40ce1f210ff7a7f80a6141ee988b9fa0592d) refactor(release): extract project name from pyproject.toml for release filename and logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:04:34+08:00*
 
+### 📚 Documentation in beta8
+
+- [3c012f0](https://github.com/HafiziRuslan/RasPiAPRS/commit/3c012f0ae038144298282fa8d68eba9b0a23786e) docs(telegram): improve commit message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T22:03:48+08:00*
+
+### 🎨 Styling in beta8
+
+- [f41da33](https://github.com/HafiziRuslan/RasPiAPRS/commit/f41da33f116d820475929258f8bc38d4103eb210) style: rename directories to match project name *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T23:24:37+08:00*
+
 ### ⚙️ Miscellaneous Tasks in beta8
 
+- [34cf38b](https://github.com/HafiziRuslan/RasPiAPRS/commit/34cf38bfc22d77777f5752a75ca7b035894672f2) ci(github): add telegram notification workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T21:57:31+08:00*
 - [9ddc6c7](https://github.com/HafiziRuslan/RasPiAPRS/commit/9ddc6c731bceb4efa0bbb96878d7536a7c433d4f) chore(config): update funding URLs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T10:25:44+08:00*
 - [b34e9d5](https://github.com/HafiziRuslan/RasPiAPRS/commit/b34e9d519df9b28399c3dc3a384fd4ea919b4779) chore(ci): add read permission to release workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T04:23:58+08:00*
 - [b9cb294](https://github.com/HafiziRuslan/RasPiAPRS/commit/b9cb294d368c09ce6531248ea930dc9bf939fa71) chore: enable paths-ignore for .github directory in release workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T03:55:57+08:00*
@@ -1129,4 +1141,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-13T01:22:25.738038737+08:00
+generated using git-cliff on 2026-03-13T23:25:36.318199428+08:00
