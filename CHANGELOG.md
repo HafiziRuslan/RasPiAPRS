@@ -2,14 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-14T03:24:13+08:00)
+## [beta8] - (2026-03-14T03:41:34+08:00)
 
-- 39 commit(s) contributed to the release.
+- 41 commit(s) contributed to the release.
 - 2 day(s) passed between the first and last commit.
 - 2 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [57ebde3](https://github.com/HafiziRuslan/RasPiAPRS/commit/57ebde3b2a0d45e50cfe7b1a60752a60c2df5780) feat(gps): optimize GPS data processing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T03:41:34+08:00*
+- [bb140ba](https://github.com/HafiziRuslan/RasPiAPRS/commit/bb140ba8190ccf69b02309ed547b6e2d0ace35dd) feat(telegram): shorten commit SHA in workflow messages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T03:31:56+08:00*
 - [2e3335d](https://github.com/HafiziRuslan/RasPiAPRS/commit/2e3335dae598fd4096e9b622bd23c8f255df92a1) feat(ci): add read permission for workflow contents *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T00:12:32+08:00*
 - [6f7f93a](https://github.com/HafiziRuslan/RasPiAPRS/commit/6f7f93afa7bfc56216a5c0360d0a37a23a6c7b96) feat(telegram): update workflow to send commit messages on workflow completion *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T00:05:38+08:00*
 - [656c018](https://github.com/HafiziRuslan/RasPiAPRS/commit/656c0187e62d4ae7f38f30d87f7a1ee2ea3eb86d) feat(telegram): add line breaks to commit message in Telegram notification *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T22:07:01+08:00*
@@ -1148,4 +1150,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-14T03:25:13.892510629+08:00
+generated using git-cliff on 2026-03-14T03:42:24.528702539+08:00
