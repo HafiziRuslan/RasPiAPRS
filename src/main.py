@@ -150,8 +150,8 @@ def configure_logging():
 		logging.CRITICAL: '5-critical.log',
 	}
 
-	max_bytes = _env_get_float('LOG_MAX_BYTES', 1.5) * 1024 * 1024
-	max_count = _env_get_int('LOG_MAX_COUNT', 5)
+	max_bytes = _env_get_float('LOG_MAX_BYTES', 1) * 1024 * 1024
+	max_count = _env_get_int('LOG_MAX_COUNT', 3)
 
 	for level, filename in log_files.items():
 		if level < log_level:
