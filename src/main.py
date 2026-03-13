@@ -809,6 +809,7 @@ class SystemStats(object):
 		self._cache = {}
 		self._temp_history = deque()
 		self._mem_history = deque()
+		self._cpu_history = deque()
 
 	def _get_cached(self, key, func, ttl=10, default=None):
 		"""Get cached data."""
@@ -825,34 +826,17 @@ class SystemStats(object):
 		self._cache[key] = (val, now)
 		return val
 
-	@property
-	def avg_cpu_load(self):
-		"""Get CPU load as a percentage of total capacity."""
-
-		def _fetch():
-			load = psutil.getloadavg()[1]
-			core = psutil.cpu_count()
-			return int((load / core) * 100 * 1000)
-
-		return self._get_cached('cpu_load', _fetch, ttl=5, default=0)
-
-	@property
-	def storage_used(self):
-		"""Get used disk space in bits."""
-
-		def _fetch():
-			return psutil.disk_usage('/').used
-
-		return self._get_cached('storage_used', _fetch, ttl=60, default=0)
-
 	def _fetch_raw_cpu_temp(self):
 		"""Fetch raw CPU temperature."""
 		return psutil.sensors_temperatures()['cpu_thermal'][0].current
 
+	def _fetch_raw_cpu_load(self):
+		"""Fetch raw CPU load."""
+		return psutil.cpu_percent()
+
 	def _fetch_raw_memory_used(self):
 		"""Fetch raw memory usage."""
-		mem = psutil.virtual_memory()
-		return mem.total - mem.free - mem.buffers - mem.cached
+		return psutil.virtual_memory().used
 
 	def _prune_history(self, history, now, window=600):
 		"""Prune old entries from history."""
@@ -881,12 +865,14 @@ class SystemStats(object):
 		"""Check and record current temperature and memory."""
 		now = time.time()
 		self._update_history(self._temp_history, self._fetch_raw_cpu_temp, now)
+		self._update_history(self._cpu_history, self._fetch_raw_cpu_load, now)
 		self._update_history(self._mem_history, self._fetch_raw_memory_used, now)
 
 	def cleanup(self):
 		"""Clean up old history entries to ensure memory efficiency."""
 		now = time.time()
 		self._prune_history(self._temp_history, now)
+		self._prune_history(self._cpu_history, now)
 		self._prune_history(self._mem_history, now)
 
 	def _get_stat_property(self, history, fetch_func, cache_key, scale=1):
@@ -906,9 +892,23 @@ class SystemStats(object):
 		return self._get_stat_property(self._temp_history, self._fetch_raw_cpu_temp, 'avg_temp', 10)
 
 	@property
-	def avg_memory_used(self):
+	def avg_cpu(self):
+		"""Get CPU load in percent."""
+		return self._get_stat_property(self._cpu_history, self._fetch_raw_cpu_load, 'cpu_load', 10)
+
+	@property
+	def avg_memory(self):
 		"""Get used memory in bits."""
 		return self._get_stat_property(self._mem_history, self._fetch_raw_memory_used, 'memory_used')
+
+	@property
+	def storage_used(self):
+		"""Get used disk space in bits."""
+
+		def _fetch():
+			return psutil.disk_usage('/').used
+
+		return self._get_cached('storage_used', _fetch, ttl=60, default=0)
 
 	@property
 	def uptime(self):
@@ -1396,7 +1396,7 @@ class APRSSender:
 		caller = f'{FROMCALL}>{TOCALL}::{FROMCALL:9s}:'
 		params = ['Temp', 'Load', 'RAM', 'ROM']
 		units = ['deg.C', '%', 'GB', 'GB']
-		eqns = ['0,0.1,0', '0,0.001,0', '0,0.001,0', '0,0.001,0']
+		eqns = ['0,0.1,0', '0,0.1,0', '0,0.001,0', '0,0.001,0']
 		if self.cfg.gpsd_enabled:
 			params.append('GPS')
 			units.append('sats')
@@ -1410,8 +1410,8 @@ class APRSSender:
 		"""Send APRS telemetry information to APRS-IS."""
 		seq = next(self.telem_seq)
 		cputemp = self.sys_stats.avg_temp
-		cpuload = self.sys_stats.avg_cpu_load
-		memused = self.sys_stats.avg_memory_used
+		cpuload = self.sys_stats.cpu_load
+		memused = self.sys_stats.avg_memory
 		diskused = self.sys_stats.storage_used
 		telemmemused = int(memused / 1.0000e6)
 		telemdiskused = int(diskused / 1.0000e6)
@@ -1420,7 +1420,7 @@ class APRSSender:
 			f'<u>{FROMCALL} Telemetry</u>\n\n'
 			f'Sequence: <b>#{seq}</b>\n'
 			f'CPU Temp: <b>{cputemp / 10:.1f} °C</b>\n'
-			f'CPU Load: <b>{cpuload / 1000:.1f}%</b>\n'
+			f'CPU Load: <b>{cpuload / 10:.1f} %</b>\n'
 			f'RAM Used: <b>{humanize.naturalsize(memused, binary=True)}</b>\n'
 			f'ROM Used: <b>{humanize.naturalsize(diskused, binary=True)}</b>'
 		)
