@@ -581,13 +581,16 @@ class GPSHandler:
 				)
 
 			logging.debug(
-				'GPSD data: pos: [time: %s, lat: %f, lon: %f, alt: %0.1f, spd: %0.0f, cse: %0.0f], sat: [time: %s, uSat: %0.0f, nSat: %0.0f]',
+				'GPSD pos data: [time: %s, lat: %f, lon: %f, alt: %0.1f, spd: %0.0f, cse: %0.0f]',
 				self._current_fix.timestamp.astimezone().isoformat(timespec='seconds'),
 				self._current_fix.lat,
 				self._current_fix.lon,
 				self._current_fix.alt,
 				self._current_fix.spd,
 				self._current_fix.cse,
+			)
+			logging.debug(
+				'GPSD sat data: [time: %s, uSat: %0.0f, nSat: %0.0f]',
 				self._current_sat.timestamp.astimezone().isoformat(timespec='seconds'),
 				self._current_sat.uSat,
 				self._current_sat.nSat,
