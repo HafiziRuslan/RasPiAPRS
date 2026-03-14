@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-15T02:53:28+08:00)
+## [beta8] - (2026-03-15T03:19:36+08:00)
 
-- 62 commit(s) contributed to the release.
+- 63 commit(s) contributed to the release.
 - 3 day(s) passed between the first and last commit.
 - 3 day(s) passed between releases.
 
@@ -46,6 +46,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [f9a464e](https://github.com/HafiziRuslan/RasPiAPRS/commit/f9a464e47f6477bf5c13fd4c4a16f5f8d704fa38) refactor: simplify message tracking logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-15T03:19:36+08:00*
 - [e43ce21](https://github.com/HafiziRuslan/RasPiAPRS/commit/e43ce21dc1180ba7aec5853fc724e238f766be84) refactor(config): introduce Config dataclass for centralized configuration management *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-15T02:53:28+08:00*
 - [75f3dcd](https://github.com/HafiziRuslan/RasPiAPRS/commit/75f3dcd9b42154e8c971d19c71a9c67bdbcfc759) refactor: improve code readability in main.py by reformatting long strings *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T07:11:59+08:00*
 - [f2a0084](https://github.com/HafiziRuslan/RasPiAPRS/commit/f2a008455f100e6c78f77127fee40a8bfab56cbf) refactor(server): optimize tg_pos formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T06:59:04+08:00*
@@ -1174,4 +1175,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-15T03:00:06.647150221+08:00
+generated using git-cliff on 2026-03-15T03:20:26.470325043+08:00
