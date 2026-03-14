@@ -82,7 +82,7 @@ jobs:
         with:
           type: 'zip'
           filename: "${{ needs.version.outputs.name }}-${{ needs.version.outputs.version }}.zip"
-          exclusions: '*.git* /.git* LICENSE /tests* *lock* sbom* *.md /misc*'
+          exclusions: '*.git* /.git* LICENSE /tests* *lock* *.md /misc*'
           recursive_exclusions: '*.md'
 
       - name: Upload Release
