@@ -286,11 +286,13 @@ class Config:
 			self.telegram_topic_id = _env_get_int_or_none('TELEGRAM_TOPIC_ID')
 			self.telegram_msg_topic_id = _env_get_int_or_none('TELEGRAM_MSG_TOPIC_ID')
 			self.telegram_loc_topic_id = _env_get_int_or_none('TELEGRAM_LOC_TOPIC_ID')
+		self.aprsphnet_enabled = _env_get_bool('APRSPHNET_ENABLE')
 		self.aprsthursday_enabled = _env_get_bool('APRSTHURSDAY_ENABLE')
+		self.aprsaturday_enabled = _env_get_bool('APRSATURDAY_ENABLE')
 		self.aprsmysunday_enabled = _env_get_bool('APRSMYSUNDAY_ENABLE')
 		self.aprshamfinity_enabled = _env_get_bool('APRSHAMFINITY_ENABLE')
 		self.additional_sender = None
-		if self.aprsthursday_enabled or self.aprsmysunday_enabled or self.aprshamfinity_enabled:
+		if self.aprsphnet_enabled or self.aprsthursday_enabled or self.aprsaturday_enabled or self.aprsmysunday_enabled or self.aprshamfinity_enabled:
 			senders_str = os.getenv('ADDITIONAL_SENDER')
 			if senders_str:
 				valid_senders = []
@@ -1065,9 +1067,11 @@ class ScheduledMessageHandler:
 		"""Initialize scheduled messages."""
 		self.messages = []
 		definitions = [
+			('aprsphnet_enabled', 'APRSPHNet', None, 'APRSPH', 'NET #{}', dt.timezone.utc),
 			('aprsthursday_enabled', 'APRSThursday', 3, 'ANSRVR', 'CQ HOTG #{}', dt.timezone.utc),
-			('aprshamfinity_enabled', 'APRSHamfinity', 6, '9M4GKS', 'CQ HAMFINITY #{}', dt.timezone.utc),
+			('aprsaturday_enabled', 'APRSaturday', 5, '9M4GHZ', 'CQ DXMY #{}', dt.timezone.utc),
 			('aprsmysunday_enabled', 'APRSMYSunday', 6, 'APRSMY', 'CHECK #{}', dt.timezone(dt.timedelta(hours=8))),
+			('aprshamfinity_enabled', 'APRSHamfinity', 6, '9M4GKS', 'CQ HAMFINITY #{}', dt.timezone.utc),
 		]
 		for attr, name, weekday, addrcall, template_fmt, tz in definitions:
 			if getattr(self.cfg, attr, False):
@@ -1091,7 +1095,7 @@ class ScheduledMessageHandler:
 	async def _is_due(self, msg_info) -> bool:
 		"""Return True if the message described by *msg_info* should be sent now."""
 		now = dt.datetime.now(msg_info['tz'])
-		if now.weekday() != msg_info['weekday']:
+		if msg_info['weekday'] is not None and now.weekday() != msg_info['weekday']:
 			return False
 		today = now.strftime('%Y-%m-%d')
 		source = msg_info['from_call'] or FROMCALL
@@ -1118,7 +1122,7 @@ class ScheduledMessageHandler:
 	async def _send_one(self, aprs_sender, name, weekday, addrcall, template, from_call=None, tz=dt.timezone.utc, gps_data=None):
 		"""Send a single scheduled message to APRS-IS if it's due."""
 		now = dt.datetime.now(tz)
-		if now.weekday() != weekday:
+		if weekday is not None and now.weekday() != weekday:
 			return False
 		today = now.strftime('%Y-%m-%d')
 		source = from_call or FROMCALL
@@ -1149,7 +1153,7 @@ class ScheduledMessageHandler:
 		if path_list:
 			tg_msg += f'\nPath: <b>{", ".join(path_list)}</b>'
 		tg_msg += (
-			f'\nTo: <b>{parsed["addresse"]}</b>\n\nMessage{"-" + parsed["msgNo"] if parsed.get("msgNo") else ""}: <b>{parsed["message_text"]}</b>'
+			f'\nTo: <b>{parsed["addresse"]}</b>\n\nMessage{"#" + parsed["msgNo"] if parsed.get("msgNo") else ""}: <b>{parsed["message_text"]}</b>'
 		)
 		await aprs_sender.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
 		self.tracking[tracking_key] = now.isoformat()
