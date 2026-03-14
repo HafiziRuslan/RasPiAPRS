@@ -239,6 +239,7 @@ class Config:
 	aprsmysunday_enabled: bool = False
 	aprshamfinity_enabled: bool = False
 	additional_sender: list[str] | None = None
+	_env_mtime: float = 0.0
 
 	def __post_init__(self):
 		self.reload()
@@ -246,7 +247,17 @@ class Config:
 	def reload(self):
 		"""Reload configuration from environment variables."""
 		global FROMCALL
-		dotenv.load_dotenv('.env', override=True)
+		env_file = '.env'
+		try:
+			current_mtime = os.path.getmtime(env_file)
+		except OSError:
+			current_mtime = 0.0
+
+		if self._env_mtime != 0.0 and current_mtime <= self._env_mtime:
+			return
+
+		self._env_mtime = current_mtime
+		dotenv.load_dotenv(env_file, override=True)
 		call_base = os.getenv('APRS_CALL', 'N0CALL')
 		ssid = _env_get_int('APRS_SSID', 0, 'SSID value error')
 		if not (1 <= ssid <= 15):
