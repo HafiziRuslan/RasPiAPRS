@@ -233,8 +233,11 @@ class Config:
 	telegram_topic_id: int | None = None
 	telegram_msg_topic_id: int | None = None
 	telegram_loc_topic_id: int | None = None
+	aprsphnet_enabled: bool = False
 	aprsthursday_enabled: bool = False
+	aprsaturday_enabled: bool = False
 	aprsmysunday_enabled: bool = False
+	aprshamfinity_enabled: bool = False
 	additional_sender: list[str] | None = None
 
 	def __post_init__(self):
@@ -245,8 +248,10 @@ class Config:
 		global FROMCALL
 		dotenv.load_dotenv('.env', override=True)
 		call_base = os.getenv('APRS_CALL', 'N0CALL')
-		ssid = os.getenv('APRS_SSID', '0')
-		FROMCALL = call_base if ssid == '0' else f'{call_base}-{ssid}'
+		ssid = _env_get_int('APRS_SSID', 0, 'SSID value error')
+		if not (1 <= ssid <= 15):
+			ssid = 0
+		FROMCALL = call_base if ssid == 0 else f'{call_base}-{ssid}'
 		self.sleep = _env_get_int('SLEEP', 600, 'Sleep value error')
 		self.symbol_table = os.getenv('APRS_SYMBOL_TABLE', '/')
 		self.symbol = os.getenv('APRS_SYMBOL', 'n')
@@ -258,7 +263,7 @@ class Config:
 		self.longitude = _env_get_float('APRS_LONGITUDE', 0.0)
 		self.altitude = _env_get_float('APRS_ALTITUDE', 0.0)
 		self.server = os.getenv('APRSIS_SERVER', 'rotate.aprs2.net')
-		self.port = _env_get_int('APRSIS_PORT', 14580, 'Port value error')
+		self.port = _env_get_int('APRSIS_PORT', 14580, 'APRSIS Port value error')
 		# self.filter = os.getenv('APRSIS_FILTER', 'm/10')
 		passcode = os.getenv('APRS_PASSCODE')
 		if passcode:
@@ -269,7 +274,7 @@ class Config:
 		self.gpsd_enabled = _env_get_bool('GPSD_ENABLE')
 		if self.gpsd_enabled:
 			self.gpsd_host = os.getenv('GPSD_HOST', 'localhost')
-			self.gpsd_port = _env_get_int('GPSD_PORT', 2947)
+			self.gpsd_port = _env_get_int('GPSD_PORT', 2947, 'GPSD Port value error')
 		self.smartbeaconing_enabled = _env_get_bool('SMARTBEACONING_ENABLE')
 		if self.smartbeaconing_enabled:
 			self.smartbeaconing_fast_speed = _env_get_int('SMARTBEACONING_FASTSPEED', 100)
