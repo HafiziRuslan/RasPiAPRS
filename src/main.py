@@ -1131,23 +1131,19 @@ class ScheduledMessageHandler:
 		"""Send all due scheduled messages."""
 		for msg_info in self.messages:
 			if await self._is_due(msg_info):
+				source = msg_info['from_call'] or self.cfg.from_call
+				tracking_key = f'{msg_info["name"]},{source},{msg_info["addrcall"]}'
+				self.tracking[tracking_key] = dt.datetime.now(msg_info['tz']).isoformat()
+				self.tracking.flush()
 				asyncio.create_task(self._send_one_with_delay(aprs_sender, gps_data=gps_data, **msg_info))
 		return False
 
 	async def _send_one(self, aprs_sender, name, weekday, addrcall, template, from_call=None, tz=dt.timezone.utc, gps_data=None):
 		"""Send a single scheduled message to APRS-IS if it's due."""
-		now = dt.datetime.now(tz)
-		if weekday is not None and now.weekday() != weekday:
-			return False
-		today = now.strftime('%Y-%m-%d')
-		source = from_call or self.cfg.from_call
-		tracking_key = f'{name},{source},{addrcall}'
-		last_sent = self.tracking.get(tracking_key)
-		if last_sent and last_sent.startswith(today):
-			return False
 		loc_data, _ = gps_data if gps_data else await self.gps_handler.get_loc_and_sat()
 		_, lat, lon, _, _, _ = loc_data
 		gridsquare = APRSConverter.latlon_to_grid(lat, lon)
+		source = from_call or self.cfg.from_call
 		seq_name = f'msg_sequence_{source}_{addrcall}'
 		seq = next(self.sequences[seq_name])
 		message = f'{template} from {gridsquare} via {self.cfg.app_name}'[:67]
@@ -1171,8 +1167,6 @@ class ScheduledMessageHandler:
 			f'\nTo: <b>{parsed["addresse"]}</b>\n\nMessage{"#" + parsed["msgNo"] if parsed.get("msgNo") else ""}: <b>{parsed["message_text"]}</b>'
 		)
 		await aprs_sender.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
-		self.tracking[tracking_key] = now.isoformat()
-		self.tracking.flush()
 		return True
 
 
