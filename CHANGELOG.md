@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-14T10:59:43+08:00)
+## [beta8] - (2026-03-14T12:20:34+08:00)
 
-- 58 commit(s) contributed to the release.
+- 60 commit(s) contributed to the release.
 - 3 day(s) passed between the first and last commit.
 - 3 day(s) passed between releases.
 
@@ -78,6 +78,8 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta8
 
+- [0d2a1c9](https://github.com/HafiziRuslan/RasPiAPRS/commit/0d2a1c98ee4114b3189546f09182a0dfa0c791e2) chore(sbom): update sbom for uv 0.10.10 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T12:20:34+08:00*
+- [ae15ad7](https://github.com/HafiziRuslan/RasPiAPRS/commit/ae15ad73842f82e039d0c7386c2bf7db20b9b58f) chore(ci): remove sbom from release exclusions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T12:20:23+08:00*
 - [07e290f](https://github.com/HafiziRuslan/RasPiAPRS/commit/07e290f33aa1f6db1ca8349da3df3dfa77df26f8) chore(config): add support for APRSPHNet, APRSaturday, and APRSHamfinity events *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T09:38:55+08:00*
 - [ee64b48](https://github.com/HafiziRuslan/RasPiAPRS/commit/ee64b4822bb44531448227b63775a4ce6708bb5b) chore(gps): revert commit 57ebde3 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T06:15:15+08:00*
 - [dcccbec](https://github.com/HafiziRuslan/RasPiAPRS/commit/dcccbecc4db3842b57a3d13d2a466fb7948b2395) chore(main): reduce log rotation defaults *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T03:24:13+08:00*
@@ -1170,4 +1172,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-14T11:00:32.654477752+08:00
+generated using git-cliff on 2026-03-14T12:21:15.961745223+08:00
