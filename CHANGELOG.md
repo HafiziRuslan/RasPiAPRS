@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-14T09:48:32+08:00)
+## [beta8] - (2026-03-14T10:06:12+08:00)
 
-- 56 commit(s) contributed to the release.
+- 57 commit(s) contributed to the release.
 - 3 day(s) passed between the first and last commit.
 - 3 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [e82f20b](https://github.com/HafiziRuslan/RasPiAPRS/commit/e82f20b71ffc71f6df322ed8b0d12352f6c96a3e) feat(sender): extend delay between messages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T10:06:12+08:00*
 - [04d0ddd](https://github.com/HafiziRuslan/RasPiAPRS/commit/04d0ddda2adb45111a760baff0c26352d41ac5bd) feat(config): add new APRS event types and improve SSID validation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T09:48:32+08:00*
 - [e837c9e](https://github.com/HafiziRuslan/RasPiAPRS/commit/e837c9ed005d612a912bd371ad5a660c27c625c3) feat(gpsd): add debug logging for GPS data *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T06:51:59+08:00*
 - [633440f](https://github.com/HafiziRuslan/RasPiAPRS/commit/633440f0582dcfc1c86ab58c3bd5a3ed57eca4f1) feat(notifications): improve Telegram commit notification format *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T04:37:52+08:00*
@@ -1165,4 +1166,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-14T09:49:20.640213599+08:00
+generated using git-cliff on 2026-03-14T10:06:58.112182672+08:00
