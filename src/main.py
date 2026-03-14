@@ -1112,17 +1112,16 @@ class ScheduledMessageHandler:
 
 	async def _send_one_with_delay(self, aprs_sender, gps_data=None, **msg_info):
 		"""Perform ``_send_one`` after a random pause"""
-		await asyncio.sleep(random.uniform(1, 15))
-		await self._send_one(aprs_sender, gps_data=gps_data, **msg_info)
+		await asyncio.sleep(random.randint(1, 60))
+		if await self._send_one(aprs_sender, gps_data=gps_data, **msg_info):
+			await aprs_sender.send_status(gps_data=gps_data)
 
 	async def send_all(self, aprs_sender, gps_data=None):
 		"""Send all due scheduled messages."""
-		sent_any = False
 		for msg_info in self.messages:
 			if await self._is_due(msg_info):
 				asyncio.create_task(self._send_one_with_delay(aprs_sender, gps_data=gps_data, **msg_info))
-				sent_any = True
-		return sent_any
+		return False
 
 	async def _send_one(self, aprs_sender, name, weekday, addrcall, template, from_call=None, tz=dt.timezone.utc, gps_data=None):
 		"""Send a single scheduled message to APRS-IS if it's due."""
