@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-14T07:19:40+08:00)
+## [beta8] - (2026-03-14T09:38:55+08:00)
 
-- 54 commit(s) contributed to the release.
-- 2 day(s) passed between the first and last commit.
-- 2 day(s) passed between releases.
+- 55 commit(s) contributed to the release.
+- 3 day(s) passed between the first and last commit.
+- 3 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
@@ -72,6 +72,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta8
 
+- [07e290f](https://github.com/HafiziRuslan/RasPiAPRS/commit/07e290f33aa1f6db1ca8349da3df3dfa77df26f8) chore(config): add support for APRSPHNet, APRSaturday, and APRSHamfinity events *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T09:38:55+08:00*
 - [ee64b48](https://github.com/HafiziRuslan/RasPiAPRS/commit/ee64b4822bb44531448227b63775a4ce6708bb5b) chore(gps): revert commit 57ebde3 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T06:15:15+08:00*
 - [dcccbec](https://github.com/HafiziRuslan/RasPiAPRS/commit/dcccbecc4db3842b57a3d13d2a466fb7948b2395) chore(main): reduce log rotation defaults *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T03:24:13+08:00*
 - [703eccb](https://github.com/HafiziRuslan/RasPiAPRS/commit/703eccbb634e2a81a905087d326b4c5d3db3d1a2) build(env): Optimize environment recreation with uv venv -c *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T23:52:23+08:00*
@@ -1163,4 +1164,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-14T07:20:23.805432297+08:00
+generated using git-cliff on 2026-03-14T09:39:43.519513309+08:00
