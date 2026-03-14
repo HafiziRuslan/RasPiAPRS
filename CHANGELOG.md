@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-14T10:06:12+08:00)
+## [beta8] - (2026-03-14T10:59:43+08:00)
 
-- 57 commit(s) contributed to the release.
+- 58 commit(s) contributed to the release.
 - 3 day(s) passed between the first and last commit.
 - 3 day(s) passed between releases.
 
@@ -67,6 +67,10 @@ All notable changes to this project will be documented in this file.
 ### 📚 Documentation in beta8
 
 - [3c012f0](https://github.com/HafiziRuslan/RasPiAPRS/commit/3c012f0ae038144298282fa8d68eba9b0a23786e) docs(telegram): improve commit message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T22:03:48+08:00*
+
+### ⚡ Performance in beta8
+
+- [9808bd4](https://github.com/HafiziRuslan/RasPiAPRS/commit/9808bd4fa2118e2abc1d278e8ac1673fc45f51e7) perf(config): cache .env mtime to skip unnecessary reloads *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T10:59:43+08:00*
 
 ### 🎨 Styling in beta8
 
@@ -1166,4 +1170,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-14T10:06:58.112182672+08:00
+generated using git-cliff on 2026-03-14T11:00:32.654477752+08:00
