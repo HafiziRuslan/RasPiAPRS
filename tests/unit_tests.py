@@ -161,22 +161,22 @@ class TestSystemStats(unittest.TestCase):
 
 class TestAPRSFormatting(unittest.TestCase):
 	def test_lat_to_aprs(self):
-		self.assertEqual(main._lat_to_aprs(37.7749), '3746.49N')
-		self.assertEqual(main._lat_to_aprs(-37.7749), '3746.49S')
+		self.assertEqual(main.APRSConverter.lat_to_aprs(37.7749), '3746.49N')
+		self.assertEqual(main.APRSConverter.lat_to_aprs(-37.7749), '3746.49S')
 
 	def test_lon_to_aprs(self):
-		self.assertEqual(main._lon_to_aprs(122.4194), '12225.16E')
-		self.assertEqual(main._lon_to_aprs(-122.4194), '12225.16W')
+		self.assertEqual(main.APRSConverter.lon_to_aprs(122.4194), '12225.16E')
+		self.assertEqual(main.APRSConverter.lon_to_aprs(-122.4194), '12225.16W')
 
 	def test_alt_to_aprs(self):
-		self.assertEqual(main._alt_to_aprs(100), '/A=000328')
+		self.assertEqual(main.APRSConverter.alt_to_aprs(100), '/A=000328')
 
 	def test_spd_to_knots(self):
 		# 10 m/s = 19.438 knots
-		self.assertEqual(main._spd_to_knots(10), '019')
+		self.assertEqual(main.APRSConverter.spd_to_knots(10), '019')
 
 	def test_cse_to_aprs(self):
-		self.assertEqual(main._cse_to_aprs(180.5), '180')
+		self.assertEqual(main.APRSConverter.cse_to_aprs(180.5), '180')
 
 
 class TestMainAsync(unittest.IsolatedAsyncioTestCase):

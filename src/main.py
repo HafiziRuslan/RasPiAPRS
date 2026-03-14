@@ -35,55 +35,220 @@ from aprslib.exceptions import ParseError as APRSParseError
 from geopy.geocoders import Nominatim
 from gpsdclient import GPSDClient
 
-# Default directory
-ETC_DIR = '/etc'
-TMP_DIR = '/var/tmp/RasPiAPRS'
-LIB_DIR = '/var/lib/RasPiAPRS'
-LOG_DIR = '/var/log/RasPiAPRS'
-# Default paths for system files
-OS_RELEASE_FILE = f'{ETC_DIR}/os-release'
-MMDVMHOST_FILE = f'{ETC_DIR}/mmdvmhost'
-# Temporary files path
-GPS_FILE = f'{TMP_DIR}/gps.json'
-LOCATION_ID_FILE = f'{TMP_DIR}/location_id.tmp'
-STATUS_FILE = f'{TMP_DIR}/status.tmp'
-# Library files path
-MSG_TRACKING_FILE = f'{LIB_DIR}/msg_tracking.pkl'
-NOMINATIM_CACHE_FILE = f'{LIB_DIR}/nominatim_cache.pkl'
 
+@dataclass
+class Config:
+	etc_dir: str = '/etc'
+	tmp_dir: str = '/var/tmp/RasPiAPRS'
+	lib_dir: str = '/var/lib/RasPiAPRS'
+	log_dir: str = '/var/log/RasPiAPRS'
+	os_release_file: str = '/etc/os-release'
+	mmdvmhost_file: str = '/etc/mmdvmhost'
+	gps_file: str = '/var/tmp/RasPiAPRS/gps.json'
+	location_id_file: str = '/var/tmp/RasPiAPRS/location_id.tmp'
+	status_file: str = '/var/tmp/RasPiAPRS/status.tmp'
+	msg_tracking_file: str = '/var/lib/RasPiAPRS/msg_tracking.pkl'
+	nominatim_cache_file: str = '/var/lib/RasPiAPRS/nominatim_cache.pkl'
+	app_name: str = 'RasPiAPRS'
+	project_url: str = 'https://git.new/RasPiAPRS'
+	from_call: str = 'N0CALL'
+	to_call: str = 'APP642'
+	call: str = 'N0CALL'
+	ssid: int = 0
+	sleep: int = 600
+	symbol_table: str = '/'
+	symbol: str = 'n'
+	symbol_overlay: str | None = None
+	latitude: float = 0.0
+	longitude: float = 0.0
+	altitude: float = 0.0
+	server: str = 'rotate.aprs2.net'
+	port: int = 14580
+	passcode: str | int = 0
+	gpsd_enabled: bool = False
+	gpsd_host: str = 'localhost'
+	gpsd_port: int = 2947
+	smartbeaconing_enabled: bool = False
+	smartbeaconing_fast_speed: int = 100
+	smartbeaconing_slow_speed: int = 10
+	smartbeaconing_fast_rate: int = 60
+	smartbeaconing_slow_rate: int = 600
+	smartbeaconing_min_turn_angle: int = 28
+	smartbeaconing_turn_slope: int = 255
+	smartbeaconing_min_turn_time: int = 5
+	telegram_enabled: bool = False
+	telegram_token: str | None = None
+	telegram_chat_id: str | None = None
+	telegram_topic_id: int | None = None
+	telegram_msg_topic_id: int | None = None
+	telegram_loc_topic_id: int | None = None
+	aprsphnet_enabled: bool = False
+	aprsthursday_enabled: bool = False
+	aprsaturday_enabled: bool = False
+	aprsmysunday_enabled: bool = False
+	aprshamfinity_enabled: bool = False
+	additional_sender: list[str] | None = None
+	additional_sender_raw: str | None = None
+	log_level_raw: int = 2
+	log_max_bytes: float = 1.0
+	log_max_count: int = 3
+	_env_mtime: float = 0.0
 
-def get_app_metadata():
-	repo_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-	git_sha = ''
-	if shutil.which('git'):
+	def __post_init__(self):
+		self.app_name, self.project_url = self.get_app_metadata()
+		self.reload()
+
+	@staticmethod
+	def get_app_metadata():
+		repo_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+		git_sha = ''
+		if shutil.which('git'):
+			try:
+				git_sha = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD^'], cwd=repo_path).decode('ascii').strip()
+			except Exception:
+				pass
+		meta = {'name': 'RasPiAPRS', 'version': '0.1', 'github': 'https://git.new/RasPiAPRS'}
 		try:
-			git_sha = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD^'], cwd=repo_path).decode('ascii').strip()
-		except Exception:
-			pass
-	meta = {'name': 'RasPiAPRS', 'version': '0.1', 'github': 'https://git.new/RasPiAPRS'}
-	try:
-		with open(os.path.join(repo_path, 'pyproject.toml'), 'rb') as f:
-			data = tomllib.load(f).get('project', {})
-			meta.update({k: data.get(k, meta[k]) for k in ['name', 'version']})
-			meta['github'] = data.get('urls', {}).get('github', meta['github'])
-	except Exception as e:
-		logging.warning('Failed to load project metadata: %s', e)
-	return f'{"-".join(filter(None, [meta["name"], meta["version"], git_sha]))}', meta['github']
+			with open(os.path.join(repo_path, 'pyproject.toml'), 'rb') as f:
+				data = tomllib.load(f).get('project', {})
+				meta.update({k: data.get(k, meta[k]) for k in ['name', 'version']})
+				meta['github'] = data.get('urls', {}).get('github', meta['github'])
+		except Exception as e:
+			logging.warning('Failed to load project metadata: %s', e)
+		return f'{"-".join(filter(None, [meta["name"], meta["version"], git_sha]))}', meta['github']
+
+	@staticmethod
+	def _env_get_bool(key: str, default: str = 'False') -> bool:
+		return os.getenv(key, default).lower() in ('true', '1', 't', 'y', 'yes')
+
+	@staticmethod
+	def _env_get_float(key: str, default: float) -> float:
+		val = os.getenv(key)
+		if val is None:
+			return default
+		try:
+			return float(val)
+		except (ValueError, TypeError):
+			return default
+
+	@staticmethod
+	def _env_get_int(key: str, default: int, warning_msg: str | None = None) -> int:
+		val = os.getenv(key)
+		if val is None:
+			return default
+		try:
+			return int(val)
+		except (ValueError, TypeError):
+			if warning_msg:
+				logging.warning('%s, using %d', warning_msg, default)
+			return default
+
+	@staticmethod
+	def _env_get_int_or_none(key: str) -> int | None:
+		val = os.getenv(key)
+		if val is None:
+			return None
+		try:
+			return int(val)
+		except (ValueError, TypeError):
+			return None
+
+	def reload(self):
+		"""Reload configuration from environment variables."""
+		env_file = '.env'
+		try:
+			current_mtime = os.path.getmtime(env_file)
+		except OSError:
+			current_mtime = 0.0
+
+		if self._env_mtime != 0.0 and current_mtime <= self._env_mtime:
+			return
+
+		self._env_mtime = current_mtime
+		dotenv.load_dotenv(env_file, override=True)
+		self.call = os.getenv('APRS_CALL', 'N0CALL')
+		self.ssid = self._env_get_int('APRS_SSID', 0, 'SSID value error')
+		self.sleep = self._env_get_int('SLEEP', 600, 'Sleep value error')
+		self.symbol_table = os.getenv('APRS_SYMBOL_TABLE', '/')
+		self.symbol = os.getenv('APRS_SYMBOL', 'n')
+		self.latitude = self._env_get_float('APRS_LATITUDE', 0.0)
+		self.longitude = self._env_get_float('APRS_LONGITUDE', 0.0)
+		self.altitude = self._env_get_float('APRS_ALTITUDE', 0.0)
+		self.server = os.getenv('APRSIS_SERVER', 'rotate.aprs2.net')
+		self.port = self._env_get_int('APRSIS_PORT', 14580, 'APRSIS Port value error')
+		self.passcode = os.getenv('APRS_PASSCODE')
+		self.gpsd_enabled = self._env_get_bool('GPSD_ENABLE')
+		if self.gpsd_enabled:
+			self.gpsd_host = os.getenv('GPSD_HOST', 'localhost')
+			self.gpsd_port = self._env_get_int('GPSD_PORT', 2947, 'GPSD Port value error')
+		self.smartbeaconing_enabled = self._env_get_bool('SMARTBEACONING_ENABLE')
+		if self.smartbeaconing_enabled:
+			self.smartbeaconing_fast_speed = self._env_get_int('SMARTBEACONING_FASTSPEED', 100)
+			self.smartbeaconing_slow_speed = self._env_get_int('SMARTBEACONING_SLOWSPEED', 10)
+			self.smartbeaconing_fast_rate = self._env_get_int('SMARTBEACONING_FASTRATE', 60)
+			self.smartbeaconing_slow_rate = self._env_get_int('SMARTBEACONING_SLOWRATE', 600)
+			self.smartbeaconing_min_turn_angle = self._env_get_int('SMARTBEACONING_MINTURNANGLE', 28)
+			self.smartbeaconing_turn_slope = self._env_get_int('SMARTBEACONING_TURNSLOPE', 255)
+			self.smartbeaconing_min_turn_time = self._env_get_int('SMARTBEACONING_MINTURNTIME', 5)
+		self.telegram_enabled = self._env_get_bool('TELEGRAM_ENABLE')
+		if self.telegram_enabled:
+			self.telegram_token = os.getenv('TELEGRAM_TOKEN')
+			self.telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID')
+			self.telegram_topic_id = self._env_get_int_or_none('TELEGRAM_TOPIC_ID')
+			self.telegram_msg_topic_id = self._env_get_int_or_none('TELEGRAM_MSG_TOPIC_ID')
+			self.telegram_loc_topic_id = self._env_get_int_or_none('TELEGRAM_LOC_TOPIC_ID')
+		self.aprsphnet_enabled = self._env_get_bool('APRSPHNET_ENABLE')
+		self.aprsthursday_enabled = self._env_get_bool('APRSTHURSDAY_ENABLE')
+		self.aprsaturday_enabled = self._env_get_bool('APRSATURDAY_ENABLE')
+		self.aprsmysunday_enabled = self._env_get_bool('APRSMYSUNDAY_ENABLE')
+		self.aprshamfinity_enabled = self._env_get_bool('APRSHAMFINITY_ENABLE')
+		self.additional_sender_raw = os.getenv('ADDITIONAL_SENDER')
+		self.log_level_raw = self._env_get_int('LOG_LEVEL', 2)
+		self.log_max_bytes = self._env_get_float('LOG_MAX_BYTES', 1)
+		self.log_max_count = self._env_get_int('LOG_MAX_COUNT', 3)
+		self.validate()
+
+	def validate(self):
+		"""Validate and normalize configuration values."""
+		# SSID and Callsign
+		if not (1 <= self.ssid <= 15):
+			self.ssid = 0
+		self.from_call = self.call if self.ssid == 0 else f'{self.call}-{self.ssid}'
+
+		# Symbol and Overlay
+		if self.symbol_table not in ['/', '\\']:
+			self.symbol_overlay = self.symbol_table
+		else:
+			self.symbol_overlay = None
+
+		# Passcode
+		if not self.passcode:
+			logging.warning('No passcode provided. Generating one.')
+			self.passcode = aprslib.passcode(self.call)
+
+		# Additional Senders
+		self.additional_sender = None
+		events_active = any(
+			[self.aprsphnet_enabled, self.aprsthursday_enabled, self.aprsaturday_enabled, self.aprsmysunday_enabled, self.aprshamfinity_enabled]
+		)
+		if events_active and self.additional_sender_raw:
+			valid_senders = []
+			for sender in self.additional_sender_raw.split(','):
+				sender = sender.strip().upper()
+				if re.match(r'^[A-Z0-9]+(-[A-Z0-9]+)?$', sender):
+					valid_senders.append(sender)
+				else:
+					logging.warning('Invalid ADDITIONAL_SENDER format: %s. Ignoring.', sender)
+			if valid_senders:
+				self.additional_sender = valid_senders
 
 
-APP_NAME, PROJECT_URL = get_app_metadata()
-FROMCALL = 'N0CALL'
-TOCALL = 'APP642'
-
-
-def configure_logging():
+def configure_logging(cfg: Config):
 	"""Sets up logging."""
-	global LOG_DIR
-	dotenv.load_dotenv('.env')
-
-	if not os.path.exists(LOG_DIR) or not os.access(LOG_DIR, os.W_OK):
-		LOG_DIR = 'logs'
-	os.makedirs(LOG_DIR, exist_ok=True)
+	log_dir = cfg.log_dir
+	if not os.path.exists(log_dir) or not os.access(log_dir, os.W_OK):
+		log_dir = 'logs'
+	os.makedirs(log_dir, exist_ok=True)
 
 	log_level_map = {
 		0: 100,  # OFF
@@ -93,7 +258,7 @@ def configure_logging():
 		4: logging.ERROR,
 		5: logging.CRITICAL,
 	}
-	log_level = log_level_map.get(_env_get_int('LOG_LEVEL', 2))
+	log_level = log_level_map.get(cfg.log_level_raw)
 
 	logger = logging.getLogger()
 	logger.setLevel(log_level)
@@ -150,14 +315,14 @@ def configure_logging():
 		logging.CRITICAL: '5-critical.log',
 	}
 
-	max_bytes = _env_get_float('LOG_MAX_BYTES', 1) * 1024 * 1024
-	max_count = _env_get_int('LOG_MAX_COUNT', 3)
+	max_bytes = cfg.log_max_bytes * 1024 * 1024
+	max_count = cfg.log_max_count
 
 	for level, filename in log_files.items():
 		if level < log_level:
 			continue
 		try:
-			path = os.path.join(LOG_DIR, filename)
+			path = os.path.join(log_dir, filename)
 			handler = NumberedRotatingFileHandler(path, maxBytes=max_bytes, backupCount=max_count)
 			handler.setLevel(level)
 			handler.addFilter(LevelFilter(level))
@@ -165,161 +330,6 @@ def configure_logging():
 			logger.addHandler(handler)
 		except (OSError, PermissionError) as e:
 			logging.error('Failed to create %s: %s', filename, e)
-
-
-def _env_get_bool(key: str, default: str = 'False') -> bool:
-	return os.getenv(key, default).lower() in ('true', '1', 't', 'y', 'yes')
-
-
-def _env_get_float(key: str, default: float) -> float:
-	val = os.getenv(key)
-	if val is None:
-		return default
-	try:
-		return float(val)
-	except (ValueError, TypeError):
-		return default
-
-
-def _env_get_int(key: str, default: int, warning_msg: str | None = None) -> int:
-	val = os.getenv(key)
-	if val is None:
-		return default
-	try:
-		return int(val)
-	except (ValueError, TypeError):
-		if warning_msg:
-			logging.warning('%s, using %d', warning_msg, default)
-		return default
-
-
-def _env_get_int_or_none(key: str) -> int | None:
-	val = os.getenv(key)
-	if val is None:
-		return None
-	try:
-		return int(val)
-	except (ValueError, TypeError):
-		return None
-
-
-@dataclass
-class Config:
-	sleep: int = 600
-	symbol_table: str = '/'
-	symbol: str = 'n'
-	symbol_overlay: str | None = None
-	latitude: float = 0.0
-	longitude: float = 0.0
-	altitude: float = 0.0
-	server: str = 'rotate.aprs2.net'
-	port: int = 14580
-	# filter: str = 'm/50'
-	passcode: int = 0
-	gpsd_enabled: bool = False
-	gpsd_host: str = 'localhost'
-	gpsd_port: int = 2947
-	smartbeaconing_enabled: bool = False
-	smartbeaconing_fast_speed: int = 100
-	smartbeaconing_slow_speed: int = 10
-	smartbeaconing_fast_rate: int = 60
-	smartbeaconing_slow_rate: int = 600
-	smartbeaconing_min_turn_angle: int = 28
-	smartbeaconing_turn_slope: int = 255
-	smartbeaconing_min_turn_time: int = 5
-	telegram_enabled: bool = False
-	telegram_token: str | None = None
-	telegram_chat_id: str | None = None
-	telegram_topic_id: int | None = None
-	telegram_msg_topic_id: int | None = None
-	telegram_loc_topic_id: int | None = None
-	aprsphnet_enabled: bool = False
-	aprsthursday_enabled: bool = False
-	aprsaturday_enabled: bool = False
-	aprsmysunday_enabled: bool = False
-	aprshamfinity_enabled: bool = False
-	additional_sender: list[str] | None = None
-	_env_mtime: float = 0.0
-
-	def __post_init__(self):
-		self.reload()
-
-	def reload(self):
-		"""Reload configuration from environment variables."""
-		global FROMCALL
-		env_file = '.env'
-		try:
-			current_mtime = os.path.getmtime(env_file)
-		except OSError:
-			current_mtime = 0.0
-
-		if self._env_mtime != 0.0 and current_mtime <= self._env_mtime:
-			return
-
-		self._env_mtime = current_mtime
-		dotenv.load_dotenv(env_file, override=True)
-		call_base = os.getenv('APRS_CALL', 'N0CALL')
-		ssid = _env_get_int('APRS_SSID', 0, 'SSID value error')
-		if not (1 <= ssid <= 15):
-			ssid = 0
-		FROMCALL = call_base if ssid == 0 else f'{call_base}-{ssid}'
-		self.sleep = _env_get_int('SLEEP', 600, 'Sleep value error')
-		self.symbol_table = os.getenv('APRS_SYMBOL_TABLE', '/')
-		self.symbol = os.getenv('APRS_SYMBOL', 'n')
-		if self.symbol_table not in ['/', '\\']:
-			self.symbol_overlay = self.symbol_table
-		else:
-			self.symbol_overlay = None
-		self.latitude = _env_get_float('APRS_LATITUDE', 0.0)
-		self.longitude = _env_get_float('APRS_LONGITUDE', 0.0)
-		self.altitude = _env_get_float('APRS_ALTITUDE', 0.0)
-		self.server = os.getenv('APRSIS_SERVER', 'rotate.aprs2.net')
-		self.port = _env_get_int('APRSIS_PORT', 14580, 'APRSIS Port value error')
-		# self.filter = os.getenv('APRSIS_FILTER', 'm/10')
-		passcode = os.getenv('APRS_PASSCODE')
-		if passcode:
-			self.passcode = passcode
-		else:
-			logging.warning('Generating passcode')
-			self.passcode = aprslib.passcode(call_base)
-		self.gpsd_enabled = _env_get_bool('GPSD_ENABLE')
-		if self.gpsd_enabled:
-			self.gpsd_host = os.getenv('GPSD_HOST', 'localhost')
-			self.gpsd_port = _env_get_int('GPSD_PORT', 2947, 'GPSD Port value error')
-		self.smartbeaconing_enabled = _env_get_bool('SMARTBEACONING_ENABLE')
-		if self.smartbeaconing_enabled:
-			self.smartbeaconing_fast_speed = _env_get_int('SMARTBEACONING_FASTSPEED', 100)
-			self.smartbeaconing_slow_speed = _env_get_int('SMARTBEACONING_SLOWSPEED', 10)
-			self.smartbeaconing_fast_rate = _env_get_int('SMARTBEACONING_FASTRATE', 60)
-			self.smartbeaconing_slow_rate = _env_get_int('SMARTBEACONING_SLOWRATE', 600)
-			self.smartbeaconing_min_turn_angle = _env_get_int('SMARTBEACONING_MINTURNANGLE', 28)
-			self.smartbeaconing_turn_slope = _env_get_int('SMARTBEACONING_TURNSLOPE', 255)
-			self.smartbeaconing_min_turn_time = _env_get_int('SMARTBEACONING_MINTURNTIME', 5)
-		self.telegram_enabled = _env_get_bool('TELEGRAM_ENABLE')
-		if self.telegram_enabled:
-			self.telegram_token = os.getenv('TELEGRAM_TOKEN')
-			self.telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID')
-			self.telegram_topic_id = _env_get_int_or_none('TELEGRAM_TOPIC_ID')
-			self.telegram_msg_topic_id = _env_get_int_or_none('TELEGRAM_MSG_TOPIC_ID')
-			self.telegram_loc_topic_id = _env_get_int_or_none('TELEGRAM_LOC_TOPIC_ID')
-		self.aprsphnet_enabled = _env_get_bool('APRSPHNET_ENABLE')
-		self.aprsthursday_enabled = _env_get_bool('APRSTHURSDAY_ENABLE')
-		self.aprsaturday_enabled = _env_get_bool('APRSATURDAY_ENABLE')
-		self.aprsmysunday_enabled = _env_get_bool('APRSMYSUNDAY_ENABLE')
-		self.aprshamfinity_enabled = _env_get_bool('APRSHAMFINITY_ENABLE')
-		self.additional_sender = None
-		if self.aprsphnet_enabled or self.aprsthursday_enabled or self.aprsaturday_enabled or self.aprsmysunday_enabled or self.aprshamfinity_enabled:
-			senders_str = os.getenv('ADDITIONAL_SENDER')
-			if senders_str:
-				valid_senders = []
-				for sender in senders_str.split(','):
-					sender = sender.strip().upper()
-					if re.match(r'^[A-Z0-9]+(-[A-Z0-9]+)?$', sender):
-						valid_senders.append(sender)
-					else:
-						logging.warning('Invalid ADDITIONAL_SENDER format: %s. Ignoring.', sender)
-				if valid_senders:
-					self.additional_sender = valid_senders
 
 
 class PersistentCounter:
@@ -415,86 +425,90 @@ class PersistentDict(UserDict):
 class Sequence(PersistentCounter):
 	"""Class to manage APRS sequence."""
 
-	def __init__(self, name='sequence', modulo=100):
-		super().__init__(f'{LIB_DIR}/{name}.seq', modulo)
+	def __init__(self, lib_dir, name='sequence', modulo=100):
+		super().__init__(f'{lib_dir}/{name}.seq', modulo)
 
 
 class Timer(PersistentCounter):
 	"""Class to manage persistent timer."""
 
-	def __init__(self, name='timer', modulo=86400):
-		super().__init__(f'{TMP_DIR}/{name}.tmr', modulo)
+	def __init__(self, tmp_dir, name='timer', modulo=86400):
+		super().__init__(f'{tmp_dir}/{name}.tmr', modulo)
 
 
-def _alt_to_aprs(alt):
-	"""Format altitude for APRS (meters to feet)."""
-	alt_ft = alt / 0.3048 if alt else 0
-	alt_ft = max(-999999, alt_ft)
-	alt_ft = min(999999, alt_ft)
-	return f'/A={alt_ft:06.0f}'
+class APRSConverter:
+	"""Utility class for APRS data conversions."""
 
+	@staticmethod
+	def _to_coord(val, pos_char, neg_char, width):
+		"""Format coordinate for APRS."""
+		direction = pos_char if val >= 0 else neg_char
+		val = abs(val)
+		deg = int(val)
+		minutes = (val - deg) * 60
+		return f'{deg:0{width}d}{minutes:05.2f}{direction}'
 
-def _cse_to_aprs(cse):
-	"""Format course for APRS."""
-	cse = cse % 360 if cse else 0
-	cse = max(0, cse)
-	cse = min(359, cse)
-	return f'{cse:03.0f}'
+	@classmethod
+	def lat_to_aprs(cls, lat):
+		"""Format latitude for APRS."""
+		return cls._to_coord(lat, 'N', 'S', 2)
 
+	@classmethod
+	def lon_to_aprs(cls, lon):
+		"""Format longitude for APRS."""
+		return cls._to_coord(lon, 'E', 'W', 3)
 
-def _to_aprs_coord(val, pos_char, neg_char, width):
-	"""Format coordinate for APRS."""
-	direction = pos_char if val >= 0 else neg_char
-	val = abs(val)
-	deg = int(val)
-	minutes = (val - deg) * 60
-	return f'{deg:0{width}d}{minutes:05.2f}{direction}'
+	@staticmethod
+	def alt_to_aprs(alt):
+		"""Format altitude for APRS (meters to feet)."""
+		alt_ft = alt / 0.3048 if alt else 0
+		alt_ft = max(-999999, alt_ft)
+		alt_ft = min(999999, alt_ft)
+		return f'/A={alt_ft:06.0f}'
 
+	@staticmethod
+	def cse_to_aprs(cse):
+		"""Format course for APRS."""
+		cse = cse % 360 if cse else 0
+		cse = max(0, cse)
+		cse = min(359, cse)
+		return f'{cse:03.0f}'
 
-def _lat_to_aprs(lat):
-	"""Format latitude for APRS."""
-	return _to_aprs_coord(lat, 'N', 'S', 2)
+	@staticmethod
+	def _format_speed(val):
+		"""Format speed for APRS with clamping."""
+		val = max(0, min(999, val))
+		return f'{val:03.0f}'
 
+	@classmethod
+	def spd_to_kmh(cls, spd):
+		"""Format speed for APRS (mps to kmh)."""
+		val = spd * 3.6 if spd else 0
+		return cls._format_speed(val)
 
-def _lon_to_aprs(lon):
-	"""Format longitude for APRS."""
-	return _to_aprs_coord(lon, 'E', 'W', 3)
+	@classmethod
+	def spd_to_knots(cls, spd):
+		"""Format speed for APRS (mps to knots)."""
+		val = spd / 0.51444 if spd else 0
+		return cls._format_speed(val)
 
-
-def _format_speed(val):
-	"""Format speed for APRS with clamping."""
-	val = max(0, min(999, val))
-	return f'{val:03.0f}'
-
-
-def _spd_to_kmh(spd):
-	"""Format speed for APRS (mps to kmh)."""
-	val = spd * 3.6 if spd else 0
-	return _format_speed(val)
-
-
-def _spd_to_knots(spd):
-	"""Format speed for APRS (mps to knots)."""
-	val = spd / 0.51444 if spd else 0
-	return _format_speed(val)
-
-
-def latlon_to_grid(lat, lon, precision=6):
-	"""Convert position to grid square."""
-	lon += 180
-	lat += 90
-	field_lon = int(lon // 20)
-	field_lat = int(lat // 10)
-	grid = chr(field_lon + ord('A')) + chr(field_lat + ord('A'))
-	if precision >= 4:
-		square_lon = int((lon % 20) // 2)
-		square_lat = int((lat % 10) // 1)
-		grid += str(square_lon) + str(square_lat)
-	if precision >= 6:
-		subsq_lon = int(((lon % 2) / 2) * 24)
-		subsq_lat = int(((lat % 1) / 1) * 24)
-		grid += chr(subsq_lon + ord('a')) + chr(subsq_lat + ord('a'))
-	return grid
+	@staticmethod
+	def latlon_to_grid(lat, lon, precision=6):
+		"""Convert position to grid square."""
+		lon += 180
+		lat += 90
+		field_lon = int(lon // 20)
+		field_lat = int(lat // 10)
+		grid = chr(field_lon + ord('A')) + chr(field_lat + ord('A'))
+		if precision >= 4:
+			square_lon = int((lon % 20) // 2)
+			square_lat = int((lat % 10) // 1)
+			grid += str(square_lon) + str(square_lat)
+		if precision >= 6:
+			subsq_lon = int(((lon % 2) / 2) * 24)
+			subsq_lat = int(((lat % 1) / 1) * 24)
+			grid += chr(subsq_lon + ord('a')) + chr(subsq_lat + ord('a'))
+		return grid
 
 
 class GPSFix(NamedTuple):
@@ -618,7 +632,7 @@ class GPSHandler:
 	def _get_fallback_location(self):
 		"""Retrieve location from cache or config (Static I/O)."""
 		try:
-			gps_cache = PersistentDict(GPS_FILE)
+			gps_cache = PersistentDict(self.cfg.gps_file)
 			lat = float(gps_cache.get('lat', self.cfg.latitude))
 			lon = float(gps_cache.get('lon', self.cfg.longitude))
 			alt = float(gps_cache.get('alt', self.cfg.altitude))
@@ -629,7 +643,7 @@ class GPSHandler:
 	def _save_cache(self, lat, lon, alt):
 		"""Save GPS location to cache file."""
 		try:
-			cache = PersistentDict(GPS_FILE)
+			cache = PersistentDict(self.cfg.gps_file)
 			cache.update({'lat': lat, 'lon': lon, 'alt': alt})
 			cache.flush()
 		except Exception as e:
@@ -698,56 +712,57 @@ class GPSHandler:
 		R = 6371000
 		phi1 = math.radians(lat1)
 		phi2 = math.radians(lat2)
-		delta_phi = math.radians(lat2 - lat1)
+		delta_phi = math.radians(lon2 - lon1)
 		delta_lambda = math.radians(lon2 - lon1)
 		a = math.sin(delta_phi / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(delta_lambda / 2) ** 2
 		c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
 		return R * c
 
 
-# Geolocation
-_GEOLOCATOR = None
-_NOMINATIM_CACHE = PersistentDict(NOMINATIM_CACHE_FILE)
+class Geolocation:
+	"""Class to handle reverse geocoding logic."""
 
+	def __init__(self, app_name, cache_file):
+		self._app_name = app_name
+		self._cache = PersistentDict(cache_file)
+		self._geolocator = None
 
-def get_add_from_pos(lat, lon):
-	"""Get address from coordinates, using a local cache."""
-	global _GEOLOCATOR
-	coord_key = f'{lat:.4f},{lon:.4f}'
-	if coord_key in _NOMINATIM_CACHE:
-		return _NOMINATIM_CACHE[coord_key]
-	if _GEOLOCATOR is None:
-		_GEOLOCATOR = Nominatim(user_agent=APP_NAME, timeout=10)
-	try:
-		location = _GEOLOCATOR.reverse((lat, lon), exactly_one=True, namedetails=True, addressdetails=True)
-		if location:
-			address = location.raw['address']
-			_NOMINATIM_CACHE[coord_key] = address
-			_NOMINATIM_CACHE.flush()
-			logging.debug(f'Address cached for requested coordinates: {coord_key}')
-			return address
-		else:
-			logging.warning(f'No address found for provided coordinates: {coord_key}')
+	def get_address(self, lat, lon):
+		"""Get address from coordinates, using a local cache."""
+		coord_key = f'{lat:.4f},{lon:.4f}'
+		if coord_key in self._cache:
+			return self._cache[coord_key]
+		if self._geolocator is None:
+			self._geolocator = Nominatim(user_agent=self._app_name, timeout=10)
+		try:
+			location = self._geolocator.reverse((lat, lon), exactly_one=True, namedetails=True, addressdetails=True)
+			if location:
+				address = location.raw['address']
+				self._cache[coord_key] = address
+				self._cache.flush()
+				logging.debug('Address cached for requested coordinates: %s', coord_key)
+				return address
+			logging.warning('No address found for provided coordinates: %s', coord_key)
 			return None
-	except Exception as e:
-		logging.error('Error getting address: %s', e)
-		return None
+		except Exception as e:
+			logging.error('Error getting address: %s', e)
+			return None
 
-
-def format_address(address, include_flag=False):
-	"""Format address dictionary into a string."""
-	if not address:
-		return ''
-	area = address.get('suburb') or address.get('town') or address.get('city') or address.get('district') or ''
-	cc_str = ''
-	if cc := address.get('country_code'):
-		cc = cc.upper()
-		if include_flag:
-			flag = ''.join(chr(ord(c) + 127397) for c in cc)
-			cc_str = f'{cc}{flag}'
-		else:
-			cc_str = f'{cc}'
-	return ' '.join([area, cc_str])
+	@staticmethod
+	def format_address(address, include_flag=False):
+		"""Format address dictionary into a string."""
+		if not address:
+			return ''
+		area = address.get('suburb') or address.get('town') or address.get('city') or address.get('district') or ''
+		cc_str = ''
+		if cc := address.get('country_code'):
+			cc = cc.upper()
+			if include_flag:
+				flag = ''.join(chr(ord(c) + 127397) for c in cc)
+				cc_str = f'{cc}{flag}'
+			else:
+				cc_str = f'{cc}'
+		return ' '.join([area, cc_str])
 
 
 class SmartBeaconing(object):
@@ -888,30 +903,70 @@ class SystemStats(object):
 			return sum(v for _, v in history) / len(history)
 		return None
 
-	def check_stats(self):
-		"""Check and record current temperature, load and memory."""
+	def _calculate_uptime(self):
+		"""Calculate human-readable uptime."""
+		uptime_seconds = dt.datetime.now(dt.timezone.utc).timestamp() - psutil.boot_time()
+		uptime = dt.timedelta(seconds=uptime_seconds)
+		u_str = humanize.precisedelta(uptime, minimum_unit='minutes', format='%0.0f')
+		for unit, abbr in [
+			(' years', 'y'),
+			(' year', 'y'),
+			(' months', 'mo'),
+			(' month', 'mo'),
+			(' days', 'd'),
+			(' day', 'd'),
+			(' hours', 'h'),
+			(' hour', 'h'),
+			(' minutes', 'm'),
+			(' minute', 'm'),
+			(' and', ''),
+			(',', ''),
+		]:
+			u_str = u_str.replace(unit, abbr)
+		return f'up: {u_str}'
+
+	def _calculate_traffic(self):
+		"""Calculate network traffic info from vnstat."""
+		try:
+			output = subprocess.check_output(['vnstat', '--json', 'f', '1'], text=True)
+			data = json.loads(output)
+			best_rx, best_tx, max_total, found = 0, 0, -1, False
+			if data.get('interfaces'):
+				for iface in data['interfaces']:
+					fiveminute_traffic = iface.get('traffic', {}).get('fiveminute')
+					if fiveminute_traffic:
+						last_entry = fiveminute_traffic[-1]
+						rx_bytes, tx_bytes = last_entry.get('rx', 0), last_entry.get('tx', 0)
+						total = rx_bytes + tx_bytes
+						if total > max_total:
+							max_total, best_rx, best_tx, found = total, rx_bytes, tx_bytes, True
+			if found:
+				rxtx = humanize.naturalsize(best_rx + best_tx).replace(' ', '')
+				return f'net: {rxtx}'
+		except Exception as e:
+			logging.debug('Could not fetch vnstat 5-min traffic: %s', e)
+		return ''
+
+	def update_metrics(self):
+		"""Unified method to calculate and update system metrics."""
 		now = time.time()
 		self._update_history(self._temp_history, self._fetch_raw_cpu_temp, now)
 		self._update_history(self._cpu_history, self._fetch_raw_cpu_load, now)
 		self._update_history(self._mem_history, self._fetch_raw_vram_used, now)
 
-	def cleanup(self):
-		"""Clean up old history entries to ensure memory efficiency."""
-		now = time.time()
-		self._prune_history(self._temp_history, now)
-		self._prune_history(self._cpu_history, now)
-		self._prune_history(self._mem_history, now)
+		self._cache['uptime'] = (self._calculate_uptime(), now)
+		self._cache['traffic_info'] = (self._calculate_traffic(), now)
+		try:
+			self._cache['storage_used'] = (psutil.disk_usage('/').used, now)
+		except Exception:
+			pass
 
 	def _get_stat_property(self, history, fetch_func, cache_key, scale=1):
 		"""Get historical data property."""
 		avg = self._calculate_average(history)
 		if avg is not None:
 			return int(avg * scale)
-
-		def _fetch():
-			return int(fetch_func() * scale)
-
-		return self._get_cached(cache_key, _fetch, ttl=5, default=0)
+		return self._get_cached(cache_key, lambda: int(fetch_func() * scale), ttl=5, default=0)
 
 	@property
 	def avg_temp(self):
@@ -931,38 +986,12 @@ class SystemStats(object):
 	@property
 	def storage_used(self):
 		"""Get used disk space in bits."""
-
-		def _fetch():
-			return psutil.disk_usage('/').used
-
-		return self._get_cached('storage_used', _fetch, ttl=60, default=0)
+		return self._get_cached('storage_used', lambda: psutil.disk_usage('/').used, ttl=60, default=0)
 
 	@property
 	def uptime(self):
 		"""Get system uptime in a human-readable format."""
-
-		def _fetch():
-			uptime_seconds = dt.datetime.now(dt.timezone.utc).timestamp() - psutil.boot_time()
-			uptime = dt.timedelta(seconds=uptime_seconds)
-			u_str = humanize.precisedelta(uptime, minimum_unit='minutes', format='%0.0f')
-			for unit, abbr in [
-				(' years', 'y'),
-				(' year', 'y'),
-				(' months', 'mo'),
-				(' month', 'mo'),
-				(' days', 'd'),
-				(' day', 'd'),
-				(' hours', 'h'),
-				(' hour', 'h'),
-				(' minutes', 'm'),
-				(' minute', 'm'),
-				(' and', ''),
-				(',', ''),
-			]:
-				u_str = u_str.replace(unit, abbr)
-			return f'up: {u_str}'
-
-		return self._get_cached('uptime', _fetch, ttl=60, default='')
+		return self._get_cached('uptime', self._calculate_uptime, ttl=60, default='')
 
 	@property
 	def os_info(self):
@@ -972,7 +1001,7 @@ class SystemStats(object):
 			osname = ''
 			try:
 				os_info = {}
-				with open(OS_RELEASE_FILE) as osr:
+				with open(self.cfg.os_release_file) as osr:
 					for line in osr:
 						line = line.strip()
 						if '=' in line:
@@ -983,7 +1012,7 @@ class SystemStats(object):
 				debian_version_full = os_info.get('DEBIAN_VERSION_FULL') or os_info.get('VERSION_ID', '')
 				osname = f'{id_like}{debian_version_full}-{version_codename}'
 			except (IOError, OSError):
-				logging.warning('OS release file not found: %s', OS_RELEASE_FILE)
+				logging.warning('OS release file not found: %s', self.cfg.os_release_file)
 			kernelver = ''
 			try:
 				kernel = os.uname()
@@ -1002,7 +1031,7 @@ class SystemStats(object):
 			mmdvm_info = {}
 			dmr_enabled = False
 			try:
-				with open(MMDVMHOST_FILE, 'r') as mmh:
+				with open(self.cfg.mmdvmhost_file, 'r') as mmh:
 					for line in mmh:
 						if '[DMR]' in line:
 							dmr_enabled = 'Enable=1' in next(mmh, '')
@@ -1010,7 +1039,7 @@ class SystemStats(object):
 							key, value = line.split('=', 1)
 							mmdvm_info[key.strip()] = value.strip()
 			except (IOError, OSError):
-				logging.warning('MMDVMHost file not found: %s', MMDVMHOST_FILE)
+				logging.warning('MMDVMHost file not found: %s', self.cfg.mmdvmhost_file)
 			rx_freq = int(mmdvm_info.get('RXFrequency', 0))
 			tx_freq = int(mmdvm_info.get('TXFrequency', 0))
 			color_code = int(mmdvm_info.get('ColorCode', 0))
@@ -1035,36 +1064,7 @@ class SystemStats(object):
 	@property
 	def traffic_info(self):
 		"""Get network traffic info from vnstat."""
-
-		def _fetch():
-			try:
-				output = subprocess.check_output(['vnstat', '--json', 'f', '1'], text=True)
-				data = json.loads(output)
-				best_rx = 0
-				best_tx = 0
-				max_total = -1
-				found = False
-				if data.get('interfaces'):
-					for iface in data['interfaces']:
-						fiveminute_traffic = iface.get('traffic', {}).get('fiveminute')
-						if fiveminute_traffic:
-							last_entry = fiveminute_traffic[-1]
-							rx_bytes = last_entry.get('rx', 0)
-							tx_bytes = last_entry.get('tx', 0)
-							total = rx_bytes + tx_bytes
-							if total > max_total:
-								max_total = total
-								best_rx = rx_bytes
-								best_tx = tx_bytes
-								found = True
-				if found:
-					rxtx = humanize.naturalsize(best_rx + best_tx).replace(' ', '')
-					return f'net: {rxtx}'
-			except (FileNotFoundError, subprocess.CalledProcessError, IndexError, json.JSONDecodeError, KeyError) as e:
-				logging.warning('Could not fetch or parse vnstat 5-min traffic: %s', e)
-			return ''
-
-		return self._get_cached('traffic_info', _fetch, ttl=300, default='')
+		return self._get_cached('traffic_info', self._calculate_traffic, ttl=300, default='')
 
 
 class ScheduledMessageHandler:
@@ -1073,7 +1073,7 @@ class ScheduledMessageHandler:
 	def __init__(self, cfg, gps_handler):
 		self.cfg = cfg
 		self.gps_handler = gps_handler
-		self.tracking = PersistentDict(MSG_TRACKING_FILE)
+		self.tracking = PersistentDict(self.cfg.msg_tracking_file)
 		self.messages = []
 		self.sequences = {}
 		self._init_messages()
@@ -1102,11 +1102,11 @@ class ScheduledMessageHandler:
 	def _init_sequences(self):
 		"""Initialize sequence counters for each message type."""
 		for msg_info in self.messages:
-			source = msg_info['from_call'] or FROMCALL
+			source = msg_info['from_call'] or self.cfg.from_call
 			addrcall = msg_info['addrcall']
 			seq_name = f'msg_sequence_{source}_{addrcall}'
 			if seq_name not in self.sequences:
-				self.sequences[seq_name] = Sequence(name=seq_name, modulo=100000)
+				self.sequences[seq_name] = Sequence(self.cfg.lib_dir, name=seq_name, modulo=100000)
 
 	async def _is_due(self, msg_info) -> bool:
 		"""Return True if the message described by *msg_info* should be sent now."""
@@ -1114,7 +1114,7 @@ class ScheduledMessageHandler:
 		if msg_info['weekday'] is not None and now.weekday() != msg_info['weekday']:
 			return False
 		today = now.strftime('%Y-%m-%d')
-		source = msg_info['from_call'] or FROMCALL
+		source = msg_info['from_call'] or self.cfg.from_call
 		tracking_key = f'{msg_info["name"]},{source},{msg_info["addrcall"]}'
 		last_sent = self.tracking.get(tracking_key)
 		if last_sent and last_sent.startswith(today):
@@ -1140,21 +1140,21 @@ class ScheduledMessageHandler:
 		if weekday is not None and now.weekday() != weekday:
 			return False
 		today = now.strftime('%Y-%m-%d')
-		source = from_call or FROMCALL
+		source = from_call or self.cfg.from_call
 		tracking_key = f'{name},{source},{addrcall}'
 		last_sent = self.tracking.get(tracking_key)
 		if last_sent and last_sent.startswith(today):
 			return False
 		loc_data, _ = gps_data if gps_data else await self.gps_handler.get_loc_and_sat()
 		_, lat, lon, _, _, _ = loc_data
-		gridsquare = latlon_to_grid(lat, lon)
+		gridsquare = APRSConverter.latlon_to_grid(lat, lon)
 		seq_name = f'msg_sequence_{source}_{addrcall}'
 		seq = next(self.sequences[seq_name])
-		message = f'{template} from {gridsquare} via {APP_NAME}'[:67]
+		message = f'{template} from {gridsquare} via {self.cfg.app_name}'[:67]
 		path_str = ''
 		if from_call:
-			path_str = f',{FROMCALL}*,qAR,{FROMCALL}'
-		payload = f'{source}>{TOCALL}{path_str}::{addrcall:9s}:{message}{{{seq}'
+			path_str = f',{self.cfg.from_call}*,qAR,{self.cfg.from_call}'
+		payload = f'{source}>{self.cfg.to_call}{path_str}::{addrcall:9s}:{message}{{{seq}'
 		try:
 			parsed = aprslib.parse(payload)
 		except APRSParseError as err:
@@ -1179,11 +1179,10 @@ class ScheduledMessageHandler:
 class TelegramLogger(object):
 	"""Class to handle logging to Telegram."""
 
-	def __init__(self, cfg, location_id_file=LOCATION_ID_FILE):
+	def __init__(self, cfg):
 		self.cfg = cfg
 		self.enabled = cfg.telegram_enabled
 		self.bot = None
-		self.location_id_file = location_id_file
 		if not self.enabled:
 			return
 		self.token = cfg.telegram_token
@@ -1224,7 +1223,7 @@ class TelegramLogger(object):
 		if not self.enabled or not self.bot:
 			return
 		try:
-			message = f'{tg_message}\n\n<code>{APP_NAME}</code>'
+			message = f'{tg_message}\n\n<code>{self.cfg.app_name}</code>'
 			msg_kwargs = {
 				'chat_id': self.chat_id,
 				'text': message,
@@ -1243,10 +1242,10 @@ class TelegramLogger(object):
 
 	def _read_location_id(self):
 		"""Reads location message ID and start time from file."""
-		if not os.path.exists(self.location_id_file):
+		if not os.path.exists(self.cfg.location_id_file):
 			return None, None
 		try:
-			with open(self.location_id_file, 'r') as f:
+			with open(self.cfg.location_id_file, 'r') as f:
 				parts = f.read().split(':')
 				msg_id = int(parts[0])
 				start_time = float(parts[1]) if len(parts) > 1 else time.time()
@@ -1258,16 +1257,16 @@ class TelegramLogger(object):
 	def _write_location_id(self, msg_id, start_time):
 		"""Writes location message ID and start time to file."""
 		try:
-			with open(self.location_id_file, 'w') as f:
+			with open(self.cfg.location_id_file, 'w') as f:
 				f.write(f'{msg_id}:{start_time}')
 		except IOError as e:
 			logging.error('Failed to save location ID: %s', e)
 
 	def _remove_location_id_file(self):
 		"""Removes the location ID file."""
-		if os.path.exists(self.location_id_file):
+		if os.path.exists(self.cfg.location_id_file):
 			try:
-				os.remove(self.location_id_file)
+				os.remove(self.cfg.location_id_file)
 			except OSError as e:
 				logging.error('Failed to remove location ID file: %s', e)
 
@@ -1333,11 +1332,12 @@ class TelegramLogger(object):
 class APRSSender:
 	"""Class to handle APRS connection and packet sending."""
 
-	def __init__(self, cfg, tg_logger, sys_stats, gps_handler, telem_seq):
+	def __init__(self, cfg, tg_logger, sys_stats, gps_handler, geolocation, telem_seq):
 		self.cfg = cfg
 		self.tg_logger = tg_logger
 		self.sys_stats = sys_stats
 		self.gps_handler = gps_handler
+		self.geolocation = geolocation
 		self.ais = None
 		self.telem_seq = telem_seq
 
@@ -1348,8 +1348,8 @@ class APRSSender:
 
 	async def connect(self):
 		"""Establish connection to APRS-IS with retries."""
-		logging.info('Connecting to APRS-IS server %s:%d as %s', self.cfg.server, self.cfg.port, FROMCALL)
-		self.ais = aprslib.IS(FROMCALL, passwd=self.cfg.passcode, host=self.cfg.server, port=self.cfg.port)
+		logging.info('Connecting to APRS-IS server %s:%d as %s', self.cfg.server, self.cfg.port, self.cfg.from_call)
+		self.ais = aprslib.IS(self.cfg.from_call, passwd=self.cfg.passcode, host=self.cfg.server, port=self.cfg.port)
 		loop = asyncio.get_running_loop()
 		max_retries = 5
 		retry_delay = 5
@@ -1357,7 +1357,7 @@ class APRSSender:
 			try:
 				await loop.run_in_executor(None, self.ais.connect)
 				# self.ais.set_filter(self.cfg.filter)
-				logging.info('Connected to APRS-IS server %s:%d as %s', self.cfg.server, self.cfg.port, FROMCALL)
+				logging.info('Connected to APRS-IS server %s:%d as %s', self.cfg.server, self.cfg.port, self.cfg.from_call)
 				return
 			except APRSConnectionError as err:
 				logging.warning('APRS connection error (attempt %d/%d): %s', attempt + 1, max_retries, err)
@@ -1383,15 +1383,15 @@ class APRSSender:
 		"""Send APRS position packet to APRS-IS."""
 		loc_data, _ = gps_data if gps_data else await self.gps_handler.get_loc_and_sat()
 		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = loc_data
-		latstr = _lat_to_aprs(cur_lat)
-		lonstr = _lon_to_aprs(cur_lon)
-		altstr = _alt_to_aprs(cur_alt)
-		spdstr = _spd_to_knots(cur_spd)
-		csestr = _cse_to_aprs(cur_cse)
-		spdkmh = _spd_to_kmh(cur_spd)
+		latstr = APRSConverter.lat_to_aprs(cur_lat)
+		lonstr = APRSConverter.lon_to_aprs(cur_lon)
+		altstr = APRSConverter.alt_to_aprs(cur_alt)
+		spdstr = APRSConverter.spd_to_knots(cur_spd)
+		csestr = APRSConverter.cse_to_aprs(cur_cse)
+		spdkmh = APRSConverter.spd_to_kmh(cur_spd)
 		mmdvminfo = self.sys_stats.mmdvm_info
 		osinfo = self.sys_stats.os_info
-		comment = '; '.join(filter(None, [mmdvminfo, osinfo, PROJECT_URL]))
+		comment = '; '.join(filter(None, [mmdvminfo, osinfo, self.cfg.project_url]))
 		timestamp, tg_timestamp = self._get_timestamps(cur_time)
 		symbt = self.cfg.symbol_table
 		symb = self.cfg.symbol
@@ -1414,9 +1414,9 @@ class APRSSender:
 					symbt, symb = '/', '('
 		lookup_table = symbt if symbt in ['/', '\\'] else '\\'
 		sym_desc = symbols.get_desc(lookup_table, symb).split('(')[0].strip()
-		payload = f'{FROMCALL}>{TOCALL}:/{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
+		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:/{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
 		tg_pos = (
-			f'<u>{FROMCALL} Position</u>\n\n'
+			f'<u>{self.cfg.from_call} Position</u>\n\n'
 			f'Time: <b>{tg_timestamp}</b>\n'
 			f'Symbol: <b>{symbt}{symb} ({sym_desc})</b>\n'
 			f'Position:\n'
@@ -1430,7 +1430,7 @@ class APRSSender:
 
 	async def send_header(self):
 		"""Send APRS header information to APRS-IS."""
-		caller = f'{FROMCALL}>{TOCALL}::{FROMCALL:9s}:'
+		caller = f'{self.cfg.from_call}>{self.cfg.to_call}::{self.cfg.from_call:9s}:'
 		params = ['Temp', 'Load', 'RAM', 'ROM']
 		units = ['deg.C', '%', 'GB', 'GB']
 		eqns = ['0,0.1,0', '0,0.1,0', '0,0.001,0', '0,0.001,0']
@@ -1440,7 +1440,7 @@ class APRSSender:
 			eqns.append('0,1,0')
 		payload = f'{caller}PARM.{",".join(params)}\r\n{caller}UNIT.{",".join(units)}\r\n{caller}EQNS.{",".join(eqns)}'
 		tg_hdr = (
-			f'<u>{FROMCALL} Header</u>\n\n'
+			f'<u>{self.cfg.from_call} Header</u>\n\n'
 			f'Parameters: <b>{",".join(params)}</b>\n'
 			f'Units: <b>{",".join(units)}</b>\n'
 			f'Equations: <b>{",".join(eqns)}</b>\n\n'
@@ -1458,9 +1458,9 @@ class APRSSender:
 		diskused = self.sys_stats.storage_used
 		telemmemused = int(memused / 1.0000e6)
 		telemdiskused = int(diskused / 1.0000e6)
-		payload = f'{FROMCALL}>{TOCALL}:T#{seq:03d},{cputemp:d},{cpuload:d},{telemmemused:d},{telemdiskused:d}'
+		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:T#{seq:03d},{cputemp:d},{cpuload:d},{telemmemused:d},{telemdiskused:d}'
 		tg_tlm = (
-			f'<u>{FROMCALL} Telemetry</u>\n\n'
+			f'<u>{self.cfg.from_call} Telemetry</u>\n\n'
 			f'Sequence: <b>#{seq}</b>\n'
 			f'CPU Temp: <b>{cputemp / 10:.1f} °C</b>\n'
 			f'CPU Load: <b>{cpuload / 10:.1f} %</b>\n'
@@ -1481,10 +1481,10 @@ class APRSSender:
 		loc_data, sat_data = gps_data if gps_data else await self.gps_handler.get_loc_and_sat()
 		cur_time, lat, lon, _, _, _ = loc_data
 		timestamp, tg_timestamp = self._get_timestamps(cur_time)
-		gridsquare = f'{latlon_to_grid(lat, lon)}'
-		address = get_add_from_pos(lat, lon)
-		near_add = format_address(address)
-		near_add_tg = format_address(address, True)
+		gridsquare = f'{APRSConverter.latlon_to_grid(lat, lon)}'
+		address = self.geolocation.get_address(lat, lon)
+		near_add = self.geolocation.format_address(address)
+		near_add_tg = self.geolocation.format_address(address, True)
 		uptime = self.sys_stats.uptime
 		traffic = self.sys_stats.traffic_info
 		sats_info = ''
@@ -1494,18 +1494,18 @@ class APRSSender:
 				sats_info = f'gps: {u_sat}/{n_sat}'
 		stat_text = f'{timestamp}{"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
 		tele_text = f'Time: <b>{tg_timestamp}</b>\nText: <b>{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}</b>'
-		payload = f'{FROMCALL}>{TOCALL}:>{stat_text}'
-		tg_stat = f'<u>{FROMCALL} Status</u>\n\n<b>{tele_text}</b>'
-		if os.path.exists(STATUS_FILE):
+		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:>{stat_text}'
+		tg_stat = f'<u>{self.cfg.from_call} Status</u>\n\n<b>{tele_text}</b>'
+		if os.path.exists(self.cfg.status_file):
 			try:
-				with open(STATUS_FILE, 'r') as f:
+				with open(self.cfg.status_file, 'r') as f:
 					if f.read() == payload:
 						return
 			except (IOError, OSError):
 				pass
 		await self.send_packet(payload, 'status')
 		try:
-			with open(STATUS_FILE, 'w') as f:
+			with open(self.cfg.status_file, 'w') as f:
 				f.write(payload)
 		except (IOError, OSError):
 			pass
@@ -1545,10 +1545,12 @@ async def initialize_session(cfg):
 		_, cfg.latitude, cfg.longitude, cfg.altitude, _, _ = loc_data
 	tg_logger = TelegramLogger(cfg)
 	sys_stats = SystemStats(cfg)
-	telem_seq = Sequence(name='telem_sequence', modulo=1000)
-	aprs_sender = APRSSender(cfg, tg_logger, sys_stats, gps_handler, telem_seq)
+	sys_stats.update_metrics()
+	geolocation = Geolocation(cfg.app_name, cfg.nominatim_cache_file)
+	telem_seq = Sequence(cfg.lib_dir, name='telem_sequence', modulo=1000)
+	aprs_sender = APRSSender(cfg, tg_logger, sys_stats, gps_handler, geolocation, telem_seq)
 	await aprs_sender.connect()
-	timer = Timer()
+	timer = Timer(cfg.tmp_dir)
 	sb = SmartBeaconing(cfg)
 	scheduled_msg_handler = ScheduledMessageHandler(cfg, gps_handler)
 	return aprs_sender, tg_logger, timer, sb, sys_stats, scheduled_msg_handler, gps_handler
@@ -1583,7 +1585,7 @@ async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, sch
 		if reload_event.is_set():
 			break
 		if timer_tick % 20 == 0:
-			sys_stats.check_stats()
+			sys_stats.update_metrics()
 		gps_data = await gps_handler.get_loc_and_sat()
 		packet_sent = False
 		tasks = _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, scheduled_msg_handler)
@@ -1615,14 +1617,14 @@ async def main():
 			health_check_task = asyncio.create_task(gps_handler.run_health_check())
 			gps_polling_task = asyncio.create_task(gps_handler.run_polling())
 		async with tg_logger:
-			await tg_logger.log(f'🚀 {APP_NAME.split("-")[0]} Started')
+			await tg_logger.log(f'🚀 {cfg.app_name.split("-")[0]} Started')
 			try:
 				await process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, scheduled_msg_handler, gps_handler)
 			finally:
 				if reload_event.is_set():
-					await tg_logger.log(f'🔄 {APP_NAME.split("-")[0]} Reloaded')
+					await tg_logger.log(f'🔄 {cfg.app_name.split("-")[0]} Reloaded')
 				else:
-					await tg_logger.log(f'🛑 {APP_NAME.split("-")[0]} Stopped')
+					await tg_logger.log(f'🛑 {cfg.app_name.split("-")[0]} Stopped')
 				await tg_logger.stop_location()
 				if health_check_task:
 					health_check_task.cancel()
@@ -1634,7 +1636,8 @@ async def main():
 
 
 if __name__ == '__main__':
-	configure_logging()
+	cfg = Config()
+	configure_logging(cfg)
 	exit_code = 0
 	try:
 		logging.info('Starting the application...')
