@@ -493,7 +493,7 @@ def latlon_to_grid(lat, lon, precision=6):
 	if precision >= 6:
 		subsq_lon = int(((lon % 2) / 2) * 24)
 		subsq_lat = int(((lat % 1) / 1) * 24)
-		grid += chr(subsq_lon + ord('A')) + chr(subsq_lat + ord('A'))
+		grid += chr(subsq_lon + ord('a')) + chr(subsq_lat + ord('a'))
 	return grid
 
 
