@@ -589,6 +589,11 @@ class GPSHandler:
 			return
 
 		while True:
+			if not self.healthy:
+				# Skip polling if GPS data is unreliable
+				await asyncio.sleep(15)
+				continue
+
 			# Update Position
 			pos_res = await self._retrieve_data('TPV', 'position')
 			if pos_res:
