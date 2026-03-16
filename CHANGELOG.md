@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-16T21:38:10+08:00)
+## [beta8] - (2026-03-17T03:20:28+08:00)
 
-- 71 commit(s) contributed to the release.
+- 73 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 5 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [2726984](https://github.com/HafiziRuslan/RasPiAPRS/commit/27269847d9f2411c034def8c55defc22fb4120cf) feat(get_loc_and_sat): add time-based GPS/SAT fix update *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-17T03:20:28+08:00*
 - [6361303](https://github.com/HafiziRuslan/RasPiAPRS/commit/636130399eb44978aec61956e15ff345a4871c17) feat(docs): add sponsorship badges to readme *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-16T21:38:10+08:00*
 - [16b2bb5](https://github.com/HafiziRuslan/RasPiAPRS/commit/16b2bb517b223ac3a141b19e08fac0ebb62307cb) feat(ci): ignore GitHub folder in Telegram workflow *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-16T18:43:34+08:00*
 - [485d196](https://github.com/HafiziRuslan/RasPiAPRS/commit/485d196f94b9cc11407436fe9f7c04bbb7f96d0f) feat(notifications): update Telegram workflow to send push notifications with commit list *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-16T18:42:04+08:00*
@@ -88,6 +89,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta8
 
+- [511826c](https://github.com/HafiziRuslan/RasPiAPRS/commit/511826cccfad51dd0dbae16a29787c728597c274) chore(misc): update metrics visualization image *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-17T03:06:57+08:00*
 - [c89eff0](https://github.com/HafiziRuslan/RasPiAPRS/commit/c89eff05396850adeacf5b00ebc4b5b10b1e52f4) ci(telegram): revert workflow to workflow_run trigger *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-16T19:02:50+08:00*
 - [0d2a1c9](https://github.com/HafiziRuslan/RasPiAPRS/commit/0d2a1c98ee4114b3189546f09182a0dfa0c791e2) chore(sbom): update sbom for uv 0.10.10 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T12:20:34+08:00*
 - [ae15ad7](https://github.com/HafiziRuslan/RasPiAPRS/commit/ae15ad73842f82e039d0c7386c2bf7db20b9b58f) chore(ci): remove sbom from release exclusions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T12:20:23+08:00*
@@ -1183,4 +1185,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-16T21:38:55.713647905+08:00
+generated using git-cliff on 2026-03-17T03:21:22.718968055+08:00
