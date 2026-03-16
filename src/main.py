@@ -779,6 +779,7 @@ class SmartBeaconing(object):
 		self.last_course = 0
 		self.is_moving = False
 		self.initialized = False
+		self.stop_time = 0
 
 	def _calculate_rate(self, spd_kmh):
 		"""Calculate beacon rate based on speed."""
@@ -819,9 +820,16 @@ class SmartBeaconing(object):
 		spd_kmh = spd * 3.6 if spd else 0
 		if self.is_moving:
 			if spd_kmh <= 3:
-				self.is_moving = False
-				logging.info('SmartBeaconing disabled: Stopped moving.')
-				return False
+				if not self.stop_time:
+					self.stop_time = now
+				if now - self.stop_time > 600:
+					self.is_moving = False
+					self.stop_time = 0
+					logging.info('SmartBeaconing disabled: Stopped moving.')
+					return False
+			else:
+				self.stop_time = 0
+
 			rate = self._calculate_rate(spd_kmh)
 			turn_detected, heading_change, turn_threshold = self._check_turn(cse, spd_kmh)
 			time_since_last = now - self.last_beacon_time
@@ -839,6 +847,7 @@ class SmartBeaconing(object):
 		else:
 			if spd_kmh > 3:
 				self.is_moving = True
+				self.stop_time = 0
 				logging.info('SmartBeaconing enabled: Movement detected.')
 				self.last_beacon_time = now
 				self.last_course = cse
