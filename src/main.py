@@ -1410,7 +1410,7 @@ class APRSSender:
 		extdatstr = ''
 		if cur_spd >= 1:
 			extdatstr = f'{csestr}/{spdstr}'
-			tgposmoving = f'\n\tSpeed: <b>{int(cur_spd)}m/s</b> | <b>{int(spdkmh)}km/h</b> | <b>{int(spdstr)}kn</b>\n\tCourse: <b>{int(cur_cse)}°</b>'
+			tgposmoving = f'\n\tCourse: <b>{int(cur_cse)}°</b>\n\tSpeed: <b>{int(cur_spd)}m/s</b> | <b>{int(spdkmh)}km/h</b> | <b>{int(spdstr)}kn</b>'
 			if self.cfg.smartbeaconing_enabled:
 				sspd = self.cfg.smartbeaconing_slow_speed
 				fspd = self.cfg.smartbeaconing_fast_speed
