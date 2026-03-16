@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-15T12:35:32+08:00)
+## [beta8] - (2026-03-16T18:22:13+08:00)
 
-- 64 commit(s) contributed to the release.
-- 4 day(s) passed between the first and last commit.
-- 4 day(s) passed between releases.
+- 65 commit(s) contributed to the release.
+- 5 day(s) passed between the first and last commit.
+- 5 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [6b91136](https://github.com/HafiziRuslan/RasPiAPRS/commit/6b91136b48ae549cf5b426ca97c52b62da339ae2) feat(beaconing): add stop_time handling for movement detection *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-16T18:22:13+08:00*
 - [e82f20b](https://github.com/HafiziRuslan/RasPiAPRS/commit/e82f20b71ffc71f6df322ed8b0d12352f6c96a3e) feat(sender): extend delay between messages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T10:06:12+08:00*
 - [04d0ddd](https://github.com/HafiziRuslan/RasPiAPRS/commit/04d0ddda2adb45111a760baff0c26352d41ac5bd) feat(config): add new APRS event types and improve SSID validation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T09:48:32+08:00*
 - [e837c9e](https://github.com/HafiziRuslan/RasPiAPRS/commit/e837c9ed005d612a912bd371ad5a660c27c625c3) feat(gpsd): add debug logging for GPS data *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T06:51:59+08:00*
@@ -1176,4 +1177,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-15T12:36:25.192476129+08:00
+generated using git-cliff on 2026-03-16T18:29:08.717909692+08:00
