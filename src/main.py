@@ -1160,7 +1160,8 @@ class ScheduledMessageHandler:
 		source = from_call or self.cfg.from_call
 		seq_name = f'msg_sequence_{source}_{addrcall}'
 		seq = next(self.sequences[seq_name])
-		message = f'{template} from {gridsquare} via {self.cfg.app_name}'[:67]
+		app_id = '-'.join(self.cfg.app_name.split('-')[:2])
+		message = f'{template} from {gridsquare} via {app_id}'[:67]
 		path_str = ''
 		if from_call:
 			path_str = f',{self.cfg.from_call}*,qAR,{self.cfg.from_call}'
