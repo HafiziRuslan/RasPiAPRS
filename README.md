@@ -1,5 +1,12 @@
 # RasPiAPRS
 
+![Ko-Fi sponsors](https://img.shields.io/badge/kofi-tip-orange?style=for-the-badge&logo=kofi&logoColor=FF6433&logoSize=auto&link=https%3A%2F%2Fko-fi.com%2Fhafiziruslan)
+![Buy me a Coffee sponsors](https://img.shields.io/badge/buymeacoffee-tip-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=FFDD00&logoSize=auto&link=https%3A%2F%2Fwww.buymeacoffee.com%2Fhafiziruslan)
+
+![GitHub Sponsors](https://img.shields.io/github/sponsors/HafiziRuslan?style=for-the-badge&logo=github&logoColor=181717&logoSize=auto&link=https%3A%2F%2Fgithub.com%2Fsponsors%2FHafiziRuslan)
+![Open Collective sponsors](https://img.shields.io/opencollective/sponsors/hafiziruslan?style=for-the-badge&logo=opencollective&logoColor=7FADF2&logoSize=auto&link=https%3A%2F%2Fopencollective.com%2Fhafiziruslan)
+![thanks.dev sponsors](https://img.shields.io/badge/sponsors-thanks.dev-black?style=for-the-badge&logoSize=auto&link=https%3A%2F%2Fthanks.dev%2F%2Fgh%2Fhafiziruslan)
+
 With this simple python program you can monitor your Pi-Star / WPSD / AllStarLink health using APRS metrics.
 
 The metrics are:-
