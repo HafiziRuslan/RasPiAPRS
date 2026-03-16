@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-16T18:22:13+08:00)
+## [beta8] - (2026-03-16T18:34:11+08:00)
 
-- 65 commit(s) contributed to the release.
+- 66 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 5 day(s) passed between releases.
 
@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [c1681b0](https://github.com/HafiziRuslan/RasPiAPRS/commit/c1681b091b43afb3820b7875ea909fd171ef26d0) fix(message): limit appname in message to first two parts *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-16T18:34:11+08:00*
 - [bcd07a8](https://github.com/HafiziRuslan/RasPiAPRS/commit/bcd07a82a740b2f6b29bda401e3c0c10ab504988) fix(grid): update grid character case to lowercase *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-15T01:35:38+08:00*
 - [e4e0041](https://github.com/HafiziRuslan/RasPiAPRS/commit/e4e00417abce73d60f341538123c1794a3c34fba) fix(utils): remove binary argument from naturalsize function call *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T07:19:40+08:00*
 - [acdf634](https://github.com/HafiziRuslan/RasPiAPRS/commit/acdf6346d6fade131e68782b4c057196d2082078) fix(main): ensure iterator count never zero  - reset count to 1 when it becomes zero to avoid invalid state *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T04:57:53+08:00*
@@ -1177,4 +1178,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-16T18:29:08.717909692+08:00
+generated using git-cliff on 2026-03-16T18:34:58.398903710+08:00
