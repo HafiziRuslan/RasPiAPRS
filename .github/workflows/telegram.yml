@@ -1,11 +1,11 @@
 name: 'Telegram Message'
 
 on:
-  push:
-    branches:
-      - master
-    paths-ignore:
-      - '.github/**'
+  workflow_run:
+    workflows:
+      - Changelog
+    types:
+      - completed
 
 permissions:
   contents: read
@@ -17,14 +17,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
 
-      - name: Prepare Commit List
+      - name: Set short SHA
         id: vars
-        run: |
-          {
-            echo 'commit_list<<EOF'
-            echo "${{ toJson(github.event.commits) }}" | jq -r '.[] | "• \(.message | split("\n")[0]) (<code>\(.id | .[0:7])</code>)"'
-            echo 'EOF'
-          } >> "$GITHUB_OUTPUT"
+        run: echo "sha_short=$(echo ${{ github.event.workflow_run.head_sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
 
       - name: Send Inline Telegram Message
         uses: cbrgm/telegram-github-action@main
@@ -32,13 +27,13 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           message: |
-            New push by <b><a href="https://github.com/${{ github.event.sender.login }}">@${{ github.event.sender.login }}</a></b>!
+            New commit by <b><a href="https://github.com/${{ github.event.sender.login }}">@${{ github.event.sender.login }}</a></b>!
             ----------
-            Repository: <a href="https://github.com/${{ github.repository }}">${{ github.repository }}</a>
-            Reference: <code>${{ github.ref_name }}</code>
-
-            <b>Commits:</b>
-            ${{ steps.vars.outputs.commit_list }}
+            Date: ${{ github.event.workflow_run.head_commit.timestamp }}
+            SHA: <code>${{ steps.vars.outputs.sha_short }}</code>
+            Reference: ${{ github.event.workflow_run.head_branch }}
+            Repository: <a href="https://github.com/${{ github.repository }}/commit/${{ github.event.workflow_run.head_sha }}">${{ github.repository }}</a>
+            Commit: <pre>${{ github.event.workflow_run.head_commit.message }}</pre>
           parse-mode: 'html'
           disable-web-page-preview: true
           disable-notification: false
