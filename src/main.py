@@ -662,7 +662,9 @@ class GPSHandler:
 
 		now = dt.datetime.now(dt.timezone.utc)
 		if (now - self._current_fix.timestamp).total_seconds() > 600:
-			return GPSFix(now, 0.0, 0.0, 0.0, 0.0, 0.0), SATFix(now, 0, 0)
+			lat, lon, alt = self._get_fallback_location()
+			self._current_fix = GPSFix(now, lat, lon, alt, 0.0, 0.0)
+			self._current_sat = SATFix(now, 0, 0)
 
 		# Return internal memory state - no I/O or network calls here
 		return self._current_fix, self._current_sat
