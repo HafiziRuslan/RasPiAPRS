@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-17T10:42:52+08:00)
+## [beta8] - (2026-03-17T11:07:26+08:00)
 
-- 75 commit(s) contributed to the release.
+- 76 commit(s) contributed to the release.
 - 6 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
@@ -35,6 +35,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [a9ddf70](https://github.com/HafiziRuslan/RasPiAPRS/commit/a9ddf709c6c96de8f72ed7d618704380772d58c9) fix(scheduler): increase random delay range for message sending *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-17T11:07:26+08:00*
 - [a373c7b](https://github.com/HafiziRuslan/RasPiAPRS/commit/a373c7b0728b989a4b9979c7353d0ee745e58854) fix(main): improve GPS fallback handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-17T07:58:14+08:00*
 - [c1681b0](https://github.com/HafiziRuslan/RasPiAPRS/commit/c1681b091b43afb3820b7875ea909fd171ef26d0) fix(message): limit appname in message to first two parts *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-16T18:34:11+08:00*
 - [bcd07a8](https://github.com/HafiziRuslan/RasPiAPRS/commit/bcd07a82a740b2f6b29bda401e3c0c10ab504988) fix(grid): update grid character case to lowercase *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-15T01:35:38+08:00*
@@ -1187,4 +1188,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-17T10:43:40.473629080+08:00
+generated using git-cliff on 2026-03-17T11:08:15.493739052+08:00
