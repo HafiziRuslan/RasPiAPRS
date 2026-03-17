@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-17T21:23:01+08:00)
+## [beta8] - (2026-03-18T03:13:27+08:00)
 
-- 162 commit(s) contributed to the release.
+- 163 commit(s) contributed to the release.
 - 21 day(s) passed between the first and last commit.
 - 21 day(s) passed between releases.
 
@@ -54,6 +54,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [478be67](https://github.com/HafiziRuslan/RasPiAPRS/commit/478be67758caa6ba6a9835b3510fe7761b1b25cc) fix: attribute error on _current_pos *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-18T03:13:27+08:00*
 - [1be44cc](https://github.com/HafiziRuslan/RasPiAPRS/commit/1be44cca7fda1807ed95eae49f56fe7f37301506) refactor(main): improve GPS data handling and fallback logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-17T21:23:01+08:00*
 - [a9ddf70](https://github.com/HafiziRuslan/RasPiAPRS/commit/a9ddf709c6c96de8f72ed7d618704380772d58c9) fix(scheduler): increase random delay range for message sending *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-17T11:07:26+08:00*
 - [a373c7b](https://github.com/HafiziRuslan/RasPiAPRS/commit/a373c7b0728b989a4b9979c7353d0ee745e58854) fix(main): improve GPS fallback handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-17T07:58:14+08:00*
@@ -1163,4 +1164,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-17T21:24:15.175027997+08:00
+generated using git-cliff on 2026-03-18T03:14:07.784443688+08:00
