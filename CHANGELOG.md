@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-17T07:58:14+08:00)
+## [beta8] - (2026-03-17T10:42:52+08:00)
 
-- 74 commit(s) contributed to the release.
-- 5 day(s) passed between the first and last commit.
-- 5 day(s) passed between releases.
+- 75 commit(s) contributed to the release.
+- 6 day(s) passed between the first and last commit.
+- 6 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
@@ -90,6 +90,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta8
 
+- [29ded3e](https://github.com/HafiziRuslan/RasPiAPRS/commit/29ded3ef2eac9681e5f4cde32ca79b8b724384ba) chore(deps): update python-telegram-bot to v22.7 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-17T10:42:52+08:00*
 - [511826c](https://github.com/HafiziRuslan/RasPiAPRS/commit/511826cccfad51dd0dbae16a29787c728597c274) chore(misc): update metrics visualization image *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-17T03:06:57+08:00*
 - [c89eff0](https://github.com/HafiziRuslan/RasPiAPRS/commit/c89eff05396850adeacf5b00ebc4b5b10b1e52f4) ci(telegram): revert workflow to workflow_run trigger *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-16T19:02:50+08:00*
 - [0d2a1c9](https://github.com/HafiziRuslan/RasPiAPRS/commit/0d2a1c98ee4114b3189546f09182a0dfa0c791e2) chore(sbom): update sbom for uv 0.10.10 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-14T12:20:34+08:00*
@@ -1186,4 +1187,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-17T07:58:58.918207497+08:00
+generated using git-cliff on 2026-03-17T10:43:40.473629080+08:00
