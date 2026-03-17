@@ -597,7 +597,7 @@ class GPSHandler:
 			# Update Position
 			pos_res = await self._retrieve_data('TPV', 'position')
 			if pos_res:
-				self._current_fix = GPSFix(
+				self._current_pos = GPSFix(
 					timestamp=pos_res.get('time', dt.datetime.now(dt.timezone.utc)),
 					lat=pos_res.get('lat', 0.0),
 					lon=pos_res.get('lon', 0.0),
@@ -605,25 +605,23 @@ class GPSHandler:
 					spd=pos_res.get('speed', 0.0),
 					cse=pos_res.get('magtrack', 0.0) or pos_res.get('track', 0.0),
 				)
-				self.last_valid_fix = self._current_fix
-				self._save_cache(self._current_fix.lat, self._current_fix.lon, self._current_fix.alt)
+				self.last_valid_pos = self._current_pos
+				self._save_cache(self._current_pos.lat, self._current_pos.lon, self._current_pos.alt)
 				logging.debug(
 					'GPSD pos data: [time: %s, lat: %f, lon: %f, alt: %0.1f, spd: %0.0f, cse: %0.0f]',
-					self._current_fix.timestamp.astimezone().isoformat(timespec='seconds'),
-					self._current_fix.lat,
-					self._current_fix.lon,
-					self._current_fix.alt,
-					self._current_fix.spd,
-					self._current_fix.cse,
+					self._current_pos.timestamp.astimezone().isoformat(timespec='seconds'),
+					self._current_pos.lat,
+					self._current_pos.lon,
+					self._current_pos.alt,
+					self._current_pos.spd,
+					self._current_pos.cse,
 				)
 
 			# Update Satellites
 			sat_res = await self._retrieve_data('SKY', 'satellite')
 			if sat_res:
 				self._current_sat = SATFix(
-					timestamp=sat_res.get('time', dt.datetime.now(dt.timezone.utc)),
-					uSat=sat_res.get('uSat', 0),
-					nSat=sat_res.get('nSat', 0)
+					timestamp=sat_res.get('time', dt.datetime.now(dt.timezone.utc)), uSat=sat_res.get('uSat', 0), nSat=sat_res.get('nSat', 0)
 				)
 				logging.debug(
 					'GPSD sat data: [time: %s, uSat: %0.0f, nSat: %0.0f]',
@@ -658,16 +656,23 @@ class GPSHandler:
 		"""Returns current data immediately from memory."""
 		# If external data is provided (e.g. from a task), use it
 		if gps_data:
-			return gps_data
+			pos, sat = gps_data
+		else:
+			now = dt.datetime.now(dt.timezone.utc)
+			if (now - self._current_pos.timestamp).total_seconds() > 600:
+				lat, lon, alt = self._get_fallback_location()
+				self._current_pos = GPSFix(now, lat, lon, alt, 0.0, 0.0)
+				self._current_sat = SATFix(now, 0, 0)
 
-		now = dt.datetime.now(dt.timezone.utc)
-		if (now - self._current_fix.timestamp).total_seconds() > 600:
-			lat, lon, alt = self._get_fallback_location()
-			self._current_fix = GPSFix(now, lat, lon, alt, 0.0, 0.0)
-			self._current_sat = SATFix(now, 0, 0)
+			# Return internal memory state - no I/O or network calls here
+			pos, sat = self._current_pos, self._current_sat
 
-		# Return internal memory state - no I/O or network calls here
-		return self._current_fix, self._current_sat
+		# Snap to home coordinates if within 50 meters
+		dist = self.calculate_distance(pos.lat, pos.lon, self.cfg.latitude, self.cfg.longitude)
+		if dist <= 50:
+			pos = pos._replace(lat=self.cfg.latitude, lon=self.cfg.longitude, alt=self.cfg.altitude)
+
+		return pos, sat
 
 	async def run_health_check(self):
 		"""Periodically check the health of the GPSD service."""
