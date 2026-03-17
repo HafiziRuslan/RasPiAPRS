@@ -540,9 +540,9 @@ class GPSHandler:
 
 		# Initialize state with fallback data to avoid blocking I/O in the main loop
 		fallback_lat, fallback_lon, fallback_alt = self._get_fallback_location()
-		self._current_fix = GPSFix(dt.datetime.now(dt.timezone.utc), fallback_lat, fallback_lon, fallback_alt, 0.0, 0.0)
+		self._current_pos = GPSFix(dt.datetime.now(dt.timezone.utc), fallback_lat, fallback_lon, fallback_alt, 0.0, 0.0)
 		self._current_sat = SATFix(dt.datetime.now(dt.timezone.utc), 0, 0)
-		self.last_valid_fix = None
+		self.last_valid_pos = None
 
 	def _fetch_from_gpsd(self, filter_class):
 		"""Worker function to fetch data from GPSD synchronously."""
