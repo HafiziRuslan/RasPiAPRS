@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-18T21:56:47+08:00)
+## [beta8] - (2026-03-18T23:47:40+08:00)
 
-- 164 commit(s) contributed to the release.
+- 165 commit(s) contributed to the release.
 - 22 day(s) passed between the first and last commit.
 - 22 day(s) passed between releases.
 
@@ -107,6 +107,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [f5391f4](https://github.com/HafiziRuslan/RasPiAPRS/commit/f5391f410568e2397b5b38b8cc7006684a40b9e8) refactor(main): improve os info formatting for readability *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-18T23:47:40+08:00*
 - [d6fd353](https://github.com/HafiziRuslan/RasPiAPRS/commit/d6fd353714b37e70173d97d357b77099cac3b343) refactor(position): reorder speed and course display *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-16T18:54:40+08:00*
 - [d42ec24](https://github.com/HafiziRuslan/RasPiAPRS/commit/d42ec24163f98cc99590bd1393fd30b4a545d4ed) refactor(polling): Add GPS unreliability check to skip polling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-15T12:35:32+08:00*
 - [f9a464e](https://github.com/HafiziRuslan/RasPiAPRS/commit/f9a464e47f6477bf5c13fd4c4a16f5f8d704fa38) refactor: simplify message tracking logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-15T03:19:36+08:00*
@@ -1165,4 +1166,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-18T21:57:38.112711854+08:00
+generated using git-cliff on 2026-03-18T23:48:34.508930812+08:00
