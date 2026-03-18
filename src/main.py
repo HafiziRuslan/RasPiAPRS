@@ -1035,16 +1035,16 @@ class SystemStats(object):
 				id_like = os_info.get('ID_LIKE', '').title()
 				version_codename = os_info.get('VERSION_CODENAME', '')
 				debian_version_full = os_info.get('DEBIAN_VERSION_FULL') or os_info.get('VERSION_ID', '')
-				osname = f'{id_like}{debian_version_full}-{version_codename}'
+				osname = f'{id_like} {debian_version_full} ({version_codename})'
 			except (IOError, OSError):
 				logging.warning('OS release file not found: %s', self.cfg.os_release_file)
 			kernelver = ''
 			try:
 				kernel = os.uname()
-				kernelver = f'[{kernel.sysname}{kernel.release}{kernel.version.split(" ", 1)[0]}-{kernel.machine}]'
+				kernelver = f'{kernel.sysname} {kernel.release} ({kernel.machine})'
 			except Exception as e:
 				logging.error('Unexpected error: %s', e)
-			return f'{" ".join(filter(None, [osname, kernelver]))}'
+			return f'{", ".join(filter(None, [osname, kernelver]))}'
 
 		return self._get_cached('os_info', _fetch, ttl=3600, default='')
 
