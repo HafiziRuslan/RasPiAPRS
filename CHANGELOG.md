@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-18T03:13:27+08:00)
+## [beta8] - (2026-03-18T21:56:47+08:00)
 
-- 163 commit(s) contributed to the release.
-- 21 day(s) passed between the first and last commit.
-- 21 day(s) passed between releases.
+- 164 commit(s) contributed to the release.
+- 22 day(s) passed between the first and last commit.
+- 22 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
@@ -152,6 +152,7 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation in beta8
 
+- [a0722ad](https://github.com/HafiziRuslan/RasPiAPRS/commit/a0722ad50340011f0f883a31bb9419411f2b23e7) style(docs): update sponsorship badges and payment options *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-18T21:56:47+08:00*
 - [3c012f0](https://github.com/HafiziRuslan/RasPiAPRS/commit/3c012f0ae038144298282fa8d68eba9b0a23786e) docs(telegram): improve commit message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T22:03:48+08:00*
 - [8bd168f](https://github.com/HafiziRuslan/RasPiAPRS/commit/8bd168f6cebd90b022ba5e6ad38d8c603527886e) docs: update README with mirrors and donation link *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T01:48:29+08:00*
 - [5fb2327](https://github.com/HafiziRuslan/RasPiAPRS/commit/5fb2327ebd9a47fe5d37faa2e513641ff09b2bdc) docs: update mirror repositories terminology *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-04T22:28:18+08:00*
@@ -1164,4 +1165,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-18T03:14:07.784443688+08:00
+generated using git-cliff on 2026-03-18T21:57:38.112711854+08:00
