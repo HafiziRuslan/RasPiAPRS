@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-19T22:59:13+08:00)
+## [beta8] - (2026-03-20T01:20:09+08:00)
 
-- 166 commit(s) contributed to the release.
+- 167 commit(s) contributed to the release.
 - 23 day(s) passed between the first and last commit.
 - 23 day(s) passed between releases.
 
@@ -55,6 +55,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [719ee61](https://github.com/HafiziRuslan/RasPiAPRS/commit/719ee61a8545af94d599dc963875951b131d8a05) docs(README): update formatting and add hardware section *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-20T01:20:09+08:00*
 - [478be67](https://github.com/HafiziRuslan/RasPiAPRS/commit/478be67758caa6ba6a9835b3510fe7761b1b25cc) fix: attribute error on _current_pos *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-18T03:13:27+08:00*
 - [1be44cc](https://github.com/HafiziRuslan/RasPiAPRS/commit/1be44cca7fda1807ed95eae49f56fe7f37301506) refactor(main): improve GPS data handling and fallback logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-17T21:23:01+08:00*
 - [a9ddf70](https://github.com/HafiziRuslan/RasPiAPRS/commit/a9ddf709c6c96de8f72ed7d618704380772d58c9) fix(scheduler): increase random delay range for message sending *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-17T11:07:26+08:00*
@@ -1167,4 +1168,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-19T23:00:29.604130378+08:00
+generated using git-cliff on 2026-03-20T01:21:01.850743880+08:00
