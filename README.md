@@ -11,17 +11,14 @@
 
 With this simple python program you can monitor your Pi-Star / WPSD / AllStarLink health using APRS metrics.
 
-The metrics are:-
-
-1. CPU temperature (average 10 minutes)
-2. CPU load (average 10 minutes)
-3. Memory used (average 10 minutes)
-4. Disk usage
-5. GPS used [optional]
+- The metrics are:
+  1. CPU temperature (average 10 minutes)
+  2. CPU load (average 10 minutes)
+  3. Memory used (average 10 minutes)
+  4. Disk usage
+  5. GPS used [optional]
 
 You can see an example of the metrics logged by my WPSD node [9W4GPA](https://aprs.fi/telemetry/a/9W4GPA?range=day).
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/hafiziruslan)
 
 Mirrors (daily update):
 
@@ -81,14 +78,14 @@ note: `sudo` required for write access on `/var` directories.
 Copy & Paste this line into last line (before blank line) of `/etc/crontab` or any other cron program that you're using.
 
 ```bash
-@reboot pi-star cd /home/pi-star/RasPiAPRS && ./main.sh > /var/log/RasPiAPRS.log 2>&1
+@reboot pi-star cd /home/pi-star/RasPiAPRS && ./main.sh 2>&1
 ```
 
 change the `pi-star` username into your username
 
 ## Update RasPiAPRS
 
-Manual update are **NOT REQUIRED** as it has integrated into `main.sh`.
+Manual update are **NOT REQUIRED** as it has integrated into `main.sh` and will be run before application started.
 
 Use this command for manual update:-
 
@@ -96,11 +93,19 @@ Use this command for manual update:-
 git pull --autostash
 ```
 
-## Example
+## Telemetry Example
 
-This is the screenshoot from `aprs.fi` of _CPU temperature_, _CPU load average_, _Memory used_, _Disk usage_ and _GPS usage_ from an WPSD node.
+This is the screenshot taken from `aprs.fi` of _CPU temperature_, _CPU load average_, _Memory used_, _Disk usage_ and _GPS usage_ from my WPSD node.
 ![RasPiAPRS Picture](misc/metrics.png)
 
-### Source
+## Hardware used for testing
+
+1. Raspberry Pi Zero 2 W
+2. Waveshare SIM7600G-H 4G HAT (B)
+3. Geekworm X306 18650 UPS
+4. MMDVM Duplex Dual HAT
+5. Nextion NX4024K032
+
+## Source
 
 [0x9900/aprstar](https://github.com/0x9900/aprstar)
