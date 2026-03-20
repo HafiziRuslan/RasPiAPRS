@@ -780,14 +780,17 @@ class SmartBeaconing(object):
 		self.sb_mtt = self.cfg.smartbeaconing_min_turn_time
 		self.sb_mta = self.cfg.smartbeaconing_min_turn_angle
 		self.sb_tsl = self.cfg.smartbeaconing_turn_slope
+		self.symbt = self.cfg.symbol_table
+		self.symb = self.cfg.symbol
 
 	def _calculate_rate(self, spd_kmh):
-		"""Calculate beacon rate based on speed."""
+		"""Calculate beacon rate based on speed and determine symbols."""
 		if spd_kmh >= self.sb_fspd:
-			return self.sb_frat
+			return self.sb_frat, '\\', '>'
 		if spd_kmh <= self.sb_sspd:
-			return self.sb_srat
-		return int(self.sb_srat - ((spd_kmh - self.sb_sspd) * (self.sb_srat - self.sb_frat) / (self.sb_fspd - self.sb_sspd)))
+			return self.sb_srat, '/', '('
+		rate = int(self.sb_srat - ((spd_kmh - self.sb_sspd) * (self.sb_srat - self.sb_frat) / (self.sb_fspd - self.sb_sspd)))
+		return rate, '/', '>'
 
 	def _check_turn(self, cse, spd_kmh):
 		"""Check if a turn is detected."""
@@ -818,11 +821,13 @@ class SmartBeaconing(object):
 				if now - self.stop_time > 900:
 					self.is_moving = False
 					self.stop_time = 0
+					self.symbt = self.cfg.symbol_table
+					self.symb = self.cfg.symbol
 					logging.info('SmartBeaconing disabled: Stopped moving.')
 					return False
 			else:
 				self.stop_time = 0
-			rate = self._calculate_rate(spd_kmh)
+			rate, self.symbt, self.symb = self._calculate_rate(spd_kmh)
 			turn_detected, heading_change, turn_threshold = self._check_turn(cse, spd_kmh)
 			time_since_last = now - self.last_beacon_time
 			should_send = False
@@ -839,6 +844,7 @@ class SmartBeaconing(object):
 		else:
 			if spd_kmh > 5:
 				self.is_moving = True
+				_, self.symbt, self.symb = self._calculate_rate(spd_kmh)
 				self.stop_time = 0
 				logging.info('SmartBeaconing enabled: Movement detected.')
 				self.last_beacon_time = now
@@ -1379,7 +1385,7 @@ class APRSSender:
 				logging.error('APRS connection error at %s: %s', log_context, err)
 				await self.connect()
 
-	async def send_position(self, gps_data=None, is_moving=False):
+	async def send_position(self, gps_data=None, is_moving=False, symbt=None, symb=None):
 		"""Send APRS position packet to APRS-IS."""
 		loc_data, _ = gps_data if gps_data else await self.gps_handler.get_loc_and_sat()
 		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = loc_data
@@ -1393,8 +1399,8 @@ class APRSSender:
 		osinfo = self.sys_stats.os_info
 		comment = '; '.join(filter(None, [mmdvminfo, osinfo, self.cfg.project_url]))
 		timestamp, tg_timestamp = self._get_timestamps(cur_time)
-		symbt = self.cfg.symbol_table
-		symb = self.cfg.symbol
+		symbt = symbt or self.cfg.symbol_table
+		symb = symb or self.cfg.symbol
 		if self.cfg.symbol_overlay:
 			symbt = self.cfg.symbol_overlay
 		tgposmoving = ''
@@ -1405,15 +1411,6 @@ class APRSSender:
 				f'\n\tHeading: <b>{int(cur_cse)}°</b>'
 				f'\n\tSpeed: <b>{humanize.metric(float(spdkmh), "km/h", precision=1)}</b> | <b>{humanize.metric(float(spdknt), "kn", precision=1)}</b> | <b>{humanize.metric(cur_spd, "m/s")}</b>'
 			)
-			sspd = self.cfg.smartbeaconing_slow_speed
-			fspd = self.cfg.smartbeaconing_fast_speed
-			kmhspd = int(spdkmh)
-			if kmhspd >= fspd:
-				symbt, symb = '\\', '>'
-			elif sspd < kmhspd < fspd:
-				symbt, symb = '/', '>'
-			elif 0 <= kmhspd <= sspd:
-				symbt, symb = '/', '('
 		lookup_table = symbt if symbt in ['/', '\\'] else '\\'
 		sym_desc = symbols.get_desc(lookup_table, symb).split('(')[0].strip()
 		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:/{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
@@ -1572,7 +1569,12 @@ def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, scheduled_msg_handler
 
 	loc_data, _ = gps_data if gps_data else None
 	return [
-		Task(should_send_position(cfg, timer_tick, sb, loc_data), aprs_sender.send_position, (), {'gps_data': gps_data, 'is_moving': sb.is_moving}),
+		Task(
+			should_send_position(cfg, timer_tick, sb, loc_data),
+			aprs_sender.send_position,
+			(),
+			{'gps_data': gps_data, 'is_moving': sb.is_moving, 'symbt': sb.symbt, 'symb': sb.symb},
+		),
 		Task(timer_tick % 21600 == 1, aprs_sender.send_header, (), {}),
 		Task(timer_tick % cfg.sleep == 1, aprs_sender.send_telemetry, (), {'gps_data': gps_data}),
 		Task(True, scheduled_msg_handler.send_all, (aprs_sender,), {'gps_data': gps_data}),
