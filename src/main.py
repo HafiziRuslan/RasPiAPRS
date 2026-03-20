@@ -1408,9 +1408,9 @@ class APRSSender:
 			sspd = self.cfg.smartbeaconing_slow_speed
 			fspd = self.cfg.smartbeaconing_fast_speed
 			kmhspd = int(spdkmh)
-			if kmhspd > fspd:
+			if kmhspd >= fspd:
 				symbt, symb = '\\', '>'
-			elif sspd < kmhspd <= fspd:
+			elif sspd < kmhspd < fspd:
 				symbt, symb = '/', '>'
 			elif 0 <= kmhspd <= sspd:
 				symbt, symb = '/', '('
