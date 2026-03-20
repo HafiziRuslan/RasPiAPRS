@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-20T01:20:09+08:00)
+## [beta8] - (2026-03-20T10:00:35+08:00)
 
-- 167 commit(s) contributed to the release.
-- 23 day(s) passed between the first and last commit.
-- 23 day(s) passed between releases.
+- 168 commit(s) contributed to the release.
+- 24 day(s) passed between the first and last commit.
+- 24 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [a591fbf](https://github.com/HafiziRuslan/RasPiAPRS/commit/a591fbf9c3f2167e1f0e57584e2c70a7089da3a7) chore(dependencies): update attrs to 26.1.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-20T10:00:35+08:00*
 - [ef38656](https://github.com/HafiziRuslan/RasPiAPRS/commit/ef38656554ab57aa8abe0b778daf2976f3ec9714) feat(payment): add stripe funding option *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-19T22:59:13+08:00*
 - [2726984](https://github.com/HafiziRuslan/RasPiAPRS/commit/27269847d9f2411c034def8c55defc22fb4120cf) feat(get_loc_and_sat): add time-based GPS/SAT fix update *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-17T03:20:28+08:00*
 - [6361303](https://github.com/HafiziRuslan/RasPiAPRS/commit/636130399eb44978aec61956e15ff345a4871c17) feat(docs): add sponsorship badges to readme *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-16T21:38:10+08:00*
@@ -1168,4 +1169,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-20T01:21:01.850743880+08:00
+generated using git-cliff on 2026-03-20T10:01:21.270531969+08:00
