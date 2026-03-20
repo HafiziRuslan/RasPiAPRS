@@ -537,8 +537,6 @@ class GPSHandler:
 		self.cfg = cfg
 		self.healthy = True
 		self.unhealthy_warning_sent = False
-
-		# Initialize state with fallback data to avoid blocking I/O in the main loop
 		fallback_lat, fallback_lon, fallback_alt = self._get_fallback_location()
 		self._current_pos = GPSFix(dt.datetime.now(dt.timezone.utc), fallback_lat, fallback_lon, fallback_alt, 0.0, 0.0)
 		self._current_sat = SATFix(dt.datetime.now(dt.timezone.utc), 0, 0)
@@ -563,18 +561,15 @@ class GPSHandler:
 		"""Retrieve data from GPSD via executor to prevent blocking."""
 		if not self.cfg.gpsd_enabled or not self.healthy:
 			return None
-
 		loop = asyncio.get_running_loop()
 		try:
 			result = await loop.run_in_executor(None, self._fetch_from_gpsd, filter_class)
 			if isinstance(result, Exception):
 				raise result
-
 			if result:
 				self.healthy = True
 				self.unhealthy_warning_sent = False
 				return result
-
 			logging.warning('GPS %s unavailable.', log_name)
 		except Exception as e:
 			if not self.unhealthy_warning_sent:
@@ -587,14 +582,10 @@ class GPSHandler:
 		"""Continuously poll GPSD for data in the background."""
 		if not self.cfg.gpsd_enabled:
 			return
-
 		while True:
 			if not self.healthy:
-				# Skip polling if GPS data is unreliable
 				await asyncio.sleep(15)
 				continue
-
-			# Update Position
 			pos_res = await self._retrieve_data('TPV', 'position')
 			if pos_res:
 				self._current_pos = GPSFix(
@@ -616,8 +607,6 @@ class GPSHandler:
 					self._current_pos.spd,
 					self._current_pos.cse,
 				)
-
-			# Update Satellites
 			sat_res = await self._retrieve_data('SKY', 'satellite')
 			if sat_res:
 				self._current_sat = SATFix(
@@ -629,7 +618,6 @@ class GPSHandler:
 					self._current_sat.uSat,
 					self._current_sat.nSat,
 				)
-
 			await asyncio.sleep(1)
 
 	def _get_fallback_location(self):
@@ -654,7 +642,6 @@ class GPSHandler:
 
 	async def get_loc_and_sat(self, gps_data=None):
 		"""Returns current data immediately from memory."""
-		# If external data is provided (e.g. from a task), use it
 		if gps_data:
 			pos, sat = gps_data
 		else:
@@ -663,15 +650,10 @@ class GPSHandler:
 				lat, lon, alt = self._get_fallback_location()
 				self._current_pos = GPSFix(now, lat, lon, alt, 0.0, 0.0)
 				self._current_sat = SATFix(now, 0, 0)
-
-			# Return internal memory state - no I/O or network calls here
 			pos, sat = self._current_pos, self._current_sat
-
-		# Snap to home coordinates if within 50 meters
 		dist = self.calculate_distance(pos.lat, pos.lon, self.cfg.latitude, self.cfg.longitude)
 		if dist <= 50:
 			pos = pos._replace(lat=self.cfg.latitude, lon=self.cfg.longitude, alt=self.cfg.altitude)
-
 		return pos, sat
 
 	async def run_health_check(self):
@@ -791,30 +773,30 @@ class SmartBeaconing(object):
 		self.is_moving = False
 		self.initialized = False
 		self.stop_time = 0
+		self.sb_fspd = self.cfg.smartbeaconing_fast_speed
+		self.sb_frat = self.cfg.smartbeaconing_fast_rate
+		self.sb_sspd = self.cfg.smartbeaconing_slow_speed
+		self.sb_srat = self.cfg.smartbeaconing_slow_rate
+		self.sb_mtt = self.cfg.smartbeaconing_min_turn_time
+		self.sb_mta = self.cfg.smartbeaconing_min_turn_angle
+		self.sb_tsl = self.cfg.smartbeaconing_turn_slope
 
 	def _calculate_rate(self, spd_kmh):
 		"""Calculate beacon rate based on speed."""
-		if spd_kmh > self.cfg.smartbeaconing_fast_speed:
-			return self.cfg.smartbeaconing_fast_rate
-		if spd_kmh < self.cfg.smartbeaconing_slow_speed:
-			return self.cfg.smartbeaconing_slow_rate
-		return int(
-			self.cfg.smartbeaconing_slow_rate
-			- (
-				(spd_kmh - self.cfg.smartbeaconing_slow_speed)
-				* (self.cfg.smartbeaconing_slow_rate - self.cfg.smartbeaconing_fast_rate)
-				/ (self.cfg.smartbeaconing_fast_speed - self.cfg.smartbeaconing_slow_speed)
-			)
-		)
+		if spd_kmh >= self.sb_fspd:
+			return self.sb_frat
+		if spd_kmh <= self.sb_sspd:
+			return self.sb_srat
+		return int(self.sb_srat - ((spd_kmh - self.sb_sspd) * (self.sb_srat - self.sb_frat) / (self.sb_fspd - self.sb_sspd)))
 
 	def _check_turn(self, cse, spd_kmh):
 		"""Check if a turn is detected."""
-		if spd_kmh < 5:
+		if not self.is_moving:
 			return False, 0.0, 0.0
 		heading_change = abs(cse - self.last_course)
 		if heading_change > 180:
 			heading_change = 360 - heading_change
-		turn_threshold = self.cfg.smartbeaconing_min_turn_angle + (self.cfg.smartbeaconing_turn_slope / (spd_kmh if spd_kmh > 0 else 1))
+		turn_threshold = self.sb_mta + (self.sb_tsl / (spd_kmh if spd_kmh > 0 else 1))
 		return heading_change > turn_threshold, heading_change, turn_threshold
 
 	def should_send(self, gps_data):
@@ -830,7 +812,7 @@ class SmartBeaconing(object):
 			return False
 		spd_kmh = spd * 3.6 if spd else 0
 		if self.is_moving:
-			if spd_kmh <= 3:
+			if spd_kmh <= 5:
 				if not self.stop_time:
 					self.stop_time = now
 				if now - self.stop_time > 600:
@@ -840,12 +822,11 @@ class SmartBeaconing(object):
 					return False
 			else:
 				self.stop_time = 0
-
 			rate = self._calculate_rate(spd_kmh)
 			turn_detected, heading_change, turn_threshold = self._check_turn(cse, spd_kmh)
 			time_since_last = now - self.last_beacon_time
 			should_send = False
-			if turn_detected and time_since_last > self.cfg.smartbeaconing_min_turn_time:
+			if turn_detected and time_since_last > self.sb_mtt:
 				logging.debug('SmartBeaconing: Turn detected (Heading difference: %.1f, Threshold: %.1f)', heading_change, turn_threshold)
 				should_send = True
 			elif time_since_last > rate:
@@ -856,7 +837,7 @@ class SmartBeaconing(object):
 				self.last_course = cse
 			return should_send
 		else:
-			if spd_kmh > 3:
+			if spd_kmh > 5:
 				self.is_moving = True
 				self.stop_time = 0
 				logging.info('SmartBeaconing enabled: Movement detected.')
@@ -978,7 +959,6 @@ class SystemStats(object):
 		self._update_history(self._temp_history, self._fetch_raw_cpu_temp, now)
 		self._update_history(self._cpu_history, self._fetch_raw_cpu_load, now)
 		self._update_history(self._mem_history, self._fetch_raw_vram_used, now)
-
 		self._cache['uptime'] = (self._calculate_uptime(), now)
 		self._cache['traffic_info'] = (self._calculate_traffic(), now)
 		try:
@@ -1399,7 +1379,7 @@ class APRSSender:
 				logging.error('APRS connection error at %s: %s', log_context, err)
 				await self.connect()
 
-	async def send_position(self, gps_data=None):
+	async def send_position(self, gps_data=None, is_moving=False):
 		"""Send APRS position packet to APRS-IS."""
 		loc_data, _ = gps_data if gps_data else await self.gps_handler.get_loc_and_sat()
 		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = loc_data
@@ -1419,9 +1399,12 @@ class APRSSender:
 			symbt = self.cfg.symbol_overlay
 		tgposmoving = ''
 		extdatstr = ''
-		if cur_spd >= 1:
+		if is_moving:
 			extdatstr = f'{csestr}/{spdstr}'
-			tgposmoving = f'\n\tCourse: <b>{int(cur_cse)}°</b>\n\tSpeed: <b>{int(cur_spd)}m/s</b> | <b>{int(spdkmh)}km/h</b> | <b>{int(spdstr)}kn</b>'
+			tgposmoving = (
+				f'\n\tHeading: <b>{int(cur_cse)}°</b>'
+				f'\n\tSpeed: <b>{humanize.metric(float(spdkmh), "km/h")}</b> | <b>{humanize.metric(float(spdstr), "kn")}</b> | <b>{humanize.metric(cur_spd, "m/s")}</b>'
+			)
 			if self.cfg.smartbeaconing_enabled:
 				sspd = self.cfg.smartbeaconing_slow_speed
 				fspd = self.cfg.smartbeaconing_fast_speed
@@ -1589,9 +1572,8 @@ def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, scheduled_msg_handler
 		kwargs: dict
 
 	loc_data, _ = gps_data if gps_data else None
-
 	return [
-		Task(should_send_position(cfg, timer_tick, sb, loc_data), aprs_sender.send_position, (), {'gps_data': gps_data}),
+		Task(should_send_position(cfg, timer_tick, sb, loc_data), aprs_sender.send_position, (), {'gps_data': gps_data, 'is_moving': sb.is_moving}),
 		Task(timer_tick % 21600 == 1, aprs_sender.send_header, (), {}),
 		Task(timer_tick % cfg.sleep == 1, aprs_sender.send_telemetry, (), {'gps_data': gps_data}),
 		Task(True, scheduled_msg_handler.send_all, (aprs_sender,), {'gps_data': gps_data}),
