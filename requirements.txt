@@ -70,9 +70,9 @@ aprslib==0.7.2 \
     --hash=sha256:c20d2568ab8728a0526b4c95952c6022433d462674abdfb0fd86b2e50ed3c097 \
     --hash=sha256:db09eac4c5f44b172e15399350147370fdafdd8f6befd69b697fbced8c83e7c6
     # via raspiaprs
-attrs==25.4.0 \
-    --hash=sha256:16d5969b87f0859ef33a48b35d55ac1be6e42ae49d5e853b597db70c35c57e11 \
-    --hash=sha256:adcf7e2a1fb3b36ac48d97835bb6d8ade15b8dcce26aba8bf1d14847b57a3373
+attrs==26.1.0 \
+    --hash=sha256:c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309 \
+    --hash=sha256:d03ceb89cb322a8fd706d4fb91940737b6642aa36998fe130a9bc96c985eff32
     # via aiohttp
 certifi==2026.2.25 \
     --hash=sha256:027692e4402ad994f1c42e52a4997a9763c646b73e4096e4d5d6db8af1d6f0fa \

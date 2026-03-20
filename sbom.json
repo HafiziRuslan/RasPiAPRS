@@ -2,14 +2,14 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:34f27564-9679-4459-b1bf-40be79cb1155",
+  "serialNumber": "urn:uuid:4be948fb-0195-45f0-a471-1d92b693f26e",
   "metadata": {
-    "timestamp": "2026-03-17T02:18:18.496091800Z",
+    "timestamp": "2026-03-20T01:56:21.131699600Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
         "name": "uv",
-        "version": "0.10.11"
+        "version": "0.10.12"
       }
     ],
     "component": {
@@ -63,10 +63,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "attrs-7@25.4.0",
+      "bom-ref": "attrs-7@26.1.0",
       "name": "attrs",
-      "version": "25.4.0",
-      "purl": "pkg:pypi/attrs@25.4.0"
+      "version": "26.1.0",
+      "purl": "pkg:pypi/attrs@26.1.0"
     },
     {
       "type": "library",
@@ -191,7 +191,7 @@
       "dependsOn": [
         "aiohappyeyeballs-2@2.6.1",
         "aiosignal-4@1.4.0",
-        "attrs-7@25.4.0",
+        "attrs-7@26.1.0",
         "frozenlist-9@1.8.0",
         "multidict-18@6.7.1",
         "propcache-19@0.4.1",
@@ -215,7 +215,7 @@
       "dependsOn": []
     },
     {
-      "ref": "attrs-7@25.4.0",
+      "ref": "attrs-7@26.1.0",
       "dependsOn": []
     },
     {
