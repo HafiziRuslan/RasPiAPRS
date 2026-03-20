@@ -1412,7 +1412,7 @@ class APRSSender:
 				f'\n\tSpeed: <b>{humanize.metric(float(spdkmh), "km/h", precision=1)}</b> | <b>{humanize.metric(float(spdknt), "kn", precision=1)}</b> | <b>{humanize.metric(cur_spd, "m/s")}</b>'
 			)
 		lookup_table = symbt if symbt in ['/', '\\'] else '\\'
-		sym_desc = symbols.get_desc(lookup_table, symb).split('(')[0].strip()
+		sym_desc = symbols.get_desc(lookup_table, symb)
 		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:/{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
 		tg_pos = (
 			f'<u>{self.cfg.from_call} Position</u>\n\n'
