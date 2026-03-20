@@ -487,7 +487,7 @@ class APRSConverter:
 		return cls._format_speed(val)
 
 	@classmethod
-	def spd_to_knots(cls, spd):
+	def spd_to_knot(cls, spd):
 		"""Format speed for APRS (mps to knots)."""
 		val = spd / 0.51444 if spd else 0
 		return cls._format_speed(val)
@@ -810,12 +810,12 @@ class SmartBeaconing(object):
 			self.last_beacon_time = now
 			self.last_course = cse
 			return False
-		spd_kmh = spd * 3.6 if spd else 0
+		spd_kmh = int(APRSConverter.spd_to_kmh(spd))
 		if self.is_moving:
 			if spd_kmh <= 5:
 				if not self.stop_time:
 					self.stop_time = now
-				if now - self.stop_time > 600:
+				if now - self.stop_time > 900:
 					self.is_moving = False
 					self.stop_time = 0
 					logging.info('SmartBeaconing disabled: Stopped moving.')
@@ -1386,8 +1386,8 @@ class APRSSender:
 		latstr = APRSConverter.lat_to_aprs(cur_lat)
 		lonstr = APRSConverter.lon_to_aprs(cur_lon)
 		altstr = APRSConverter.alt_to_aprs(cur_alt)
-		spdstr = APRSConverter.spd_to_knots(cur_spd)
 		csestr = APRSConverter.cse_to_aprs(cur_cse)
+		spdknt = APRSConverter.spd_to_knot(cur_spd)
 		spdkmh = APRSConverter.spd_to_kmh(cur_spd)
 		mmdvminfo = self.sys_stats.mmdvm_info
 		osinfo = self.sys_stats.os_info
@@ -1399,22 +1399,21 @@ class APRSSender:
 			symbt = self.cfg.symbol_overlay
 		tgposmoving = ''
 		extdatstr = ''
-		if is_moving:
-			extdatstr = f'{csestr}/{spdstr}'
+		if is_moving and self.cfg.smartbeaconing_enabled:
+			extdatstr = f'{csestr}/{spdknt}'
 			tgposmoving = (
 				f'\n\tHeading: <b>{int(cur_cse)}°</b>'
-				f'\n\tSpeed: <b>{humanize.metric(float(spdkmh), "km/h")}</b> | <b>{humanize.metric(float(spdstr), "kn")}</b> | <b>{humanize.metric(cur_spd, "m/s")}</b>'
+				f'\n\tSpeed: <b>{humanize.metric(float(spdkmh), "km/h", precision=1)}</b> | <b>{humanize.metric(float(spdknt), "kn", precision=1)}</b> | <b>{humanize.metric(cur_spd, "m/s")}</b>'
 			)
-			if self.cfg.smartbeaconing_enabled:
-				sspd = self.cfg.smartbeaconing_slow_speed
-				fspd = self.cfg.smartbeaconing_fast_speed
-				kmhspd = int(spdkmh)
-				if kmhspd > fspd:
-					symbt, symb = '\\', '>'
-				elif sspd < kmhspd <= fspd:
-					symbt, symb = '/', '>'
-				elif 0 < kmhspd <= sspd:
-					symbt, symb = '/', '('
+			sspd = self.cfg.smartbeaconing_slow_speed
+			fspd = self.cfg.smartbeaconing_fast_speed
+			kmhspd = int(spdkmh)
+			if kmhspd > fspd:
+				symbt, symb = '\\', '>'
+			elif sspd < kmhspd <= fspd:
+				symbt, symb = '/', '>'
+			elif 0 <= kmhspd <= sspd:
+				symbt, symb = '/', '('
 		lookup_table = symbt if symbt in ['/', '\\'] else '\\'
 		sym_desc = symbols.get_desc(lookup_table, symb).split('(')[0].strip()
 		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:/{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
