@@ -1,4 +1,4 @@
-name: 'Telegram Message'
+name: telegram
 
 on:
   workflow_run:
@@ -27,11 +27,9 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           message: |
-            New commit by <b><a href="${{ github.event.sender.html_url }}">@${{ github.event.sender.login }}</a></b>!
-            -----------
-            Date: ${{ github.event.workflow_run.head_commit.timestamp }}
-            SHA: <code>${{ steps.vars.outputs.sha_short }}</code>
-            Repo: <a href="${{ github.event.workflow_run.head_repository.html_url }}/commit/${{ github.event.workflow_run.head_sha }}">${{ github.event.workflow_run.head_repository.full_name }}/tree/${{ github.event.workflow_run.head_branch }}</a>
+            New commit on <b><a href="${{ github.event.workflow_run.head_repository.html_url }}/commit/${{ github.event.workflow_run.head_sha }}">${{ github.event.workflow_run.head_repository.full_name }} -> ${{ github.event.workflow_run.head_branch }}</a></b>!
+            ———————————
+            Ref: <code>${{ steps.vars.outputs.sha_short }}</code> on ${{ github.event.workflow_run.head_commit.timestamp }} by <a href="${{ github.event.sender.html_url }}">@${{ github.event.sender.login }}</a>
             Commit: <pre>${{ github.event.workflow_run.head_commit.message }}</pre>
           parse-mode: 'html'
           disable-web-page-preview: true
