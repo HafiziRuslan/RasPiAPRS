@@ -2,14 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-20T22:30:39+08:00)
+## [beta8] - (2026-03-21T05:24:10+08:00)
 
-- 170 commit(s) contributed to the release.
+- 175 commit(s) contributed to the release.
 - 24 day(s) passed between the first and last commit.
 - 24 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [1503a38](https://github.com/HafiziRuslan/RasPiAPRS/commit/1503a38530732a14870de4db1ad2d540b940c7b9) feat(smartbeaconing): integrate symbol handling into smartbeaconing logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-21T03:35:38+08:00*
+- [22bab8d](https://github.com/HafiziRuslan/RasPiAPRS/commit/22bab8d1dafab9defd6561b2f948e2aa862a88a3) feat(aprspos): enhance smartbeaconing speed formatting and logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-21T03:08:47+08:00*
 - [a591fbf](https://github.com/HafiziRuslan/RasPiAPRS/commit/a591fbf9c3f2167e1f0e57584e2c70a7089da3a7) chore(dependencies): update attrs to 26.1.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-20T10:00:35+08:00*
 - [ef38656](https://github.com/HafiziRuslan/RasPiAPRS/commit/ef38656554ab57aa8abe0b778daf2976f3ec9714) feat(payment): add stripe funding option *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-19T22:59:13+08:00*
 - [2726984](https://github.com/HafiziRuslan/RasPiAPRS/commit/27269847d9f2411c034def8c55defc22fb4120cf) feat(get_loc_and_sat): add time-based GPS/SAT fix update *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-17T03:20:28+08:00*
@@ -110,6 +112,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [12b8014](https://github.com/HafiziRuslan/RasPiAPRS/commit/12b8014dea7925498aa40fe0ecabb745914500ae) refactor(speed): adjust speed thresholds for symbol selection *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-21T03:10:06+08:00*
 - [6fd9d22](https://github.com/HafiziRuslan/RasPiAPRS/commit/6fd9d2203c01965d8d02c763c1a6c9328d17d33b) refactor(smartbeaconing): optimize smart beaconing configuration *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-20T22:30:39+08:00*
 - [c5a688d](https://github.com/HafiziRuslan/RasPiAPRS/commit/c5a688db85570f87b0aa4714f9a230de6ce2b3f3) refactor(telegram): optimizetelegram message template *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-20T21:10:54+08:00*
 - [f5391f4](https://github.com/HafiziRuslan/RasPiAPRS/commit/f5391f410568e2397b5b38b8cc7006684a40b9e8) refactor(main): improve os info formatting for readability *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-18T23:47:40+08:00*
@@ -158,6 +161,7 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation in beta8
 
+- [49a6890](https://github.com/HafiziRuslan/RasPiAPRS/commit/49a689035d0a2efa41a4004c57e5dc798b9aa498) docs(symbols): update symbols database with comprehensive descriptions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-21T05:24:10+08:00*
 - [a0722ad](https://github.com/HafiziRuslan/RasPiAPRS/commit/a0722ad50340011f0f883a31bb9419411f2b23e7) style(docs): update sponsorship badges and payment options *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-18T21:56:47+08:00*
 - [3c012f0](https://github.com/HafiziRuslan/RasPiAPRS/commit/3c012f0ae038144298282fa8d68eba9b0a23786e) docs(telegram): improve commit message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T22:03:48+08:00*
 - [8bd168f](https://github.com/HafiziRuslan/RasPiAPRS/commit/8bd168f6cebd90b022ba5e6ad38d8c603527886e) docs: update README with mirrors and donation link *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-12T01:48:29+08:00*
@@ -178,6 +182,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta8
 
+- [d7d9d22](https://github.com/HafiziRuslan/RasPiAPRS/commit/d7d9d22e837d7f26192dccb212626b1e642bf363) ci(workflow): rename telegram job, improve message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-20T22:44:16+08:00*
 - [29ded3e](https://github.com/HafiziRuslan/RasPiAPRS/commit/29ded3ef2eac9681e5f4cde32ca79b8b724384ba) chore(deps): update python-telegram-bot to v22.7 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-17T10:42:52+08:00*
 - [511826c](https://github.com/HafiziRuslan/RasPiAPRS/commit/511826cccfad51dd0dbae16a29787c728597c274) chore(misc): update metrics visualization image *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-17T03:06:57+08:00*
 - [c89eff0](https://github.com/HafiziRuslan/RasPiAPRS/commit/c89eff05396850adeacf5b00ebc4b5b10b1e52f4) ci(telegram): revert workflow to workflow_run trigger *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-16T19:02:50+08:00*
@@ -1171,4 +1176,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-20T22:31:51.742169837+08:00
+generated using git-cliff on 2026-03-21T05:25:06.910394631+08:00
