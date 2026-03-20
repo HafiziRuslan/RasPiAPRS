@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-20T10:00:35+08:00)
+## [beta8] - (2026-03-20T22:30:39+08:00)
 
-- 168 commit(s) contributed to the release.
+- 170 commit(s) contributed to the release.
 - 24 day(s) passed between the first and last commit.
 - 24 day(s) passed between releases.
 
@@ -110,6 +110,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [6fd9d22](https://github.com/HafiziRuslan/RasPiAPRS/commit/6fd9d2203c01965d8d02c763c1a6c9328d17d33b) refactor(smartbeaconing): optimize smart beaconing configuration *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-20T22:30:39+08:00*
+- [c5a688d](https://github.com/HafiziRuslan/RasPiAPRS/commit/c5a688db85570f87b0aa4714f9a230de6ce2b3f3) refactor(telegram): optimizetelegram message template *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-20T21:10:54+08:00*
 - [f5391f4](https://github.com/HafiziRuslan/RasPiAPRS/commit/f5391f410568e2397b5b38b8cc7006684a40b9e8) refactor(main): improve os info formatting for readability *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-18T23:47:40+08:00*
 - [d6fd353](https://github.com/HafiziRuslan/RasPiAPRS/commit/d6fd353714b37e70173d97d357b77099cac3b343) refactor(position): reorder speed and course display *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-16T18:54:40+08:00*
 - [d42ec24](https://github.com/HafiziRuslan/RasPiAPRS/commit/d42ec24163f98cc99590bd1393fd30b4a545d4ed) refactor(polling): Add GPS unreliability check to skip polling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-15T12:35:32+08:00*
@@ -1169,4 +1171,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-20T10:01:21.270531969+08:00
+generated using git-cliff on 2026-03-20T22:31:51.742169837+08:00
