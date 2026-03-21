@@ -161,7 +161,6 @@ class Config:
 			current_mtime = os.path.getmtime(env_file)
 		except OSError:
 			current_mtime = 0.0
-
 		if self._env_mtime != 0.0 and current_mtime <= self._env_mtime:
 			return
 
@@ -215,23 +214,16 @@ class Config:
 
 	def validate(self):
 		"""Validate and normalize configuration values."""
-		# SSID and Callsign
 		if not (1 <= self.ssid <= 15):
 			self.ssid = 0
 		self.from_call = self.call if self.ssid == 0 else f'{self.call}-{self.ssid}'
-
-		# Symbol and Overlay
 		if self.symbol_table not in ['/', '\\']:
 			self.symbol_overlay = self.symbol_table
 		else:
 			self.symbol_overlay = None
-
-		# Passcode
 		if not self.passcode:
 			logging.warning('No passcode provided. Generating one.')
 			self.passcode = aprslib.passcode(self.call)
-
-		# Additional Senders
 		self.additional_sender = None
 		events_active = any(
 			[self.aprsphnet_enabled, self.aprsthursday_enabled, self.aprsaturday_enabled, self.aprsmysunday_enabled, self.aprshamfinity_enabled]
@@ -254,7 +246,6 @@ def configure_logging(cfg: Config):
 	if not os.path.exists(log_dir) or not os.access(log_dir, os.W_OK):
 		log_dir = 'logs'
 	os.makedirs(log_dir, exist_ok=True)
-
 	log_level_map = {
 		0: 100,  # OFF
 		1: logging.DEBUG,
@@ -264,10 +255,8 @@ def configure_logging(cfg: Config):
 		5: logging.CRITICAL,
 	}
 	log_level = log_level_map.get(cfg.log_level_raw)
-
 	logger = logging.getLogger()
 	logger.setLevel(log_level)
-
 	for name in ['aiohttp', 'aprslib', 'asyncio', 'geopy', 'gpsdclient', 'hpack', 'httpx', 'telegram', 'urllib3']:
 		logging.getLogger(name).setLevel(max(log_level, logging.WARNING))
 
@@ -283,7 +272,6 @@ def configure_logging(cfg: Config):
 			return record.levelno == self.level
 
 	formatter = ISO8601Formatter('%(asctime)s | %(levelname)-8s | %(threadName)-12s | %(name)s.%(funcName)s:%(lineno)d | %(message)s')
-
 	console = logging.StreamHandler()
 	console.setLevel(logging.WARNING)
 	console.setFormatter(formatter)
@@ -319,10 +307,8 @@ def configure_logging(cfg: Config):
 		logging.ERROR: '4-error.log',
 		logging.CRITICAL: '5-critical.log',
 	}
-
 	max_bytes = cfg.log_max_bytes * 1024 * 1024
 	max_count = cfg.log_max_count
-
 	for level, filename in log_files.items():
 		if level < log_level:
 			continue
@@ -550,9 +536,10 @@ class GPSHandler:
 	def _fetch_from_gpsd(self, filter_class):
 		"""Worker function to fetch data from GPSD synchronously."""
 		try:
-			host = self.cfg.gpsd_sock if self.cfg.gpsd_sock else self.cfg.gpsd_host
-			port = None if self.cfg.gpsd_sock else self.cfg.gpsd_port
-			with GPSDClient(host=host, port=port, timeout=5) as client:
+			host = self.cfg.gpsd_host if self.cfg.gpsd_host else None
+			port = self.cfg.gpsd_port if self.cfg.gpsd_port else None
+			sock = self.cfg.gpsd_sock if self.cfg.gpsd_sock else None
+			with GPSDClient(host=host, port=port, sock=sock, timeout=5) as client:
 				for result in client.dict_stream(convert_datetime=True, filter=[filter_class]):
 					if filter_class == 'TPV' and result.get('mode', 0) > 1:
 						return result
