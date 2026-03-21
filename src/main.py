@@ -66,8 +66,9 @@ class Config:
 	port: int = 14580
 	passcode: str | int = 0
 	gpsd_enabled: bool = False
-	gpsd_host: str = 'localhost'
-	gpsd_port: int = 2947
+	gpsd_host: str | None = 'localhost'
+	gpsd_port: int | None = 2947
+	gpsd_sock: str | None = None
 	smartbeaconing_enabled: bool = False
 	smartbeaconing_fast_speed: int = 100
 	smartbeaconing_slow_speed: int = 10
@@ -179,8 +180,12 @@ class Config:
 		self.passcode = os.getenv('APRS_PASSCODE')
 		self.gpsd_enabled = self._env_get_bool('GPSD_ENABLE')
 		if self.gpsd_enabled:
-			self.gpsd_host = os.getenv('GPSD_HOST', 'localhost')
-			self.gpsd_port = self._env_get_int('GPSD_PORT', 2947, 'GPSD Port value error')
+			self.gpsd_host = os.getenv('GPSD_HOST')
+			self.gpsd_port = self._env_get_int_or_none('GPSD_PORT')
+			self.gpsd_sock = os.getenv('GPSD_SOCK')
+			if not self.gpsd_sock and not (self.gpsd_host and self.gpsd_port):
+				self.gpsd_host = 'localhost'
+				self.gpsd_port = 2947
 		self.smartbeaconing_enabled = self._env_get_bool('SMARTBEACONING_ENABLE')
 		if self.smartbeaconing_enabled:
 			self.smartbeaconing_fast_speed = self._env_get_int('SMARTBEACONING_FASTSPEED', 100)
@@ -545,7 +550,9 @@ class GPSHandler:
 	def _fetch_from_gpsd(self, filter_class):
 		"""Worker function to fetch data from GPSD synchronously."""
 		try:
-			with GPSDClient(host=self.cfg.gpsd_host, port=self.cfg.gpsd_port, timeout=5) as client:
+			host = self.cfg.gpsd_sock if self.cfg.gpsd_sock else self.cfg.gpsd_host
+			port = None if self.cfg.gpsd_sock else self.cfg.gpsd_port
+			with GPSDClient(host=host, port=port, timeout=5) as client:
 				for result in client.dict_stream(convert_datetime=True, filter=[filter_class]):
 					if filter_class == 'TPV' and result.get('mode', 0) > 1:
 						return result
