@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-21T23:54:48+08:00)
+## [beta8] - (2026-03-22T00:20:07+08:00)
 
-- 176 commit(s) contributed to the release.
+- 177 commit(s) contributed to the release.
 - 25 day(s) passed between the first and last commit.
 - 25 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [f9011fc](https://github.com/HafiziRuslan/RasPiAPRS/commit/f9011fcf2d876707c7d907fe617661eb2e24eb9d) feat(gpsd): add support for GPSD socket connection *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-22T00:20:07+08:00*
 - [1503a38](https://github.com/HafiziRuslan/RasPiAPRS/commit/1503a38530732a14870de4db1ad2d540b940c7b9) feat(smartbeaconing): integrate symbol handling into smartbeaconing logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-21T03:35:38+08:00*
 - [22bab8d](https://github.com/HafiziRuslan/RasPiAPRS/commit/22bab8d1dafab9defd6561b2f948e2aa862a88a3) feat(aprspos): enhance smartbeaconing speed formatting and logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-21T03:08:47+08:00*
 - [a591fbf](https://github.com/HafiziRuslan/RasPiAPRS/commit/a591fbf9c3f2167e1f0e57584e2c70a7089da3a7) chore(dependencies): update attrs to 26.1.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-20T10:00:35+08:00*
@@ -1177,4 +1178,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-21T23:56:11.330841812+08:00
+generated using git-cliff on 2026-03-22T00:20:45.002550231+08:00
