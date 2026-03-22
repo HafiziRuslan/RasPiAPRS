@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-23T03:44:56+08:00)
+## [beta8] - (2026-03-23T03:54:11+08:00)
 
-- 182 commit(s) contributed to the release.
+- 183 commit(s) contributed to the release.
 - 26 day(s) passed between the first and last commit.
 - 26 day(s) passed between releases.
 
@@ -61,6 +61,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [568c314](https://github.com/HafiziRuslan/RasPiAPRS/commit/568c314d79f060fd22a2b65ee1c05029108856b8) fix(main): handle GPSD fetch errors properly *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T03:54:11+08:00*
 - [04d3f7e](https://github.com/HafiziRuslan/RasPiAPRS/commit/04d3f7e5acfd1eb436e604da99db958b23395b47) fix(main): implement TPV and SKY stream processing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-21T23:54:48+08:00*
 - [719ee61](https://github.com/HafiziRuslan/RasPiAPRS/commit/719ee61a8545af94d599dc963875951b131d8a05) docs(README): update formatting and add hardware section *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-20T01:20:09+08:00*
 - [478be67](https://github.com/HafiziRuslan/RasPiAPRS/commit/478be67758caa6ba6a9835b3510fe7761b1b25cc) fix: attribute error on _current_pos *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-18T03:13:27+08:00*
@@ -1183,4 +1184,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-23T03:45:47.546999331+08:00
+generated using git-cliff on 2026-03-23T03:54:56.000858389+08:00
