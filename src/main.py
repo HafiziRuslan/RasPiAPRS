@@ -541,19 +541,20 @@ class GPSHandler:
 			sock_path = self.cfg.gpsd_sock
 			if sock_path:
 				import socket
+
 				sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 				sock.settimeout(5)
 				sock.connect(sock_path)
 				sock.sendall(b'?WATCH={"enable":true,"json":true}\n')
-				if filter_class == 'POLL':
-					sock.sendall(b'?POLL;\n')
+				sock.sendall(b'?POLL;\n')
 				lines = sock.makefile('r', encoding='utf-8')
 			else:
 				client = GPSDClient(host=host, port=port, timeout=5)
 				lines = client.gpsd_lines()
-			for line in lines:
-				if not sock_path and filter_class == 'POLL' and getattr(client, 'sock', None):
-					client.sock.sendall(b'?POLL;\n')
+			for i, line in enumerate(lines):
+				if not sock_path and i == 1:
+					if hasattr(client, 'sock') and client.sock:
+						client.sock.sendall(b'?POLL;\n')
 				answ = line.strip()
 				if not answ or answ.startswith('{"class":"VERSION"'):
 					continue
