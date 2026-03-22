@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-23T04:13:47+08:00)
+## [beta8] - (2026-03-23T04:28:25+08:00)
 
-- 186 commit(s) contributed to the release.
+- 187 commit(s) contributed to the release.
 - 26 day(s) passed between the first and last commit.
 - 26 day(s) passed between releases.
 
@@ -61,6 +61,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [016c1b4](https://github.com/HafiziRuslan/RasPiAPRS/commit/016c1b4d7de6239241c3b3b74dd235ddfa814d40) fix(gps): remove redundant permission error handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T04:28:25+08:00*
 - [914c46f](https://github.com/HafiziRuslan/RasPiAPRS/commit/914c46f24e93403d7bd1140774fe2591b3a49b0b) fix(main): improve GPSD error handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T04:13:47+08:00*
 - [c76c738](https://github.com/HafiziRuslan/RasPiAPRS/commit/c76c73827b37f93063731a2d9c774500782eaf30) chore(main): add GPSD permission handling to setup script *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T04:13:27+08:00*
 - [568c314](https://github.com/HafiziRuslan/RasPiAPRS/commit/568c314d79f060fd22a2b65ee1c05029108856b8) fix(main): handle GPSD fetch errors properly *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T03:54:11+08:00*
@@ -1187,4 +1188,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-23T04:14:32.056622415+08:00
+generated using git-cliff on 2026-03-23T04:29:07.983347262+08:00
