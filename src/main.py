@@ -1172,8 +1172,7 @@ class ScheduledMessageHandler:
 	async def _send_one_with_delay(self, aprs_sender, gps_data=None, **msg_info):
 		"""Perform ``_send_one`` after a random pause"""
 		await asyncio.sleep(random.randint(15, 90))
-		if await self._send_one(aprs_sender, gps_data=gps_data, **msg_info):
-			await aprs_sender.send_status(gps_data=gps_data)
+		await self._send_one(aprs_sender, gps_data=gps_data, **msg_info)
 
 	async def send_all(self, aprs_sender, gps_data=None):
 		"""Send all due scheduled messages."""
