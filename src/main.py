@@ -683,7 +683,7 @@ class GPSHandler:
 			pos, sat = gps_data
 		else:
 			now = dt.datetime.now(dt.timezone.utc)
-			if (now - self._current_pos.timestamp).total_seconds() > 600:
+			if (now - max(self._current_pos.timestamp, self._current_sat.timestamp)).total_seconds() > 600:
 				lat, lon, alt = self._get_fallback_location()
 				self._current_pos = GPSFix(now, lat, lon, alt, 0.0, 0.0)
 				self._current_sat = SATFix(now, 0, 0)
@@ -1617,7 +1617,7 @@ def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, scheduled_msg_handler
 	]
 
 
-async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, scheduled_msg_handler, gps_handler):
+async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, scheduled_msg_handler, gps_handler, gps_data):
 	"""Run the main processing loop."""
 	while True:
 		timer_tick = next(timer)
@@ -1625,7 +1625,6 @@ async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, sch
 			break
 		if timer_tick % 20 == 0:
 			sys_stats.update_metrics()
-		gps_data = await gps_handler.get_loc_and_sat()
 		packet_sent = False
 		tasks = _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, scheduled_msg_handler)
 		for task in tasks:
@@ -1640,6 +1639,7 @@ async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, sch
 		if packet_sent:
 			await aprs_sender.send_status(gps_data=gps_data)
 		await asyncio.sleep(1)
+		gps_data = await gps_handler.get_loc_and_sat()
 
 
 async def main():
@@ -1655,10 +1655,12 @@ async def main():
 		if cfg.gpsd_enabled:
 			health_check_task = asyncio.create_task(gps_handler.run_health_check())
 			gps_polling_task = asyncio.create_task(gps_handler.run_polling())
+			await asyncio.sleep(2)
+		gps_data = await gps_handler.get_loc_and_sat()
 		async with tg_logger:
 			await tg_logger.log(f'🚀 {cfg.app_name.split("-")[0]} Started')
 			try:
-				await process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, scheduled_msg_handler, gps_handler)
+				await process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, scheduled_msg_handler, gps_handler, gps_data)
 			finally:
 				if reload_event.is_set():
 					await tg_logger.log(f'🔄 {cfg.app_name.split("-")[0]} Reloaded')
