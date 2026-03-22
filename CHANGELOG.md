@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-23T03:11:18+08:00)
+## [beta8] - (2026-03-23T03:32:36+08:00)
 
-- 180 commit(s) contributed to the release.
+- 181 commit(s) contributed to the release.
 - 26 day(s) passed between the first and last commit.
 - 26 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [db9c4a0](https://github.com/HafiziRuslan/RasPiAPRS/commit/db9c4a0544937f24f8a69b1a6c87c7b9d9a581f0) feat(gpsd): add unix socket support and improve data retrieval *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T03:32:36+08:00*
 - [f9011fc](https://github.com/HafiziRuslan/RasPiAPRS/commit/f9011fcf2d876707c7d907fe617661eb2e24eb9d) feat(gpsd): add support for GPSD socket connection *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-22T00:20:07+08:00*
 - [1503a38](https://github.com/HafiziRuslan/RasPiAPRS/commit/1503a38530732a14870de4db1ad2d540b940c7b9) feat(smartbeaconing): integrate symbol handling into smartbeaconing logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-21T03:35:38+08:00*
 - [22bab8d](https://github.com/HafiziRuslan/RasPiAPRS/commit/22bab8d1dafab9defd6561b2f948e2aa862a88a3) feat(aprspos): enhance smartbeaconing speed formatting and logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-21T03:08:47+08:00*
@@ -1181,4 +1182,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-23T03:12:08.461752268+08:00
+generated using git-cliff on 2026-03-23T03:33:20.486203645+08:00
