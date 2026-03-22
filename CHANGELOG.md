@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-23T04:49:11+08:00)
+## [beta8] - (2026-03-23T04:58:43+08:00)
 
-- 189 commit(s) contributed to the release.
+- 190 commit(s) contributed to the release.
 - 26 day(s) passed between the first and last commit.
 - 26 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [7c2ef89](https://github.com/HafiziRuslan/RasPiAPRS/commit/7c2ef8920c151045bd2f829a0c6b27450558e2e3) feat(gps): add GPS time parsing method and update time handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T04:58:43+08:00*
 - [9b64268](https://github.com/HafiziRuslan/RasPiAPRS/commit/9b642687acbcb4491c670f507716096099449e05) feat(gpsd): improve polling logic and add comprehensive test suite *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T03:44:56+08:00*
 - [db9c4a0](https://github.com/HafiziRuslan/RasPiAPRS/commit/db9c4a0544937f24f8a69b1a6c87c7b9d9a581f0) feat(gpsd): add unix socket support and improve data retrieval *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T03:32:36+08:00*
 - [f9011fc](https://github.com/HafiziRuslan/RasPiAPRS/commit/f9011fcf2d876707c7d907fe617661eb2e24eb9d) feat(gpsd): add support for GPSD socket connection *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-22T00:20:07+08:00*
@@ -1193,4 +1194,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-23T04:50:31.253841431+08:00
+generated using git-cliff on 2026-03-23T04:59:48.372819738+08:00
