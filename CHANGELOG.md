@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-22T00:58:24+08:00)
+## [beta8] - (2026-03-23T02:51:18+08:00)
 
-- 178 commit(s) contributed to the release.
-- 25 day(s) passed between the first and last commit.
-- 25 day(s) passed between releases.
+- 179 commit(s) contributed to the release.
+- 26 day(s) passed between the first and last commit.
+- 26 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
@@ -114,6 +114,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [5471ab2](https://github.com/HafiziRuslan/RasPiAPRS/commit/5471ab252359fec09608dd6586b60a58d452a023) refactor(connect): remove commented filter line *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T02:51:18+08:00*
 - [c79fe98](https://github.com/HafiziRuslan/RasPiAPRS/commit/c79fe98459100c63bff1b7f482a90b74b7effa7c) refactor(main): optimize GPSD client configuration and remove unnecessary code *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-22T00:58:24+08:00*
 - [12b8014](https://github.com/HafiziRuslan/RasPiAPRS/commit/12b8014dea7925498aa40fe0ecabb745914500ae) refactor(speed): adjust speed thresholds for symbol selection *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-21T03:10:06+08:00*
 - [6fd9d22](https://github.com/HafiziRuslan/RasPiAPRS/commit/6fd9d2203c01965d8d02c763c1a6c9328d17d33b) refactor(smartbeaconing): optimize smart beaconing configuration *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-20T22:30:39+08:00*
@@ -1179,4 +1180,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-22T01:02:37.732150885+08:00
+generated using git-cliff on 2026-03-23T02:52:06.850598057+08:00
