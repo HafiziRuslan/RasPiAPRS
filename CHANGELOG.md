@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-23T05:24:33+08:00)
+## [beta8] - (2026-03-23T05:29:57+08:00)
 
-- 191 commit(s) contributed to the release.
+- 192 commit(s) contributed to the release.
 - 26 day(s) passed between the first and last commit.
 - 26 day(s) passed between releases.
 
@@ -62,6 +62,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [3c9ff34](https://github.com/HafiziRuslan/RasPiAPRS/commit/3c9ff34f1bed96b15ee4f4b157f169ebc06f6534) fix(main): remove redundant status sending after message delivery *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T05:29:57+08:00*
 - [016c1b4](https://github.com/HafiziRuslan/RasPiAPRS/commit/016c1b4d7de6239241c3b3b74dd235ddfa814d40) fix(gps): remove redundant permission error handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T04:28:25+08:00*
 - [914c46f](https://github.com/HafiziRuslan/RasPiAPRS/commit/914c46f24e93403d7bd1140774fe2591b3a49b0b) fix(main): improve GPSD error handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T04:13:47+08:00*
 - [c76c738](https://github.com/HafiziRuslan/RasPiAPRS/commit/c76c73827b37f93063731a2d9c774500782eaf30) chore(main): add GPSD permission handling to setup script *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T04:13:27+08:00*
@@ -1195,4 +1196,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-23T05:25:21.241500336+08:00
+generated using git-cliff on 2026-03-23T05:32:36.674728072+08:00
