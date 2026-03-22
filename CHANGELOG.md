@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-23T02:51:18+08:00)
+## [beta8] - (2026-03-23T03:11:18+08:00)
 
-- 179 commit(s) contributed to the release.
+- 180 commit(s) contributed to the release.
 - 26 day(s) passed between the first and last commit.
 - 26 day(s) passed between releases.
 
@@ -114,6 +114,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [f9ea15c](https://github.com/HafiziRuslan/RasPiAPRS/commit/f9ea15c666f071ff31e75ca74b7ac47026b30f89) refactor(gps): remove gps data processing for POLL *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T03:11:18+08:00*
 - [5471ab2](https://github.com/HafiziRuslan/RasPiAPRS/commit/5471ab252359fec09608dd6586b60a58d452a023) refactor(connect): remove commented filter line *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T02:51:18+08:00*
 - [c79fe98](https://github.com/HafiziRuslan/RasPiAPRS/commit/c79fe98459100c63bff1b7f482a90b74b7effa7c) refactor(main): optimize GPSD client configuration and remove unnecessary code *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-22T00:58:24+08:00*
 - [12b8014](https://github.com/HafiziRuslan/RasPiAPRS/commit/12b8014dea7925498aa40fe0ecabb745914500ae) refactor(speed): adjust speed thresholds for symbol selection *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-21T03:10:06+08:00*
@@ -1180,4 +1181,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-23T02:52:06.850598057+08:00
+generated using git-cliff on 2026-03-23T03:12:08.461752268+08:00
