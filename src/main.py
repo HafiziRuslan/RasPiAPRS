@@ -1366,7 +1366,6 @@ class APRSSender:
 		for attempt in range(max_retries):
 			try:
 				await loop.run_in_executor(None, self.ais.connect)
-				# self.ais.set_filter(self.cfg.filter)
 				logging.info('Connected to APRS-IS server %s:%d as %s', self.cfg.server, self.cfg.port, self.cfg.from_call)
 				return
 			except APRSConnectionError as err:
