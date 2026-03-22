@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-23T03:54:11+08:00)
+## [beta8] - (2026-03-23T04:13:47+08:00)
 
-- 183 commit(s) contributed to the release.
+- 186 commit(s) contributed to the release.
 - 26 day(s) passed between the first and last commit.
 - 26 day(s) passed between releases.
 
@@ -61,6 +61,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta8
 
+- [914c46f](https://github.com/HafiziRuslan/RasPiAPRS/commit/914c46f24e93403d7bd1140774fe2591b3a49b0b) fix(main): improve GPSD error handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T04:13:47+08:00*
+- [c76c738](https://github.com/HafiziRuslan/RasPiAPRS/commit/c76c73827b37f93063731a2d9c774500782eaf30) chore(main): add GPSD permission handling to setup script *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T04:13:27+08:00*
 - [568c314](https://github.com/HafiziRuslan/RasPiAPRS/commit/568c314d79f060fd22a2b65ee1c05029108856b8) fix(main): handle GPSD fetch errors properly *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T03:54:11+08:00*
 - [04d3f7e](https://github.com/HafiziRuslan/RasPiAPRS/commit/04d3f7e5acfd1eb436e604da99db958b23395b47) fix(main): implement TPV and SKY stream processing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-21T23:54:48+08:00*
 - [719ee61](https://github.com/HafiziRuslan/RasPiAPRS/commit/719ee61a8545af94d599dc963875951b131d8a05) docs(README): update formatting and add hardware section *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-20T01:20:09+08:00*
@@ -169,6 +171,7 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation in beta8
 
+- [7b01d04](https://github.com/HafiziRuslan/RasPiAPRS/commit/7b01d043b34b59c6c4e982582fa5c5db66b43adc) docs(README): add GPS-related dependencies and installation steps *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T04:13:06+08:00*
 - [49a6890](https://github.com/HafiziRuslan/RasPiAPRS/commit/49a689035d0a2efa41a4004c57e5dc798b9aa498) docs(symbols): update symbols database with comprehensive descriptions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-21T05:24:10+08:00*
 - [a0722ad](https://github.com/HafiziRuslan/RasPiAPRS/commit/a0722ad50340011f0f883a31bb9419411f2b23e7) style(docs): update sponsorship badges and payment options *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-18T21:56:47+08:00*
 - [3c012f0](https://github.com/HafiziRuslan/RasPiAPRS/commit/3c012f0ae038144298282fa8d68eba9b0a23786e) docs(telegram): improve commit message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T22:03:48+08:00*
@@ -1184,4 +1187,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-23T03:54:56.000858389+08:00
+generated using git-cliff on 2026-03-23T04:14:32.056622415+08:00
