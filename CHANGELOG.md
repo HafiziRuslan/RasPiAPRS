@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-23T04:28:25+08:00)
+## [beta8] - (2026-03-23T04:45:09+08:00)
 
-- 187 commit(s) contributed to the release.
+- 188 commit(s) contributed to the release.
 - 26 day(s) passed between the first and last commit.
 - 26 day(s) passed between releases.
 
@@ -191,6 +191,10 @@ All notable changes to this project will be documented in this file.
 ### 🎨 Styling in beta8
 
 - [f41da33](https://github.com/HafiziRuslan/RasPiAPRS/commit/f41da33f116d820475929258f8bc38d4103eb210) style: rename directories to match project name *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-13T23:24:37+08:00*
+
+### 🧪 Testing in beta8
+
+- [0401f42](https://github.com/HafiziRuslan/RasPiAPRS/commit/0401f420fb12a6d39614e1e986cd5eb7bbcf2a31) test(gps): make gpsd socket configurable *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T04:45:09+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta8
 
@@ -1188,4 +1192,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-23T04:29:07.983347262+08:00
+generated using git-cliff on 2026-03-23T04:45:47.607694663+08:00
