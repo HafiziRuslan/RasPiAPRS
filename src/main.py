@@ -533,6 +533,15 @@ class GPSHandler:
 		self._current_sat = SATFix(dt.datetime.now(dt.timezone.utc), 0, 0)
 		self.last_valid_pos = None
 
+	def _parse_gps_time(self, raw_time):
+		"""Parse ISO8601 time string from GPSD to datetime object."""
+		if isinstance(raw_time, str):
+			try:
+				return dt.datetime.fromisoformat(raw_time.replace('Z', '+00:00'))
+			except ValueError:
+				pass
+		return dt.datetime.now(dt.timezone.utc)
+
 	def _fetch_from_gpsd(self, filter_class):
 		"""Worker function to fetch data from GPSD synchronously."""
 		try:
@@ -617,7 +626,7 @@ class GPSHandler:
 			pos_res = await self._retrieve_data('TPV', 'position')
 			if pos_res:
 				self._current_pos = GPSFix(
-					timestamp=pos_res.get('time', dt.datetime.now(dt.timezone.utc)),
+					timestamp=self._parse_gps_time(pos_res.get('time')),
 					lat=pos_res.get('lat', 0.0),
 					lon=pos_res.get('lon', 0.0),
 					alt=pos_res.get('alt', 0.0),
@@ -638,7 +647,7 @@ class GPSHandler:
 			sat_res = await self._retrieve_data('SKY', 'satellite')
 			if sat_res:
 				self._current_sat = SATFix(
-					timestamp=sat_res.get('time', dt.datetime.now(dt.timezone.utc)), uSat=sat_res.get('uSat', 0), nSat=sat_res.get('nSat', 0)
+					timestamp=self._parse_gps_time(sat_res.get('time')), uSat=sat_res.get('uSat', 0), nSat=sat_res.get('nSat', 0)
 				)
 				logging.debug(
 					'GPSD sat data: [time: %s, uSat: %0.0f, nSat: %0.0f]',
