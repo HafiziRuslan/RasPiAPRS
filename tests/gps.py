@@ -9,7 +9,7 @@ from gpsdclient import GPSDClient
 class MockConfig:
 	gpsd_host = 'localhost'
 	gpsd_port = 2947
-	gpsd_sock = '/var/run/gpsd.sock'
+	gpsd_sock = None
 
 
 def fetch_from_gpsd(cfg, filter_class):
@@ -17,7 +17,7 @@ def fetch_from_gpsd(cfg, filter_class):
 	try:
 		host = cfg.gpsd_host or 'localhost'
 		port = cfg.gpsd_port or 2947
-		sock_path = cfg.gpsd_sock or '/var/run/gpsd.sock'
+		sock_path = cfg.gpsd_sock
 		if sock_path:
 			sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 			sock.settimeout(5)
