@@ -33,6 +33,8 @@ The following packages are required:
 - `curl`
 - `gcc`
 - `git`
+- `gpsd-clients`
+- `gpsd`
 - `python3-dev`
 - `uv`
 - `vnstat`
