@@ -288,6 +288,8 @@ run_app() {
 }
 
 main() {
+  setup_environment
+
   if check_internet; then
     INTERNET_AVAILABLE=true
   else
@@ -295,11 +297,10 @@ main() {
   fi
 
   ensure_apt_packages gcc git gpsd gpsd-clients python3-dev curl vnstat
-  ensure_uv_installed
-  setup_environment
+  update_application
   setup_directories
   fix_gpsd_permissions
-  update_application
+  ensure_uv_installed
   setup_venv
 
   if [ ! -f .env ]; then
