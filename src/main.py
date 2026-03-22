@@ -536,30 +536,53 @@ class GPSHandler:
 	def _fetch_from_gpsd(self, filter_class):
 		"""Worker function to fetch data from GPSD synchronously."""
 		try:
-			host = self.cfg.gpsd_host if self.cfg.gpsd_host else None
-			port = self.cfg.gpsd_port if self.cfg.gpsd_port else None
-			sock = self.cfg.gpsd_sock if self.cfg.gpsd_sock else None
-			with GPSDClient(host=host, port=port, sock=sock, timeout=5) as client:
-				for result in client.dict_stream(convert_datetime=True, filter=[filter_class]):
+			host = self.cfg.gpsd_host or 'localhost'
+			port = self.cfg.gpsd_port or 2947
+			sock_path = self.cfg.gpsd_sock
+			if sock_path:
+				import socket
+				sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+				sock.settimeout(5)
+				sock.connect(sock_path)
+				sock.sendall(b'?WATCH={"enable":true,"json":true}\n')
+				if filter_class == 'POLL':
+					sock.sendall(b'?POLL;\n')
+				lines = sock.makefile('r', encoding='utf-8')
+			else:
+				client = GPSDClient(host=host, port=port, timeout=5)
+				lines = client.gpsd_lines()
+			for line in lines:
+				if not sock_path and filter_class == 'POLL' and getattr(client, 'sock', None):
+					client.sock.sendall(b'?POLL;\n')
+				answ = line.strip()
+				if not answ or answ.startswith('{"class":"VERSION"'):
+					continue
+				result = json.loads(answ)
+				res_class = result.get('class')
+				if res_class == filter_class:
 					if filter_class == 'TPV' and result.get('mode', 0) > 1:
 						return result
 					if filter_class == 'SKY' and result.get('satellites'):
 						return result
 					if filter_class not in ('TPV', 'SKY'):
 						return result
-				# if filter_class in ('TPV', 'SKY'):
-				# 	for result in client.dict_stream(convert_datetime=True, filter=['POLL']):
-				# 		if filter_class == 'TPV' and 'tpv' in result:
-				# 			for tpv in result['tpv']:
-				# 				if tpv.get('mode', 0) > 1:
-				# 					return tpv
-				# 		if filter_class == 'SKY' and 'sky' in result:
-				# 			for sky in result['sky']:
-				# 				if sky.get('satellites'):
-				# 					return sky
-				return None
+				elif res_class == 'POLL' and filter_class in ('TPV', 'SKY'):
+					if filter_class == 'TPV' and 'tpv' in result:
+						for tpv in result['tpv']:
+							if tpv.get('mode', 0) > 1:
+								return tpv
+					if filter_class == 'SKY' and 'sky' in result:
+						for sky in result['sky']:
+							if sky.get('satellites'):
+								return sky
+			return None
 		except Exception as e:
 			return e
+		finally:
+			if sock_path and 'sock' in locals():
+				sock.close()
+			elif 'client' in locals():
+				client.close()
 
 	async def _retrieve_data(self, filter_class, log_name):
 		"""Retrieve data from GPSD via executor to prevent blocking."""
