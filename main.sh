@@ -71,6 +71,18 @@ setup_directories() {
   done
 }
 
+fix_gpsd_permissions() {
+  if ! getent group gpsd >/dev/null; then
+    log_msg INFO "gpsd group not found. Creating it."
+    groupadd -r gpsd
+  fi
+
+  if ! id -nG "$dir_own" | grep -qw "gpsd"; then
+    log_msg INFO "Adding user $dir_own to gpsd group for socket access."
+    usermod -aG gpsd "$dir_own"
+  fi
+}
+
 # --- System Checks ---
 check_internet() {
   local hosts=(1.1.1.1 8.8.8.8 github.com pypi.org)
@@ -276,17 +288,17 @@ run_app() {
 }
 
 main() {
-  setup_environment
-  setup_directories
-
   if check_internet; then
     INTERNET_AVAILABLE=true
   else
     log_msg WARN "⚠️ No internet connection detected. Skipping updates."
   fi
 
-  ensure_apt_packages gcc git python3-dev curl vnstat
+  ensure_apt_packages gcc git gpsd gpsd-clients python3-dev curl vnstat
   ensure_uv_installed
+  setup_environment
+  setup_directories
+  fix_gpsd_permissions
   update_application
   setup_venv
 
