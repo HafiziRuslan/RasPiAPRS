@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-23T04:45:09+08:00)
+## [beta8] - (2026-03-23T04:49:11+08:00)
 
-- 188 commit(s) contributed to the release.
+- 189 commit(s) contributed to the release.
 - 26 day(s) passed between the first and last commit.
 - 26 day(s) passed between releases.
 
@@ -198,6 +198,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta8
 
+- [a6db83b](https://github.com/HafiziRuslan/RasPiAPRS/commit/a6db83b4549c044d7ed92a86a8d2617d5dbebfed) chore(main): reorganize application initialization sequence *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T04:49:11+08:00*
 - [d7d9d22](https://github.com/HafiziRuslan/RasPiAPRS/commit/d7d9d22e837d7f26192dccb212626b1e642bf363) ci(workflow): rename telegram job, improve message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-20T22:44:16+08:00*
 - [29ded3e](https://github.com/HafiziRuslan/RasPiAPRS/commit/29ded3ef2eac9681e5f4cde32ca79b8b724384ba) chore(deps): update python-telegram-bot to v22.7 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-17T10:42:52+08:00*
 - [511826c](https://github.com/HafiziRuslan/RasPiAPRS/commit/511826cccfad51dd0dbae16a29787c728597c274) chore(misc): update metrics visualization image *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-17T03:06:57+08:00*
@@ -1192,4 +1193,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-23T04:45:47.607694663+08:00
+generated using git-cliff on 2026-03-23T04:50:31.253841431+08:00
