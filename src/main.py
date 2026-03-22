@@ -547,16 +547,16 @@ class GPSHandler:
 						return result
 					if filter_class not in ('TPV', 'SKY'):
 						return result
-				if filter_class in ('TPV', 'SKY'):
-					for result in client.dict_stream(convert_datetime=True, filter=['POLL']):
-						if filter_class == 'TPV' and 'tpv' in result:
-							for tpv in result['tpv']:
-								if tpv.get('mode', 0) > 1:
-									return tpv
-						if filter_class == 'SKY' and 'sky' in result:
-							for sky in result['sky']:
-								if sky.get('satellites'):
-									return sky
+				# if filter_class in ('TPV', 'SKY'):
+				# 	for result in client.dict_stream(convert_datetime=True, filter=['POLL']):
+				# 		if filter_class == 'TPV' and 'tpv' in result:
+				# 			for tpv in result['tpv']:
+				# 				if tpv.get('mode', 0) > 1:
+				# 					return tpv
+				# 		if filter_class == 'SKY' and 'sky' in result:
+				# 			for sky in result['sky']:
+				# 				if sky.get('satellites'):
+				# 					return sky
 				return None
 		except Exception as e:
 			return e
