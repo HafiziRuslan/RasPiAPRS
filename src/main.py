@@ -577,8 +577,6 @@ class GPSHandler:
 							if sky.get('satellites'):
 								return sky
 			return None
-		except PermissionError as e:
-			logging.error('GPSD Permission Denied: Ensure the user has access to the socket (e.g., sudo usermod -aG gpsd $USER): %s', e)
 		except Exception as e:
 			logging.error('GPSD fetch error: %s', e)
 		finally:
@@ -601,8 +599,6 @@ class GPSHandler:
 				self.unhealthy_warning_sent = False
 				return result
 			logging.warning('GPS %s unavailable.', log_name)
-		except PermissionError as e:
-			logging.error('GPSD Permission Denied: Ensure the user has access to the socket (e.g., sudo usermod -aG gpsd $USER): %s', e)
 		except Exception as e:
 			if not self.unhealthy_warning_sent:
 				logging.error('GPSD (%s) connection error: %s', log_name, e)
