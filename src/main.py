@@ -578,7 +578,7 @@ class GPSHandler:
 								return sky
 			return None
 		except Exception as e:
-			return e
+			return logging.error('GPSD fetch error: %s', e)
 		finally:
 			if sock_path and 'sock' in locals():
 				sock.close()
