@@ -552,10 +552,12 @@ class GPSHandler:
 
 	def _fetch_from_gpsd(self, filter_class):
 		"""Worker function to fetch data from GPSD synchronously."""
+		host = self.cfg.gpsd_host or 'localhost'
+		port = self.cfg.gpsd_port or 2947
+		sock_path = self.cfg.gpsd_sock
+		client = None
+		sock = None
 		try:
-			host = self.cfg.gpsd_host or 'localhost'
-			port = self.cfg.gpsd_port or 2947
-			sock_path = self.cfg.gpsd_sock
 			if sock_path:
 				import socket
 
@@ -574,6 +576,8 @@ class GPSHandler:
 						client.sock.sendall(b'?POLL;\n')
 				answ = line.strip()
 				if not answ or answ.startswith('{"class":"VERSION"'):
+					if filter_class == 'VERSION' and answ.startswith('{"class":"VERSION"'):
+						return json.loads(answ)
 					continue
 				result = json.loads(answ)
 				res_class = result.get('class')
@@ -594,12 +598,10 @@ class GPSHandler:
 							if sky.get('satellites'):
 								return sky
 			return None
-		except Exception as e:
-			logging.error('GPSD fetch error: %s', e)
 		finally:
-			if sock_path and 'sock' in locals():
+			if sock:
 				sock.close()
-			elif 'client' in locals():
+			if client:
 				client.close()
 
 	async def _retrieve_data(self, filter_class, log_name):
@@ -609,15 +611,13 @@ class GPSHandler:
 		loop = asyncio.get_running_loop()
 		try:
 			result = await loop.run_in_executor(None, self._fetch_from_gpsd, filter_class)
-			if isinstance(result, Exception):
-				raise result
 			if result:
 				self.healthy = True
 				self.unhealthy_warning_sent = False
 				return result
-			logging.warning('GPS %s unavailable.', log_name)
-		except Exception as e:
-			if not self.unhealthy_warning_sent:
+			logging.debug('GPS %s data currently unavailable.', log_name)
+		except (ConnectionError, OSError, TimeoutError, Exception) as e:
+			if self.healthy or not self.unhealthy_warning_sent:
 				logging.error('GPSD (%s) connection error: %s', log_name, e)
 				self.unhealthy_warning_sent = True
 			self.healthy = False
@@ -712,20 +712,16 @@ class GPSHandler:
 			start_time = time.monotonic()
 			try:
 				result = await loop.run_in_executor(None, self._fetch_from_gpsd, 'VERSION')
-				if isinstance(result, Exception):
-					raise result
 				if result:
 					if not self.healthy:
 						logging.info('GPSD connection restored.')
 						self.unhealthy_warning_sent = False
 					self.healthy = True
 				else:
-					if self.healthy:
-						logging.warning('GPSD connection lost.')
-					self.healthy = False
-			except Exception as e:
+					raise ConnectionError('Empty response from GPSD')
+			except (ConnectionError, OSError, TimeoutError, Exception) as e:
 				if self.healthy:
-					logging.warning('GPSD connection lost: %s', e)
+					logging.warning('GPSD connection lost or failed: %s', e)
 				self.healthy = False
 			elapsed = time.monotonic() - start_time
 			await asyncio.sleep(max(0, check_interval - elapsed))
