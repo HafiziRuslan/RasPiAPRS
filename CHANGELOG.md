@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-23T08:14:58+08:00)
+## [beta8] - (2026-03-23T08:33:15+08:00)
 
-- 194 commit(s) contributed to the release.
+- 195 commit(s) contributed to the release.
 - 27 day(s) passed between the first and last commit.
 - 27 day(s) passed between releases.
 
@@ -123,6 +123,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta8
 
+- [7f40317](https://github.com/HafiziRuslan/RasPiAPRS/commit/7f40317c5d38489870e0c68a4a58a6174dc27d7d) refactor(send_position): optimize PHG handling for non-moving states *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T08:33:15+08:00*
 - [95d7b7b](https://github.com/HafiziRuslan/RasPiAPRS/commit/95d7b7b3eb6da28f522f51fdae7392571370cc7d) refactor(position): simplify position message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T08:14:58+08:00*
 - [95fa0bf](https://github.com/HafiziRuslan/RasPiAPRS/commit/95fa0bfad51c635a1a3a546fd1c7a8189840f747) refactor(gps): improve fallback logic and parameter handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T05:24:33+08:00*
 - [f9ea15c](https://github.com/HafiziRuslan/RasPiAPRS/commit/f9ea15c666f071ff31e75ca74b7ac47026b30f89) refactor(gps): remove gps data processing for POLL *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T03:11:18+08:00*
@@ -1198,4 +1199,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-23T08:15:52.370240510+08:00
+generated using git-cliff on 2026-03-23T08:34:02.986865778+08:00
