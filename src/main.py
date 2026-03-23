@@ -120,7 +120,7 @@ class Config:
 				meta['github'] = data.get('urls', {}).get('github', meta['github'])
 		except Exception as e:
 			logging.warning('Failed to load project metadata: %s', e)
-		return f'{"-".join(filter(None, [meta["name"], meta["version"], git_sha]))}', meta['github']
+		return f'{"/".join(filter(None, [meta["name"], meta["version"], git_sha]))}', meta['github']
 
 	@staticmethod
 	def _env_get_bool(key: str, default: str = 'False') -> bool:
@@ -562,13 +562,13 @@ class GPSHandler:
 				import socket
 
 				sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-				sock.settimeout(5)
+				sock.settimeout(10)
 				sock.connect(sock_path)
 				sock.sendall(b'?WATCH={"enable":true,"json":true}\n')
 				sock.sendall(b'?POLL;\n')
 				lines = sock.makefile('r', encoding='utf-8')
 			else:
-				client = GPSDClient(host=host, port=port, timeout=5)
+				client = GPSDClient(host=host, port=port, timeout=10)
 				lines = client.gpsd_lines()
 			for i, line in enumerate(lines):
 				if not sock_path and i == 1:
@@ -778,8 +778,9 @@ class GPSHandler:
 class Geolocation:
 	"""Class to handle reverse geocoding logic."""
 
-	def __init__(self, app_name, cache_file):
+	def __init__(self, app_name, project_url, cache_file):
 		self._app_name = app_name
+		self._project_url = project_url
 		self._cache = PersistentDict(cache_file)
 		self._geolocator = None
 
@@ -789,7 +790,7 @@ class Geolocation:
 		if coord_key in self._cache:
 			return self._cache[coord_key]
 		if self._geolocator is None:
-			self._geolocator = Nominatim(user_agent=self._app_name, timeout=10)
+			self._geolocator = Nominatim(user_agent=f'{self._app_name} (+{self._project_url})', timeout=10)
 		try:
 			location = self._geolocator.reverse((lat, lon), exactly_one=True, namedetails=True, addressdetails=True)
 			if location:
@@ -1239,7 +1240,7 @@ class ScheduledMessageHandler:
 		source = from_call or self.cfg.from_call
 		seq_name = f'msg_sequence_{source}_{addrcall}'
 		seq = next(self.sequences[seq_name])
-		app_id = '-'.join(self.cfg.app_name.split('-')[:2])
+		app_id = '/'.join(self.cfg.app_name.split('/')[:2])
 		message = f'{template} from {gridsquare} via {app_id}'[:67]
 		path_str = ''
 		if from_call:
@@ -1637,7 +1638,7 @@ async def initialize_session(cfg):
 	tg_logger = TelegramLogger(cfg)
 	sys_stats = SystemStats(cfg)
 	sys_stats.update_metrics()
-	geolocation = Geolocation(cfg.app_name, cfg.nominatim_cache_file)
+	geolocation = Geolocation(cfg.app_name, cfg.project_url, cfg.nominatim_cache_file)
 	telem_seq = Sequence(cfg.lib_dir, name='telem_sequence', modulo=1000)
 	aprs_sender = APRSSender(cfg, tg_logger, sys_stats, gps_handler, geolocation, telem_seq)
 	await aprs_sender.connect()
