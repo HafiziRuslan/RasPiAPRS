@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta8] - (2026-03-23T23:47:54+08:00)
+## [beta8] - (2026-03-24T00:27:15+08:00)
 
-- 199 commit(s) contributed to the release.
+- 200 commit(s) contributed to the release.
 - 27 day(s) passed between the first and last commit.
 - 27 day(s) passed between releases.
 
 ### 🚀 Features in beta8
 
+- [a2478e2](https://github.com/HafiziRuslan/RasPiAPRS/commit/a2478e20b91b583c80cfc7adadea182254336d70) feat(main): improve PHG encoding/decoding functionality *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-24T00:27:15+08:00*
 - [4ec088a](https://github.com/HafiziRuslan/RasPiAPRS/commit/4ec088af8b0bfef25affe1eb42cc4575cb958040) feat(config): add PHG configuration parameters *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T10:41:35+08:00*
 - [60dd331](https://github.com/HafiziRuslan/RasPiAPRS/commit/60dd3310aea24aff700b813adf6b9738deecb0d8) feat(ext): add phg code calculation and data integration *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T08:03:02+08:00*
 - [7c2ef89](https://github.com/HafiziRuslan/RasPiAPRS/commit/7c2ef8920c151045bd2f829a0c6b27450558e2e3) feat(gps): add GPS time parsing method and update time handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-23T04:58:43+08:00*
@@ -1203,4 +1204,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-23T23:49:34.976699800+08:00
+generated using git-cliff on 2026-03-24T00:44:20.412169939+08:00
