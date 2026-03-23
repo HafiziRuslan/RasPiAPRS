@@ -1042,6 +1042,11 @@ class SystemStats(object):
 		return self._get_cached('uptime', self._calculate_uptime, ttl=60, default='')
 
 	@property
+	def traffic_info(self):
+		"""Get network traffic info from vnstat."""
+		return self._get_cached('traffic_info', self._calculate_traffic, ttl=300, default='')
+
+	@property
 	def os_info(self):
 		"""Get operating system information."""
 
@@ -1074,67 +1079,58 @@ class SystemStats(object):
 	@property
 	def mmdvm_info(self):
 		"""Get MMDVM configured frequency and color code."""
-
-		def _fetch():
-			mmdvm_info = {}
-			dmr_enabled = False
-			try:
-				with open(self.cfg.mmdvmhost_file, 'r') as mmh:
-					for line in mmh:
-						if '[DMR]' in line:
-							dmr_enabled = 'Enable=1' in next(mmh, '')
-						elif '=' in line:
-							key, value = line.split('=', 1)
-							mmdvm_info[key.strip()] = value.strip()
-			except (IOError, OSError):
-				logging.warning('MMDVMHost file not found: %s', self.cfg.mmdvmhost_file)
-			rx_freq = int(mmdvm_info.get('RXFrequency', 0))
-			tx_freq = int(mmdvm_info.get('TXFrequency', 0))
-			color_code = int(mmdvm_info.get('ColorCode', 0))
-			slot1 = int(mmdvm_info.get('Slot1', 0))
-			slot2 = int(mmdvm_info.get('Slot2', 0))
-			tx = humanize.metric(tx_freq, 'Hz', precision=6)
-			offset = rx_freq - tx_freq
-			shift = f'({"+" if offset > 0 else ""}{humanize.metric(offset, "Hz", precision=2)})' if offset != 0 else None
-			if dmr_enabled:
-				cc = f'C{color_code}'
-				ts = ''
-				if slot1 == 1 and slot2 == 1:
-					ts = 'S1S2'
-				elif slot1 == 1:
-					ts = 'S1'
-				elif slot2 == 1:
-					ts = 'S2'
-			return f'{", ".join(filter(None, [tx, shift, cc, ts]))}'
-
-		return self._get_cached('mmdvm_info', _fetch, ttl=3600, default='')
+		return self._get_cached('mmdvm_all', self._fetch_mmdvm_all, ttl=3600, default={}).get('info', '')
 
 	@property
 	def mmdvm_phg(self):
 		"""Get PHG code from MMDVMHost configuration."""
+		return self._get_cached('mmdvm_all', self._fetch_mmdvm_all, ttl=3600, default={}).get('phg', '')
 
-		def _fetch():
-			try:
-				conf = {}
-				with open(self.cfg.mmdvmhost_file, 'r') as f:
-					for line in f:
-						if '=' in line:
-							k, v = line.split('=', 1)
-							conf[k.strip()] = v.strip()
-				p = min(9, int(math.sqrt(float(conf.get('Power', 0)))))
-				h = min(9, int(math.log2(max(10, float(conf.get('Height', 0))) / 10)))
-				g = min(9, int(float((conf.get('TXLevel', 0) / 10) - 1)))
-				d = min(8, int(float(conf.get('Direction', 0))) // 45)
-				return f'PHG{p}{h}{g}{d}'
-			except Exception:
-				return ''
+	def _fetch_mmdvm_all(self):
+		"""Unified fetch for MMDVM info and PHG from MMDVMHost configuration."""
+		conf = {}
+		section = ''
+		try:
+			with open(self.cfg.mmdvmhost_file, 'r') as f:
+				for line in f:
+					line = line.strip()
+					if not line or line.startswith(('#', ';')):
+						continue
+					if line.startswith('[') and line.endswith(']'):
+						section = line[1:-1].upper()
+					elif '=' in line:
+						k, v = line.split('=', 1)
+						key = k.strip()
+						val = v.strip()
+						conf[f'{section}:{key}'] = val
+						if key not in conf:
+							conf[key] = val
+		except (IOError, OSError):
+			logging.warning('MMDVMHost file not found: %s', self.cfg.mmdvmhost_file)
+			return {'info': '', 'phg': ''}
 
-		return self._get_cached('mmdvm_phg', _fetch, ttl=3600, default='')
+		rx_freq, tx_freq = int(conf.get('RXFrequency', 0)), int(conf.get('TXFrequency', 0))
+		tx = humanize.metric(tx_freq, 'Hz', precision=len(str(tx_freq).rstrip('0')) or 1)
+		offset = rx_freq - tx_freq
+		shift = f'({"+" if offset > 0 else ""}{humanize.metric(offset, "Hz", precision=2)})' if offset != 0 else None
+		cc, ts = '', ''
+		if conf.get('DMR:Enable') == '1':
+			cc = f"C{conf.get('ColorCode', 0)}"
+			s1, s2 = conf.get('Slot1') == '1', conf.get('Slot2') == '1'
+			ts = 'S1S2' if s1 and s2 else ('S1' if s1 else ('S2' if s2 else ''))
+		info_str = f'{", ".join(filter(None, [tx, shift, cc, ts]))}'
 
-	@property
-	def traffic_info(self):
-		"""Get network traffic info from vnstat."""
-		return self._get_cached('traffic_info', self._calculate_traffic, ttl=300, default='')
+		phg_str = ''
+		try:
+			p = min(9, int(math.sqrt(float(conf.get('INFO:Power', 0)))))
+			h = min(9, int(math.log2(max(10, float(conf.get('INFO:Height', 0))) / 10)))
+			g = min(9, int(float(conf.get('MODEM:TXLevel', 0)) / 10))
+			d = min(8, int(float(conf.get('INFO:Direction', 0))) // 45)
+			phg_str = f'PHG{p}{h}{g}{d}'
+		except Exception:
+			pass
+
+		return {'info': info_str, 'phg': phg_str}
 
 
 class ScheduledMessageHandler:
@@ -1453,6 +1449,7 @@ class APRSSender:
 		spdknt = APRSConverter.spd_to_knot(cur_spd)
 		spdkmh = APRSConverter.spd_to_kmh(cur_spd)
 		mmdvminfo = self.sys_stats.mmdvm_info
+		mmdvmphg = self.sys_stats.mmdvm_phg
 		osinfo = self.sys_stats.os_info
 		comment = '; '.join(filter(None, [mmdvminfo, osinfo, self.cfg.project_url]))
 		timestamp, tg_timestamp = self._get_timestamps(cur_time)
@@ -1463,16 +1460,16 @@ class APRSSender:
 		extstr = ''
 		ext_tg = ''
 		if not is_moving:
-			extstr = self.sys_stats.mmdvm_phg
-			if extstr.startswith('PHG') and len(extstr) == 7:
-				p, h, g, d = (int(c) for c in extstr[3:])
+			extstr = mmdvmphg
+			if mmdvmphg.startswith('PHG') and len(mmdvmphg) == 7:
+				p, h, g, d = (int(c) for c in mmdvmphg[3:])
 				p_w, h_ft, dir_deg = p * p, 10 * (2**h), d * 45
 				dir_txt = ['Omni', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'N'][d]
 				ext_tg = (
-					f'\n\tPHG: <b>{extstr}</b>'
+					f'\n\tPHG: <b>{mmdvmphg}</b>'
 					f'\n\tPower: <b>{p_w}W</b> | Height: <b>{h_ft}ft</b> | Gain: <b>{g}dB</b> | Dir: <b>{dir_txt} ({dir_deg}°)</b>'
 				)
-		elif is_moving and self.cfg.smartbeaconing_enabled:
+		else:
 			extstr = f'{csestr}/{spdknt}'
 			ext_tg = (
 				f'\n\tHeading: <b>{int(cur_cse)}°</b>'
