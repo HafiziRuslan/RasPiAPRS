@@ -90,6 +90,10 @@ class Config:
 	aprshamfinity_enabled: bool = False
 	additional_sender: list[str] | None = None
 	additional_sender_raw: str | None = None
+	phg_power: float | None = 0.1
+	phg_height: float | None = 5
+	phg_gain: float | None = 3
+	phg_direction: float | None = 0
 	log_level_raw: int = 2
 	log_max_bytes: float = 1.0
 	log_max_count: int = 3
@@ -174,6 +178,10 @@ class Config:
 		self.latitude = self._env_get_float('APRS_LATITUDE', 0.0)
 		self.longitude = self._env_get_float('APRS_LONGITUDE', 0.0)
 		self.altitude = self._env_get_float('APRS_ALTITUDE', 0.0)
+		self.phg_power = self._env_get_float('PHG_POWER', 0.1)
+		self.phg_height = self._env_get_float('PHG_HEIGHT', 5.0)
+		self.phg_gain = self._env_get_float('PHG_GAIN', 3)
+		self.phg_direction = self._env_get_float('PHG_DIRECTION', 0)
 		self.server = os.getenv('APRSIS_SERVER', 'rotate.aprs2.net')
 		self.port = self._env_get_int('APRSIS_PORT', 14580, 'APRSIS Port value error')
 		self.passcode = os.getenv('APRS_PASSCODE')
@@ -1088,6 +1096,19 @@ class SystemStats(object):
 
 	def _fetch_mmdvm_all(self):
 		"""Unified fetch for MMDVM info and PHG from MMDVMHost configuration."""
+
+		def calc_phg(p_val, h_val, g_val, d_val):
+			"""Helper to calculate PHG string from power, height, gain, and direction."""
+			try:
+				p = min(9, int(math.sqrt(float(p_val or 0))))
+				h = min(9, int(math.log2(max(10, float(h_val or 0)) / 10)))
+				g = min(9, int(float(g_val or 0)))
+				d = min(8, int(float(d_val or 0)) // 45)
+				return f'PHG{p}{h}{g}{d}'
+			except (ValueError, TypeError, ZeroDivisionError):
+				return ''
+
+		phg_str = calc_phg(self.cfg.phg_power, self.cfg.phg_height, self.cfg.phg_gain, self.cfg.phg_direction)
 		conf = {}
 		section = ''
 		try:
@@ -1107,7 +1128,7 @@ class SystemStats(object):
 							conf[key] = val
 		except (IOError, OSError):
 			logging.warning('MMDVMHost file not found: %s', self.cfg.mmdvmhost_file)
-			return {'info': '', 'phg': ''}
+			return {'info': '', 'phg': phg_str}
 
 		rx_freq, tx_freq = int(conf.get('RXFrequency', 0)), int(conf.get('TXFrequency', 0))
 		tx = humanize.metric(tx_freq, 'Hz', precision=len(str(tx_freq).rstrip('0')) or 1)
@@ -1115,20 +1136,13 @@ class SystemStats(object):
 		shift = f'({"+" if offset > 0 else ""}{humanize.metric(offset, "Hz", precision=2)})' if offset != 0 else None
 		cc, ts = '', ''
 		if conf.get('DMR:Enable') == '1':
-			cc = f"C{conf.get('ColorCode', 0)}"
+			cc = f'C{conf.get("ColorCode", 0)}'
 			s1, s2 = conf.get('Slot1') == '1', conf.get('Slot2') == '1'
 			ts = 'S1S2' if s1 and s2 else ('S1' if s1 else ('S2' if s2 else ''))
 		info_str = f'{", ".join(filter(None, [tx, shift, cc, ts]))}'
 
-		phg_str = ''
-		try:
-			p = min(9, int(math.sqrt(float(conf.get('INFO:Power', 0)))))
-			h = min(9, int(math.log2(max(10, float(conf.get('INFO:Height', 0))) / 10)))
-			g = min(9, int(float(conf.get('MODEM:TXLevel', 0)) / 10))
-			d = min(8, int(float(conf.get('INFO:Direction', 0))) // 45)
-			phg_str = f'PHG{p}{h}{g}{d}'
-		except Exception:
-			pass
+		if not phg_str:
+			phg_str = calc_phg(conf.get('INFO:Power', 0), conf.get('INFO:Height', 0), conf.get('INFO:Gain', 3), conf.get('INFO:Direction', 0))
 
 		return {'info': info_str, 'phg': phg_str}
 
