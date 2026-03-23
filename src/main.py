@@ -1460,16 +1460,19 @@ class APRSSender:
 		symb = symb or self.cfg.symbol
 		if self.cfg.symbol_overlay:
 			symbt = self.cfg.symbol_overlay
-		extstr = self.sys_stats.mmdvm_phg
-		if extstr.startswith('PHG') and len(extstr) == 7:
-			p, h, g, d = (int(c) for c in extstr[3:])
-			p_w, h_ft, dir_deg = p * p, 10 * (2**h), d * 45
-			dir_txt = ['Omni', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'N'][d]
-			ext_tg = (
-				f'\n\tPHG: <b>{extstr}</b>'
-				f'\n\tPower: <b>{p_w}W</b> | Height: <b>{h_ft}ft</b> | Gain: <b>{g}dB</b> | Dir: <b>{dir_txt} ({dir_deg}°)</b>'
-			)
-		if is_moving and self.cfg.smartbeaconing_enabled:
+		extstr = ''
+		ext_tg = ''
+		if not is_moving:
+			extstr = self.sys_stats.mmdvm_phg
+			if extstr.startswith('PHG') and len(extstr) == 7:
+				p, h, g, d = (int(c) for c in extstr[3:])
+				p_w, h_ft, dir_deg = p * p, 10 * (2**h), d * 45
+				dir_txt = ['Omni', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'N'][d]
+				ext_tg = (
+					f'\n\tPHG: <b>{extstr}</b>'
+					f'\n\tPower: <b>{p_w}W</b> | Height: <b>{h_ft}ft</b> | Gain: <b>{g}dB</b> | Dir: <b>{dir_txt} ({dir_deg}°)</b>'
+				)
+		elif is_moving and self.cfg.smartbeaconing_enabled:
 			extstr = f'{csestr}/{spdknt}'
 			ext_tg = (
 				f'\n\tHeading: <b>{int(cur_cse)}°</b>'
