@@ -606,21 +606,38 @@ class GPSHandler:
 
 	async def _retrieve_data(self, filter_class, log_name):
 		"""Retrieve data from GPSD via executor to prevent blocking."""
-		if not self.cfg.gpsd_enabled or not self.healthy:
+		if not self.cfg.gpsd_enabled:
 			return None
 		loop = asyncio.get_running_loop()
-		try:
-			result = await loop.run_in_executor(None, self._fetch_from_gpsd, filter_class)
-			if result:
-				self.healthy = True
-				self.unhealthy_warning_sent = False
-				return result
-			logging.debug('GPS %s data currently unavailable.', log_name)
-		except (ConnectionError, OSError, TimeoutError, Exception) as e:
-			if self.healthy or not self.unhealthy_warning_sent:
-				logging.error('GPSD (%s) connection error: %s', log_name, e)
+		max_retries = 3
+		retry_delay = 1
+		for attempt in range(max_retries):
+			try:
+				result = await loop.run_in_executor(None, self._fetch_from_gpsd, filter_class)
+				if result:
+					if not self.healthy:
+						logging.info('GPSD (%s) connection restored.', log_name)
+					self.healthy = True
+					self.unhealthy_warning_sent = False
+					return result
+				logging.debug('GPS %s data currently unavailable (attempt %d/%d).', log_name, attempt + 1, max_retries)
+				break
+			except (ConnectionError, OSError, TimeoutError) as e:
+				if self.healthy or not self.unhealthy_warning_sent:
+					logging.error('GPSD (%s) connection error (attempt %d/%d): %s', log_name, attempt + 1, max_retries, e)
+					self.unhealthy_warning_sent = True
+				self.healthy = False
+				if attempt < max_retries - 1:
+					await asyncio.sleep(retry_delay)
+					retry_delay = min(retry_delay * 2, 10)
+					continue
+				else:
+					logging.error('GPSD (%s) all retry attempts failed.', log_name)
+			except Exception as e:
+				logging.error('GPSD (%s) unexpected error: %s', log_name, e, exc_info=True)
+				self.healthy = False
 				self.unhealthy_warning_sent = True
-			self.healthy = False
+				break
 		return None
 
 	async def run_polling(self):
