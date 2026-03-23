@@ -1110,6 +1110,28 @@ class SystemStats(object):
 		return self._get_cached('mmdvm_info', _fetch, ttl=3600, default='')
 
 	@property
+	def mmdvm_phg(self):
+		"""Get PHG code from MMDVMHost configuration."""
+
+		def _fetch():
+			try:
+				conf = {}
+				with open(self.cfg.mmdvmhost_file, 'r') as f:
+					for line in f:
+						if '=' in line:
+							k, v = line.split('=', 1)
+							conf[k.strip()] = v.strip()
+				p = min(9, int(math.sqrt(float(conf.get('Power', 0)))))
+				h = min(9, int(math.log2(max(10, float(conf.get('Height', 0))) / 10)))
+				g = min(9, int(float((conf.get('TXLevel', 0) / 10) - 1)))
+				d = min(8, int(float(conf.get('Direction', 0))) // 45)
+				return f'PHG{p}{h}{g}{d}'
+			except Exception:
+				return ''
+
+		return self._get_cached('mmdvm_phg', _fetch, ttl=3600, default='')
+
+	@property
 	def traffic_info(self):
 		"""Get network traffic info from vnstat."""
 		return self._get_cached('traffic_info', self._calculate_traffic, ttl=300, default='')
@@ -1438,17 +1460,27 @@ class APRSSender:
 		symb = symb or self.cfg.symbol
 		if self.cfg.symbol_overlay:
 			symbt = self.cfg.symbol_overlay
-		tgposmoving = ''
-		extdatstr = ''
+		extstr = ''
+		ext_tg = ''
 		if is_moving and self.cfg.smartbeaconing_enabled:
-			extdatstr = f'{csestr}/{spdknt}'
-			tgposmoving = (
+			extstr = f'{csestr}/{spdknt}'
+			ext_tg = (
 				f'\n\tHeading: <b>{int(cur_cse)}°</b>'
 				f'\n\tSpeed: <b>{humanize.metric(float(spdkmh), "km/h", precision=1)}</b> | <b>{humanize.metric(float(spdknt), "kn", precision=1)}</b> | <b>{humanize.metric(cur_spd, "m/s")}</b>'
 			)
+		else:
+			extstr = self.sys_stats.mmdvm_phg
+			if extstr.startswith('PHG') and len(extstr) == 7:
+				p, h, g, d = (int(c) for c in extstr[3:])
+				p_w, h_ft, dir_deg = p * p, 10 * (2**h), d * 45
+				dir_txt = ['Omni', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'N'][d]
+				ext_tg = (
+					f'\n\tPHG: <b>{extstr}</b>'
+					f'\n\tPower: <b>{p_w}W</b> | Height: <b>{h_ft}ft</b> | Gain: <b>{g}dB</b> | Dir: <b>{dir_txt} ({dir_deg}°)</b>'
+				)
 		lookup_table = symbt if symbt in ['/', '\\'] else '\\'
 		sym_desc = symbols.get_desc(lookup_table, symb)
-		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:/{timestamp}{latstr}{symbt}{lonstr}{symb}{extdatstr}{altstr}{comment}'
+		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:/{timestamp}{latstr}{symbt}{lonstr}{symb}{extstr}{altstr}{comment}'
 		tg_pos = (
 			f'<u>{self.cfg.from_call} Position</u>\n\n'
 			f'Time: <b>{tg_timestamp}</b>\n'
@@ -1456,7 +1488,7 @@ class APRSSender:
 			f'Position:\n'
 			f'\tLatitude: <b>{cur_lat}</b>\n'
 			f'\tLongitude: <b>{cur_lon}</b>\n'
-			f'\tAltitude: <b>{cur_alt}m</b>{tgposmoving}\n'
+			f'\tAltitude: <b>{cur_alt}m</b>{ext_tg}\n'
 			f'Comment: <b>{comment}</b>'
 		)
 		await self.send_packet(payload, 'position')
