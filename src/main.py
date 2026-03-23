@@ -1114,7 +1114,8 @@ class SystemStats(object):
 			"""Helper to calculate PHG string from power, height, gain, and direction."""
 			try:
 				p = min(9, int(math.sqrt(float(p_val or 0))))
-				h = min(9, int(math.log2(max(10, float(h_val or 0)) / 10)))
+				h_idx = int(math.log2(max(10, float(h_val or 0)) / 10))
+				h = chr(48 + max(0, h_idx))
 				g = min(9, int(float(g_val or 0)))
 				d = min(8, int(float(d_val or 0)) // 45)
 				return f'PHG{p}{h}{g}{d}'
@@ -1489,13 +1490,13 @@ class APRSSender:
 		if not is_moving:
 			extstr = mmdvmphg
 			if mmdvmphg.startswith('PHG') and len(mmdvmphg) == 7:
-				p, h, g, d = (int(c) for c in mmdvmphg[3:])
+				p = int(mmdvmphg[3])
+				h = ord(mmdvmphg[4]) - 48
+				g = int(mmdvmphg[5])
+				d = int(mmdvmphg[6])
 				p_w, h_ft, dir_deg = p * p, 10 * (2**h), d * 45
 				dir_txt = ['Omni', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'N'][d]
-				ext_tg = (
-					f'\n\tPHG: <b>{mmdvmphg}</b>'
-					f'\n\tPower: <b>{p_w}W</b> | Height: <b>{h_ft}ft</b> | Gain: <b>{g}dB</b> | Dir: <b>{dir_txt} ({dir_deg}°)</b>'
-				)
+				ext_tg = (f'\n\tPHG: <b>{mmdvmphg}</b> --> [Power: <b>{p_w}W</b> | Height: <b>{h_ft}ft</b> | Gain: <b>{g}dB</b> | Dir: <b>{dir_txt} ({dir_deg}°)</b>]')
 		else:
 			extstr = f'{csestr}/{spdknt}'
 			ext_tg = (
