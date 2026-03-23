@@ -1460,24 +1460,21 @@ class APRSSender:
 		symb = symb or self.cfg.symbol
 		if self.cfg.symbol_overlay:
 			symbt = self.cfg.symbol_overlay
-		extstr = ''
-		ext_tg = ''
+		extstr = self.sys_stats.mmdvm_phg
+		if extstr.startswith('PHG') and len(extstr) == 7:
+			p, h, g, d = (int(c) for c in extstr[3:])
+			p_w, h_ft, dir_deg = p * p, 10 * (2**h), d * 45
+			dir_txt = ['Omni', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'N'][d]
+			ext_tg = (
+				f'\n\tPHG: <b>{extstr}</b>'
+				f'\n\tPower: <b>{p_w}W</b> | Height: <b>{h_ft}ft</b> | Gain: <b>{g}dB</b> | Dir: <b>{dir_txt} ({dir_deg}°)</b>'
+			)
 		if is_moving and self.cfg.smartbeaconing_enabled:
 			extstr = f'{csestr}/{spdknt}'
 			ext_tg = (
 				f'\n\tHeading: <b>{int(cur_cse)}°</b>'
 				f'\n\tSpeed: <b>{humanize.metric(float(spdkmh), "km/h", precision=1)}</b> | <b>{humanize.metric(float(spdknt), "kn", precision=1)}</b> | <b>{humanize.metric(cur_spd, "m/s")}</b>'
 			)
-		else:
-			extstr = self.sys_stats.mmdvm_phg
-			if extstr.startswith('PHG') and len(extstr) == 7:
-				p, h, g, d = (int(c) for c in extstr[3:])
-				p_w, h_ft, dir_deg = p * p, 10 * (2**h), d * 45
-				dir_txt = ['Omni', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'N'][d]
-				ext_tg = (
-					f'\n\tPHG: <b>{extstr}</b>'
-					f'\n\tPower: <b>{p_w}W</b> | Height: <b>{h_ft}ft</b> | Gain: <b>{g}dB</b> | Dir: <b>{dir_txt} ({dir_deg}°)</b>'
-				)
 		lookup_table = symbt if symbt in ['/', '\\'] else '\\'
 		sym_desc = symbols.get_desc(lookup_table, symb)
 		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:/{timestamp}{latstr}{symbt}{lonstr}{symb}{extstr}{altstr}{comment}'
