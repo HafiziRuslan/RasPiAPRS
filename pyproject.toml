@@ -1,6 +1,6 @@
 [project]
 name = 'RasPiAPRS'
-version = '0.1b8'
+version = '0.1b9'
 description = 'APRS telemetry for Pi-Star/WPSD/AllStarLink'
 keywords = [
   'amateur-radio',
@@ -13,7 +13,8 @@ keywords = [
   'allstarlink',
 ]
 readme = 'README.md'
-license = 'BSD-3-Clause'
+license = 'GPL-3.0-or-later'
+license-files = ['LICENSE']
 authors = [
   { name = 'Fred Cirera', email = 'github-fred@hidzz.com' },
   { name = 'Hafizi Ruslan', email = '9w2lgx@mhrtech.my' },
@@ -23,8 +24,8 @@ classifiers = [
   'Development Status :: 4 - Beta',
   'Intended Audience :: Other Audience',
   'License :: Freeware',
-  'License :: OSI Approved :: BSD License',
   'License :: OSI Approved',
+  'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
   'Natural Language :: English',
   'Natural Language :: Malay',
   'Operating System :: POSIX :: Linux',

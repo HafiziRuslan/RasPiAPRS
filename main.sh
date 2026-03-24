@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+echo "        RasPiAPRS  Copyright (C) 2026  HafiziRuslan
+        This program comes with ABSOLUTELY NO WARRANTY.
+        This is free software, and you are welcome to redistribute it under certain conditions."
+
 # --- Constants and Globals ---
 LOG_FILE="/var/log/RasPiAPRS.log"
 RESTART_DELAY=5

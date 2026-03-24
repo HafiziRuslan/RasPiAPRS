@@ -2,6 +2,9 @@
 
 echo "RasPiAPRS Troubleshooting Script"
 echo "================================"
+echo "        RasPiAPRS  Copyright (C) 2026  HafiziRuslan"
+echo "        This program comes with ABSOLUTELY NO WARRANTY."
+echo "        This is free software, and you are welcome to redistribute it under certain conditions."
 
 # Check for root privileges
 if [ "$EUID" -ne 0 ]; then

@@ -1,5 +1,20 @@
 #!/usr/bin/python3
-"""RasPiAPRS: Send APRS position and telemetry from Raspberry Pi to APRS-IS."""
+
+# 	Send APRS position and telemetry from Raspberry Pi to APRS-IS.
+# 	Copyright (C) 2026  HafiziRuslan
+#
+# 	This program is free software: you can redistribute it and/or modify
+# 	it under the terms of the GNU General Public License as published by
+# 	the Free Software Foundation, either version 3 of the License, or
+# 	any later version.
+#
+# 	This program is distributed in the hope that it will be useful,
+# 	but WITHOUT ANY WARRANTY; without even the implied warranty of
+# 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# 	GNU General Public License for more details.
+#
+# 	You should have received a copy of the GNU General Public License
+# 	along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import asyncio
 import datetime as dt
@@ -1497,7 +1512,7 @@ class APRSSender:
 				d = int(mmdvmphg[6])
 				p_w, h_ft, dir_deg = p * p, 10 * (2**h), d * 45
 				dir_txt = ['Omni', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'N'][d]
-				ext_tg = (f'\n\tPHG: <b>{mmdvmphg}</b> --> [Power: <b>{p_w}W</b> | Height: <b>{h_ft}ft</b> | Gain: <b>{g}dB</b> | Dir: <b>{dir_txt} ({dir_deg}°)</b>]')
+				ext_tg = f'\n\tPHG: <b>{mmdvmphg}</b> --> [Power: <b>{p_w}W</b> | Height: <b>{h_ft}ft</b> | Gain: <b>{g}dB</b> | Dir: <b>{dir_txt} ({dir_deg}°)</b>]'
 		else:
 			extstr = f'{csestr}/{spdknt}'
 			ext_tg = (
