@@ -1512,7 +1512,14 @@ class APRSSender:
 				d = int(mmdvmphg[6])
 				p_w, h_ft, dir_deg = p * p, 10 * (2**h), d * 45
 				dir_txt = ['Omni', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'N'][d]
-				ext_tg = f'\n\tPHG: <b>{mmdvmphg}</b> --> [Power: <b>{p_w}W</b> | Height: <b>{h_ft}ft</b> | Gain: <b>{g}dB</b> | Dir: <b>{dir_txt} ({dir_deg}°)</b>]'
+				dir_deg = f' ({dir_deg}°)' if d > 0 else ''
+				ext_tg = (
+					f'\n\t{mmdvmphg}'
+					f'\n\t\tPower: <b>{humanize.metric(int(p_w), "W", precision=1)}</b>'
+					f'\n\t\tHeight: <b>{humanize.metric(int(h_ft), "ft", precision=1)}</b>'
+					f'\n\t\tGain: <b>{humanize.metric(int(g), "dB", precision=1)}</b>'
+					f'\n\t\tDirection: <b>{dir_txt}{dir_deg}</b>'
+				)
 		else:
 			extstr = f'{csestr}/{spdknt}'
 			ext_tg = (
