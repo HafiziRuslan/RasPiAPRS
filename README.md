@@ -1,43 +1,52 @@
 # RasPiAPRS
 
+<div style="text-align: center;">
+
+![RasPiAPRS Logo](misc/raspiaprs_2x1.png)
+
 ![Ko-Fi sponsors](https://img.shields.io/badge/kofi-tip-FF6433?style=for-the-badge&logo=kofi&logoColor=FF6433&logoSize=auto&link=https%3A%2F%2Fko-fi.com%2Fhafiziruslan)
 ![Buy me a Coffee sponsors](https://img.shields.io/badge/buymeacoffee-tip-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=FFDD00&logoSize=auto&link=https%3A%2F%2Fwww.buymeacoffee.com%2Fhafiziruslan)
 ![PayPal sponsors](https://img.shields.io/badge/paypal-tip-002991?style=for-the-badge&logo=paypal&logoColor=002991&logoSize=auto&link=https%3A%2F%2Fpaypal.me%2FHafiziRuslan)
 ![Stripe sponsors](https://img.shields.io/badge/stripe-tip-635BFF?style=for-the-badge&logo=stripe&logoColor=635BFF&logoSize=auto&link=https%3A%2F%2Fdonate.stripe.com%2F5kA9CJg7S1J8bx64gg)
-
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/hafiziruslan?style=for-the-badge&logo=githubsponsors&logoColor=EA4AAA&logoSize=auto&color=EA4AAA&link=https%3A%2F%2Fgithub.com%2Fsponsors%2FHafiziRuslan)
 ![Open Collective sponsors](https://img.shields.io/opencollective/sponsors/hafiziruslan?style=for-the-badge&logo=opencollective&logoColor=7FADF2&logoSize=auto&link=https%3A%2F%2Fopencollective.com%2Fhafiziruslan)
 ![thanks.dev sponsors](https://img.shields.io/badge/sponsors-thanks.dev-black?style=for-the-badge&logoSize=auto&link=https%3A%2F%2Fthanks.dev%2F%2Fgh%2Fhafiziruslan)
 
-With this simple python program you can monitor your Pi-Star / WPSD / AllStarLink health using APRS metrics.
+</div>
 
-- The metrics are:
-  1. CPU temperature (average 10 minutes)
-  2. CPU load (average 10 minutes)
-  3. Memory used (average 10 minutes)
-  4. Disk usage
-  5. GPS used [optional]
+<table style="margin-left: auto; margin-right: auto;">
+  <tr><th colspan="2" style="text-align: center;">Mirrors (daily update)</th></tr>
+  <tr><td style="text-align: end;">GitLab</td><td><a href="https://gitlab.com/hafiziruslan/RasPiAPRS">hafiziruslan/RasPiAPRS</a></td></tr>
+  <tr><td style="text-align: end;">Codeberg</td><td><a href="https://codeberg.org/hafiziruslan/RasPiAPRS">hafiziruslan/RasPiAPRS</a></td></tr>
+  <tr><td style="text-align: end;">Gitea</td><td><a href="https://gitea.com/HafiziRuslan/RasPiAPRS">HafiziRuslan/RasPiAPRS</a></td></tr>
+</table>
+
+## About
+
+**RasPiAPRS** is a monitoring tool designed for Raspberry Pi nodes running radio software such as Pi-Star, WPSD, or AllStarLink. It tracks system health and location data, broadcasting this information over the APRS network.
+
+## Key Functions
+
+* **System Telemetry**: Collects and transmits data on CPU temperature, CPU load average, memory usage, disk usage, and GPS status.
+* **SmartBeaconing**: Dynamically adjusts transmission intervals based on the station's speed and heading to optimize network traffic.
+* **Symbol Transition**: Automatically switches the APRS map icon between "stationary" and "moving" symbols based on current motion.
+* **Notifications**: Sends status updates to Telegram via a bot API.
+* **Visualization**: Supports telemetry logging for display on platforms like `aprs.fi`.
 
 You can see an example of the metrics logged by my WPSD node [9W4GPA](https://aprs.fi/telemetry/a/9W4GPA?range=day).
-
-Mirrors (daily update):
-
-- GitLab: <https://gitlab.com/hafiziruslan/RasPiAPRS>
-- Codeberg: <https://codeberg.org/hafiziruslan/RasPiAPRS>
-- Gitea: <https://gitea.com/HafiziRuslan/RasPiAPRS>
 
 ## Requirements
 
 The following packages are required:
 
-- `curl`
-- `gcc`
-- `git`
-- `gpsd-clients`
-- `gpsd`
-- `python3-dev`
-- `uv`
-- `vnstat`
+* `curl`
+* `gcc`
+* `git`
+* `gpsd-clients`
+* `gpsd`
+* `python3-dev`
+* `uv`
+* `vnstat`
 
 The startup script will attempt to install them automatically if they are missing.
 
@@ -73,7 +82,7 @@ nano .env
 sudo ./main.sh
 ```
 
-note: `sudo` required for write access on `/var` directories.
+note: `sudo` required for dependencies check and write access on `/var` directories.
 
 ## AutoStart RasPiAPRS
 
@@ -98,7 +107,12 @@ git pull --autostash
 ## Telemetry Example
 
 This is the screenshot taken from `aprs.fi` of _CPU temperature_, _CPU load average_, _Memory used_, _Disk usage_ and _GPS usage_ from my WPSD node.
-![RasPiAPRS Picture](misc/metrics.png)
+
+<div style="text-align: center;">
+
+![RasPiAPRS Metrics](misc/metrics.png)
+
+</div>
 
 ## Hardware used for testing
 
