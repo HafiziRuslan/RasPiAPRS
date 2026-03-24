@@ -2,10 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta9] - (2026-03-24T21:18:00+08:00)
+## [beta9] - (2026-03-25T07:40:01+08:00)
 
-- 2 commit(s) contributed to the release.
+- 3 commit(s) contributed to the release.
 - 1 day(s) passed between releases.
+
+### 🚀 Features in beta9
+
+- [55e1aa0](https://github.com/HafiziRuslan/RasPiAPRS/commit/55e1aa006b4242946351488bbef2326a2f70ecb5) docs(readme): enhance readme with visual improvements and additional information *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-25T07:40:01+08:00*
 
 ### 🚜 Refactor in beta9
 
@@ -1217,4 +1221,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-24T21:19:05.119257556+08:00
+generated using git-cliff on 2026-03-25T07:40:54.088791709+08:00
