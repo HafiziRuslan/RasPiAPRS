@@ -10,10 +10,14 @@ updates:
   - package-ecosystem: 'uv'
     directory: '/'
     multi-ecosystem-group: 'python'
+    patterns:
+      - '*'
 
   - package-ecosystem: 'pip'
     directory: '/'
     multi-ecosystem-group: 'python'
+    patterns:
+      - '*'
 
   - package-ecosystem: 'github-actions'
     directory: '/'
