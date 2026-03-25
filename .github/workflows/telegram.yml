@@ -1,4 +1,4 @@
-name: telegram
+name: Telegram
 
 on:
   workflow_run:

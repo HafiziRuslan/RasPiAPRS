@@ -1,7 +1,22 @@
 version: 2
 
-updates:
-  - package-ecosystem: "uv"
-    directory: "/"
+multi-ecosystem-groups:
+  python:
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
+      timezone: 'Asia/Kuala_Lumpur'
+
+updates:
+  - package-ecosystem: 'uv'
+    directory: '/'
+    multi-ecosystem-group: 'python'
+
+  - package-ecosystem: 'pip'
+    directory: '/'
+    multi-ecosystem-group: 'python'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'monthly'
+      timezone: 'Asia/Kuala_Lumpur'
