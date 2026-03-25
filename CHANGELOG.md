@@ -2,19 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta9] - (2026-03-25T07:40:01+08:00)
+## [beta9] - (2026-03-25T13:23:17+08:00)
 
-- 3 commit(s) contributed to the release.
-- 1 day(s) passed between releases.
+- 6 commit(s) contributed to the release.
+- 1 day(s) passed between the first and last commit.
+- 2 day(s) passed between releases.
 
 ### 🚀 Features in beta9
 
+- [fe98100](https://github.com/HafiziRuslan/RasPiAPRS/commit/fe98100fb4ae6a7dd5da5b54377d2cf690baaaa3) feat(anyio): update anyio to 4.13.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-25T10:34:54+08:00*
 - [55e1aa0](https://github.com/HafiziRuslan/RasPiAPRS/commit/55e1aa006b4242946351488bbef2326a2f70ecb5) docs(readme): enhance readme with visual improvements and additional information *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-25T07:40:01+08:00*
 
 ### 🚜 Refactor in beta9
 
+- [7799095](https://github.com/HafiziRuslan/RasPiAPRS/commit/7799095dabad4e4af8ed791a923d4741bf531aa3) refactor(github): optimize configurations *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-25T10:34:23+08:00*
 - [80d6903](https://github.com/HafiziRuslan/RasPiAPRS/commit/80d69037e119f195374ac9766fe624623577c6fe) refactor(ext): optimize direction calculation and formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-24T21:18:00+08:00*
 - [d345dc9](https://github.com/HafiziRuslan/RasPiAPRS/commit/d345dc99705b55ebe8f7b29c87657a295cba0b80) refactor(license): update license to GPL-3.0-or-later *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-24T20:05:26+08:00*
+
+### 📚 Documentation in beta9
+
+- [d6ec728](https://github.com/HafiziRuslan/RasPiAPRS/commit/d6ec72862565cf8fbae343bbd8745b4104e4aaff) docs(sbom): update sbom.json serial number and uv version *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-25T13:23:17+08:00*
 
 ---
 
@@ -1221,4 +1228,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-25T07:40:54.088791709+08:00
+generated using git-cliff on 2026-03-25T13:25:24.589817458+08:00
