@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta9] - (2026-03-25T13:23:17+08:00)
+## [beta9] - (2026-03-27T06:33:30+08:00)
 
-- 6 commit(s) contributed to the release.
-- 1 day(s) passed between the first and last commit.
-- 2 day(s) passed between releases.
+- 7 commit(s) contributed to the release.
+- 2 day(s) passed between the first and last commit.
+- 3 day(s) passed between releases.
 
 ### 🚀 Features in beta9
 
@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta9
 
+- [16274ff](https://github.com/HafiziRuslan/RasPiAPRS/commit/16274ffcaaa48591e37e481f5248de1150e12432) docs(README): reorganize README structure and update requirements *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-27T06:33:30+08:00*
 - [7799095](https://github.com/HafiziRuslan/RasPiAPRS/commit/7799095dabad4e4af8ed791a923d4741bf531aa3) refactor(github): optimize configurations *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-25T10:34:23+08:00*
 - [80d6903](https://github.com/HafiziRuslan/RasPiAPRS/commit/80d69037e119f195374ac9766fe624623577c6fe) refactor(ext): optimize direction calculation and formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-24T21:18:00+08:00*
 - [d345dc9](https://github.com/HafiziRuslan/RasPiAPRS/commit/d345dc99705b55ebe8f7b29c87657a295cba0b80) refactor(license): update license to GPL-3.0-or-later *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-24T20:05:26+08:00*
@@ -1228,4 +1229,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-25T13:25:24.589817458+08:00
+generated using git-cliff on 2026-03-27T06:34:42.703526573+08:00
