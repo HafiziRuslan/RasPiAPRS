@@ -27,26 +27,23 @@
 
 ## Key Functions
 
-* **System Telemetry**: Collects and transmits data on CPU temperature, CPU load average, memory usage, disk usage, and GPS status.
-* **SmartBeaconing**: Dynamically adjusts transmission intervals based on the station's speed and heading to optimize network traffic.
-* **Symbol Transition**: Automatically switches the APRS map icon between "stationary" and "moving" symbols based on current motion.
-* **Notifications**: Sends status updates to Telegram via a bot API.
-* **Visualization**: Supports telemetry logging for display on platforms like `aprs.fi`.
+* **Telemetry Tracking**: Monitors specific hardware metrics including CPU temperature/load, memory/disk usage, and network traffic.
+* **SmartBeaconing**: Reduces network congestion by dynamically adjusting beacon frequency based on the station's speed and heading.
+* **Dynamic Symbols**: Automatically switches the APRS map icon (e.g., stationary vs. moving) based on real-time GPS motion.
+* **Remote Alerts**: Supports Telegram Bot API for sending system status updates directly to your device.
+* **Visualization**: Formats and logs telemetry data for display on platforms like `aprs.fi`.
 
 You can see an example of the metrics logged by my WPSD node [9W4GPA](https://aprs.fi/telemetry/a/9W4GPA?range=day).
 
 ## Requirements
 
-The following packages are required:
+The following packages are required for the application to interface with hardware and manage dependencies:
 
-* `curl`
-* `gcc`
-* `git`
-* `gpsd-clients`
-* `gpsd`
-* `python3-dev`
-* `uv`
-* `vnstat`
+* `curl` & `git`: Used for initial installation and the integrated self-updating mechanism.
+* `gcc` & `python3-dev`: Required to compile Python C-extensions for system monitoring libraries.
+* `gpsd` & `gpsd-clients`: Interfaces with GPS hardware to provide location and timing data.
+* `uv`: A high-performance Python package installer used to manage application dependencies.
+* `vnstat`: A network traffic monitor used to report data usage in telemetry.
 
 The startup script will attempt to install them automatically if they are missing.
 
@@ -54,51 +51,47 @@ Note: to install uv using `apt`, you may use `debian.griffo.io` repository.
 
 ```bash
 curl -sS https://debian.griffo.io/EA0F721D231FDD3A0A17B9AC7808B4DD62C41256.asc | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/debian.griffo.io.gpg
-
 echo "deb https://debian.griffo.io/apt $(lsb_release -sc 2>/dev/null) main" | sudo tee /etc/apt/sources.list.d/debian.griffo.io.list
-
 sudo apt update && sudo apt install uv
 ```
 
-## Installation (Pi-Star / WPSD / AllStarLink)
+## Installation
 
 ```bash
-git clone https://github.com/HafiziRuslan/RasPiAPRS.git RasPiAPRS
+git clone https://github.com/HafiziRuslan/RasPiAPRS.git
 cd RasPiAPRS
 ```
 
-## Configurations
+## Configuration
 
-Copy the file `.env.sample` into `.env`, and edit the configuration using your favorite editor.
+Copy the sample environment file and edit it with your credentials and station settings.
 
 ```bash
 cp .env.sample .env
 nano .env
 ```
 
-## Starting RasPiAPRS
+## Starting
+
+Run the startup script with `sudo`. The script will automatically check for system dependencies, update the application, and manage the Python virtual environment.
 
 ```bash
 sudo ./main.sh
 ```
 
-note: `sudo` required for dependencies check and write access on `/var` directories.
+## AutoStart
 
-## AutoStart RasPiAPRS
-
-Copy & Paste this line into last line (before blank line) of `/etc/crontab` or any other cron program that you're using.
+To ensure the script starts automatically after a reboot, add the following line to `/etc/crontab` (or your preferred cron manager).
 
 ```bash
 @reboot pi-star cd /home/pi-star/RasPiAPRS && ./main.sh 2>&1
 ```
 
-change the `pi-star` username into your username
+*Note: Replace `pi-star` with your actual system username if different.*
 
-## Update RasPiAPRS
+## Update
 
-Manual update are **NOT REQUIRED** as it has integrated into `main.sh` and will be run before application started.
-
-Use this command for manual update:-
+Manual updates are generally **not required** as `main.sh` performs a check every time it starts. To force a manual update:
 
 ```bash
 git pull --autostash
