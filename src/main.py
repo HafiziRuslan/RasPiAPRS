@@ -994,21 +994,15 @@ class SystemStats(object):
 		uptime_seconds = dt.datetime.now(dt.timezone.utc).timestamp() - psutil.boot_time()
 		uptime = dt.timedelta(seconds=uptime_seconds)
 		u_str = humanize.precisedelta(uptime, minimum_unit='minutes', format='%0.0f')
-		for unit, abbr in [
-			(' years', 'y'),
-			(' year', 'y'),
-			(' months', 'mo'),
-			(' month', 'mo'),
-			(' days', 'd'),
-			(' day', 'd'),
-			(' hours', 'h'),
-			(' hour', 'h'),
-			(' minutes', 'm'),
-			(' minute', 'm'),
-			(' and', ''),
-			(',', ''),
+		for pattern, repl in [
+			(r' years?', 'y'),
+			(r' months?', 'mo'),
+			(r' days?', 'd'),
+			(r' hours?', 'h'),
+			(r' minutes?', 'm'),
+			(r' and|,', ''),
 		]:
-			u_str = u_str.replace(unit, abbr)
+			u_str = re.sub(pattern, repl, u_str)
 		return f'up: {u_str}'
 
 	def _calculate_traffic(self):
