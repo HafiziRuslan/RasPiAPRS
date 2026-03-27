@@ -962,7 +962,7 @@ class SystemStats(object):
 
 	def _fetch_raw_vram_used(self):
 		"""Fetch raw memory usage."""
-		return psutil.virtual_memory().used
+		return psutil.virtual_memory().used + psutil.swap_memory().used
 
 	def _prune_history(self, history, now, window=None):
 		"""Prune old entries from history."""
@@ -1100,7 +1100,10 @@ class SystemStats(object):
 			kernelver = ''
 			try:
 				kernel = os.uname()
-				kernelver = f'{kernel.sysname} {kernel.release} ({kernel.machine})'
+				sysname = kernel.sysname
+				release = f'{kernel.release.split("-")[0]}{kernel.version.split()}'
+				machine = kernel.machine
+				kernelver = f'{sysname} {release} ({machine})'
 			except Exception as e:
 				logging.error('Unexpected error: %s', e)
 			return f'{", ".join(filter(None, [osname, kernelver]))}'
