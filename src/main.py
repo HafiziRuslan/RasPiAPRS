@@ -1338,6 +1338,8 @@ class TelegramLogger(object):
 		if not self.enabled or not self.bot:
 			return
 		try:
+			if lat != 0 and lon != 0:
+				await self._update_location(lat, lon, cse)
 			message = f'{tg_message}\n\n<code>{self.cfg.app_name}</code>'
 			msg_kwargs = {
 				'chat_id': self.chat_id,
@@ -1350,8 +1352,6 @@ class TelegramLogger(object):
 				msg_kwargs['message_thread_id'] = current_topic_id
 			msg = await self._call_with_retry(self.bot.send_message, **msg_kwargs)
 			logging.info('Sent message to Telegram: %s/%s/%s', msg.chat_id, msg.message_thread_id, msg.message_id)
-			if lat != 0 and lon != 0:
-				await self._update_location(lat, lon, cse)
 		except Exception as e:
 			logging.error('Failed to send message to Telegram: %s', e)
 
@@ -1695,13 +1695,13 @@ def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, scheduled_msg_handler
 
 	loc_data, _ = gps_data if gps_data else None
 	return [
+		Task(timer_tick % 21600 == 1, aprs_sender.send_header, (), {}),
 		Task(
 			should_send_position(cfg, timer_tick, sb, loc_data),
 			aprs_sender.send_position,
 			(),
 			{'gps_data': gps_data, 'is_moving': sb.is_moving, 'symbt': sb.symbt, 'symb': sb.symb},
 		),
-		Task(timer_tick % 21600 == 1, aprs_sender.send_header, (), {}),
 		Task(timer_tick % cfg.sleep == 1, aprs_sender.send_telemetry, (), {'gps_data': gps_data}),
 		Task(True, scheduled_msg_handler.send_all, (aprs_sender,), {'gps_data': gps_data}),
 	]
