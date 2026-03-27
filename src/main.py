@@ -994,14 +994,7 @@ class SystemStats(object):
 		uptime_seconds = dt.datetime.now(dt.timezone.utc).timestamp() - psutil.boot_time()
 		uptime = dt.timedelta(seconds=uptime_seconds)
 		u_str = humanize.precisedelta(uptime, minimum_unit='minutes', format='%0.0f')
-		for pattern, repl in [
-			(r' years?', 'y'),
-			(r' months?', 'mo'),
-			(r' days?', 'd'),
-			(r' hours?', 'h'),
-			(r' minutes?', 'm'),
-			(r' and|,', ''),
-		]:
+		for pattern, repl in [(r' years?', 'y'), (r' months?', 'mo'), (r' days?', 'd'), (r' hours?', 'h'), (r' minutes?', 'm'), (r' and|,', '')]:
 			u_str = re.sub(pattern, repl, u_str)
 		return f'up: {u_str}'
 
@@ -1094,16 +1087,19 @@ class SystemStats(object):
 				id_like = os_info.get('ID_LIKE', '').title()
 				version_codename = os_info.get('VERSION_CODENAME', '')
 				debian_version_full = os_info.get('DEBIAN_VERSION_FULL') or os_info.get('VERSION_ID', '')
-				osname = f'{id_like} {debian_version_full} ({version_codename})'
+				osname = ''.join(filter(None, [id_like, debian_version_full, f'({version_codename})']))
 			except (IOError, OSError):
 				logging.warning('OS release file not found: %s', self.cfg.os_release_file)
 			kernelver = ''
 			try:
 				kernel = os.uname()
 				sysname = kernel.sysname
-				release = f'{kernel.release.split("-")[0]}{kernel.version.split()}'
+				kvpart = kernel.version.split()
+				buildno = kvpart[0]
+				builddate = dt.datetime.strptime(f'{kvpart[4]} {kvpart[5]} {kvpart[8]}', '%b %d %Y').date().isoformat()
+				release = ''.join(filter(None, [kernel.release.split('-')[0], buildno, f'[{builddate}]']))
 				machine = kernel.machine
-				kernelver = f'{sysname} {release} ({machine})'
+				kernelver = ''.join(filter(None, [sysname, release, f'({machine})']))
 			except Exception as e:
 				logging.error('Unexpected error: %s', e)
 			return f'{", ".join(filter(None, [osname, kernelver]))}'
