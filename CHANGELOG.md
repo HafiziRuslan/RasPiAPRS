@@ -2,19 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta9] - (2026-03-27T06:33:30+08:00)
+## [beta9] - (2026-03-27T10:39:14+08:00)
 
-- 7 commit(s) contributed to the release.
-- 2 day(s) passed between the first and last commit.
-- 3 day(s) passed between releases.
+- 9 commit(s) contributed to the release.
+- 3 day(s) passed between the first and last commit.
+- 4 day(s) passed between releases.
 
 ### 🚀 Features in beta9
 
+- [49e787c](https://github.com/HafiziRuslan/RasPiAPRS/commit/49e787c3f9bd3786cc10068d5249ed41790fe299) feat(monitor): improve memory usage tracking and kernel version formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-27T10:39:14+08:00*
 - [fe98100](https://github.com/HafiziRuslan/RasPiAPRS/commit/fe98100fb4ae6a7dd5da5b54377d2cf690baaaa3) feat(anyio): update anyio to 4.13.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-25T10:34:54+08:00*
 - [55e1aa0](https://github.com/HafiziRuslan/RasPiAPRS/commit/55e1aa006b4242946351488bbef2326a2f70ecb5) docs(readme): enhance readme with visual improvements and additional information *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-25T07:40:01+08:00*
 
 ### 🚜 Refactor in beta9
 
+- [3cf590b](https://github.com/HafiziRuslan/RasPiAPRS/commit/3cf590b3c092a01d64b3d532d3e97c79e7cdf5b6) refactor(uptime): simplify time unit replacement with regex *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-27T10:20:38+08:00*
 - [16274ff](https://github.com/HafiziRuslan/RasPiAPRS/commit/16274ffcaaa48591e37e481f5248de1150e12432) docs(README): reorganize README structure and update requirements *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-27T06:33:30+08:00*
 - [7799095](https://github.com/HafiziRuslan/RasPiAPRS/commit/7799095dabad4e4af8ed791a923d4741bf531aa3) refactor(github): optimize configurations *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-25T10:34:23+08:00*
 - [80d6903](https://github.com/HafiziRuslan/RasPiAPRS/commit/80d69037e119f195374ac9766fe624623577c6fe) refactor(ext): optimize direction calculation and formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-24T21:18:00+08:00*
@@ -1229,4 +1231,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-27T06:34:42.703526573+08:00
+generated using git-cliff on 2026-03-27T10:40:41.922218006+08:00
