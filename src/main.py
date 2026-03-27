@@ -1098,8 +1098,26 @@ class SystemStats(object):
 				buildno = kvpart[0]
 				builddate = dt.datetime.strptime(f'{kvpart[4]} {kvpart[5]} {kvpart[8]}', '%b %d %Y').date().isoformat()
 				release = ''.join(filter(None, [kernel.release.split('-')[0], buildno, f'[{builddate}]']))
-				machine = kernel.machine
-				kernelver = ''.join(filter(None, [sysname, release, f'({machine})']))
+				raw_machine = kernel.machine
+				arch_map = {
+					'aarch64': 'arm64',
+					'armv8l': 'armhf',
+					'armv7l': 'armhf',
+					'armv6l': 'armhf',
+					'armv5tejl': 'arm',
+					'x86_64': 'amd64',
+					'i386': 'x86',
+					'i686': 'x86',
+					'mips': 'mips',
+					'mipsel': 'mipsel',
+					'powerpc': 'ppc',
+					'ppc64': 'ppc64',
+					'ppc64le': 'ppc64le',
+					'riscv64': 'riscv64',
+					's390x': 's390x',
+				}
+				machine = arch_map.get(raw_machine, raw_machine)
+				kernelver = ''.join(filter(None, [sysname, release, machine]))
 			except Exception as e:
 				logging.error('Unexpected error: %s', e)
 			return f'{", ".join(filter(None, [osname, kernelver]))}'
