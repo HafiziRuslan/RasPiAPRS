@@ -1096,8 +1096,8 @@ class SystemStats(object):
 				sysname = kernel.sysname
 				kvpart = kernel.version.split()
 				buildno = kvpart[0]
-				builddate = dt.datetime.strptime(f'{kvpart[4]} {kvpart[5]} {kvpart[8]}', '%b %d %Y').date().isoformat()
-				release = ''.join(filter(None, [kernel.release.split('-')[0], buildno, f'[{builddate}]']))
+				builddate = dt.datetime.strptime(f'{kvpart[-1]}{kvpart[-5]}{kvpart[-4]} {kvpart[-3]}', '%Y%b%d %H:%M:%S').isoformat()
+				release = ''.join(filter(None, [kernel.release.split('-')[0], buildno, f'({builddate})']))
 				raw_machine = kernel.machine
 				arch_map = {
 					'aarch64': 'arm64',
