@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta9] - (2026-03-27T11:40:38+08:00)
+## [beta9] - (2026-03-27T12:24:07+08:00)
 
-- 10 commit(s) contributed to the release.
+- 12 commit(s) contributed to the release.
 - 3 day(s) passed between the first and last commit.
 - 4 day(s) passed between releases.
 
@@ -16,6 +16,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta9
 
+- [e014eeb](https://github.com/HafiziRuslan/RasPiAPRS/commit/e014eeb3263924d67dcd76a136974482751a497c) fix(telegram): send location update before log message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-27T12:24:07+08:00*
+- [ca16913](https://github.com/HafiziRuslan/RasPiAPRS/commit/ca1691377cfeb7227bce2ba3a5c8ee557a711380) fix(kernel): normalize machine architecture in kernel version string *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-27T12:17:55+08:00*
 - [c5fa372](https://github.com/HafiziRuslan/RasPiAPRS/commit/c5fa372ee8c7b9ac33760218267044021ae42ef2) fix(system): fix system info string construction and release format *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-27T11:40:38+08:00*
 
 ### 🚜 Refactor in beta9
@@ -1235,4 +1237,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-27T11:41:35.176301546+08:00
+generated using git-cliff on 2026-03-27T12:25:03.632480080+08:00
