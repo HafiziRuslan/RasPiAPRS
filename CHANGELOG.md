@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta9] - (2026-03-27T12:24:07+08:00)
+## [beta9] - (2026-03-27T13:05:56+08:00)
 
-- 12 commit(s) contributed to the release.
+- 13 commit(s) contributed to the release.
 - 3 day(s) passed between the first and last commit.
 - 4 day(s) passed between releases.
 
@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta9
 
+- [ebb3f56](https://github.com/HafiziRuslan/RasPiAPRS/commit/ebb3f569c823a318fc64a8708c1c4b90a9373b0a) refactor(os_info): optimize kernel version parsing logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-27T13:05:56+08:00*
 - [3cf590b](https://github.com/HafiziRuslan/RasPiAPRS/commit/3cf590b3c092a01d64b3d532d3e97c79e7cdf5b6) refactor(uptime): simplify time unit replacement with regex *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-27T10:20:38+08:00*
 - [16274ff](https://github.com/HafiziRuslan/RasPiAPRS/commit/16274ffcaaa48591e37e481f5248de1150e12432) docs(README): reorganize README structure and update requirements *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-27T06:33:30+08:00*
 - [7799095](https://github.com/HafiziRuslan/RasPiAPRS/commit/7799095dabad4e4af8ed791a923d4741bf531aa3) refactor(github): optimize configurations *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-25T10:34:23+08:00*
@@ -1237,4 +1238,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-27T12:25:03.632480080+08:00
+generated using git-cliff on 2026-03-27T13:06:50.801150863+08:00
