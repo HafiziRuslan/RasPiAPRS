@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta9] - (2026-03-28T06:26:28+08:00)
+## [beta9] - (2026-03-28T19:26:01+08:00)
 
-- 15 commit(s) contributed to the release.
-- 3 day(s) passed between the first and last commit.
-- 4 day(s) passed between releases.
+- 16 commit(s) contributed to the release.
+- 4 day(s) passed between the first and last commit.
+- 5 day(s) passed between releases.
 
 ### 🚀 Features in beta9
 
@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta9
 
+- [c1f15a5](https://github.com/HafiziRuslan/RasPiAPRS/commit/c1f15a534fac3d1a242772d63fe0de0ca9c0cb4d) fix(main): fix output formatting by adding spaces *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-28T19:26:01+08:00*
 - [e014eeb](https://github.com/HafiziRuslan/RasPiAPRS/commit/e014eeb3263924d67dcd76a136974482751a497c) fix(telegram): send location update before log message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-27T12:24:07+08:00*
 - [ca16913](https://github.com/HafiziRuslan/RasPiAPRS/commit/ca1691377cfeb7227bce2ba3a5c8ee557a711380) fix(kernel): normalize machine architecture in kernel version string *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-27T12:17:55+08:00*
 - [c5fa372](https://github.com/HafiziRuslan/RasPiAPRS/commit/c5fa372ee8c7b9ac33760218267044021ae42ef2) fix(system): fix system info string construction and release format *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-27T11:40:38+08:00*
@@ -1240,4 +1241,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-28T06:27:19.644195826+08:00
+generated using git-cliff on 2026-03-28T19:26:56.783208321+08:00
