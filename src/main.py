@@ -1087,7 +1087,7 @@ class SystemStats(object):
 				id_like = os_info.get('ID_LIKE', '').title()
 				version_codename = os_info.get('VERSION_CODENAME', '')
 				debian_version_full = os_info.get('DEBIAN_VERSION_FULL') or os_info.get('VERSION_ID', '')
-				osname = ''.join(filter(None, [id_like, debian_version_full, f'({version_codename})']))
+				osname = ' '.join(filter(None, [id_like, debian_version_full, f'({version_codename})']))
 			except (IOError, OSError):
 				logging.warning('OS release file not found: %s', self.cfg.os_release_file)
 			kernelver = ''
@@ -1117,7 +1117,7 @@ class SystemStats(object):
 					's390x': 's390x',
 				}
 				machine = arch_map.get(raw_machine, raw_machine)
-				kernelver = ''.join(filter(None, [sysname, release, machine]))
+				kernelver = ' '.join(filter(None, [sysname, release, machine]))
 			except Exception as e:
 				logging.error('Unexpected error: %s', e)
 			return f'{", ".join(filter(None, [osname, kernelver]))}'
@@ -1180,7 +1180,8 @@ class SystemStats(object):
 			cc = f'C{conf.get("ColorCode", 0)}'
 			s1, s2 = conf.get('Slot1') == '1', conf.get('Slot2') == '1'
 			ts = 'S1S2' if s1 and s2 else ('S1' if s1 else ('S2' if s2 else ''))
-		info_str = f'{", ".join(filter(None, [tx, shift, cc, ts]))}'
+			ccts = ''.join(filter(None, [cc, ts]))
+		info_str = f'{" ".join(filter(None, [tx, shift, ccts]))}'
 
 		if not phg_str:
 			phg_str = calc_phg(conf.get('INFO:Power', 0), conf.get('INFO:Height', 0), conf.get('INFO:Gain', 3), conf.get('INFO:Direction', 0))
