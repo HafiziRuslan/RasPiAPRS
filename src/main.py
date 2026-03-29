@@ -319,6 +319,24 @@ class Config:
 				self.additional_sender = valid_senders
 			if needs_cleanup:
 				self._cleanup_env_senders(valid_senders)
+		all_callsigns_for_group_filter = []
+		if self.from_call:
+			all_callsigns_for_group_filter.append(self.from_call)
+		if self.additional_sender:
+			all_callsigns_for_group_filter.extend(self.additional_sender)
+		unique_filter_parts = set()
+		if all_callsigns_for_group_filter:
+			group_filter_string = 'g/' + '/'.join(sorted(set(all_callsigns_for_group_filter)))
+			unique_filter_parts.add(group_filter_string)
+		if self.aprsis_filter and self.aprsis_filter.strip():
+			for part in self.aprsis_filter.strip().split():
+				if part.strip():
+					unique_filter_parts.add(part.strip())
+		if unique_filter_parts:
+			self.aprsis_filter = ' '.join(sorted(list(unique_filter_parts)))
+		else:
+			self.aprsis_filter = None
+		logging.debug('Final constructed APRS-IS filter: %s', self.aprsis_filter)
 
 	def _cleanup_env_senders(self, valid_senders: list[str]):
 		"""Update .env file to remove invalid senders."""
@@ -1556,6 +1574,32 @@ class APRSSender:
 		ctime = source_time or dt.datetime.now(dt.timezone.utc)
 		return ctime.strftime('%d%H%Mz'), ctime.astimezone().isoformat(timespec='seconds')
 
+	def _aprs_callback(self, packet: str):
+		"""Callback function to process incoming APRS packets from the server."""
+		logging.info('Received APRS packet: %s', packet)
+		try:
+			parsed_packet = aprslib.parse(packet)
+			if 'message' in parsed_packet:
+				from_call = parsed_packet.get('from', 'UNKNOWN')
+				addresse = parsed_packet.get('addresse', 'UNKNOWN')
+				message_text = parsed_packet.get('message_text', '')
+				msg_no = parsed_packet.get('msgNo')
+				if addresse == self.cfg.from_call and msg_no:
+					ack_payload = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:ack{msg_no}'
+					logging.debug('Replying acknowledge for message %s from %s', msg_no, from_call)
+					asyncio.create_task(self.send_packet(ack_payload, 'ack'))
+				tg_msg = (
+					f'<u>APRS Message Received</u>\n\n'
+					f'From: <b>{from_call}</b>\n'
+					f'To: <b>{addresse}</b>\n'
+					f'{f"MsgNo: {msg_no}" if msg_no else ""}\nMessage: <b>{message_text}</b>'
+				)
+				asyncio.create_task(self.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id))
+		except APRSParseError as e:
+			logging.warning('Failed to parse incoming APRS packet: %s - Raw: %s', e, packet)
+		except Exception as e:
+			logging.error('Unexpected error in APRS callback: %s', e, exc_info=True)
+
 	async def connect(self):
 		"""Establish connection to APRS-IS with retries."""
 		logging.info('Connecting to APRS-IS server %s:%d as %s', self.cfg.aprsis_server, self.cfg.aprsis_port, self.cfg.from_call)
@@ -1576,21 +1620,18 @@ class APRSSender:
 				if self.cfg.aprsis_filter:
 					await loop.run_in_executor(None, self.ais.set_filter, self.cfg.aprsis_filter)
 					logging.info('APRS-IS filter set to: %s', self.cfg.aprsis_filter)
+					await loop.run_in_executor(None, self.ais.consumer, self._aprs_callback, raw=True)
 				return
 			except APRSConnectionError as err:
 				logging.warning('APRS connection error (attempt %d/%d): %s', attempt + 1, max_retries, err)
-				if attempt < max_retries - 1:
-					await asyncio.sleep(retry_delay)
-					retry_delay = min(retry_delay * 2, 60)
 			except Exception as e:
-				logging.error(
-					'Unexpected error during APRS-IS object creation or connection (attempt %d/%d): %s', attempt + 1, max_retries, e, exc_info=True
-				)
-				if attempt < max_retries - 1:
-					await asyncio.sleep(retry_delay)
-					retry_delay = min(retry_delay * 2, 60)
-		logging.critical('All attempts to connect to APRS-IS failed, exiting.')
-		sys.exit(getattr(os, 'EX_NOHOST', 1))
+				logging.error('Unexpected error (attempt %d/%d): %s', attempt + 1, max_retries, e, exc_info=True)
+			if attempt < max_retries - 1:
+				await asyncio.sleep(retry_delay)
+				retry_delay = min(retry_delay * 2, 60)
+			else:
+				logging.critical('All attempts to connect to APRS-IS failed, exiting.')
+				sys.exit(getattr(os, 'EX_NOHOST', 1))
 
 	async def send_packet(self, payload, log_context='packet'):
 		"""Send a packet with random delay and retry logic."""
