@@ -17,6 +17,7 @@
 # 	along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import asyncio
+import contextlib
 import datetime as dt
 import json
 import logging
@@ -30,6 +31,7 @@ import shutil
 import signal
 import subprocess
 import sys
+import tempfile
 import time
 import tomllib
 from collections import UserDict
@@ -49,6 +51,7 @@ from aprslib.exceptions import ConnectionError as APRSConnectionError
 from aprslib.exceptions import ParseError as APRSParseError
 from geopy.geocoders import Nominatim
 from gpsdclient import GPSDClient
+from itu_appendix42 import ItuAppendix42
 
 
 @dataclass
@@ -173,6 +176,26 @@ class Config:
 		except (ValueError, TypeError):
 			return None
 
+	@staticmethod
+	@contextlib.contextmanager
+	def _atomic_write(file_path: str):
+		"""Context manager for atomic file writing, preserving permissions and ownership."""
+		abs_path = os.path.abspath(file_path)
+		fd, temp_path = tempfile.mkstemp(dir=os.path.dirname(abs_path), text=True)
+		try:
+			with os.fdopen(fd, 'w') as f_tmp:
+				yield f_tmp
+			if os.path.exists(file_path):
+				shutil.copymode(file_path, temp_path)
+				if hasattr(os, 'geteuid') and os.geteuid() == 0:
+					st = os.stat(file_path)
+					shutil.chown(temp_path, user=st.st_uid, group=st.st_gid)
+			os.replace(temp_path, file_path)
+		except Exception:
+			if os.path.exists(temp_path):
+				os.remove(temp_path)
+			raise
+
 	def reload(self):
 		"""Reload configuration from environment variables."""
 		env_file = '.env'
@@ -252,15 +275,51 @@ class Config:
 			[self.aprsphnet_enabled, self.aprsthursday_enabled, self.aprsaturday_enabled, self.aprsmysunday_enabled, self.aprshamfinity_enabled]
 		)
 		if events_active and self.additional_sender_raw:
+			ituappendix42 = ItuAppendix42()
 			valid_senders = []
-			for sender in self.additional_sender_raw.split(','):
+			raw_senders = self.additional_sender_raw.split(',')
+			needs_cleanup = False
+			for sender in raw_senders:
 				sender = sender.strip().upper()
-				if re.match(r'^[A-Z0-9]+(-[A-Z0-9]+)?$', sender):
+				if not sender:
+					continue
+				base, ssid_str = sender.rsplit('-', 1) if '-' in sender else (sender, None)
+				is_valid = False
+				if ituappendix42.fullmatch(base):
+					if ssid_str is None or (ssid_str.isdigit() and 0 <= int(ssid_str) <= 15):
+						is_valid = True
+				if is_valid:
 					valid_senders.append(sender)
 				else:
-					logging.warning('Invalid ADDITIONAL_SENDER format: %s. Ignoring.', sender)
+					logging.warning('Invalid ITU callsign format: %s. Removing from configuration.', sender)
+					needs_cleanup = True
 			if valid_senders:
 				self.additional_sender = valid_senders
+			if needs_cleanup:
+				self._cleanup_env_senders(valid_senders)
+
+	def _cleanup_env_senders(self, valid_senders: list[str]):
+		"""Update .env file to remove invalid senders."""
+		env_path = '.env'
+		if not os.path.exists(env_path):
+			return
+		try:
+			with open(env_path, 'r') as f:
+				lines = f.readlines()
+			new_lines = []
+			for line in lines:
+				if line.strip().startswith('ADDITIONAL_SENDER='):
+					comment = ''
+					if '#' in line:
+						comment = ' ' + line[line.find('#'):].strip()
+					new_lines.append(f"ADDITIONAL_SENDER={','.join(valid_senders)}{comment}\n")
+				else:
+					new_lines.append(line)
+			with self._atomic_write(env_path) as f_tmp:
+				f_tmp.writelines(new_lines)
+			logging.info('Cleaned up invalid senders in %s', env_path)
+		except Exception as e:
+			logging.error('Failed to cleanup .env file: %s', e)
 
 
 def configure_logging(cfg: Config):
