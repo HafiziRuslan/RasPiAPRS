@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta9] - (2026-03-30T07:12:44+08:00)
+## [beta9] - (2026-03-30T07:30:59+08:00)
 
-- 36 commit(s) contributed to the release.
+- 37 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta9
 
+- [84a9388](https://github.com/HafiziRuslan/RasPiAPRS/commit/84a9388953df8c630b325984e9f4b00f9ddffbfa) fix(consumer): change APRS consumer to blocking mode and wrap in lambda *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T07:30:59+08:00*
 - [8e0aafd](https://github.com/HafiziRuslan/RasPiAPRS/commit/8e0aafd34dee564af9d3aff6fe9f22882c06549f) fix(aprs): fix run_in_executor call with keyword argument *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T05:45:35+08:00*
 - [c1f15a5](https://github.com/HafiziRuslan/RasPiAPRS/commit/c1f15a534fac3d1a242772d63fe0de0ca9c0cb4d) fix(main): fix output formatting by adding spaces *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-28T19:26:01+08:00*
 - [e014eeb](https://github.com/HafiziRuslan/RasPiAPRS/commit/e014eeb3263924d67dcd76a136974482751a497c) fix(telegram): send location update before log message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-27T12:24:07+08:00*
@@ -1264,4 +1265,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-30T07:13:35.782655454+08:00
+generated using git-cliff on 2026-03-30T07:31:54.259750211+08:00
