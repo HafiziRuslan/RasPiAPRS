@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta9] - (2026-03-30T02:32:50+08:00)
+## [beta9] - (2026-03-30T02:49:50+08:00)
 
-- 23 commit(s) contributed to the release.
+- 24 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation in beta9
 
+- [ce5ab86](https://github.com/HafiziRuslan/RasPiAPRS/commit/ce5ab86a70abea8082dc784a1f48913dd34a049a) docs(readme): add aprs-is filtering note and move example *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T02:49:50+08:00*
 - [d6ec728](https://github.com/HafiziRuslan/RasPiAPRS/commit/d6ec72862565cf8fbae343bbd8745b4104e4aaff) docs(sbom): update sbom.json serial number and uv version *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-25T13:23:17+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta9
@@ -1251,4 +1252,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-30T02:33:39.877518211+08:00
+generated using git-cliff on 2026-03-30T02:50:41.777867890+08:00
