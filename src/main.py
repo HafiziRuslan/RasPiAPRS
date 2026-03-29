@@ -1560,12 +1560,8 @@ class APRSSender:
 		"""Establish connection to APRS-IS with retries."""
 		logging.info('Connecting to APRS-IS server %s:%d as %s', self.cfg.aprsis_server, self.cfg.aprsis_port, self.cfg.from_call)
 		self.ais = aprslib.IS(
-			callsign=self.cfg.from_call,
-			passwd=self.cfg.aprs_passcode,
-			host=self.cfg.aprsis_server,
-			port=self.cfg.aprsis_port,
-			filter=self.cfg.aprsis_filter,
-		)
+			callsign=self.cfg.from_call, passwd=self.cfg.aprs_passcode, host=self.cfg.aprsis_server, port=self.cfg.aprsis_port
+		).set_filter(self.cfg.aprsis_filter)
 		loop = asyncio.get_running_loop()
 		max_retries = 5
 		retry_delay = 5
