@@ -25,6 +25,7 @@ import logging.handlers
 import math
 import os
 import pickle
+import platform
 import random
 import re
 import shutil
@@ -60,7 +61,6 @@ class Config:
 	tmp_dir: str = '/var/tmp/RasPiAPRS'
 	lib_dir: str = '/var/lib/RasPiAPRS'
 	log_dir: str = '/var/log/RasPiAPRS'
-	os_release_file: str = '/etc/os-release'
 	mmdvmhost_file: str = '/etc/mmdvmhost'
 	gps_file: str = '/var/tmp/RasPiAPRS/gps.json'
 	location_id_file: str = '/var/tmp/RasPiAPRS/location_id.tmp'
@@ -311,8 +311,8 @@ class Config:
 				if line.strip().startswith('ADDITIONAL_SENDER='):
 					comment = ''
 					if '#' in line:
-						comment = ' ' + line[line.find('#'):].strip()
-					new_lines.append(f"ADDITIONAL_SENDER={','.join(valid_senders)}{comment}\n")
+						comment = ' ' + line[line.find('#') :].strip()
+					new_lines.append(f'ADDITIONAL_SENDER={",".join(valid_senders)}{comment}\n')
 				else:
 					new_lines.append(line)
 			with self._atomic_write(env_path) as f_tmp:
@@ -1134,30 +1134,35 @@ class SystemStats(object):
 		"""Get operating system information."""
 
 		def _fetch():
-			osname = ''
+			os_name = ''
 			try:
-				os_info = {}
-				with open(self.cfg.os_release_file) as osr:
-					for line in osr:
-						line = line.strip()
-						if '=' in line:
-							key, value = line.split('=', 1)
-							os_info[key] = value.strip().replace('"', '')
-				id_like = os_info.get('ID_LIKE', '').title()
-				version_codename = os_info.get('VERSION_CODENAME', '')
-				debian_version_full = os_info.get('DEBIAN_VERSION_FULL') or os_info.get('VERSION_ID', '')
-				osname = ' '.join(filter(None, [id_like, debian_version_full, f'({version_codename})']))
-			except (IOError, OSError):
-				logging.warning('OS release file not found: %s', self.cfg.os_release_file)
-			kernelver = ''
+				info = platform.freedesktop_os_release()
+				vendor = info.get('ID_LIKE', info.get('ID', '')).title()
+				version = info.get('DEBIAN_VERSION_FULL') or info.get('VERSION_ID', '')
+				codename = info.get('VERSION_CODENAME', '')
+				os_name = ' '.join(filter(None, [vendor, version, f'({codename})' if codename else None]))
+			except (AttributeError, OSError):
+				os_name = platform.platform()
+
+			kernel_ver = ''
 			try:
-				kernel = os.uname()
-				sysname = kernel.sysname
-				kvpart = kernel.version.split()
-				buildno = kvpart[0]
-				builddate = dt.datetime.strptime(f'{kvpart[-1]}{kvpart[-5]}{kvpart[-4]} {kvpart[-3]}', '%Y%b%d %H:%M:%S').isoformat()
-				release = ''.join(filter(None, [kernel.release.split('-')[0], buildno, f'({builddate})']))
-				raw_machine = kernel.machine
+				sysname = platform.system()
+				release = platform.release()
+				version_str = platform.version()
+				build_no = version_str.split()[0] if version_str else ''
+				build_date = ''
+				if iso_match := re.search(r'(\d{4}-\d{2}-\d{2})', version_str):
+					build_date = iso_match.group(1)
+				else:
+					kvpart = version_str.split()
+					if len(kvpart) >= 5:
+						try:
+							d_str = f'{kvpart[-1]}{kvpart[-5]}{kvpart[-4]} {kvpart[-3]}'
+							build_date = dt.datetime.strptime(d_str, '%Y%b%d %H:%M:%S').isoformat()
+						except (ValueError, IndexError):
+							pass
+				rel_info = ''.join(filter(None, [release.split('-')[0], build_no, f'({build_date})' if build_date else None]))
+				raw_machine = platform.machine()
 				arch_map = {
 					'aarch64': 'arm64',
 					'armv8l': 'armhf',
@@ -1176,10 +1181,10 @@ class SystemStats(object):
 					's390x': 's390x',
 				}
 				machine = arch_map.get(raw_machine, raw_machine)
-				kernelver = ' '.join(filter(None, [sysname, release, machine]))
+				kernel_ver = ' '.join(filter(None, [sysname, rel_info, machine]))
 			except Exception as e:
 				logging.error('Unexpected error: %s', e)
-			return f'{", ".join(filter(None, [osname, kernelver]))}'
+			return f'{", ".join(filter(None, [os_name, kernel_ver]))}'
 
 		return self._get_cached('os_info', _fetch, ttl=3600, default='')
 
