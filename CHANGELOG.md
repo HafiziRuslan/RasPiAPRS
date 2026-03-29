@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta10] - (2026-03-30T07:43:07+08:00)
+## [beta10] - (2026-03-30T07:51:11+08:00)
 
-- 2 commit(s) contributed to the release.
+- 3 commit(s) contributed to the release.
 
 ### 🐛 Bug Fixes in beta10
 
@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta10
 
+- [b6181f7](https://github.com/HafiziRuslan/RasPiAPRS/commit/b6181f78146d03cc84b06613922b2ff9618a29bb) chore(main): disable aprs consumer task *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T07:51:11+08:00*
 - [951b205](https://github.com/HafiziRuslan/RasPiAPRS/commit/951b2057669bc6ab44135f78470362a2635da058) chore(version): bump version to 0.1b10 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T07:39:26+08:00*
 
 ---
@@ -1279,4 +1280,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-30T07:44:05.921058248+08:00
+generated using git-cliff on 2026-03-30T07:52:01.973149506+08:00
