@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta9] - (2026-03-28T19:26:01+08:00)
+## [beta9] - (2026-03-29T19:44:46+08:00)
 
-- 16 commit(s) contributed to the release.
-- 4 day(s) passed between the first and last commit.
-- 5 day(s) passed between releases.
+- 18 commit(s) contributed to the release.
+- 5 day(s) passed between the first and last commit.
+- 6 day(s) passed between releases.
 
 ### 🚀 Features in beta9
 
@@ -35,6 +35,11 @@ All notable changes to this project will be documented in this file.
 ### 📚 Documentation in beta9
 
 - [d6ec728](https://github.com/HafiziRuslan/RasPiAPRS/commit/d6ec72862565cf8fbae343bbd8745b4104e4aaff) docs(sbom): update sbom.json serial number and uv version *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-25T13:23:17+08:00*
+
+### ⚙️ Miscellaneous Tasks in beta9
+
+- [fc06261](https://github.com/HafiziRuslan/RasPiAPRS/commit/fc062612259117fc70f33294f9c54cb57151ffe7) chore(dependencies):upgrade aiohttp to 3.13.4 and add new packages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-29T19:44:46+08:00*
+- [bad254a](https://github.com/HafiziRuslan/RasPiAPRS/commit/bad254ad2f5a2ab3dad7d4e4a1cd29f80052618b) chore(config): disable additional sender in .env.sample *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-29T19:42:22+08:00*
 
 ---
 
@@ -1241,4 +1246,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-28T19:26:56.783208321+08:00
+generated using git-cliff on 2026-03-29T19:48:37.548001764+08:00
