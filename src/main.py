@@ -70,7 +70,7 @@ class Config:
 	project_url: str = 'https://git.new/RasPiAPRS'
 	sleep: int = 600
 	call: str = 'N0CALL'
-	aprs_passcode: str | int = 0
+	aprs_passcode: str | int = -1
 	ssid: int = 0
 	from_call: str = call
 	to_call: str = 'APP642'
@@ -82,6 +82,7 @@ class Config:
 	symbol_overlay: str | None = None
 	aprsis_server: str = 'rotate.aprs2.net'
 	aprsis_port: int = 14580
+	aprsis_filter: str | None = None
 	phg_power: float | None = 0.1
 	phg_height: float | None = 5
 	phg_gain: float | None = 3
@@ -244,6 +245,7 @@ class Config:
 		self.phg_direction = self._env_get_float('PHG_DIRECTION', 0)
 		self.aprsis_server = os.getenv('APRSIS_SERVER', 'rotate.aprs2.net')
 		self.aprsis_port = self._env_get_int('APRSIS_PORT', 14580, 'APRSIS Port value error')
+		self.aprsis_filter = os.getenv('APRSIS_FILTER')
 		self.aprs_passcode = os.getenv('APRS_PASSCODE')
 		self.gpsd_enabled = self._env_get_bool('GPSD_ENABLE')
 		if self.gpsd_enabled:
@@ -1568,7 +1570,13 @@ class APRSSender:
 	async def connect(self):
 		"""Establish connection to APRS-IS with retries."""
 		logging.info('Connecting to APRS-IS server %s:%d as %s', self.cfg.aprsis_server, self.cfg.aprsis_port, self.cfg.from_call)
-		self.ais = aprslib.IS(self.cfg.from_call, passwd=self.cfg.aprs_passcode, host=self.cfg.aprsis_server, port=self.cfg.aprsis_port)
+		self.ais = aprslib.IS(
+			callsign=self.cfg.from_call,
+			passwd=self.cfg.aprs_passcode,
+			host=self.cfg.aprsis_server,
+			port=self.cfg.aprsis_port,
+			filter=self.cfg.aprsis_filter,
+		)
 		loop = asyncio.get_running_loop()
 		max_retries = 5
 		retry_delay = 5
