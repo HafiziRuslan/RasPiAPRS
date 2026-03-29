@@ -1922,11 +1922,11 @@ async def main():
 	cfg = Config()
 	health_check_task = None
 	gps_polling_task = None
-	aprs_consumer_task = None
+	# aprs_consumer_task = None
 	while True:
 		reload_event.clear()
 		aprs_sender, tg_logger, timer, sb, sys_stats, scheduled_msg_handler, gps_handler = await initialize_session(cfg)
-		aprs_consumer_task = asyncio.create_task(aprs_sender.run_consumer())
+		# aprs_consumer_task = asyncio.create_task(aprs_sender.run_consumer())
 		if cfg.gpsd_enabled:
 			health_check_task = asyncio.create_task(gps_handler.run_health_check())
 			gps_polling_task = asyncio.create_task(gps_handler.run_polling())
@@ -1946,8 +1946,8 @@ async def main():
 					health_check_task.cancel()
 				if gps_polling_task:
 					gps_polling_task.cancel()
-				if aprs_consumer_task:
-					aprs_consumer_task.cancel()
+				# if aprs_consumer_task:
+				# 	aprs_consumer_task.cancel()
 				aprs_sender.close()
 		if not reload_event.is_set():
 			break
