@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta9] - (2026-03-30T03:08:05+08:00)
+## [beta9] - (2026-03-30T03:32:28+08:00)
 
-- 25 commit(s) contributed to the release.
+- 26 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta9
 
+- [b2802e7](https://github.com/HafiziRuslan/RasPiAPRS/commit/b2802e741abf66b9bbae70734e8e1fc8e47bfe86) refactor(main): simplify aprslib.IS initialization *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T03:32:28+08:00*
 - [3dfdca4](https://github.com/HafiziRuslan/RasPiAPRS/commit/3dfdca431ca04863f87b2687537b5a6e6746e56b) refactor(APRSConverter): simplify APRS coordinate conversions using aprslib.util *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T03:08:05+08:00*
 - [3562d27](https://github.com/HafiziRuslan/RasPiAPRS/commit/3562d2726e06dfbf580d3d14870aff4ad41ebf2a) refactor(Config): simplify Config class fields and logging setup *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-29T22:17:47+08:00*
 - [bc53f02](https://github.com/HafiziRuslan/RasPiAPRS/commit/bc53f022b48a889162b917f842bcfacf32f622d6) refactor(server): rename server, port, and passcode variables for clarity *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-29T21:07:33+08:00*
@@ -1253,4 +1254,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-30T03:09:07.590626126+08:00
+generated using git-cliff on 2026-03-30T03:33:21.347823216+08:00
