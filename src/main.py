@@ -1616,7 +1616,8 @@ class APRSSender:
 					raise APRSConnectionError('Failed to initialize aprslib.IS object.')
 				logging.debug('Attempting connect to APRS-IS %s', self.ais.server)
 				await loop.run_in_executor(None, self.ais.connect)
-				logging.info('Connected to APRS-IS server %s:%d as %s', self.cfg.aprsis_server, self.cfg.aprsis_port, self.cfg.from_call)
+				if self.ais._connected:
+					logging.info('Connected to APRS-IS server %s:%d as %s', self.ais.server[0], self.ais.server[1], self.ais.callsign)
 				if self.cfg.aprsis_filter:
 					await loop.run_in_executor(None, self.ais.set_filter, self.cfg.aprsis_filter)
 					logging.info('APRS-IS filter set to: %s', self.cfg.aprsis_filter)
