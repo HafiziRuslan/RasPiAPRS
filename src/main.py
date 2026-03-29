@@ -1614,13 +1614,13 @@ class APRSSender:
 				if self.ais is None:
 					logging.critical('Failed to create aprslib.IS instance; object is None.')
 					raise APRSConnectionError('Failed to initialize aprslib.IS object.')
-				logging.debug('Attempting to connect with APRS-IS instance: %s', self.ais)
+				logging.debug('Attempting connect to APRS-IS %s', self.ais.server)
 				await loop.run_in_executor(None, self.ais.connect)
 				logging.info('Connected to APRS-IS server %s:%d as %s', self.cfg.aprsis_server, self.cfg.aprsis_port, self.cfg.from_call)
 				if self.cfg.aprsis_filter:
 					await loop.run_in_executor(None, self.ais.set_filter, self.cfg.aprsis_filter)
 					logging.info('APRS-IS filter set to: %s', self.cfg.aprsis_filter)
-					await loop.run_in_executor(None, self.ais.consumer, self._aprs_callback, raw=True)
+					await loop.run_in_executor(None, self.ais.consumer(self._aprs_callback, raw=True))
 				return
 			except APRSConnectionError as err:
 				logging.warning('APRS connection error (attempt %d/%d): %s', attempt + 1, max_retries, err)
