@@ -61,7 +61,7 @@ class Config:
 	tmp_dir: str = '/var/tmp/RasPiAPRS'
 	lib_dir: str = '/var/lib/RasPiAPRS'
 	log_dir: str = '/var/log/RasPiAPRS'
-	mmdvmhost_file: str = '/etc/mmdvmhost'
+	mmdvmhost_file: str = ''
 	gps_file: str = '/var/tmp/RasPiAPRS/gps.json'
 	location_id_file: str = '/var/tmp/RasPiAPRS/location_id.tmp'
 	status_file: str = '/var/tmp/RasPiAPRS/status.tmp'
@@ -203,11 +203,14 @@ class Config:
 			current_mtime = os.path.getmtime(env_file)
 		except OSError:
 			current_mtime = 0.0
-		if self._env_mtime != 0.0 and current_mtime <= self._env_mtime:
+		if self._env_mtime != 0.0 and current_mtime <= self._env_mtime and self.mmdvmhost_file:
 			return
 
 		self._env_mtime = current_mtime
 		dotenv.load_dotenv(env_file, override=True)
+		self.log_level_raw = self._env_get_int('LOG_LEVEL', 2)
+		self.log_max_bytes = self._env_get_float('LOG_MAX_BYTES', 1)
+		self.log_max_count = self._env_get_int('LOG_MAX_COUNT', 3)
 		self.call = os.getenv('APRS_CALL', 'N0CALL')
 		self.ssid = self._env_get_int('APRS_SSID', 0, 'SSID value error')
 		self.sleep = self._env_get_int('SLEEP', 600, 'Sleep value error')
@@ -216,6 +219,26 @@ class Config:
 		self.latitude = self._env_get_float('APRS_LATITUDE', 0.0)
 		self.longitude = self._env_get_float('APRS_LONGITUDE', 0.0)
 		self.altitude = self._env_get_float('APRS_ALTITUDE', 0.0)
+		mmdvm_file_from_env = os.getenv('MMDVMHOST_FILE')
+		if mmdvm_file_from_env:
+			self.mmdvmhost_file = mmdvm_file_from_env
+		else:
+			self.mmdvmhost_file = ''
+			for proc in psutil.process_iter(['name', 'cmdline']):
+				if proc.info['name'] == 'MMDVMHost' and proc.info['cmdline']:
+					for arg in proc.info['cmdline']:
+						if 'MMDVM.ini' in arg or 'mmdvmhost' in arg:
+							if os.path.isfile(arg) and os.access(arg, os.R_OK):
+								self.mmdvmhost_file = arg
+								logging.info('Found MMDVMHost configuration from active process: %s', self.mmdvmhost_file)
+								break
+					if self.mmdvmhost_file:
+						break
+			if not self.mmdvmhost_file:
+				for p in ['/etc/mmdvmhost', '/etc/MMDVM.ini', '/opt/MMDVMHost/MMDVM.ini']:
+					if os.path.isfile(p) and os.access(p, os.R_OK):
+						self.mmdvmhost_file = p
+						break
 		self.phg_power = self._env_get_float('PHG_POWER', 0.1)
 		self.phg_height = self._env_get_float('PHG_HEIGHT', 5.0)
 		self.phg_gain = self._env_get_float('PHG_GAIN', 3)
@@ -253,9 +276,6 @@ class Config:
 		self.aprsmysunday_enabled = self._env_get_bool('APRSMYSUNDAY_ENABLE')
 		self.aprshamfinity_enabled = self._env_get_bool('APRSHAMFINITY_ENABLE')
 		self.additional_sender_raw = os.getenv('ADDITIONAL_SENDER')
-		self.log_level_raw = self._env_get_int('LOG_LEVEL', 2)
-		self.log_max_bytes = self._env_get_float('LOG_MAX_BYTES', 1)
-		self.log_max_count = self._env_get_int('LOG_MAX_COUNT', 3)
 		self.validate()
 
 	def validate(self):
@@ -994,6 +1014,8 @@ class SystemStats(object):
 		self._cache = {}
 		self._temp_history = deque()
 		self._mem_history = deque()
+		self._mmdvmhost_mtime: float = 0.0
+		self._mmdvmhost_raw_config: dict = {}
 		self._cpu_history = deque()
 
 	def _get_cached(self, key, func, ttl=10, default=None):
@@ -1198,58 +1220,76 @@ class SystemStats(object):
 		"""Get PHG code from MMDVMHost configuration."""
 		return self._get_cached('mmdvm_all', self._fetch_mmdvm_all, ttl=3600, default={}).get('phg', '')
 
+	@staticmethod
+	def _calc_phg(p_val, h_val, g_val, d_val):
+		"""Helper to calculate PHG string from power, height, gain, and direction."""
+		try:
+			p = min(9, int(math.sqrt(float(p_val or 0))))
+			h_val_f = float(h_val or 0)
+			h_idx = int(math.log2(max(10, h_val_f) / 10))
+			h = chr(48 + max(0, min(9, h_idx)))
+			g = min(9, int(float(g_val or 0)))
+			d = min(8, int(float(d_val or 0)) // 45)
+			return f'PHG{p}{h}{g}{d}'
+		except (ValueError, TypeError, ZeroDivisionError):
+			return ''
+
 	def _fetch_mmdvm_all(self):
 		"""Unified fetch for MMDVM info and PHG from MMDVMHost configuration."""
-
-		def calc_phg(p_val, h_val, g_val, d_val):
-			"""Helper to calculate PHG string from power, height, gain, and direction."""
-			try:
-				p = min(9, int(math.sqrt(float(p_val or 0))))
-				h_idx = int(math.log2(max(10, float(h_val or 0)) / 10))
-				h = chr(48 + max(0, h_idx))
-				g = min(9, int(float(g_val or 0)))
-				d = min(8, int(float(d_val or 0)) // 45)
-				return f'PHG{p}{h}{g}{d}'
-			except (ValueError, TypeError, ZeroDivisionError):
-				return ''
-
-		phg_str = calc_phg(self.cfg.phg_power, self.cfg.phg_height, self.cfg.phg_gain, self.cfg.phg_direction)
-		conf = {}
-		section = ''
+		phg_str = self._calc_phg(self.cfg.phg_power, self.cfg.phg_height, self.cfg.phg_gain, self.cfg.phg_direction)
+		mmdvm_file_path = self.cfg.mmdvmhost_file
+		if not (os.path.isfile(mmdvm_file_path) and os.access(mmdvm_file_path, os.R_OK)):
+			logging.debug('MMDVMHost file not found or not readable: %s', self.cfg.mmdvmhost_file)
+			return {'info': '', 'phg': phg_str}
+		current_mtime = os.path.getmtime(mmdvm_file_path)
+		if current_mtime == self._mmdvmhost_mtime and self._mmdvmhost_raw_config:
+			conf = self._mmdvmhost_raw_config
+		else:
+			conf = {}
+			self._mmdvmhost_mtime = current_mtime
+		section = 'GLOBAL'
 		try:
-			with open(self.cfg.mmdvmhost_file, 'r') as f:
+			with open(mmdvm_file_path, 'r', encoding='utf-8', errors='replace') as f:
 				for line in f:
 					line = line.strip()
-					if not line or line.startswith(('#', ';')):
+					if not line or line.startswith(('#', ';', '!')):
 						continue
-					if line.startswith('[') and line.endswith(']'):
-						section = line[1:-1].upper()
+					if line.startswith('[') and ']' in line:
+						section = line[1 : line.find(']')].strip().upper()
 					elif '=' in line:
-						k, v = line.split('=', 1)
-						key = k.strip()
-						val = v.strip()
+						parts = line.split('=', 1)
+						key = parts[0].strip()
+						val = parts[1].split('#', 1)[0].split(';', 1)[0].strip()
 						conf[f'{section}:{key}'] = val
 						if key not in conf:
 							conf[key] = val
-		except (IOError, OSError):
-			logging.warning('MMDVMHost file not found: %s', self.cfg.mmdvmhost_file)
+			self._mmdvmhost_raw_config = conf
+		except (IOError, OSError) as e:
+			logging.debug('Could not read MMDVMHost file %s: %s', self.cfg.mmdvmhost_file, e)
 			return {'info': '', 'phg': phg_str}
-
-		rx_freq, tx_freq = int(conf.get('RXFrequency', 0)), int(conf.get('TXFrequency', 0))
-		tx = humanize.metric(tx_freq, 'Hz', precision=len(str(tx_freq).rstrip('0')) or 1)
-		offset = rx_freq - tx_freq
-		shift = f'({"+" if offset > 0 else ""}{humanize.metric(offset, "Hz", precision=2)})' if offset != 0 else None
-		cc, ts = '', ''
-		if conf.get('DMR:Enable') == '1':
-			cc = f'C{conf.get("ColorCode", 0)}'
-			s1, s2 = conf.get('Slot1') == '1', conf.get('Slot2') == '1'
+		try:
+			rx_f = int(conf.get('RXFrequency', 0))
+			tx_f = int(conf.get('TXFrequency', 0))
+			tx_str = humanize.metric(tx_f, 'Hz', precision=len(str(tx_f).rstrip('0')) or 1)
+			offset = rx_f - tx_f
+			shift = f'({"+" if offset > 0 else ""}{humanize.metric(offset, "Hz", precision=2)})' if offset != 0 else None
+		except (ValueError, TypeError):
+			tx_str, shift = '', None
+		cc_ts = ''
+		if conf.get('DMR:Enable', conf.get('Enable')) == '1':
+			cc = f'C{conf.get("DMR:ColorCode", conf.get("ColorCode", "0"))}'
+			s1 = conf.get('DMR:Slot1', conf.get('Slot1', '0')) == '1'
+			s2 = conf.get('DMR:Slot2', conf.get('Slot2', '0')) == '1'
 			ts = 'S1S2' if s1 and s2 else ('S1' if s1 else ('S2' if s2 else ''))
-			ccts = ''.join(filter(None, [cc, ts]))
-		info_str = f'{" ".join(filter(None, [tx, shift, ccts]))}'
-
+			cc_ts = cc + ts
+		info_str = ' '.join(filter(None, [tx_str, shift, cc_ts]))
 		if not phg_str:
-			phg_str = calc_phg(conf.get('INFO:Power', 0), conf.get('INFO:Height', 0), conf.get('INFO:Gain', 3), conf.get('INFO:Direction', 0))
-
+			phg_str = self._calc_phg(
+				conf.get('INFO:Power', conf.get('Power')),
+				conf.get('INFO:Height', conf.get('Height')),
+				conf.get('INFO:Gain', conf.get('Gain', 3)),
+				conf.get('INFO:Direction', conf.get('Direction', 0)),
+			)
 		return {'info': info_str, 'phg': phg_str}
 
 
