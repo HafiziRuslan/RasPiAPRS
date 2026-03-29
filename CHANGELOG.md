@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta9] - (2026-03-30T04:08:37+08:00)
+## [beta9] - (2026-03-30T05:21:38+08:00)
 
-- 29 commit(s) contributed to the release.
+- 30 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
 ### 🚀 Features in beta9
 
+- [b251795](https://github.com/HafiziRuslan/RasPiAPRS/commit/b2517952d7263569669daf42dab5c1e0608df24c) feat(aprs): add support for APRS message processing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T05:21:38+08:00*
 - [450acf9](https://github.com/HafiziRuslan/RasPiAPRS/commit/450acf93e1f23a66dea5247203967c16db20b677) feat(aprs): update APRS-IS configuration and filter handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T02:32:50+08:00*
 - [49e787c](https://github.com/HafiziRuslan/RasPiAPRS/commit/49e787c3f9bd3786cc10068d5249ed41790fe299) feat(monitor): improve memory usage tracking and kernel version formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-27T10:39:14+08:00*
 - [fe98100](https://github.com/HafiziRuslan/RasPiAPRS/commit/fe98100fb4ae6a7dd5da5b54377d2cf690baaaa3) feat(anyio): update anyio to 4.13.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-25T10:34:54+08:00*
@@ -1257,4 +1258,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-30T04:09:29.295101577+08:00
+generated using git-cliff on 2026-03-30T05:22:28.005846311+08:00
