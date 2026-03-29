@@ -1559,23 +1559,37 @@ class APRSSender:
 	async def connect(self):
 		"""Establish connection to APRS-IS with retries."""
 		logging.info('Connecting to APRS-IS server %s:%d as %s', self.cfg.aprsis_server, self.cfg.aprsis_port, self.cfg.from_call)
-		self.ais = aprslib.IS(
-			callsign=self.cfg.from_call, passwd=self.cfg.aprs_passcode, host=self.cfg.aprsis_server, port=self.cfg.aprsis_port
-		).set_filter(self.cfg.aprsis_filter)
 		loop = asyncio.get_running_loop()
 		max_retries = 5
 		retry_delay = 5
 		for attempt in range(max_retries):
 			try:
+				self.ais = aprslib.IS(
+					callsign=self.cfg.from_call, passwd=self.cfg.aprs_passcode, host=self.cfg.aprsis_server, port=self.cfg.aprsis_port
+				)
+				if self.ais is None:
+					logging.critical('Failed to create aprslib.IS instance; object is None.')
+					raise APRSConnectionError('Failed to initialize aprslib.IS object.')
+				logging.debug('Attempting to connect with APRS-IS instance: %s', self.ais)
 				await loop.run_in_executor(None, self.ais.connect)
 				logging.info('Connected to APRS-IS server %s:%d as %s', self.cfg.aprsis_server, self.cfg.aprsis_port, self.cfg.from_call)
+				if self.cfg.aprsis_filter:
+					await loop.run_in_executor(None, self.ais.set_filter, self.cfg.aprsis_filter)
+					logging.info('APRS-IS filter set to: %s', self.cfg.aprsis_filter)
 				return
 			except APRSConnectionError as err:
 				logging.warning('APRS connection error (attempt %d/%d): %s', attempt + 1, max_retries, err)
 				if attempt < max_retries - 1:
 					await asyncio.sleep(retry_delay)
 					retry_delay = min(retry_delay * 2, 60)
-		logging.error('Connection error, exiting')
+			except Exception as e:
+				logging.error(
+					'Unexpected error during APRS-IS object creation or connection (attempt %d/%d): %s', attempt + 1, max_retries, e, exc_info=True
+				)
+				if attempt < max_retries - 1:
+					await asyncio.sleep(retry_delay)
+					retry_delay = min(retry_delay * 2, 60)
+		logging.critical('All attempts to connect to APRS-IS failed, exiting.')
 		sys.exit(getattr(os, 'EX_NOHOST', 1))
 
 	async def send_packet(self, payload, log_context='packet'):
