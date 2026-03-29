@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta9] - (2026-03-30T03:32:28+08:00)
+## [beta9] - (2026-03-30T04:08:37+08:00)
 
-- 26 commit(s) contributed to the release.
+- 29 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
@@ -24,6 +24,9 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta9
 
+- [27eb214](https://github.com/HafiziRuslan/RasPiAPRS/commit/27eb2148cde2703ec9dae9ff0b9f308b6559da48) refactor(aprs-is): improve connection handling with retries and error logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T04:08:37+08:00*
+- [2b94866](https://github.com/HafiziRuslan/RasPiAPRS/commit/2b94866752a11cc5c84c2c7bbeb884b94bab4b10) refactor(main.py):optimize task scheduling and message handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T03:55:35+08:00*
+- [15c312a](https://github.com/HafiziRuslan/RasPiAPRS/commit/15c312abe706d97bdc049f354ecf9989d77ab984) refactor(env): update .env.sample with improved comments and formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T03:45:26+08:00*
 - [b2802e7](https://github.com/HafiziRuslan/RasPiAPRS/commit/b2802e741abf66b9bbae70734e8e1fc8e47bfe86) refactor(main): simplify aprslib.IS initialization *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T03:32:28+08:00*
 - [3dfdca4](https://github.com/HafiziRuslan/RasPiAPRS/commit/3dfdca431ca04863f87b2687537b5a6e6746e56b) refactor(APRSConverter): simplify APRS coordinate conversions using aprslib.util *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T03:08:05+08:00*
 - [3562d27](https://github.com/HafiziRuslan/RasPiAPRS/commit/3562d2726e06dfbf580d3d14870aff4ad41ebf2a) refactor(Config): simplify Config class fields and logging setup *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-29T22:17:47+08:00*
@@ -1254,4 +1257,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-30T03:33:21.347823216+08:00
+generated using git-cliff on 2026-03-30T04:09:29.295101577+08:00
