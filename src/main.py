@@ -1572,6 +1572,17 @@ class APRSSender:
 		self.ais = None
 		self.telem_seq = telem_seq
 
+	async def run_consumer(self):
+		"""Run the APRS-IS consumer in the background."""
+		loop = asyncio.get_running_loop()
+		while True:
+			if self.ais:
+				try:
+					await loop.run_in_executor(None, self.ais.consumer(self._aprs_callback, raw=True))
+				except Exception as e:
+					logging.error('APRS consumer error: %s', e)
+			await asyncio.sleep(5)
+
 	def _get_timestamps(self, source_time: dt.datetime | None = None) -> tuple[str, str]:
 		"""Generate APRS and ISO8601 timestamps."""
 		ctime = source_time or dt.datetime.now(dt.timezone.utc)
@@ -1631,7 +1642,7 @@ class APRSSender:
 				if self.cfg.aprsis_filter:
 					await loop.run_in_executor(None, self.ais.set_filter, self.cfg.aprsis_filter)
 					logging.info('APRS-IS filter set to: %s', self.cfg.aprsis_filter)
-					await loop.run_in_executor(None, self.ais.consumer(self._aprs_callback, raw=True))
+					# await loop.run_in_executor(None, self.ais.consumer(self._aprs_callback, raw=True))
 				return
 			except APRSConnectionError as err:
 				logging.warning('APRS connection error (attempt %d/%d): %s', attempt + 1, max_retries, err)
@@ -1911,9 +1922,11 @@ async def main():
 	cfg = Config()
 	health_check_task = None
 	gps_polling_task = None
+	aprs_consumer_task = None
 	while True:
 		reload_event.clear()
 		aprs_sender, tg_logger, timer, sb, sys_stats, scheduled_msg_handler, gps_handler = await initialize_session(cfg)
+		aprs_consumer_task = asyncio.create_task(aprs_sender.run_consumer())
 		if cfg.gpsd_enabled:
 			health_check_task = asyncio.create_task(gps_handler.run_health_check())
 			gps_polling_task = asyncio.create_task(gps_handler.run_polling())
@@ -1933,6 +1946,8 @@ async def main():
 					health_check_task.cancel()
 				if gps_polling_task:
 					gps_polling_task.cancel()
+				if aprs_consumer_task:
+					aprs_consumer_task.cancel()
 				aprs_sender.close()
 		if not reload_event.is_set():
 			break
