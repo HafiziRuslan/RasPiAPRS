@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta9] - (2026-03-30T06:24:58+08:00)
+## [beta9] - (2026-03-30T06:52:44+08:00)
 
-- 33 commit(s) contributed to the release.
+- 34 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta9
 
+- [f9c17a1](https://github.com/HafiziRuslan/RasPiAPRS/commit/f9c17a184c117decbe66dff11216d2b10240ef7a) refactor(filter): refactor aprs-is filter construction logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T06:52:44+08:00*
 - [11942e1](https://github.com/HafiziRuslan/RasPiAPRS/commit/11942e163a897295b4f08051d21b4a7c74f6e8a2) refactor(data): Enhance APRS packet processing logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T06:24:58+08:00*
 - [46445ef](https://github.com/HafiziRuslan/RasPiAPRS/commit/46445ef759fee6250ac3a27ef5bbe992c4d1ec8b) refactor(connect): optimize connection logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T05:58:11+08:00*
 - [27eb214](https://github.com/HafiziRuslan/RasPiAPRS/commit/27eb2148cde2703ec9dae9ff0b9f308b6559da48) refactor(aprs-is): improve connection handling with retries and error logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T04:08:37+08:00*
@@ -1261,4 +1262,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-30T06:25:46.567315770+08:00
+generated using git-cliff on 2026-03-30T06:53:39.550653697+08:00
