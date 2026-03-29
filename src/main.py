@@ -57,50 +57,53 @@ from itu_appendix42 import ItuAppendix42
 
 @dataclass
 class Config:
-	etc_dir: str = '/etc'
 	tmp_dir: str = '/var/tmp/RasPiAPRS'
-	lib_dir: str = '/var/lib/RasPiAPRS'
 	log_dir: str = '/var/log/RasPiAPRS'
+	lib_dir: str = '/var/lib/RasPiAPRS'
 	mmdvmhost_file: str = ''
-	gps_file: str = '/var/tmp/RasPiAPRS/gps.json'
-	location_id_file: str = '/var/tmp/RasPiAPRS/location_id.tmp'
-	status_file: str = '/var/tmp/RasPiAPRS/status.tmp'
-	msg_tracking_file: str = '/var/lib/RasPiAPRS/msg_tracking.pkl'
-	nominatim_cache_file: str = '/var/lib/RasPiAPRS/nominatim_cache.pkl'
+	gps_file: str = f'{tmp_dir}/gps.json'
+	location_id_file: str = f'{tmp_dir}/location_id.tmp'
+	status_file: str = f'{tmp_dir}/status.tmp'
+	msg_tracking_file: str = f'{lib_dir}/msg_tracking.pkl'
+	nominatim_cache_file: str = f'{lib_dir}/nominatim_cache.pkl'
 	app_name: str = 'RasPiAPRS'
 	project_url: str = 'https://git.new/RasPiAPRS'
-	from_call: str = 'N0CALL'
-	to_call: str = 'APP642'
-	call: str = 'N0CALL'
-	ssid: int = 0
 	sleep: int = 600
-	symbol_table: str = '/'
-	symbol: str = 'n'
-	symbol_overlay: str | None = None
+	call: str = 'N0CALL'
+	aprs_passcode: str | int = 0
+	ssid: int = 0
+	from_call: str = call
+	to_call: str = 'APP642'
+	altitude: float = 0.0
 	latitude: float = 0.0
 	longitude: float = 0.0
-	altitude: float = 0.0
+	symbol: str = 'n'
+	symbol_table: str = '/'
+	symbol_overlay: str | None = None
 	aprsis_server: str = 'rotate.aprs2.net'
 	aprsis_port: int = 14580
-	aprs_passcode: str | int = 0
+	phg_power: float | None = 0.1
+	phg_height: float | None = 5
+	phg_gain: float | None = 3
+	phg_direction: float | None = 0
 	gpsd_enabled: bool = False
 	gpsd_host: str | None = 'localhost'
 	gpsd_port: int | None = 2947
 	gpsd_sock: str | None = None
 	smartbeaconing_enabled: bool = False
-	smartbeaconing_fast_speed: int = 100
-	smartbeaconing_slow_speed: int = 10
 	smartbeaconing_fast_rate: int = 60
-	smartbeaconing_slow_rate: int = 600
+	smartbeaconing_fast_speed: int = 100
 	smartbeaconing_min_turn_angle: int = 28
-	smartbeaconing_turn_slope: int = 255
 	smartbeaconing_min_turn_time: int = 5
+	smartbeaconing_slow_rate: int = 600
+	smartbeaconing_slow_speed: int = 10
+	smartbeaconing_turn_slope: int = 255
 	telegram_enabled: bool = False
 	telegram_token: str | None = None
 	telegram_chat_id: str | None = None
 	telegram_topic_id: int | None = None
-	telegram_msg_topic_id: int | None = None
 	telegram_loc_topic_id: int | None = None
+	telegram_msg_topic_id: int | None = None
 	aprsphnet_enabled: bool = False
 	aprsthursday_enabled: bool = False
 	aprsaturday_enabled: bool = False
@@ -108,10 +111,6 @@ class Config:
 	aprshamfinity_enabled: bool = False
 	additional_sender: list[str] | None = None
 	additional_sender_raw: str | None = None
-	phg_power: float | None = 0.1
-	phg_height: float | None = 5
-	phg_gain: float | None = 3
-	phg_direction: float | None = 0
 	log_level_raw: int = 2
 	log_max_bytes: float = 1.0
 	log_max_count: int = 3
@@ -348,6 +347,9 @@ def configure_logging(cfg: Config):
 	if not os.path.exists(log_dir) or not os.access(log_dir, os.W_OK):
 		log_dir = 'logs'
 	os.makedirs(log_dir, exist_ok=True)
+	logger = logging.getLogger()
+	for handler in logger.handlers[:]:
+		logger.removeHandler(handler)
 	log_level_map = {
 		0: 100,  # OFF
 		1: logging.DEBUG,
@@ -357,7 +359,6 @@ def configure_logging(cfg: Config):
 		5: logging.CRITICAL,
 	}
 	log_level = log_level_map.get(cfg.log_level_raw)
-	logger = logging.getLogger()
 	logger.setLevel(log_level)
 	for name in ['aiohttp', 'aprslib', 'asyncio', 'geopy', 'gpsdclient', 'hpack', 'httpx', 'telegram', 'urllib3']:
 		logging.getLogger(name).setLevel(max(log_level, logging.WARNING))
