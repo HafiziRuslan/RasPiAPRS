@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta9] - (2026-03-30T05:45:35+08:00)
+## [beta9] - (2026-03-30T06:24:58+08:00)
 
-- 31 commit(s) contributed to the release.
+- 33 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
@@ -26,6 +26,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta9
 
+- [11942e1](https://github.com/HafiziRuslan/RasPiAPRS/commit/11942e163a897295b4f08051d21b4a7c74f6e8a2) refactor(data): Enhance APRS packet processing logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T06:24:58+08:00*
+- [46445ef](https://github.com/HafiziRuslan/RasPiAPRS/commit/46445ef759fee6250ac3a27ef5bbe992c4d1ec8b) refactor(connect): optimize connection logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T05:58:11+08:00*
 - [27eb214](https://github.com/HafiziRuslan/RasPiAPRS/commit/27eb2148cde2703ec9dae9ff0b9f308b6559da48) refactor(aprs-is): improve connection handling with retries and error logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T04:08:37+08:00*
 - [2b94866](https://github.com/HafiziRuslan/RasPiAPRS/commit/2b94866752a11cc5c84c2c7bbeb884b94bab4b10) refactor(main.py):optimize task scheduling and message handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T03:55:35+08:00*
 - [15c312a](https://github.com/HafiziRuslan/RasPiAPRS/commit/15c312abe706d97bdc049f354ecf9989d77ab984) refactor(env): update .env.sample with improved comments and formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T03:45:26+08:00*
@@ -1259,4 +1261,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-30T05:46:30.970302723+08:00
+generated using git-cliff on 2026-03-30T06:25:46.567315770+08:00
