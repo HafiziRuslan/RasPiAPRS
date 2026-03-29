@@ -43,6 +43,7 @@ from typing import NamedTuple
 
 import aiohttp
 import aprslib
+import aprslib.util
 import dotenv
 import humanize
 import psutil
@@ -536,31 +537,19 @@ class APRSConverter:
 	"""Utility class for APRS data conversions."""
 
 	@staticmethod
-	def _to_coord(val, pos_char, neg_char, width):
-		"""Format coordinate for APRS."""
-		direction = pos_char if val >= 0 else neg_char
-		val = abs(val)
-		deg = int(val)
-		minutes = (val - deg) * 60
-		return f'{deg:0{width}d}{minutes:05.2f}{direction}'
-
-	@classmethod
-	def lat_to_aprs(cls, lat):
+	def lat_to_aprs(lat):
 		"""Format latitude for APRS."""
-		return cls._to_coord(lat, 'N', 'S', 2)
+		return aprslib.util.latitude_to_ddm(lat)
 
-	@classmethod
-	def lon_to_aprs(cls, lon):
+	@staticmethod
+	def lon_to_aprs(lon):
 		"""Format longitude for APRS."""
-		return cls._to_coord(lon, 'E', 'W', 3)
+		return aprslib.util.longitude_to_ddm(lon)
 
 	@staticmethod
 	def alt_to_aprs(alt):
-		"""Format altitude for APRS (meters to feet)."""
-		alt_ft = alt / 0.3048 if alt else 0
-		alt_ft = max(-999999, alt_ft)
-		alt_ft = min(999999, alt_ft)
-		return f'/A={alt_ft:06.0f}'
+		"""Format altitude for APRS."""
+		return aprslib.util.comment_altitude(alt)
 
 	@staticmethod
 	def cse_to_aprs(cse):
