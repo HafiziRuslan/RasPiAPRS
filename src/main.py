@@ -326,14 +326,14 @@ class Config:
 			all_callsigns_for_group_filter.extend(self.additional_sender)
 		unique_filter_parts = set()
 		if all_callsigns_for_group_filter:
-			group_filter_string = 'g/' + '/'.join(sorted(set(all_callsigns_for_group_filter)))
+			group_filter_string = 'g/' + '/'.join(set(all_callsigns_for_group_filter))
 			unique_filter_parts.add(group_filter_string)
 		if self.aprsis_filter and self.aprsis_filter.strip():
 			for part in self.aprsis_filter.strip().split():
 				if part.strip():
 					unique_filter_parts.add(part.strip())
 		if unique_filter_parts:
-			self.aprsis_filter = ' '.join(sorted(list(unique_filter_parts)))
+			self.aprsis_filter = ' '.join(list(unique_filter_parts))
 		else:
 			self.aprsis_filter = None
 		logging.debug('Final constructed APRS-IS filter: %s', self.aprsis_filter)
@@ -1579,7 +1579,7 @@ class APRSSender:
 		logging.info('Received APRS packet: %s', packet)
 		try:
 			parsed_packet = aprslib.parse(packet)
-			if 'message' in parsed_packet:
+			if 'message' in parsed_packet.get('format') and not parsed_packet.get('response'):
 				from_call = parsed_packet.get('from', 'UNKNOWN')
 				addresse = parsed_packet.get('addresse', 'UNKNOWN')
 				message_text = parsed_packet.get('message_text', '')
@@ -1595,6 +1595,13 @@ class APRSSender:
 					f'{f"MsgNo: {msg_no}" if msg_no else ""}\nMessage: <b>{message_text}</b>'
 				)
 				asyncio.create_task(self.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id))
+			else:
+				logging.debug(
+					'Ignoring non-message APRS packet of type %s from %s: %s',
+					parsed_packet.get('format', 'unknown'),
+					parsed_packet.get('from', 'UNKNOWN'),
+					packet,
+				)
 		except APRSParseError as e:
 			logging.warning('Failed to parse incoming APRS packet: %s - Raw: %s', e, packet)
 		except Exception as e:
