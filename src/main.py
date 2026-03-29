@@ -1783,7 +1783,7 @@ def should_send_position(cfg, timer_tick, sb, gps_data):
 	return (cfg.gpsd_enabled and cfg.smartbeaconing_enabled and sb.should_send(gps_data)) or (timer_tick % 1200 == 1)
 
 
-def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, scheduled_msg_handler):
+def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender):
 	class Task(NamedTuple):
 		condition: bool
 		func: Callable
@@ -1800,7 +1800,6 @@ def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, scheduled_msg_handler
 			{'gps_data': gps_data, 'is_moving': sb.is_moving, 'symbt': sb.symbt, 'symb': sb.symb},
 		),
 		Task(timer_tick % cfg.sleep == 1, aprs_sender.send_telemetry, (), {'gps_data': gps_data}),
-		Task(True, scheduled_msg_handler.send_all, (aprs_sender,), {'gps_data': gps_data}),
 	]
 
 
@@ -1812,18 +1811,28 @@ async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, sch
 			break
 		if timer_tick % 20 == 0:
 			sys_stats.update_metrics()
-		packet_sent = False
-		tasks = _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, scheduled_msg_handler)
-		for task in tasks:
+		packet_sent_this_cycle = False
+		position_packet_was_sent = False
+		tasks_to_run = _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender)
+		for task in tasks_to_run:
 			if task.condition:
 				try:
 					res = await task.func(*task.args, **task.kwargs)
 					sent = res if isinstance(res, bool) else True
 					if sent:
-						packet_sent = True
+						packet_sent_this_cycle = True
+						if task.func == aprs_sender.send_position:
+							position_packet_was_sent = True
 				except Exception as e:
 					logging.error('Error executing task %s: %s', task.func.__name__, e, exc_info=True)
-		if packet_sent:
+		if position_packet_was_sent and scheduled_msg_handler.messages:
+			try:
+				res = await scheduled_msg_handler.send_all(aprs_sender, gps_data=gps_data)
+				if res:
+					packet_sent_this_cycle = True
+			except Exception as e:
+				logging.error('Error executing scheduled message: %s', e, exc_info=True)
+		if packet_sent_this_cycle:
 			await aprs_sender.send_status(gps_data=gps_data)
 		await asyncio.sleep(1)
 		gps_data = await gps_handler.get_loc_and_sat()
