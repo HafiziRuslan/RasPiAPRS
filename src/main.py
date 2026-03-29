@@ -1578,7 +1578,7 @@ class APRSSender:
 		while True:
 			if self.ais:
 				try:
-					await loop.run_in_executor(None, self.ais.consumer(self._aprs_callback, raw=True))
+					await loop.run_in_executor(None, self.ais.consumer(self._aprs_callback, blocking=False, immortal=True, raw=True))
 				except Exception as e:
 					logging.error('APRS consumer error: %s', e)
 			await asyncio.sleep(5)
