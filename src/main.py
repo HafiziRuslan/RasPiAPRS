@@ -324,16 +324,19 @@ class Config:
 			all_callsigns_for_group_filter.append(self.from_call)
 		if self.additional_sender:
 			all_callsigns_for_group_filter.extend(self.additional_sender)
-		unique_filter_parts = set()
-		if all_callsigns_for_group_filter:
-			group_filter_string = 'g/' + '/'.join(set(all_callsigns_for_group_filter))
-			unique_filter_parts.add(group_filter_string)
+		filter_parts = []
 		if self.aprsis_filter and self.aprsis_filter.strip():
 			for part in self.aprsis_filter.strip().split():
-				if part.strip():
-					unique_filter_parts.add(part.strip())
-		if unique_filter_parts:
-			self.aprsis_filter = ' '.join(list(unique_filter_parts))
+				stripped_part = part.strip()
+				if stripped_part and stripped_part not in filter_parts:
+					filter_parts.append(stripped_part)
+		if all_callsigns_for_group_filter:
+			unique_group_calls = sorted(list(set(all_callsigns_for_group_filter)))
+			group_filter_string = 'g/' + '/'.join(unique_group_calls)
+			if group_filter_string not in filter_parts:
+				filter_parts.append(group_filter_string)
+		if filter_parts:
+			self.aprsis_filter = ' '.join(filter_parts)
 		else:
 			self.aprsis_filter = None
 		logging.debug('Final constructed APRS-IS filter: %s', self.aprsis_filter)
