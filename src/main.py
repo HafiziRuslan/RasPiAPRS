@@ -80,9 +80,9 @@ class Config:
 	latitude: float = 0.0
 	longitude: float = 0.0
 	altitude: float = 0.0
-	server: str = 'rotate.aprs2.net'
-	port: int = 14580
-	passcode: str | int = 0
+	aprsis_server: str = 'rotate.aprs2.net'
+	aprsis_port: int = 14580
+	aprs_passcode: str | int = 0
 	gpsd_enabled: bool = False
 	gpsd_host: str | None = 'localhost'
 	gpsd_port: int | None = 2947
@@ -243,9 +243,9 @@ class Config:
 		self.phg_height = self._env_get_float('PHG_HEIGHT', 5.0)
 		self.phg_gain = self._env_get_float('PHG_GAIN', 3)
 		self.phg_direction = self._env_get_float('PHG_DIRECTION', 0)
-		self.server = os.getenv('APRSIS_SERVER', 'rotate.aprs2.net')
-		self.port = self._env_get_int('APRSIS_PORT', 14580, 'APRSIS Port value error')
-		self.passcode = os.getenv('APRS_PASSCODE')
+		self.aprsis_server = os.getenv('APRSIS_SERVER', 'rotate.aprs2.net')
+		self.aprsis_port = self._env_get_int('APRSIS_PORT', 14580, 'APRSIS Port value error')
+		self.aprs_passcode = os.getenv('APRS_PASSCODE')
 		self.gpsd_enabled = self._env_get_bool('GPSD_ENABLE')
 		if self.gpsd_enabled:
 			self.gpsd_host = os.getenv('GPSD_HOST')
@@ -287,9 +287,9 @@ class Config:
 			self.symbol_overlay = self.symbol_table
 		else:
 			self.symbol_overlay = None
-		if not self.passcode:
+		if not self.aprs_passcode:
 			logging.warning('No passcode provided. Generating one.')
-			self.passcode = aprslib.passcode(self.call)
+			self.aprs_passcode = aprslib.passcode(self.call)
 		self.additional_sender = None
 		events_active = any(
 			[self.aprsphnet_enabled, self.aprsthursday_enabled, self.aprsaturday_enabled, self.aprsmysunday_enabled, self.aprshamfinity_enabled]
@@ -1566,15 +1566,15 @@ class APRSSender:
 
 	async def connect(self):
 		"""Establish connection to APRS-IS with retries."""
-		logging.info('Connecting to APRS-IS server %s:%d as %s', self.cfg.server, self.cfg.port, self.cfg.from_call)
-		self.ais = aprslib.IS(self.cfg.from_call, passwd=self.cfg.passcode, host=self.cfg.server, port=self.cfg.port)
+		logging.info('Connecting to APRS-IS server %s:%d as %s', self.cfg.aprsis_server, self.cfg.aprsis_port, self.cfg.from_call)
+		self.ais = aprslib.IS(self.cfg.from_call, passwd=self.cfg.aprs_passcode, host=self.cfg.aprsis_server, port=self.cfg.aprsis_port)
 		loop = asyncio.get_running_loop()
 		max_retries = 5
 		retry_delay = 5
 		for attempt in range(max_retries):
 			try:
 				await loop.run_in_executor(None, self.ais.connect)
-				logging.info('Connected to APRS-IS server %s:%d as %s', self.cfg.server, self.cfg.port, self.cfg.from_call)
+				logging.info('Connected to APRS-IS server %s:%d as %s', self.cfg.aprsis_server, self.cfg.aprsis_port, self.cfg.from_call)
 				return
 			except APRSConnectionError as err:
 				logging.warning('APRS connection error (attempt %d/%d): %s', attempt + 1, max_retries, err)
