@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta9] - (2026-03-29T20:12:20+08:00)
+## [beta9] - (2026-03-29T21:07:33+08:00)
 
-- 19 commit(s) contributed to the release.
+- 21 commit(s) contributed to the release.
 - 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
@@ -23,6 +23,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta9
 
+- [bc53f02](https://github.com/HafiziRuslan/RasPiAPRS/commit/bc53f022b48a889162b917f842bcfacf32f622d6) refactor(server): rename server, port, and passcode variables for clarity *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-29T21:07:33+08:00*
+- [82a59cf](https://github.com/HafiziRuslan/RasPiAPRS/commit/82a59cf98dddaeb844cc16d0549d2a57ebb69276) refactor(config): improve mmdvmhost handling and phg calculation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-29T21:03:49+08:00*
 - [b1c0edb](https://github.com/HafiziRuslan/RasPiAPRS/commit/b1c0edb74b8a2dcf99916e57324498033a8acb9a) refactor(os): use platform for OS info *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-29T20:12:20+08:00*
 - [1ff9f86](https://github.com/HafiziRuslan/RasPiAPRS/commit/1ff9f8691bba15c281a02e4082f63f77b046a85b) refactor(build): update uv version to 0.11.2 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-28T06:26:28+08:00*
 - [c58517f](https://github.com/HafiziRuslan/RasPiAPRS/commit/c58517f346d1403f57435c549fd990d9d9fe9f88) refactor(msg): improve tg_logger formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-28T05:19:17+08:00*
@@ -1247,4 +1249,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-29T20:13:48.997066715+08:00
+generated using git-cliff on 2026-03-29T21:24:27.633249037+08:00
