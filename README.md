@@ -27,13 +27,12 @@
 
 ## Key Functions
 
+* **APRS-IS Filtering**: Allows defining server-side filters to receive only relevant packets (e.g., specific callsigns or geographic radius), optimizing data usage.
 * **Telemetry Tracking**: Monitors specific hardware metrics including CPU temperature/load, memory/disk usage, and network traffic.
 * **SmartBeaconing**: Reduces network congestion by dynamically adjusting beacon frequency based on the station's speed and heading.
 * **Dynamic Symbols**: Automatically switches the APRS map icon (e.g., stationary vs. moving) based on real-time GPS motion.
 * **Remote Alerts**: Supports Telegram Bot API for sending system status updates directly to your device.
 * **Visualization**: Formats and logs telemetry data for display on platforms like `aprs.fi`.
-
-You can see an example of the metrics logged by my WPSD node [9W4GPA](https://aprs.fi/telemetry/a/9W4GPA?range=day).
 
 ## Requirements
 
@@ -98,6 +97,8 @@ git pull --autostash
 ```
 
 ## Telemetry Example
+
+You can see an example of the metrics logged by my WPSD node [9W4GPA](https://aprs.fi/telemetry/a/9W4GPA?range=day).
 
 This is the screenshot taken from `aprs.fi` of _CPU temperature_, _CPU load average_, _Memory used_, _Disk usage_ and _GPS usage_ from my WPSD node.
 
