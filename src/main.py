@@ -23,6 +23,7 @@ import json
 import logging
 import logging.handlers
 import math
+import multiprocessing
 import os
 import pickle
 import platform
@@ -1571,17 +1572,25 @@ class APRSSender:
 		self.geolocation = geolocation
 		self.ais = None
 		self.telem_seq = telem_seq
+		self._queue = multiprocessing.Queue()
+		self._consumer_proc = None
 
 	async def run_consumer(self):
-		"""Run the APRS-IS consumer in the background."""
+		"""Polls the multiprocessing queue for received packets."""
 		loop = asyncio.get_running_loop()
+		self._consumer_proc = multiprocessing.Process(
+			target=aprs_consumer_worker,
+			args=(self.cfg.from_call, self.cfg.aprs_passcode, self.cfg.aprsis_server, self.cfg.aprsis_port, self.cfg.aprsis_filter, self._queue),
+			daemon=True,
+		)
+		self._consumer_proc.start()
+		logging.debug('Started APRS consumer process (PID: %d)', self._consumer_proc.pid)
 		while True:
-			if self.ais:
-				try:
-					await loop.run_in_executor(None, self.ais.consumer(lambda: self._aprs_callback, raw=True))
-				except Exception as e:
-					logging.error('APRS consumer error: %s', e)
-			await asyncio.sleep(5)
+			try:
+				packet = await loop.run_in_executor(None, self._queue.get)
+				self._aprs_callback(packet)
+			except Exception as e:
+				logging.error('Error processing queued APRS packet: %s', e)
 
 	def _get_timestamps(self, source_time: dt.datetime | None = None) -> tuple[str, str]:
 		"""Generate APRS and ISO8601 timestamps."""
@@ -1811,12 +1820,30 @@ class APRSSender:
 		await self.tg_logger.log(tg_stat)
 
 	def close(self):
-		"""Close the APRS-IS connection."""
+		"""Close the APRS-IS connection and stop the consumer process."""
+		if self._consumer_proc and self._consumer_proc.is_alive():
+			self._consumer_proc.terminate()
 		if self.ais:
 			try:
 				self.ais.close()
 			except Exception:
 				pass
+
+
+def aprs_consumer_worker(call, passcode, server, port, aprs_filter, queue):
+	"""Isolated worker process to handle the blocking APRS-IS consumer."""
+	import time
+	import aprslib
+
+	while True:
+		try:
+			ais = aprslib.IS(callsign=call, passwd=passcode, host=server, port=port)
+			ais.connect()
+			if aprs_filter:
+				ais.set_filter(aprs_filter)
+			ais.consumer(lambda packet: queue.put(packet), raw=True)
+		except Exception:
+			time.sleep(10)
 
 
 def setup_signal_handling(reload_event):
@@ -1922,11 +1949,11 @@ async def main():
 	cfg = Config()
 	health_check_task = None
 	gps_polling_task = None
-	# aprs_consumer_task = None
+	aprs_consumer_task = None
 	while True:
 		reload_event.clear()
 		aprs_sender, tg_logger, timer, sb, sys_stats, scheduled_msg_handler, gps_handler = await initialize_session(cfg)
-		# aprs_consumer_task = asyncio.create_task(aprs_sender.run_consumer())
+		aprs_consumer_task = asyncio.create_task(aprs_sender.run_consumer())
 		if cfg.gpsd_enabled:
 			health_check_task = asyncio.create_task(gps_handler.run_health_check())
 			gps_polling_task = asyncio.create_task(gps_handler.run_polling())
@@ -1946,8 +1973,8 @@ async def main():
 					health_check_task.cancel()
 				if gps_polling_task:
 					gps_polling_task.cancel()
-				# if aprs_consumer_task:
-				# 	aprs_consumer_task.cancel()
+				if aprs_consumer_task:
+					aprs_consumer_task.cancel()
 				aprs_sender.close()
 		if not reload_event.is_set():
 			break
