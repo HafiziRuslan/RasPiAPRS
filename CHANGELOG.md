@@ -2,13 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta10] - (2026-03-30T07:51:11+08:00)
+## [beta10] - (2026-03-30T08:00:27+08:00)
 
-- 3 commit(s) contributed to the release.
+- 4 commit(s) contributed to the release.
+- 1 day(s) passed between the first and last commit.
+- 1 day(s) passed between releases.
 
 ### 🐛 Bug Fixes in beta10
 
 - [35a81d7](https://github.com/HafiziRuslan/RasPiAPRS/commit/35a81d733ba0435aa9938a659b589ec6dca8b00b) fix(aprs): update consumer callback and execution *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T07:43:07+08:00*
+
+### 🚜 Refactor in beta10
+
+- [6b91341](https://github.com/HafiziRuslan/RasPiAPRS/commit/6b9134183df743913923da141bc3e09c6370978a) refactor(aprs): move consumer to separate process *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T08:00:27+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta10
 
@@ -1280,4 +1286,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-30T07:52:01.973149506+08:00
+generated using git-cliff on 2026-03-30T08:01:25.118796506+08:00
