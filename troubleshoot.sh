@@ -234,7 +234,7 @@ else
 fi
 
 # Check dependencies
-DEPENDENCIES=("gcc" "git" "gpsd" "gpsd-clients" "python3-dev" "curl" "vnstat")
+DEPENDENCIES=("gcc" "git" "gpsd" "gpsd-clients" "python3-dev" "curl" "vnstat" "uv")
 MISSING_DEPS=0
 
 for dep in "${DEPENDENCIES[@]}"; do
