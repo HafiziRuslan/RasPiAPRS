@@ -1402,7 +1402,9 @@ class ScheduledMessageHandler:
 			tg_msg += f'\nPath: <b>{", ".join(path_list)}</b>'
 			wa_msg += f'\nPath: *{", ".join(path_list.replace("*", "\\*"))}*'
 		tg_msg += f'\nTo: <b>{parsed["addresse"]}</b>\n{f"MessageNo: <b>{parsed['msgNo']}</b>" if parsed.get("msgNo") else ""}\nMessage: <b>{parsed["message_text"]}</b>'
-		wa_msg += f'\nTo: *{parsed["addresse"]}*\n{f"MessageNo: *{parsed['msgNo']}*" if parsed.get("msgNo") else ""}\nMessage: *{parsed["message_text"]}*'
+		wa_msg += (
+			f'\nTo: *{parsed["addresse"]}*\n{f"MessageNo: *{parsed['msgNo']}*" if parsed.get("msgNo") else ""}\nMessage: *{parsed["message_text"]}*'
+		)
 		await aprs_sender.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
 		await aprs_sender.wa_logger.log(wa_msg)
 		return True
@@ -1606,6 +1608,45 @@ class APRSSender:
 		self._queue = multiprocessing.Queue()
 		self._consumer_proc = None
 
+	def _get_timestamps(self, source_time: dt.datetime | None = None) -> tuple[str, str]:
+		"""Generate APRS and ISO8601 timestamps."""
+		ctime = source_time or dt.datetime.now(dt.timezone.utc)
+		return ctime.strftime('%d%H%Mz'), ctime.astimezone().isoformat(timespec='seconds')
+
+	async def connect(self):
+		"""Establish connection to APRS-IS with retries."""
+		logging.info('Connecting to APRS-IS server %s:%d as %s', self.cfg.aprsis_server, self.cfg.aprsis_port, self.cfg.from_call)
+		loop = asyncio.get_running_loop()
+		max_retries = 5
+		retry_delay = 5
+		for attempt in range(max_retries):
+			try:
+				self.ais = aprslib.IS(
+					callsign=self.cfg.from_call, passwd=self.cfg.aprs_passcode, host=self.cfg.aprsis_server, port=self.cfg.aprsis_port
+				)
+				if self.ais is None:
+					logging.critical('Failed to create aprslib.IS instance; object is None.')
+					raise APRSConnectionError('Failed to initialize aprslib.IS object.')
+				logging.debug('Attempting connect to APRS-IS %s', self.ais.server)
+				await loop.run_in_executor(None, self.ais.connect)
+				if self.cfg.aprsis_filter:
+					await loop.run_in_executor(None, self.ais.set_filter, self.cfg.aprsis_filter)
+					logging.info('APRS-IS filter set to: %s', self.cfg.aprsis_filter)
+				if self.ais._connected:
+					# await loop.run_in_executor(None, self.ais.consumer(self._aprs_callback, blocking=True, immortal=True, raw=True))
+					logging.info('Connected to APRS-IS server %s:%d as %s', self.ais.server[0], self.ais.server[1], self.ais.callsign)
+				return
+			except APRSConnectionError as err:
+				logging.warning('APRS connection error (attempt %d/%d): %s', attempt + 1, max_retries, err)
+			except Exception as e:
+				logging.error('Unexpected error (attempt %d/%d): %s', attempt + 1, max_retries, e, exc_info=True)
+			if attempt < max_retries - 1:
+				await asyncio.sleep(retry_delay)
+				retry_delay = min(retry_delay * 2, 60)
+			else:
+				logging.critical('All attempts to connect to APRS-IS failed, exiting.')
+				sys.exit(getattr(os, 'EX_NOHOST', 1))
+
 	async def run_consumer(self):
 		"""Polls the multiprocessing queue for received packets."""
 		loop = asyncio.get_running_loop()
@@ -1622,11 +1663,6 @@ class APRSSender:
 				self._aprs_callback(packet)
 			except Exception as e:
 				logging.error('Error processing queued APRS packet: %s', e)
-
-	def _get_timestamps(self, source_time: dt.datetime | None = None) -> tuple[str, str]:
-		"""Generate APRS and ISO8601 timestamps."""
-		ctime = source_time or dt.datetime.now(dt.timezone.utc)
-		return ctime.strftime('%d%H%Mz'), ctime.astimezone().isoformat(timespec='seconds')
 
 	def _aprs_callback(self, packet: str):
 		"""Callback function to process incoming APRS packets from the server."""
@@ -1669,40 +1705,6 @@ class APRSSender:
 			logging.warning('Failed to parse incoming APRS packet: %s - Raw: %s', e, packet)
 		except Exception as e:
 			logging.error('Unexpected error in APRS callback: %s', e, exc_info=True)
-
-	async def connect(self):
-		"""Establish connection to APRS-IS with retries."""
-		logging.info('Connecting to APRS-IS server %s:%d as %s', self.cfg.aprsis_server, self.cfg.aprsis_port, self.cfg.from_call)
-		loop = asyncio.get_running_loop()
-		max_retries = 5
-		retry_delay = 5
-		for attempt in range(max_retries):
-			try:
-				self.ais = aprslib.IS(
-					callsign=self.cfg.from_call, passwd=self.cfg.aprs_passcode, host=self.cfg.aprsis_server, port=self.cfg.aprsis_port
-				)
-				if self.ais is None:
-					logging.critical('Failed to create aprslib.IS instance; object is None.')
-					raise APRSConnectionError('Failed to initialize aprslib.IS object.')
-				logging.debug('Attempting connect to APRS-IS %s', self.ais.server)
-				await loop.run_in_executor(None, self.ais.connect)
-				if self.ais._connected:
-					logging.info('Connected to APRS-IS server %s:%d as %s', self.ais.server[0], self.ais.server[1], self.ais.callsign)
-				if self.cfg.aprsis_filter:
-					await loop.run_in_executor(None, self.ais.set_filter, self.cfg.aprsis_filter)
-					logging.info('APRS-IS filter set to: %s', self.cfg.aprsis_filter)
-					await loop.run_in_executor(None, self.ais.consumer(self._aprs_callback, raw=True))
-				return
-			except APRSConnectionError as err:
-				logging.warning('APRS connection error (attempt %d/%d): %s', attempt + 1, max_retries, err)
-			except Exception as e:
-				logging.error('Unexpected error (attempt %d/%d): %s', attempt + 1, max_retries, e, exc_info=True)
-			if attempt < max_retries - 1:
-				await asyncio.sleep(retry_delay)
-				retry_delay = min(retry_delay * 2, 60)
-			else:
-				logging.critical('All attempts to connect to APRS-IS failed, exiting.')
-				sys.exit(getattr(os, 'EX_NOHOST', 1))
 
 	async def send_packet(self, payload, log_context='packet'):
 		"""Send a packet with random delay and retry logic."""
