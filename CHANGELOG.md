@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta10] - (2026-04-07T06:59:15+08:00)
+## [beta10] - (2026-04-07T07:07:25+08:00)
 
-- 14 commit(s) contributed to the release.
+- 15 commit(s) contributed to the release.
 - 8 day(s) passed between the first and last commit.
 - 8 day(s) passed between releases.
 
@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta10
 
+- [c1af961](https://github.com/HafiziRuslan/RasPiAPRS/commit/c1af961f8e65fe4ef64a6ff8f40c98b0ef5ae090) fix(whatsapp): correct asterisk escaping in WhatsApp messages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T07:07:25+08:00*
 - [35a81d7](https://github.com/HafiziRuslan/RasPiAPRS/commit/35a81d733ba0435aa9938a659b589ec6dca8b00b) fix(aprs): update consumer callback and execution *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T07:43:07+08:00*
 
 ### 🚜 Refactor in beta10
@@ -1302,4 +1303,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-07T07:00:17.820623749+08:00
+generated using git-cliff on 2026-04-07T07:08:15.729881672+08:00
