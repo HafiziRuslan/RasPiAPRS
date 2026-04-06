@@ -50,7 +50,7 @@ import humanize
 import psutil
 import symbols
 import telegram
-from aprslib.exceptions import ConnectionError as APRSConnectionError
+from aprslib.exceptions import ConnectionError as APRSConnectionError, UnknownFormat
 from aprslib.exceptions import ParseError as APRSParseError
 from geopy.geocoders import Nominatim
 from gpsdclient import GPSDClient
@@ -107,6 +107,8 @@ class Config:
 	telegram_topic_id: int | None = None
 	telegram_loc_topic_id: int | None = None
 	telegram_msg_topic_id: int | None = None
+	whatsapp_enabled: bool = False
+	whatsapp_number: str | None = None
 	aprsphnet_enabled: bool = False
 	aprsthursday_enabled: bool = False
 	aprsaturday_enabled: bool = False
@@ -273,6 +275,9 @@ class Config:
 			self.telegram_topic_id = self._env_get_int_or_none('TELEGRAM_TOPIC_ID')
 			self.telegram_msg_topic_id = self._env_get_int_or_none('TELEGRAM_MSG_TOPIC_ID')
 			self.telegram_loc_topic_id = self._env_get_int_or_none('TELEGRAM_LOC_TOPIC_ID')
+		self.whatsapp_enabled = self._env_get_bool('WHATSAPP_ENABLE')
+		if self.whatsapp_enabled:
+			self.whatsapp_number = os.getenv('WHATSAPP_NUMBER')
 		self.aprsphnet_enabled = self._env_get_bool('APRSPHNET_ENABLE')
 		self.aprsthursday_enabled = self._env_get_bool('APRSTHURSDAY_ENABLE')
 		self.aprsaturday_enabled = self._env_get_bool('APRSATURDAY_ENABLE')
@@ -1561,12 +1566,43 @@ class TelegramLogger(object):
 			self._remove_location_id_file()
 
 
+class WhatsAppLogger:
+	"""Class to handle sending APRS messages to the WTSAPP gateway."""
+
+	def __init__(self, cfg):
+		self.cfg = cfg
+		self.enabled = cfg.whatsapp_enabled
+		self.number = cfg.whatsapp_number
+		self.aprs_sender = None
+
+	async def log(self, message: str):
+		"""Send a formatted APRS message to WTSAPP, splitting into chunks if necessary."""
+		if not self.enabled or not self.aprs_sender or not self.number:
+			return
+		clean_number = re.sub(r'\D', '', self.number)
+		if not clean_number:
+			return
+		prefix = f'+{clean_number} '
+		max_chunk = 67 - len(prefix)
+		if max_chunk <= 0:
+			logging.error('WhatsApp number is too long for APRS message limits.')
+			return
+		for i in range(0, len(message), max_chunk):
+			chunk = message[i : i + max_chunk]
+			message_body = f'{prefix}{chunk}'
+			payload = f'{self.cfg.from_call}>{self.cfg.to_call}::WTSAPP   :{message_body}'
+			await self.aprs_sender.send_packet(payload, 'whatsapp')
+
+
 class APRSSender:
 	"""Class to handle APRS connection and packet sending."""
 
-	def __init__(self, cfg, tg_logger, sys_stats, gps_handler, geolocation, telem_seq):
+	def __init__(self, cfg, tg_logger, wa_logger, sys_stats, gps_handler, geolocation, telem_seq):
 		self.cfg = cfg
 		self.tg_logger = tg_logger
+		self.wa_logger = wa_logger
+		if self.wa_logger:
+			self.wa_logger.aprs_sender = self
 		self.sys_stats = sys_stats
 		self.gps_handler = gps_handler
 		self.geolocation = geolocation
@@ -1602,7 +1638,7 @@ class APRSSender:
 		logging.info('Received APRS packet: %s', packet)
 		try:
 			parsed_packet = aprslib.parse(packet)
-			if 'message' in parsed_packet.get('format') and not parsed_packet.get('response'):
+			if 'message' in parsed_packet.get('format') and not parsed_packet.get('response') or parsed_packet is not UnknownFormat:
 				from_call = parsed_packet.get('from', 'UNKNOWN')
 				addresse = parsed_packet.get('addresse', 'UNKNOWN')
 				message_text = parsed_packet.get('message_text', '')
@@ -1611,13 +1647,20 @@ class APRSSender:
 					ack_payload = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:ack{msg_no}'
 					logging.debug('Replying acknowledge for message %s from %s', msg_no, from_call)
 					asyncio.create_task(self.send_packet(ack_payload, 'ack'))
-				tg_msg = (
-					f'<u>APRS Message Received</u>\n\n'
-					f'From: <b>{from_call}</b>\n'
-					f'To: <b>{addresse}</b>\n'
-					f'{f"MsgNo: {msg_no}" if msg_no else ""}\nMessage: <b>{message_text}</b>'
-				)
-				asyncio.create_task(self.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id))
+					tg_msg = (
+						f'<u>APRS Message Received</u>\n\n'
+						f'From: <b>{from_call}</b>\n'
+						f'To: <b>{addresse}</b>\n'
+						f'{f"MsgNo: <b>{msg_no}</b>" if msg_no else ""}\nMessage: <b>{message_text}</b>'
+					)
+					wa_msg = (
+						f'APRS Message Received\n\n'
+						f'From: *{from_call}*\n'
+						f'To: *{addresse}*\n'
+						f'{f"MsgNo: *{msg_no}*" if msg_no else ""}\nMessage: *{message_text}*\n'
+					)
+					asyncio.create_task(self.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id))
+					asyncio.create_task(self.wa_logger.log(wa_msg))
 			else:
 				logging.debug(
 					'Ignoring non-message APRS packet of type %s from %s: %s',
@@ -1651,7 +1694,7 @@ class APRSSender:
 				if self.cfg.aprsis_filter:
 					await loop.run_in_executor(None, self.ais.set_filter, self.cfg.aprsis_filter)
 					logging.info('APRS-IS filter set to: %s', self.cfg.aprsis_filter)
-					# await loop.run_in_executor(None, self.ais.consumer(self._aprs_callback, raw=True))
+					await loop.run_in_executor(None, self.ais.consumer(self._aprs_callback, raw=True))
 				return
 			except APRSConnectionError as err:
 				logging.warning('APRS connection error (attempt %d/%d): %s', attempt + 1, max_retries, err)
@@ -1714,11 +1757,22 @@ class APRSSender:
 					f'\n\t\tGain: <b>{humanize.metric(int(g), "dB", precision=1)}</b>'
 					f'\n\t\tDirection: <b>{dir_txt}{dir_deg}</b>'
 				)
+				ext_wa = (
+					f'\n\t{mmdvmphg}'
+					f'\n\t\tPower: *{humanize.metric(int(p_w), "W", precision=1)}*'
+					f'\n\t\tHeight: *{humanize.metric(int(h_ft), "ft", precision=1)}*'
+					f'\n\t\tGain: *{humanize.metric(int(g), "dB", precision=1)}*'
+					f'\n\t\tDirection: *{dir_txt}{dir_deg}*'
+				)
 		else:
 			extstr = f'{csestr}/{spdknt}'
 			ext_tg = (
 				f'\n\tHeading: <b>{int(cur_cse)}°</b>'
 				f'\n\tSpeed: <b>{humanize.metric(float(spdkmh), "km/h", precision=1)}</b> | <b>{humanize.metric(float(spdknt), "kn", precision=1)}</b> | <b>{humanize.metric(cur_spd, "m/s")}</b>'
+			)
+			ext_wa = (
+				f'\n\tHeading: *{int(cur_cse)}°*'
+				f'\n\tSpeed: *{humanize.metric(float(spdkmh), "km/h", precision=1)}* | *{humanize.metric(float(spdknt), "kn", precision=1)}* | *{humanize.metric(cur_spd, "m/s")}*'
 			)
 		lookup_table = symbt if symbt in ['/', '\\'] else '\\'
 		sym_desc = symbols.get_desc(lookup_table, symb)
@@ -1733,8 +1787,19 @@ class APRSSender:
 			f'\tAltitude: <b>{cur_alt}m</b>{ext_tg}\n'
 			f'Comment: <b>{comment}</b>'
 		)
+		wa_pos = (
+			f'{self.cfg.from_call} Position\n\n'
+			f'Time: *{tg_timestamp}*\n'
+			f'Symbol: *{symbt}{symb} ({sym_desc})*\n'
+			f'Position:\n'
+			f'\tLatitude: *{cur_lat}*\n'
+			f'\tLongitude: *{cur_lon}*\n'
+			f'\tAltitude: *{cur_alt}m*{ext_wa}\n'
+			f'Comment: *{comment}*'
+		)
 		await self.send_packet(payload, 'position')
 		await self.tg_logger.log(tg_pos, cur_lat, cur_lon, int(csestr))
+		await self.wa_logger.log(wa_pos)
 
 	async def send_header(self):
 		"""Send APRS header information to APRS-IS."""
@@ -1754,8 +1819,16 @@ class APRSSender:
 			f'Equations: <b>{",".join(eqns)}</b>\n\n'
 			f'Value: <code>[a,b,c]=(a×v²)+(b×v)+c</code>'
 		)
+		wa_hdr = (
+			f'{self.cfg.from_call} Header\n\n'
+			f'Parameters: *{",".join(params)}*\n'
+			f'Units: *{",".join(units)}*\n'
+			f'Equations: *{",".join(eqns)}*\n\n'
+			f'Value: `[a,b,c]=(a×v²)+(b×v)+c`'
+		)
 		await self.send_packet(payload, 'header')
 		await self.tg_logger.log(tg_hdr)
+		await self.wa_logger.log(wa_hdr)
 
 	async def send_telemetry(self, gps_data=None):
 		"""Send APRS telemetry information to APRS-IS."""
@@ -1775,6 +1848,14 @@ class APRSSender:
 			f'RAM Used: <b>{humanize.naturalsize(memused, binary=True)}</b>\n'
 			f'ROM Used: <b>{humanize.naturalsize(diskused, binary=True)}</b>'
 		)
+		wa_tlm = (
+			f'{self.cfg.from_call} Telemetry\n\n'
+			f'Sequence: *#{seq}*\n'
+			f'CPU Temp: *{cputemp / 10:.1f} °C*\n'
+			f'CPU Load: *{cpuload / 10:.1f} %*\n'
+			f'RAM Used: *{humanize.naturalsize(memused, binary=True)}*\n'
+			f'ROM Used: *{humanize.naturalsize(diskused, binary=True)}*'
+		)
 		if self.cfg.gpsd_enabled:
 			_, sat_data = gps_data if gps_data else await self.gps_handler.get_loc_and_sat()
 			_, uSat, nSat = sat_data
@@ -1783,6 +1864,7 @@ class APRSSender:
 				tg_tlm += f'\nGPS Lock: <b>{uSat}</b>\nGPS Avail: <b>{nSat}</b>'
 		await self.send_packet(payload, 'telemetry')
 		await self.tg_logger.log(tg_tlm)
+		await self.wa_logger.log(wa_tlm)
 
 	async def send_status(self, gps_data=None):
 		"""Send APRS status information to APRS-IS."""
@@ -1801,9 +1883,11 @@ class APRSSender:
 			if u_sat > 0:
 				sats_info = f'gps: {u_sat}/{n_sat}'
 		stat_text = f'{timestamp}{"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
-		tele_text = f'Time: <b>{tg_timestamp}</b>\nText: <b>{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}</b>'
+		tg_stat = f'Time: <b>{tg_timestamp}</b>\nText: <b>{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}</b>'
+		wa_stat = f'Time: *{tg_timestamp}*\nText: *{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}*'
 		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:>{stat_text}'
-		tg_stat = f'<u>{self.cfg.from_call} Status</u>\n\n<b>{tele_text}</b>'
+		tg_stat = f'<u>{self.cfg.from_call} Status</u>\n\n{tg_stat}'
+		wa_stat = f'{self.cfg.from_call} Status\n\n{wa_stat}'
 		if os.path.exists(self.cfg.status_file):
 			try:
 				with open(self.cfg.status_file, 'r') as f:
@@ -1818,6 +1902,7 @@ class APRSSender:
 		except (IOError, OSError):
 			pass
 		await self.tg_logger.log(tg_stat)
+		await self.wa_logger.log(wa_stat)
 
 	def close(self):
 		"""Close the APRS-IS connection and stop the consumer process."""
@@ -1870,11 +1955,12 @@ async def initialize_session(cfg):
 		loc_data, _ = await gps_handler.get_loc_and_sat()
 		_, cfg.latitude, cfg.longitude, cfg.altitude, _, _ = loc_data
 	tg_logger = TelegramLogger(cfg)
+	wa_logger = WhatsAppLogger(cfg)
 	sys_stats = SystemStats(cfg)
 	sys_stats.update_metrics()
 	geolocation = Geolocation(cfg.app_name, cfg.project_url, cfg.nominatim_cache_file)
 	telem_seq = Sequence(cfg.lib_dir, name='telem_sequence', modulo=1000)
-	aprs_sender = APRSSender(cfg, tg_logger, sys_stats, gps_handler, geolocation, telem_seq)
+	aprs_sender = APRSSender(cfg, tg_logger, wa_logger, sys_stats, gps_handler, geolocation, telem_seq)
 	await aprs_sender.connect()
 	timer = Timer(cfg.tmp_dir)
 	sb = SmartBeaconing(cfg)
