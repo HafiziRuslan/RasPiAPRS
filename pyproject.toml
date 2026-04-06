@@ -1,17 +1,8 @@
 [project]
 name = 'RasPiAPRS'
 version = '0.1b10'
-description = 'APRS telemetry for Pi-Star/WPSD/AllStarLink'
-keywords = [
-  'amateur-radio',
-  'aprs',
-  'aprs-beacon',
-  'aprs-telemetry',
-  'mmdvm',
-  'pi-star',
-  'wpsd',
-  'allstarlink',
-]
+description = 'APRS telemetry for Pi-Star/WPSD/AllStarLink/DVSwitch'
+keywords = ['amateur-radio', 'aprs', 'aprs-beacon', 'aprs-telemetry', 'aprs-messaging', 'mmdvm', 'pi-star', 'wpsd', 'allstarlink', 'dvswitch']
 readme = 'README.md'
 license = 'GPL-3.0-or-later'
 license-files = ['LICENSE']
@@ -23,14 +14,10 @@ maintainers = [{ name = 'Hafizi Ruslan', email = '9w2lgx@mhrtech.my' }]
 classifiers = [
   'Development Status :: 4 - Beta',
   'Intended Audience :: Other Audience',
-  'License :: Freeware',
-  'License :: OSI Approved',
   'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
   'Natural Language :: English',
   'Natural Language :: Malay',
   'Operating System :: POSIX :: Linux',
-  'Operating System :: Unix',
-  'Programming Language :: Python',
   'Programming Language :: Python :: 3.13',
   'Programming Language :: Python :: 3.14',
   'Programming Language :: Python :: 3.15',
