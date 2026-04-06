@@ -1202,7 +1202,8 @@ class SystemStats(object):
 							build_date = dt.datetime.strptime(d_str, '%Y%b%d %H:%M:%S').isoformat()
 						except (ValueError, IndexError):
 							pass
-				rel_info = ''.join(filter(None, [release.split('-')[0], build_no, f'({build_date})' if build_date else None]))
+				rel_ver = re.match(r'^[\d.]+', release).group() if re.match(r'^[\d.]+', release) else release
+				rel_info = ''.join(filter(None, [rel_ver, build_no, f'({build_date})' if build_date else None]))
 				raw_machine = platform.machine()
 				arch_map = {
 					'aarch64': 'arm64',
