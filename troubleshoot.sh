@@ -202,6 +202,17 @@ if [ -f ".env" ]; then
       echo "[FAIL] TELEGRAM_CHAT_ID format is invalid (must be numeric)."
     fi
   fi
+
+  # Check WhatsApp
+  WHATSAPP_ENABLE=$(get_env_var "WHATSAPP_ENABLE" | tr -d '[:space:]')
+  if [ "$WHATSAPP_ENABLE" = "true" ]; then
+    WHATSAPP_PHONE=$(get_env_var "WHATSAPP_PHONE" | tr -d '[:space:]')
+    if [[ "$WHATSAPP_PHONE" =~ ^[0-9]+$ ]]; then
+      echo "[PASS] WHATSAPP_PHONE format looks valid."
+    else
+      echo "[FAIL] WHATSAPP_PHONE format is invalid (must be numeric)."
+    fi
+  fi
 else
   echo "[FAIL] .env configuration file NOT found."
   echo "       Please copy .env.sample to .env and configure it."
@@ -223,7 +234,7 @@ else
 fi
 
 # Check dependencies
-DEPENDENCIES=("gcc" "git" "curl" "uv")
+DEPENDENCIES=("gcc" "git" "gpsd" "gpsd-clients" "python3-dev" "curl" "vnstat")
 MISSING_DEPS=0
 
 for dep in "${DEPENDENCIES[@]}"; do
@@ -241,17 +252,24 @@ if [ $MISSING_DEPS -eq 1 ]; then
 fi
 
 # Check log directory permissions
-if [ -w "/var/log" ]; then
-  echo "[PASS] /var/log is writable."
+if [ -w "/var/log/RasPiAPRS" ]; then
+  echo "[PASS] /var/log/RasPiAPRS is writable."
 else
-  echo "[FAIL] /var/log is NOT writable. Run with sudo."
+  echo "[FAIL] /var/log/RasPiAPRS is NOT writable. Run with sudo."
 fi
 
 # Check tmp directory permissions
-if [ -w "/var/tmp" ]; then
-  echo "[PASS] /var/tmp is writable."
+if [ -w "/var/tmp/RasPiAPRS" ]; then
+  echo "[PASS] /var/tmp/RasPiAPRS is writable."
 else
-  echo "[FAIL] /var/tmp is NOT writable."
+  echo "[FAIL] /var/tmp/RasPiAPRS is NOT writable. Run with sudo."
+fi
+
+# Check lib directory permissions
+if [ -w "/var/lib/RasPiAPRS" ]; then
+  echo "[PASS] /var/lib/RasPiAPRS is writable."
+else
+  echo "[FAIL] /var/lib/RasPiAPRS is NOT writable. Run with sudo."
 fi
 
 echo "================================"
