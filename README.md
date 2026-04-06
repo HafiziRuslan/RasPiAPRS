@@ -31,7 +31,7 @@
 * **Telemetry Tracking**: Monitors specific hardware metrics including CPU temperature/load, memory/disk usage, and network traffic.
 * **SmartBeaconing**: Reduces network congestion by dynamically adjusting beacon frequency based on the station's speed and heading.
 * **Dynamic Symbols**: Automatically switches the APRS map icon (e.g., stationary vs. moving) based on real-time GPS motion.
-* **Remote Alerts**: Supports Telegram Bot API for sending system status updates directly to your device.
+* **Remote Alerts**: Supports WhatsApp and Telegram Bot API for sending system status updates directly to your device.
 * **Visualization**: Formats and logs telemetry data for display on platforms like `aprs.fi`.
 
 ## Requirements
