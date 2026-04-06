@@ -1396,11 +1396,11 @@ class ScheduledMessageHandler:
 		wa_msg = f'Message {name}\n\nFrom: *{parsed["from"]}*'
 		if parsed.get('via'):
 			tg_msg += f'\nvia: <b>{parsed["via"]}</b>'
-			wa_msg += f'\nvia: *{parsed["via"].replace("*", "\*")}*'
+			wa_msg += f'\nvia: *{parsed["via"].replace("*", "\\*")}*'
 		path_list = parsed.get('path')
 		if path_list:
 			tg_msg += f'\nPath: <b>{", ".join(path_list)}</b>'
-			wa_msg += f'\nPath: *{", ".join(path_list.replace("*", "\*"))}*'
+			wa_msg += f'\nPath: *{", ".join(path_list.replace("*", "\\*"))}*'
 		tg_msg += f'\nTo: <b>{parsed["addresse"]}</b>\n{f"MessageNo: <b>{parsed['msgNo']}</b>" if parsed.get("msgNo") else ""}\nMessage: <b>{parsed["message_text"]}</b>'
 		wa_msg += f'\nTo: *{parsed["addresse"]}*\n{f"MessageNo: *{parsed['msgNo']}*" if parsed.get("msgNo") else ""}\nMessage: *{parsed["message_text"]}*'
 		await aprs_sender.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
@@ -1691,7 +1691,7 @@ class APRSSender:
 				if self.cfg.aprsis_filter:
 					await loop.run_in_executor(None, self.ais.set_filter, self.cfg.aprsis_filter)
 					logging.info('APRS-IS filter set to: %s', self.cfg.aprsis_filter)
-					await loop.run_in_executor(None, self.ais.consumer(self._aprs_callback, blocking=False, raw=True))
+					await loop.run_in_executor(None, self.ais.consumer(self._aprs_callback, raw=True))
 				return
 			except APRSConnectionError as err:
 				logging.warning('APRS connection error (attempt %d/%d): %s', attempt + 1, max_retries, err)
