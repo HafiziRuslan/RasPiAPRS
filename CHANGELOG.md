@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta10] - (2026-03-30T08:00:27+08:00)
+## [beta10] - (2026-04-06T17:05:06+08:00)
 
-- 4 commit(s) contributed to the release.
-- 1 day(s) passed between the first and last commit.
-- 1 day(s) passed between releases.
+- 6 commit(s) contributed to the release.
+- 8 day(s) passed between the first and last commit.
+- 8 day(s) passed between releases.
 
 ### 🐛 Bug Fixes in beta10
 
@@ -16,8 +16,13 @@ All notable changes to this project will be documented in this file.
 
 - [6b91341](https://github.com/HafiziRuslan/RasPiAPRS/commit/6b9134183df743913923da141bc3e09c6370978a) refactor(aprs): move consumer to separate process *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T08:00:27+08:00*
 
+### 📚 Documentation in beta10
+
+- [124945a](https://github.com/HafiziRuslan/RasPiAPRS/commit/124945adb8d0d541b3a2a0e1a00a2016b24a7497) docs(RasPiAPRS): update project description and keywords *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-06T16:59:47+08:00*
+
 ### ⚙️ Miscellaneous Tasks in beta10
 
+- [9e223b5](https://github.com/HafiziRuslan/RasPiAPRS/commit/9e223b555516ef53e20db0b6dea0f6b239e9b1ec) build(deps): update aiohttp to version 3.13.5 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-06T17:05:06+08:00*
 - [b6181f7](https://github.com/HafiziRuslan/RasPiAPRS/commit/b6181f78146d03cc84b06613922b2ff9618a29bb) chore(main): disable aprs consumer task *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T07:51:11+08:00*
 - [951b205](https://github.com/HafiziRuslan/RasPiAPRS/commit/951b2057669bc6ab44135f78470362a2635da058) chore(version): bump version to 0.1b10 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T07:39:26+08:00*
 
@@ -1286,4 +1291,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-03-30T08:01:25.118796506+08:00
+generated using git-cliff on 2026-04-06T17:06:07.412806248+08:00
