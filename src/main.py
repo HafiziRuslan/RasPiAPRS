@@ -1321,9 +1321,8 @@ class ScheduledMessageHandler:
 		self.gps_handler = gps_handler
 		self.tracking = PersistentDict(self.cfg.msg_tracking_file)
 		self.messages = []
-		self.sequences = {}
+		self.sequence = Sequence(self.cfg.lib_dir, name='msg_sequence', modulo=100000)
 		self._init_messages()
-		self._init_sequences()
 
 	def _init_messages(self):
 		"""Initialize scheduled messages."""
@@ -1344,15 +1343,6 @@ class ScheduledMessageHandler:
 					self.messages.append(
 						{'name': name, 'weekday': weekday, 'addrcall': addrcall, 'template': template_fmt.format(name), 'from_call': sender, 'tz': tz}
 					)
-
-	def _init_sequences(self):
-		"""Initialize sequence counters for each message type."""
-		for msg_info in self.messages:
-			source = msg_info['from_call'] or self.cfg.from_call
-			addrcall = msg_info['addrcall']
-			seq_name = f'msg_sequence_{source}_{addrcall}'
-			if seq_name not in self.sequences:
-				self.sequences[seq_name] = Sequence(self.cfg.lib_dir, name=seq_name, modulo=100000)
 
 	async def _is_due(self, msg_info) -> bool:
 		"""Return True if the message described by *msg_info* should be sent now."""
@@ -1389,8 +1379,7 @@ class ScheduledMessageHandler:
 		_, lat, lon, _, _, _ = loc_data
 		gridsquare = APRSConverter.latlon_to_grid(lat, lon)
 		source = from_call or self.cfg.from_call
-		seq_name = f'msg_sequence_{source}_{addrcall}'
-		seq = next(self.sequences[seq_name])
+		seq = next(self.sequence)
 		app_id = '/'.join(self.cfg.app_name.split('/')[:2])
 		message = f'{template} from {gridsquare} via {app_id}'[:67]
 		path_str = ''
@@ -1404,13 +1393,18 @@ class ScheduledMessageHandler:
 			return False
 		await aprs_sender.send_packet(payload, name)
 		tg_msg = f'<u>Message {name}</u>\n\nFrom: <b>{parsed["from"]}</b>'
+		wa_msg = f'Message {name}\n\nFrom: *{parsed["from"]}*'
 		if parsed.get('via'):
 			tg_msg += f'\nvia: <b>{parsed["via"]}</b>'
+			wa_msg += f'\nvia: *{parsed["via"].replace("*", "\*")}*'
 		path_list = parsed.get('path')
 		if path_list:
 			tg_msg += f'\nPath: <b>{", ".join(path_list)}</b>'
-		tg_msg += f'\nTo: <b>{parsed["addresse"]}</b>\n{f"MessageNo: {parsed['msgNo']}" if parsed.get("msgNo") else ""}\nMessage: <b>{parsed["message_text"]}</b>'
+			wa_msg += f'\nPath: *{", ".join(path_list.replace("*", "\*"))}*'
+		tg_msg += f'\nTo: <b>{parsed["addresse"]}</b>\n{f"MessageNo: <b>{parsed['msgNo']}</b>" if parsed.get("msgNo") else ""}\nMessage: <b>{parsed["message_text"]}</b>'
+		wa_msg += f'\nTo: *{parsed["addresse"]}*\n{f"MessageNo: *{parsed['msgNo']}*" if parsed.get("msgNo") else ""}\nMessage: *{parsed["message_text"]}*'
 		await aprs_sender.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
+		await aprs_sender.wa_logger.log(wa_msg)
 		return True
 
 
