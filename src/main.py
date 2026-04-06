@@ -1637,9 +1637,11 @@ class APRSSender:
 	def _aprs_callback(self, packet: str):
 		"""Callback function to process incoming APRS packets from the server."""
 		logging.info('Received APRS packet: %s', packet)
+		if packet.split(':', 1)[-1][:1] in '#$%)*,<?T[_{}':
+			return
 		try:
 			parsed_packet = aprslib.parse(packet)
-			if 'message' in parsed_packet.get('format') and not parsed_packet.get('response') or parsed_packet is not UnknownFormat:
+			if 'message' in parsed_packet.get('format') and not parsed_packet.get('response') and parsed_packet is not UnknownFormat:
 				from_call = parsed_packet.get('from', 'UNKNOWN')
 				addresse = parsed_packet.get('addresse', 'UNKNOWN')
 				message_text = parsed_packet.get('message_text', '')
@@ -1695,7 +1697,7 @@ class APRSSender:
 				if self.cfg.aprsis_filter:
 					await loop.run_in_executor(None, self.ais.set_filter, self.cfg.aprsis_filter)
 					logging.info('APRS-IS filter set to: %s', self.cfg.aprsis_filter)
-					await loop.run_in_executor(None, self.ais.consumer(self._aprs_callback, raw=True))
+					await loop.run_in_executor(None, self.ais.consumer(self._aprs_callback, blocking=False, raw=True))
 				return
 			except APRSConnectionError as err:
 				logging.warning('APRS connection error (attempt %d/%d): %s', attempt + 1, max_retries, err)
