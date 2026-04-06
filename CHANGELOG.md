@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta10] - (2026-04-07T07:07:25+08:00)
+## [beta10] - (2026-04-07T07:21:41+08:00)
 
-- 15 commit(s) contributed to the release.
+- 16 commit(s) contributed to the release.
 - 8 day(s) passed between the first and last commit.
 - 8 day(s) passed between releases.
 
@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta10
 
+- [d49a203](https://github.com/HafiziRuslan/RasPiAPRS/commit/d49a203d21846944054393213ada88314a7ec630) refactor(main): move timestamp utils and connection logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T07:21:41+08:00*
 - [43e547f](https://github.com/HafiziRuslan/RasPiAPRS/commit/43e547fbea2f95d8f0dbfccc0d7387976b522e80) refactor aprs packet handler logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T06:42:22+08:00*
 - [600361d](https://github.com/HafiziRuslan/RasPiAPRS/commit/600361d75ffb04f2e8c24ed57f962ae20f1e3eb1) refactor(main): extract release version from string *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T05:49:14+08:00*
 - [6b91341](https://github.com/HafiziRuslan/RasPiAPRS/commit/6b9134183df743913923da141bc3e09c6370978a) refactor(aprs): move consumer to separate process *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T08:00:27+08:00*
@@ -1303,4 +1304,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-07T07:08:15.729881672+08:00
+generated using git-cliff on 2026-04-07T07:22:31.743961416+08:00
