@@ -2,11 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta10] - (2026-04-06T17:05:06+08:00)
+## [beta10] - (2026-04-07T05:11:08+08:00)
 
-- 6 commit(s) contributed to the release.
+- 7 commit(s) contributed to the release.
 - 8 day(s) passed between the first and last commit.
 - 8 day(s) passed between releases.
+
+### 🚀 Features in beta10
+
+- [344a005](https://github.com/HafiziRuslan/RasPiAPRS/commit/344a005f37170d17166c07ddbdf5089e7bc91016) feat(config, aprs): add whatsapp support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T05:11:08+08:00*
 
 ### 🐛 Bug Fixes in beta10
 
@@ -1291,4 +1295,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-06T17:06:07.412806248+08:00
+generated using git-cliff on 2026-04-07T05:11:56.542880958+08:00
