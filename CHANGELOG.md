@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta10] - (2026-04-07T05:14:30+08:00)
+## [beta10] - (2026-04-07T05:31:41+08:00)
 
-- 8 commit(s) contributed to the release.
+- 11 commit(s) contributed to the release.
 - 8 day(s) passed between the first and last commit.
 - 8 day(s) passed between releases.
 
 ### 🚀 Features in beta10
 
+- [ac6c891](https://github.com/HafiziRuslan/RasPiAPRS/commit/ac6c891f236cb9f2e984e521f0256752133fef21) feat(troubleshoot): add whatsapp validation and update system checks *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T05:29:39+08:00*
 - [344a005](https://github.com/HafiziRuslan/RasPiAPRS/commit/344a005f37170d17166c07ddbdf5089e7bc91016) feat(config, aprs): add whatsapp support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T05:11:08+08:00*
 
 ### 🐛 Bug Fixes in beta10
@@ -22,11 +23,13 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation in beta10
 
+- [5ddcd11](https://github.com/HafiziRuslan/RasPiAPRS/commit/5ddcd11324ff0af6411f3821f5930365c785eff3) docs(README): add WhatsApp support to remote alerts *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T05:31:41+08:00*
 - [9edbe6d](https://github.com/HafiziRuslan/RasPiAPRS/commit/9edbe6d792456ba3585947cdc05f96d7bd4ac566) docs(env): update env comment for whatsapp format *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T05:14:30+08:00*
 - [124945a](https://github.com/HafiziRuslan/RasPiAPRS/commit/124945adb8d0d541b3a2a0e1a00a2016b24a7497) docs(RasPiAPRS): update project description and keywords *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-06T16:59:47+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta10
 
+- [5bd779c](https://github.com/HafiziRuslan/RasPiAPRS/commit/5bd779c660f4a3df6fb3625afe33fcfec9ef9b6c) chore(troubleshoot): add uv to dependencies *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T05:30:24+08:00*
 - [9e223b5](https://github.com/HafiziRuslan/RasPiAPRS/commit/9e223b555516ef53e20db0b6dea0f6b239e9b1ec) build(deps): update aiohttp to version 3.13.5 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-06T17:05:06+08:00*
 - [b6181f7](https://github.com/HafiziRuslan/RasPiAPRS/commit/b6181f78146d03cc84b06613922b2ff9618a29bb) chore(main): disable aprs consumer task *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T07:51:11+08:00*
 - [951b205](https://github.com/HafiziRuslan/RasPiAPRS/commit/951b2057669bc6ab44135f78470362a2635da058) chore(version): bump version to 0.1b10 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T07:39:26+08:00*
@@ -1296,4 +1299,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-07T05:15:16.479679505+08:00
+generated using git-cliff on 2026-04-07T05:32:33.012136542+08:00
