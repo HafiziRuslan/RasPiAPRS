@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta10] - (2026-04-07T05:11:08+08:00)
+## [beta10] - (2026-04-07T05:14:30+08:00)
 
-- 7 commit(s) contributed to the release.
+- 8 commit(s) contributed to the release.
 - 8 day(s) passed between the first and last commit.
 - 8 day(s) passed between releases.
 
@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation in beta10
 
+- [9edbe6d](https://github.com/HafiziRuslan/RasPiAPRS/commit/9edbe6d792456ba3585947cdc05f96d7bd4ac566) docs(env): update env comment for whatsapp format *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T05:14:30+08:00*
 - [124945a](https://github.com/HafiziRuslan/RasPiAPRS/commit/124945adb8d0d541b3a2a0e1a00a2016b24a7497) docs(RasPiAPRS): update project description and keywords *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-06T16:59:47+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta10
@@ -1295,4 +1296,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-07T05:11:56.542880958+08:00
+generated using git-cliff on 2026-04-07T05:15:16.479679505+08:00
