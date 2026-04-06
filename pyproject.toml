@@ -30,7 +30,7 @@ urls.history = 'https://github.com/HafiziRuslan/RasPiAPRS/blob/master/CHANGELOG.
 urls.issuetracker = 'https://github.com/HafiziRuslan/RasPiAPRS/issues'
 requires-python = '>=3.13'
 dependencies = [
-  'aiohttp>=3.13.4',
+  'aiohttp>=3.13.5',
   'aprslib>=0.7.2',
   'callsign-regex>=0.7.1',
   'geopy>=2.4.1',
