@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta10] - (2026-04-07T05:49:14+08:00)
+## [beta10] - (2026-04-07T06:59:15+08:00)
 
-- 12 commit(s) contributed to the release.
+- 14 commit(s) contributed to the release.
 - 8 day(s) passed between the first and last commit.
 - 8 day(s) passed between releases.
 
 ### 🚀 Features in beta10
 
+- [f2c6642](https://github.com/HafiziRuslan/RasPiAPRS/commit/f2c6642b69e58b7461186aa5eb9edaeedc34324d) refactor(main): consolidate message sequences *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T06:59:15+08:00*
 - [ac6c891](https://github.com/HafiziRuslan/RasPiAPRS/commit/ac6c891f236cb9f2e984e521f0256752133fef21) feat(troubleshoot): add whatsapp validation and update system checks *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T05:29:39+08:00*
 - [344a005](https://github.com/HafiziRuslan/RasPiAPRS/commit/344a005f37170d17166c07ddbdf5089e7bc91016) feat(config, aprs): add whatsapp support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T05:11:08+08:00*
 
@@ -19,6 +20,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta10
 
+- [43e547f](https://github.com/HafiziRuslan/RasPiAPRS/commit/43e547fbea2f95d8f0dbfccc0d7387976b522e80) refactor aprs packet handler logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T06:42:22+08:00*
 - [600361d](https://github.com/HafiziRuslan/RasPiAPRS/commit/600361d75ffb04f2e8c24ed57f962ae20f1e3eb1) refactor(main): extract release version from string *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T05:49:14+08:00*
 - [6b91341](https://github.com/HafiziRuslan/RasPiAPRS/commit/6b9134183df743913923da141bc3e09c6370978a) refactor(aprs): move consumer to separate process *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T08:00:27+08:00*
 
@@ -1300,4 +1302,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-07T05:50:05.869368893+08:00
+generated using git-cliff on 2026-04-07T07:00:17.820623749+08:00
