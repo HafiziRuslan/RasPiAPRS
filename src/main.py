@@ -1393,18 +1393,16 @@ class ScheduledMessageHandler:
 			return False
 		await aprs_sender.send_packet(payload, name)
 		tg_msg = f'<u>Message {name}</u>\n\nFrom: <b>{parsed["from"]}</b>'
-		wa_msg = f'Message {name}\n\nFrom: *{parsed["from"]}*'
+		wa_msg = f'From: {parsed["from"]}'
 		if parsed.get('via'):
 			tg_msg += f'\nvia: <b>{parsed["via"]}</b>'
-			wa_msg += f'\nvia: *{parsed["via"].replace("*", "\\*")}*'
+			wa_msg += f', via: {parsed["via"].replace("*", "\\*")}'
 		path_list = parsed.get('path')
 		if path_list:
 			tg_msg += f'\nPath: <b>{", ".join(path_list)}</b>'
-			wa_msg += f'\nPath: *{", ".join(path_list.replace("*", "\\*"))}*'
+			wa_msg += f', Path: {", ".join(path_list.replace("*", "\\*"))}'
 		tg_msg += f'\nTo: <b>{parsed["addresse"]}</b>\n{f"MessageNo: <b>{parsed['msgNo']}</b>" if parsed.get("msgNo") else ""}\nMessage: <b>{parsed["message_text"]}</b>'
-		wa_msg += (
-			f'\nTo: *{parsed["addresse"]}*\n{f"MessageNo: *{parsed['msgNo']}*" if parsed.get("msgNo") else ""}\nMessage: *{parsed["message_text"]}*'
-		)
+		wa_msg += f', To: {parsed["addresse"]}{f", MsgNo: {parsed['msgNo']}, " if parsed.get("msgNo") else ", "}Msg: {parsed["message_text"]}'
 		await aprs_sender.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
 		await aprs_sender.wa_logger.log(wa_msg)
 		return True
@@ -1695,7 +1693,9 @@ class APRSSender:
 						f'To: <b>{addresse}</b>\n'
 						f'{f"MsgNo: <b>{msg_no}</b>" if msg_no else ""}\nMessage: <b>{message_text}</b>'
 					)
-					wa_msg = f'APRS Message Received --> From: *{from_call}*, To: *{addresse}*{f", MsgNo: *{msg_no}*, " if msg_no else ", "}Message: *{message_text}*'
+					wa_msg = (
+						f'APRS Msg Received --> From: {from_call}, To: {addresse}{f", MsgNo: {msg_no}, " if msg_no else ", "}Msg: {message_text}'
+					)
 					asyncio.create_task(self.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id))
 					asyncio.create_task(self.wa_logger.log(wa_msg))
 			else:
@@ -1769,7 +1769,7 @@ class APRSSender:
 				f'\n\tHeading: <b>{int(cur_cse)}°</b>'
 				f'\n\tSpeed: <b>{humanize.metric(float(spdkmh), "km/h", precision=1)}</b> | <b>{humanize.metric(float(spdknt), "kn", precision=1)}</b> | <b>{humanize.metric(cur_spd, "m/s")}</b>'
 			)
-			ext_wa = f', Cse: *{int(cur_cse)}°, *Spd: *{humanize.metric(float(spdkmh), "km/h", precision=1)}*'
+			ext_wa = f', Cse: {int(cur_cse)}°, Spd: {humanize.metric(float(spdkmh), "km/h", precision=1)}'
 		lookup_table = symbt if symbt in ['/', '\\'] else '\\'
 		sym_desc = symbols.get_desc(lookup_table, symb)
 		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:/{timestamp}{latstr}{symbt}{lonstr}{symb}{extstr}{altstr}{comment}'
@@ -1783,7 +1783,7 @@ class APRSSender:
 			f'\tAltitude: <b>{cur_alt}m</b>{ext_tg}\n'
 			f'Comment: <b>{comment}</b>'
 		)
-		wa_pos = f'{self.cfg.from_call} Position --> Sym: *{sym_desc}*, Lat: *{cur_lat}*, Lon: *{cur_lon}*, Alt: *{cur_alt}m*{ext_wa}'
+		wa_pos = f'{self.cfg.from_call} Position --> Sym: {sym_desc}, Lat: {cur_lat}, Lon: {cur_lon}, Alt: {cur_alt}m{ext_wa}'
 		await self.send_packet(payload, 'position')
 		await self.tg_logger.log(tg_pos, cur_lat, cur_lon, cur_cse)
 		await self.wa_logger.log(wa_pos)
@@ -1827,14 +1827,14 @@ class APRSSender:
 			f'RAM Used: <b>{humanize.naturalsize(memused, binary=True)}</b>\n'
 			f'ROM Used: <b>{humanize.naturalsize(diskused, binary=True)}</b>'
 		)
-		wa_tlm = f'{self.cfg.from_call} Telemetry --> Seq: *#{seq}*, Temp: *{cputemp / 10:.1f} °C*, Load: *{cpuload / 10:.1f} %*, RAM: *{humanize.naturalsize(memused, binary=True)}*, ROM: *{humanize.naturalsize(diskused, binary=True)}*'
+		wa_tlm = f'{self.cfg.from_call} Telemetry --> Seq: #{seq}, Temp: {cputemp / 10:.1f} °C, Load: {cpuload / 10:.1f} %, RAM: {humanize.naturalsize(memused, binary=True)}, ROM: {humanize.naturalsize(diskused, binary=True)}'
 		if self.cfg.gpsd_enabled:
 			_, sat_data = gps_data if gps_data else await self.gps_handler.get_loc_and_sat()
 			_, uSat, nSat = sat_data
 			payload += f',{uSat:d}'
 			if uSat > 0:
 				tg_tlm += f'\nGPS Lock: <b>{uSat}</b>\nGPS Avail: <b>{nSat}</b>'
-				wa_tlm += f', GPS: *{uSat}/{nSat}*'
+				wa_tlm += f', GPS: {uSat}/{nSat}'
 		await self.send_packet(payload, 'telemetry')
 		await self.tg_logger.log(tg_tlm)
 		await self.wa_logger.log(wa_tlm)
@@ -1857,7 +1857,7 @@ class APRSSender:
 				sats_info = f'gps: {u_sat}/{n_sat}'
 		stat_text = f'{timestamp}{"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
 		tg_stat = f'Time: <b>{tg_timestamp}</b>\nText: <b>{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}</b>'
-		wa_stat = f'*{"; ".join(filter(None, [gridsquare, uptime, traffic, sats_info]))}*'
+		wa_stat = '; '.join(filter(None, [gridsquare, uptime, traffic, sats_info]))
 		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:>{stat_text}'
 		tg_stat = f'<u>{self.cfg.from_call} Status</u>\n\n{tg_stat}'
 		wa_stat = f'{self.cfg.from_call} Status --> {wa_stat}'
