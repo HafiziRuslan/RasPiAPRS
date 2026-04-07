@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta10] - (2026-04-07T08:34:46+08:00)
+## [beta10] - (2026-04-07T09:02:59+08:00)
 
-- 19 commit(s) contributed to the release.
+- 21 commit(s) contributed to the release.
 - 9 day(s) passed between the first and last commit.
 - 9 day(s) passed between releases.
 
 ### 🚀 Features in beta10
 
+- [dd2f6cf](https://github.com/HafiziRuslan/RasPiAPRS/commit/dd2f6cf7138a30a75ff05152201078f78699068c) feat(aprs): improve send_all logic to track sent messages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T09:02:59+08:00*
 - [f2c6642](https://github.com/HafiziRuslan/RasPiAPRS/commit/f2c6642b69e58b7461186aa5eb9edaeedc34324d) refactor(main): consolidate message sequences *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T06:59:15+08:00*
 - [ac6c891](https://github.com/HafiziRuslan/RasPiAPRS/commit/ac6c891f236cb9f2e984e521f0256752133fef21) feat(troubleshoot): add whatsapp validation and update system checks *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T05:29:39+08:00*
 - [344a005](https://github.com/HafiziRuslan/RasPiAPRS/commit/344a005f37170d17166c07ddbdf5089e7bc91016) feat(config, aprs): add whatsapp support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T05:11:08+08:00*
@@ -23,6 +24,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta10
 
+- [5a300d9](https://github.com/HafiziRuslan/RasPiAPRS/commit/5a300d92d769305463a294e15fd5a591c4fd2a62) refactor(main): remove degree symbol from telemetry message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T08:52:40+08:00*
 - [f38a9e7](https://github.com/HafiziRuslan/RasPiAPRS/commit/f38a9e7a36c6c3d0666863c46da8dc780d99f578) refactor(main): tidy message & telemetry formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T08:34:46+08:00*
 - [d49a203](https://github.com/HafiziRuslan/RasPiAPRS/commit/d49a203d21846944054393213ada88314a7ec630) refactor(main): move timestamp utils and connection logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T07:21:41+08:00*
 - [43e547f](https://github.com/HafiziRuslan/RasPiAPRS/commit/43e547fbea2f95d8f0dbfccc0d7387976b522e80) refactor aprs packet handler logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T06:42:22+08:00*
@@ -1307,4 +1309,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-07T08:38:03.944795801+08:00
+generated using git-cliff on 2026-04-07T09:03:49.728179938+08:00
