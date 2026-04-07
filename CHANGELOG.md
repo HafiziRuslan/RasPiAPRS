@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta10] - (2026-04-07T08:07:25+08:00)
+## [beta10] - (2026-04-07T08:34:46+08:00)
 
-- 18 commit(s) contributed to the release.
+- 19 commit(s) contributed to the release.
 - 9 day(s) passed between the first and last commit.
 - 9 day(s) passed between releases.
 
@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta10
 
+- [f38a9e7](https://github.com/HafiziRuslan/RasPiAPRS/commit/f38a9e7a36c6c3d0666863c46da8dc780d99f578) refactor(main): tidy message & telemetry formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T08:34:46+08:00*
 - [d49a203](https://github.com/HafiziRuslan/RasPiAPRS/commit/d49a203d21846944054393213ada88314a7ec630) refactor(main): move timestamp utils and connection logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T07:21:41+08:00*
 - [43e547f](https://github.com/HafiziRuslan/RasPiAPRS/commit/43e547fbea2f95d8f0dbfccc0d7387976b522e80) refactor aprs packet handler logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T06:42:22+08:00*
 - [600361d](https://github.com/HafiziRuslan/RasPiAPRS/commit/600361d75ffb04f2e8c24ed57f962ae20f1e3eb1) refactor(main): extract release version from string *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T05:49:14+08:00*
@@ -1306,4 +1307,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-07T08:08:21.028593686+08:00
+generated using git-cliff on 2026-04-07T08:38:03.944795801+08:00
