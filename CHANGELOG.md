@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta10] - (2026-04-07T07:21:41+08:00)
+## [beta10] - (2026-04-07T08:02:04+08:00)
 
-- 16 commit(s) contributed to the release.
-- 8 day(s) passed between the first and last commit.
-- 8 day(s) passed between releases.
+- 17 commit(s) contributed to the release.
+- 9 day(s) passed between the first and last commit.
+- 9 day(s) passed between releases.
 
 ### 🚀 Features in beta10
 
@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta10
 
+- [d85c4da](https://github.com/HafiziRuslan/RasPiAPRS/commit/d85c4dab36bfaa457bbb4f7ba4c11ad757e1aff9) refactor(server): enhance APRS message handling and error resilience *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T08:02:04+08:00*
 - [c1af961](https://github.com/HafiziRuslan/RasPiAPRS/commit/c1af961f8e65fe4ef64a6ff8f40c98b0ef5ae090) fix(whatsapp): correct asterisk escaping in WhatsApp messages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T07:07:25+08:00*
 - [35a81d7](https://github.com/HafiziRuslan/RasPiAPRS/commit/35a81d733ba0435aa9938a659b589ec6dca8b00b) fix(aprs): update consumer callback and execution *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T07:43:07+08:00*
 
@@ -1304,4 +1305,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-07T07:22:31.743961416+08:00
+generated using git-cliff on 2026-04-07T08:02:55.797390786+08:00
