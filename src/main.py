@@ -1364,6 +1364,7 @@ class ScheduledMessageHandler:
 
 	async def send_all(self, aprs_sender, gps_data=None):
 		"""Send all due scheduled messages."""
+		any_sent = False
 		for msg_info in self.messages:
 			if await self._is_due(msg_info):
 				source = msg_info['from_call'] or self.cfg.from_call
@@ -1371,7 +1372,8 @@ class ScheduledMessageHandler:
 				self.tracking[tracking_key] = dt.datetime.now(msg_info['tz']).isoformat()
 				self.tracking.flush()
 				asyncio.create_task(self._send_one_with_delay(aprs_sender, gps_data=gps_data, **msg_info))
-		return False
+				any_sent = True
+		return any_sent
 
 	async def _send_one(self, aprs_sender, name, addrcall, template, from_call=None, gps_data=None, **kwargs):
 		"""Send a single scheduled message to APRS-IS if it's due."""
@@ -1384,7 +1386,7 @@ class ScheduledMessageHandler:
 		message = f'{template} from {gridsquare} via {app_id}'[:67]
 		path_str = ''
 		if from_call:
-			path_str = f',{self.cfg.from_call}*,qAR,{self.cfg.from_call}'
+			path_str = f',TCPIP*,qAC,{self.cfg.from_call}'
 		payload = f'{source}>{self.cfg.to_call}{path_str}::{addrcall:9s}:{message}{{{seq}'
 		try:
 			parsed = aprslib.parse(payload)
