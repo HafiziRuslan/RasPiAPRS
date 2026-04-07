@@ -1827,7 +1827,7 @@ class APRSSender:
 			f'RAM Used: <b>{humanize.naturalsize(memused, binary=True)}</b>\n'
 			f'ROM Used: <b>{humanize.naturalsize(diskused, binary=True)}</b>'
 		)
-		wa_tlm = f'{self.cfg.from_call} Telemetry --> Seq: #{seq}, Temp: {cputemp / 10:.1f} °C, Load: {cpuload / 10:.1f} %, RAM: {humanize.naturalsize(memused, binary=True)}, ROM: {humanize.naturalsize(diskused, binary=True)}'
+		wa_tlm = f'{self.cfg.from_call} Telemetry --> Seq: #{seq}, Temp: {cputemp / 10:.1f} C, Load: {cpuload / 10:.1f} %, RAM: {humanize.naturalsize(memused, binary=True)}, ROM: {humanize.naturalsize(diskused, binary=True)}'
 		if self.cfg.gpsd_enabled:
 			_, sat_data = gps_data if gps_data else await self.gps_handler.get_loc_and_sat()
 			_, uSat, nSat = sat_data
