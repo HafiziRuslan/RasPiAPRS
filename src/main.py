@@ -1571,6 +1571,7 @@ class WhatsAppLogger:
 		self.enabled = cfg.whatsapp_enabled
 		self.number = cfg.whatsapp_number
 		self.aprs_sender = None
+		self._timestamps = deque()
 
 	async def log(self, message: str):
 		"""Send a formatted APRS message to WTSAPP, splitting into chunks if necessary."""
@@ -1579,15 +1580,22 @@ class WhatsAppLogger:
 		clean_number = re.sub(r'\D', '', self.number)
 		if not clean_number:
 			return
-		prefix = f'+{clean_number} '
+		prefix = f'@+{clean_number} '
 		max_chunk = 67 - len(prefix)
 		if max_chunk <= 0:
 			logging.error('WhatsApp number is too long for APRS message limits.')
 			return
-		for i in range(0, len(message), max_chunk):
-			chunk = message[i : i + max_chunk]
+		chunks = [message[i : i + max_chunk] for i in range(0, len(message), max_chunk)]
+		now = time.time()
+		while self._timestamps and self._timestamps[0] < now - 600:
+			self._timestamps.popleft()
+		if len(self._timestamps) + len(chunks) > 50:
+			logging.warning('WhatsApp rate limit reached (50 msgs/10 min). Skipping message.')
+			return
+		for chunk in chunks:
 			message_body = f'{prefix}{chunk}'
 			payload = f'{self.cfg.from_call}>{self.cfg.to_call}::WTSAPP   :{message_body}'
+			self._timestamps.append(time.time())
 			await self.aprs_sender.send_packet(payload, 'whatsapp')
 
 
@@ -1633,7 +1641,6 @@ class APRSSender:
 					await loop.run_in_executor(None, self.ais.set_filter, self.cfg.aprsis_filter)
 					logging.info('APRS-IS filter set to: %s', self.cfg.aprsis_filter)
 				if self.ais._connected:
-					# await loop.run_in_executor(None, self.ais.consumer(self._aprs_callback, blocking=True, immortal=True, raw=True))
 					logging.info('Connected to APRS-IS server %s:%d as %s', self.ais.server[0], self.ais.server[1], self.ais.callsign)
 				return
 			except APRSConnectionError as err:
@@ -1666,6 +1673,8 @@ class APRSSender:
 
 	def _aprs_callback(self, packet: str):
 		"""Callback function to process incoming APRS packets from the server."""
+		if isinstance(packet, bytes):
+			packet = packet.decode('ascii', errors='replace')
 		logging.info('Received APRS packet: %s', packet)
 		if packet.split(':', 1)[-1][:1] in '#$%)*,<?T[_{}':
 			return
@@ -1686,12 +1695,7 @@ class APRSSender:
 						f'To: <b>{addresse}</b>\n'
 						f'{f"MsgNo: <b>{msg_no}</b>" if msg_no else ""}\nMessage: <b>{message_text}</b>'
 					)
-					wa_msg = (
-						f'APRS Message Received\n\n'
-						f'From: *{from_call}*\n'
-						f'To: *{addresse}*\n'
-						f'{f"MsgNo: *{msg_no}*" if msg_no else ""}\nMessage: *{message_text}*\n'
-					)
+					wa_msg = f'APRS Message Received --> From: *{from_call}*, To: *{addresse}*{f", MsgNo: *{msg_no}*, " if msg_no else ", "}Message: *{message_text}*'
 					asyncio.create_task(self.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id))
 					asyncio.create_task(self.wa_logger.log(wa_msg))
 			else:
@@ -1710,11 +1714,13 @@ class APRSSender:
 		"""Send a packet with random delay and retry logic."""
 		while True:
 			try:
+				if not self.ais:
+					await self.connect()
 				await asyncio.sleep(random.uniform(0, 5))
 				self.ais.sendall(payload)
 				logging.info(payload)
 				return
-			except APRSConnectionError as err:
+			except (APRSConnectionError, BrokenPipeError, ConnectionResetError, OSError) as err:
 				logging.error('APRS connection error at %s: %s', log_context, err)
 				await self.connect()
 
@@ -1739,6 +1745,7 @@ class APRSSender:
 			symbt = self.cfg.symbol_overlay
 		extstr = ''
 		ext_tg = ''
+		ext_wa = ''
 		if not is_moving:
 			extstr = mmdvmphg
 			if mmdvmphg.startswith('PHG') and len(mmdvmphg) == 7:
@@ -1756,23 +1763,13 @@ class APRSSender:
 					f'\n\t\tGain: <b>{humanize.metric(int(g), "dB", precision=1)}</b>'
 					f'\n\t\tDirection: <b>{dir_txt}{dir_deg}</b>'
 				)
-				ext_wa = (
-					f'\n\t{mmdvmphg}'
-					f'\n\t\tPower: *{humanize.metric(int(p_w), "W", precision=1)}*'
-					f'\n\t\tHeight: *{humanize.metric(int(h_ft), "ft", precision=1)}*'
-					f'\n\t\tGain: *{humanize.metric(int(g), "dB", precision=1)}*'
-					f'\n\t\tDirection: *{dir_txt}{dir_deg}*'
-				)
 		else:
 			extstr = f'{csestr}/{spdknt}'
 			ext_tg = (
 				f'\n\tHeading: <b>{int(cur_cse)}°</b>'
 				f'\n\tSpeed: <b>{humanize.metric(float(spdkmh), "km/h", precision=1)}</b> | <b>{humanize.metric(float(spdknt), "kn", precision=1)}</b> | <b>{humanize.metric(cur_spd, "m/s")}</b>'
 			)
-			ext_wa = (
-				f'\n\tHeading: *{int(cur_cse)}°*'
-				f'\n\tSpeed: *{humanize.metric(float(spdkmh), "km/h", precision=1)}* | *{humanize.metric(float(spdknt), "kn", precision=1)}* | *{humanize.metric(cur_spd, "m/s")}*'
-			)
+			ext_wa = f', Cse: *{int(cur_cse)}°, *Spd: *{humanize.metric(float(spdkmh), "km/h", precision=1)}*'
 		lookup_table = symbt if symbt in ['/', '\\'] else '\\'
 		sym_desc = symbols.get_desc(lookup_table, symb)
 		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:/{timestamp}{latstr}{symbt}{lonstr}{symb}{extstr}{altstr}{comment}'
@@ -1786,18 +1783,9 @@ class APRSSender:
 			f'\tAltitude: <b>{cur_alt}m</b>{ext_tg}\n'
 			f'Comment: <b>{comment}</b>'
 		)
-		wa_pos = (
-			f'{self.cfg.from_call} Position\n\n'
-			f'Time: *{tg_timestamp}*\n'
-			f'Symbol: *{symbt}{symb} ({sym_desc})*\n'
-			f'Position:\n'
-			f'\tLatitude: *{cur_lat}*\n'
-			f'\tLongitude: *{cur_lon}*\n'
-			f'\tAltitude: *{cur_alt}m*{ext_wa}\n'
-			f'Comment: *{comment}*'
-		)
+		wa_pos = f'{self.cfg.from_call} Position --> Sym: *{sym_desc}*, Lat: *{cur_lat}*, Lon: *{cur_lon}*, Alt: *{cur_alt}m*{ext_wa}'
 		await self.send_packet(payload, 'position')
-		await self.tg_logger.log(tg_pos, cur_lat, cur_lon, int(csestr))
+		await self.tg_logger.log(tg_pos, cur_lat, cur_lon, cur_cse)
 		await self.wa_logger.log(wa_pos)
 
 	async def send_header(self):
@@ -1818,16 +1806,8 @@ class APRSSender:
 			f'Equations: <b>{",".join(eqns)}</b>\n\n'
 			f'Value: <code>[a,b,c]=(a×v²)+(b×v)+c</code>'
 		)
-		wa_hdr = (
-			f'{self.cfg.from_call} Header\n\n'
-			f'Parameters: *{",".join(params)}*\n'
-			f'Units: *{",".join(units)}*\n'
-			f'Equations: *{",".join(eqns)}*\n\n'
-			f'Value: `[a,b,c]=(a×v²)+(b×v)+c`'
-		)
 		await self.send_packet(payload, 'header')
 		await self.tg_logger.log(tg_hdr)
-		await self.wa_logger.log(wa_hdr)
 
 	async def send_telemetry(self, gps_data=None):
 		"""Send APRS telemetry information to APRS-IS."""
@@ -1847,20 +1827,14 @@ class APRSSender:
 			f'RAM Used: <b>{humanize.naturalsize(memused, binary=True)}</b>\n'
 			f'ROM Used: <b>{humanize.naturalsize(diskused, binary=True)}</b>'
 		)
-		wa_tlm = (
-			f'{self.cfg.from_call} Telemetry\n\n'
-			f'Sequence: *#{seq}*\n'
-			f'CPU Temp: *{cputemp / 10:.1f} °C*\n'
-			f'CPU Load: *{cpuload / 10:.1f} %*\n'
-			f'RAM Used: *{humanize.naturalsize(memused, binary=True)}*\n'
-			f'ROM Used: *{humanize.naturalsize(diskused, binary=True)}*'
-		)
+		wa_tlm = f'{self.cfg.from_call} Telemetry --> Seq: *#{seq}*, Temp: *{cputemp / 10:.1f} °C*, Load: *{cpuload / 10:.1f} %*, RAM: *{humanize.naturalsize(memused, binary=True)}*, ROM: *{humanize.naturalsize(diskused, binary=True)}*'
 		if self.cfg.gpsd_enabled:
 			_, sat_data = gps_data if gps_data else await self.gps_handler.get_loc_and_sat()
 			_, uSat, nSat = sat_data
 			payload += f',{uSat:d}'
 			if uSat > 0:
 				tg_tlm += f'\nGPS Lock: <b>{uSat}</b>\nGPS Avail: <b>{nSat}</b>'
+				wa_tlm += f', GPS: *{uSat}/{nSat}*'
 		await self.send_packet(payload, 'telemetry')
 		await self.tg_logger.log(tg_tlm)
 		await self.wa_logger.log(wa_tlm)
@@ -1883,10 +1857,10 @@ class APRSSender:
 				sats_info = f'gps: {u_sat}/{n_sat}'
 		stat_text = f'{timestamp}{"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
 		tg_stat = f'Time: <b>{tg_timestamp}</b>\nText: <b>{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}</b>'
-		wa_stat = f'Time: *{tg_timestamp}*\nText: *{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}*'
+		wa_stat = f'*{"; ".join(filter(None, [gridsquare, uptime, traffic, sats_info]))}*'
 		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:>{stat_text}'
 		tg_stat = f'<u>{self.cfg.from_call} Status</u>\n\n{tg_stat}'
-		wa_stat = f'{self.cfg.from_call} Status\n\n{wa_stat}'
+		wa_stat = f'{self.cfg.from_call} Status --> {wa_stat}'
 		if os.path.exists(self.cfg.status_file):
 			try:
 				with open(self.cfg.status_file, 'r') as f:
