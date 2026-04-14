@@ -1790,7 +1790,7 @@ class APRSSender:
 			f'\tAltitude: <b>{cur_alt}m</b>{ext_tg}\n'
 			f'Comment: <b>{comment}</b>'
 		)
-		wa_pos = f'{self.cfg.from_call} Pos -> {cur_lat}, {cur_lon}, {cur_alt}m{ext_wa}'
+		wa_pos = f'Pos -> {cur_lat}, {cur_lon}, {cur_alt}m{ext_wa}'
 		await self.send_packet(payload, 'position')
 		await self.tg_logger.log(tg_pos, cur_lat, cur_lon, cur_cse)
 		await self.wa_logger.log(wa_pos)
@@ -1834,7 +1834,7 @@ class APRSSender:
 			f'RAM Used: <b>{humanize.naturalsize(memused, binary=True)}</b>\n'
 			f'ROM Used: <b>{humanize.naturalsize(diskused, binary=True)}</b>'
 		)
-		wa_tlm = f'{self.cfg.from_call} Tel -> #{seq}, {cputemp / 10:.1f} C, {cpuload / 10:.1f} %, {humanize.naturalsize(memused, binary=True)}, {humanize.naturalsize(diskused, binary=True)}'
+		wa_tlm = f'Tel -> #{seq}, {cputemp / 10:.1f} C, {cpuload / 10:.1f} %, {humanize.naturalsize(memused, binary=True)}, {humanize.naturalsize(diskused, binary=True)}'
 		if self.cfg.gpsd_enabled:
 			_, sat_data = gps_data if gps_data else await self.gps_handler.get_loc_and_sat()
 			_, uSat, nSat = sat_data
@@ -1863,11 +1863,11 @@ class APRSSender:
 			if u_sat > 0:
 				sats_info = f'gps: {u_sat}/{n_sat}'
 		stat_text = f'{timestamp}{"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
-		tg_stat = f'Time: <b>{tg_timestamp}</b>\nText: <b>{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}</b>'
-		wa_stat = '; '.join(filter(None, [gridsquare, uptime, sats_info]))
+		tg_text = f'Time: <b>{tg_timestamp}</b>\nText: <b>{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}</b>'
+		wa_text = '; '.join(filter(None, [gridsquare, uptime, sats_info]))
 		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:>{stat_text}'
-		tg_stat = f'<u>{self.cfg.from_call} Status</u>\n\n{tg_stat}'
-		wa_stat = f'{self.cfg.from_call} Stat -> {wa_stat}'
+		tg_stat = f'<u>{self.cfg.from_call} Status</u>\n\n{tg_text}'
+		wa_stat = f'Stat -> {wa_text}'
 		if os.path.exists(self.cfg.status_file):
 			try:
 				with open(self.cfg.status_file, 'r') as f:
