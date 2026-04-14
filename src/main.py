@@ -364,8 +364,12 @@ class Config:
 					new_lines.append(f'ADDITIONAL_SENDER={",".join(valid_senders)}{comment}\n')
 				else:
 					new_lines.append(line)
-			with self._atomic_write(env_path) as f_tmp:
-				f_tmp.writelines(new_lines)
+			try:
+				with self._atomic_write(env_path) as f_tmp:
+					f_tmp.writelines(new_lines)
+			except (PermissionError, OSError):
+				content = ''.join(new_lines)
+				subprocess.run(['sudo', 'tee', env_path], input=content, text=True, capture_output=True, check=True)
 			logging.info('Cleaned up invalid senders in %s', env_path)
 		except Exception as e:
 			logging.error('Failed to cleanup .env file: %s', e)
@@ -1695,9 +1699,7 @@ class APRSSender:
 						f'To: <b>{addresse}</b>\n'
 						f'{f"MsgNo: <b>{msg_no}</b>" if msg_no else ""}\nMessage: <b>{message_text}</b>'
 					)
-					wa_msg = (
-						f'APRS Msg Received --> From: {from_call}, To: {addresse}{f", MsgNo: {msg_no}, " if msg_no else ", "}Msg: {message_text}'
-					)
+					wa_msg = f'APRS Msg Received --> From: {from_call}, To: {addresse}{f", MsgNo: {msg_no}, " if msg_no else ", "}Msg: {message_text}'
 					asyncio.create_task(self.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id))
 					asyncio.create_task(self.wa_logger.log(wa_msg))
 			else:
