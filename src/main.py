@@ -1371,11 +1371,11 @@ class ScheduledMessageHandler:
 		any_sent = False
 		for msg_info in self.messages:
 			if await self._is_due(msg_info):
+				asyncio.create_task(self._send_one_with_delay(aprs_sender, gps_data=gps_data, **msg_info))
 				source = msg_info['from_call'] or self.cfg.from_call
 				tracking_key = f'{msg_info["name"]},{source},{msg_info["addrcall"]}'
 				self.tracking[tracking_key] = dt.datetime.now(msg_info['tz']).isoformat()
 				self.tracking.flush()
-				asyncio.create_task(self._send_one_with_delay(aprs_sender, gps_data=gps_data, **msg_info))
 				any_sent = True
 		return any_sent
 
