@@ -45,13 +45,15 @@ from typing import NamedTuple
 import aiohttp
 import aprslib
 import aprslib.util
+import dateutil.tz
 import dotenv
 import humanize
 import psutil
 import symbols
 import telegram
-from aprslib.exceptions import ConnectionError as APRSConnectionError, UnknownFormat
+from aprslib.exceptions import ConnectionError as APRSConnectionError
 from aprslib.exceptions import ParseError as APRSParseError
+from aprslib.exceptions import UnknownFormat
 from geopy.geocoders import Nominatim
 from gpsdclient import GPSDClient
 from itu_appendix42 import ItuAppendix42
@@ -1203,7 +1205,11 @@ class SystemStats(object):
 					if len(kvpart) >= 5:
 						try:
 							d_str = f'{kvpart[-1]}{kvpart[-5]}{kvpart[-4]} {kvpart[-3]}'
-							build_date = dt.datetime.strptime(d_str, '%Y%b%d %H:%M:%S').isoformat()
+							dt_obj = dt.datetime.strptime(d_str, '%Y%b%d %H:%M:%S')
+							if len(kvpart) >= 6 and (tz_str := kvpart[-2]).isalpha():
+								if tz := dateutil.tz.gettz(tz_str):
+									dt_obj = dt_obj.replace(tzinfo=tz)
+							build_date = dt_obj.astimezone(dt.timezone.utc).isoformat()
 						except (ValueError, IndexError):
 							pass
 				rel_ver = re.match(r'^[\d.]+', release).group() if re.match(r'^[\d.]+', release) else release
@@ -1899,6 +1905,7 @@ class APRSSender:
 def aprs_consumer_worker(call, passcode, server, port, aprs_filter, queue):
 	"""Isolated worker process to handle the blocking APRS-IS consumer."""
 	import time
+
 	import aprslib
 
 	while True:
