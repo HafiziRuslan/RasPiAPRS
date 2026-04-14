@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta10] - (2026-04-07T09:02:59+08:00)
+## [beta10] - (2026-04-14T15:34:44+08:00)
 
-- 21 commit(s) contributed to the release.
-- 9 day(s) passed between the first and last commit.
-- 9 day(s) passed between releases.
+- 22 commit(s) contributed to the release.
+- 16 day(s) passed between the first and last commit.
+- 16 day(s) passed between releases.
 
 ### 🚀 Features in beta10
 
@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta10
 
+- [7c2d377](https://github.com/HafiziRuslan/RasPiAPRS/commit/7c2d377864cd141c50981b497cf92d5f66b6f4e7) chore(sbom): update serial number and timestamp *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-14T15:34:44+08:00*
 - [5bd779c](https://github.com/HafiziRuslan/RasPiAPRS/commit/5bd779c660f4a3df6fb3625afe33fcfec9ef9b6c) chore(troubleshoot): add uv to dependencies *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T05:30:24+08:00*
 - [9e223b5](https://github.com/HafiziRuslan/RasPiAPRS/commit/9e223b555516ef53e20db0b6dea0f6b239e9b1ec) build(deps): update aiohttp to version 3.13.5 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-06T17:05:06+08:00*
 - [b6181f7](https://github.com/HafiziRuslan/RasPiAPRS/commit/b6181f78146d03cc84b06613922b2ff9618a29bb) chore(main): disable aprs consumer task *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-03-30T07:51:11+08:00*
@@ -1309,4 +1310,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-07T09:03:49.728179938+08:00
+generated using git-cliff on 2026-04-14T15:35:30.901103444+08:00
