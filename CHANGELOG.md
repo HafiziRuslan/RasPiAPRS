@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta10] - (2026-04-14T16:55:33+08:00)
+## [beta10] - (2026-04-14T23:28:23+08:00)
 
-- 26 commit(s) contributed to the release.
+- 27 commit(s) contributed to the release.
 - 16 day(s) passed between the first and last commit.
 - 16 day(s) passed between releases.
 
@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta10
 
+- [c4b1ebf](https://github.com/HafiziRuslan/RasPiAPRS/commit/c4b1ebfcbd97a5c4239d902c95e4c05f4028c137) refactor(telegram): simplify message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-14T23:28:23+08:00*
 - [4f90e84](https://github.com/HafiziRuslan/RasPiAPRS/commit/4f90e84e6297b3d75c1d650305792be45666e963) refactor(core): improve env handling and message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-14T16:00:57+08:00*
 - [5a300d9](https://github.com/HafiziRuslan/RasPiAPRS/commit/5a300d92d769305463a294e15fd5a591c4fd2a62) refactor(main): remove degree symbol from telemetry message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T08:52:40+08:00*
 - [f38a9e7](https://github.com/HafiziRuslan/RasPiAPRS/commit/f38a9e7a36c6c3d0666863c46da8dc780d99f578) refactor(main): tidy message & telemetry formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T08:34:46+08:00*
@@ -1317,4 +1318,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-14T16:56:24.147131517+08:00
+generated using git-cliff on 2026-04-14T23:29:22.842057390+08:00
