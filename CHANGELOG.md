@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta10] - (2026-04-14T23:28:23+08:00)
+## [beta10] - (2026-04-15T01:00:26+08:00)
 
-- 27 commit(s) contributed to the release.
+- 30 commit(s) contributed to the release.
 - 16 day(s) passed between the first and last commit.
 - 16 day(s) passed between releases.
 
@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta10
 
+- [cb63ff0](https://github.com/HafiziRuslan/RasPiAPRS/commit/cb63ff016e82d6a256c0a7118c7f01902918b719) refactor(main.py): simplify string formatting in telemetry and status messages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-15T00:31:07+08:00*
+- [761391a](https://github.com/HafiziRuslan/RasPiAPRS/commit/761391aaee251774bcf650c9d95ccded4371dc8e) fix(main): correct APRS message display format *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-15T00:27:02+08:00*
 - [dd6bbf6](https://github.com/HafiziRuslan/RasPiAPRS/commit/dd6bbf63813a20eba653050b24177ef9b51a92ac) refactor: standardize message formatting across APRS clients *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-14T16:18:17+08:00*
 - [4bdd02e](https://github.com/HafiziRuslan/RasPiAPRS/commit/4bdd02efca05cee1d015c8a1dcde2c8eb03473a5) refactor(validate): add pattern matching for callsign filters *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T08:07:25+08:00*
 - [d85c4da](https://github.com/HafiziRuslan/RasPiAPRS/commit/d85c4dab36bfaa457bbb4f7ba4c11ad757e1aff9) refactor(server): enhance APRS message handling and error resilience *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T08:02:04+08:00*
@@ -26,6 +28,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta10
 
+- [5055db2](https://github.com/HafiziRuslan/RasPiAPRS/commit/5055db2719acd99c7e221fc01c75181a630b8ab9) refactor(config): rename Telegram variables to constant naming convention *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-15T01:00:26+08:00*
 - [c4b1ebf](https://github.com/HafiziRuslan/RasPiAPRS/commit/c4b1ebfcbd97a5c4239d902c95e4c05f4028c137) refactor(telegram): simplify message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-14T23:28:23+08:00*
 - [4f90e84](https://github.com/HafiziRuslan/RasPiAPRS/commit/4f90e84e6297b3d75c1d650305792be45666e963) refactor(core): improve env handling and message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-14T16:00:57+08:00*
 - [5a300d9](https://github.com/HafiziRuslan/RasPiAPRS/commit/5a300d92d769305463a294e15fd5a591c4fd2a62) refactor(main): remove degree symbol from telemetry message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T08:52:40+08:00*
@@ -1318,4 +1321,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-14T23:29:22.842057390+08:00
+generated using git-cliff on 2026-04-15T01:01:20.288575118+08:00
