@@ -1700,7 +1700,7 @@ class APRSSender:
 						f'<u>APRS Message Received</u>\n\n'
 						f'From: <b>{from_call}</b>\n'
 						f'To: <b>{addresse}</b>\n'
-						f'{f"MsgNo: <b>{msg_no}</b>" if msg_no else ""}\nMessage: <b>{message_text}</b>'
+						f'{f"MsgID: <b>{msg_no}</b>" if msg_no else ""}\nMessage: <b>{message_text}</b>'
 					)
 					wa_msg = f'Msg -> {from_call}>{addresse}{f", ID: {msg_no}, " if msg_no else ", "}Msg: {message_text}'
 					asyncio.create_task(self.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id))
