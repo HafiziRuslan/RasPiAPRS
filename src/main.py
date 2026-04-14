@@ -1348,14 +1348,18 @@ class ScheduledMessageHandler:
 						{'name': name, 'weekday': weekday, 'addrcall': addrcall, 'template': template_fmt.format(name), 'from_call': sender, 'tz': tz}
 					)
 
+	def _get_tracking_key(self, msg_info) -> str:
+		"""Generate unique tracking key for message."""
+		source = msg_info['from_call'] or self.cfg.from_call
+		return f'{msg_info["name"]},{source},{msg_info["addrcall"]}'
+
 	async def _is_due(self, msg_info) -> bool:
 		"""Return True if the message described by *msg_info* should be sent now."""
 		now = dt.datetime.now(msg_info['tz'])
 		if msg_info['weekday'] is not None and now.weekday() != msg_info['weekday']:
 			return False
 		today = now.strftime('%Y-%m-%d')
-		source = msg_info['from_call'] or self.cfg.from_call
-		tracking_key = f'{msg_info["name"]},{source},{msg_info["addrcall"]}'
+		tracking_key = self._get_tracking_key(msg_info)
 		last_sent = self.tracking.get(tracking_key)
 		if last_sent and last_sent.startswith(today):
 			return False
@@ -1372,8 +1376,7 @@ class ScheduledMessageHandler:
 		for msg_info in self.messages:
 			if await self._is_due(msg_info):
 				asyncio.create_task(self._send_one_with_delay(aprs_sender, gps_data=gps_data, **msg_info))
-				source = msg_info['from_call'] or self.cfg.from_call
-				tracking_key = f'{msg_info["name"]},{source},{msg_info["addrcall"]}'
+				tracking_key = self._get_tracking_key(msg_info)
 				self.tracking[tracking_key] = dt.datetime.now(msg_info['tz']).isoformat()
 				self.tracking.flush()
 				any_sent = True
