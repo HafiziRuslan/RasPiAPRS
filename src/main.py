@@ -1405,11 +1405,11 @@ class ScheduledMessageHandler:
 		wa_msg = f'{parsed["from"]}'
 		if parsed.get('via'):
 			tg_msg += f'\nvia: <b>{parsed["via"]}</b>'
-			wa_msg += f'>{parsed["via"].replace("*", "\\*")}'
+			wa_msg += f'>{parsed["via"]}'
 		path_list = parsed.get('path')
 		if path_list:
 			tg_msg += f'\nPath: <b>{", ".join(path_list)}</b>'
-			wa_msg += f'>{", ".join(path_list.replace("*", "\\*"))}'
+			wa_msg += f'>{", ".join(path_list)}'
 		tg_msg += f'\nTo: <b>{parsed["addresse"]}</b>\n{f"MessageID: <b>{parsed['msgNo']}</b>" if parsed.get("msgNo") else ""}\nMessage: <b>{parsed["message_text"]}</b>'
 		wa_msg += f'>{parsed["addresse"]}{f", ID: {parsed['msgNo']}, " if parsed.get("msgNo") else ", "}Msg: {parsed["message_text"]}'
 		await aprs_sender.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
