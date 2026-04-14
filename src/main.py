@@ -103,10 +103,10 @@ class Config:
 	smartbeaconing_turn_slope: int = 255
 	telegram_enabled: bool = False
 	telegram_token: str | None = None
-	telegram_chat_id: str | None = None
-	telegram_topic_id: int | None = None
-	telegram_loc_topic_id: int | None = None
-	telegram_msg_topic_id: int | None = None
+	telegram_cid: str | None = None
+	telegram_tid: int | None = None
+	telegram_loc_tid: int | None = None
+	telegram_msg_tid: int | None = None
 	whatsapp_enabled: bool = False
 	whatsapp_number: str | None = None
 	aprsphnet_enabled: bool = False
@@ -271,10 +271,10 @@ class Config:
 		self.telegram_enabled = self._env_get_bool('TELEGRAM_ENABLE')
 		if self.telegram_enabled:
 			self.telegram_token = os.getenv('TELEGRAM_TOKEN')
-			self.telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID')
-			self.telegram_topic_id = self._env_get_int_or_none('TELEGRAM_TOPIC_ID')
-			self.telegram_msg_topic_id = self._env_get_int_or_none('TELEGRAM_MSG_TOPIC_ID')
-			self.telegram_loc_topic_id = self._env_get_int_or_none('TELEGRAM_LOC_TOPIC_ID')
+			self.telegram_cid = os.getenv('TELEGRAM_CHAT_ID')
+			self.telegram_tid = self._env_get_int_or_none('TELEGRAM_TOPIC_ID')
+			self.telegram_msg_tid = self._env_get_int_or_none('TELEGRAM_MSG_TOPIC_ID')
+			self.telegram_loc_tid = self._env_get_int_or_none('TELEGRAM_LOC_TOPIC_ID')
 		self.whatsapp_enabled = self._env_get_bool('WHATSAPP_ENABLE')
 		if self.whatsapp_enabled:
 			self.whatsapp_number = os.getenv('WHATSAPP_NUMBER')
@@ -1412,7 +1412,7 @@ class ScheduledMessageHandler:
 			wa_msg += f'>{", ".join(path_list)}'
 		tg_msg += f'\nTo: <b>{parsed["addresse"]}</b>\n{f"MessageID: <b>{parsed['msgNo']}</b>" if parsed.get("msgNo") else ""}\nMessage: <b>{parsed["message_text"]}</b>'
 		wa_msg += f'>{parsed["addresse"]}{f", ID: {parsed['msgNo']}, " if parsed.get("msgNo") else ", "}Msg: {parsed["message_text"]}'
-		await aprs_sender.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id)
+		await aprs_sender.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_tid)
 		await aprs_sender.wa_logger.log(wa_msg)
 		return True
 
@@ -1427,14 +1427,14 @@ class TelegramLogger(object):
 		if not self.enabled:
 			return
 		self.token = cfg.telegram_token
-		self.chat_id = cfg.telegram_chat_id
+		self.chat_id = cfg.telegram_cid
 		if not self.token or not self.chat_id:
 			logging.error('Telegram token or chat ID is missing. Disabling Telegram logging.')
 			self.enabled = False
 			return
 		self.bot = telegram.Bot(self.token)
-		self.topic_id = cfg.telegram_topic_id
-		self.loc_topic_id = cfg.telegram_loc_topic_id
+		self.tid = cfg.telegram_tid
+		self.loc_tid = cfg.telegram_loc_tid
 
 	async def __aenter__(self):
 		if self.bot:
@@ -1459,7 +1459,7 @@ class TelegramLogger(object):
 				await asyncio.sleep(delay)
 				delay *= 2
 
-	async def log(self, tg_message: str, lat: float = 0.0, lon: float = 0.0, cse: float = 0.0, topic_id: int | None = None):
+	async def log(self, tg_message: str, lat: float = 0.0, lon: float = 0.0, cse: float = 0.0, tid: int | None = None):
 		"""Send log message and optionally location to Telegram channel."""
 		if not self.enabled or not self.bot:
 			return
@@ -1473,9 +1473,9 @@ class TelegramLogger(object):
 				'parse_mode': 'HTML',
 				'link_preview_options': {'is_disabled': True, 'prefer_small_media': True, 'show_above_text': True},
 			}
-			current_topic_id = topic_id if topic_id is not None else self.topic_id
-			if current_topic_id:
-				msg_kwargs['message_thread_id'] = current_topic_id
+			current_tid = tid if tid is not None else self.tid
+			if current_tid:
+				msg_kwargs['message_thread_id'] = current_tid
 			msg = await self._call_with_retry(self.bot.send_message, **msg_kwargs)
 			logging.info('Sent message to Telegram: %s/%s/%s', msg.chat_id, msg.message_thread_id, msg.message_id)
 		except Exception as e:
@@ -1544,10 +1544,10 @@ class TelegramLogger(object):
 		"""Send a new live location message."""
 		try:
 			loc_kwargs = {'chat_id': self.chat_id, 'latitude': lat, 'longitude': lon, 'heading': cse if cse > 0 else None, 'live_period': 86400}
-			if self.loc_topic_id:
-				loc_kwargs['message_thread_id'] = self.loc_topic_id
-			elif self.topic_id:
-				loc_kwargs['message_thread_id'] = self.topic_id
+			if self.loc_tid:
+				loc_kwargs['message_thread_id'] = self.loc_tid
+			elif self.tid:
+				loc_kwargs['message_thread_id'] = self.tid
 			loc = await self._call_with_retry(self.bot.send_location, **loc_kwargs)
 			logging.info('Sent location to Telegram: %s/%s/%s', loc.chat_id, loc.message_thread_id, loc.message_id)
 			self._write_location_id(loc.message_id, time.time())
@@ -1703,8 +1703,9 @@ class APRSSender:
 						f'{f"MsgID: <b>{msg_no}</b>" if msg_no else ""}\nMessage: <b>{message_text}</b>'
 					)
 					wa_msg = f'Msg -> {from_call}>{addresse}{f", ID: {msg_no}, " if msg_no else ", "}Msg: {message_text}'
-					asyncio.create_task(self.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_topic_id))
-					asyncio.create_task(self.wa_logger.log(wa_msg))
+					asyncio.create_task(self.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_tid))
+					if from_call != 'WTSAPP':
+						asyncio.create_task(self.wa_logger.log(wa_msg))
 			else:
 				logging.debug(
 					'Ignoring non-message APRS packet of type %s from %s: %s',
