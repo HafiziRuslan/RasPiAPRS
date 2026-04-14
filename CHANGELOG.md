@@ -2,14 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta10] - (2026-04-15T01:00:26+08:00)
+## [beta10] - (2026-04-15T02:48:59+08:00)
 
-- 30 commit(s) contributed to the release.
+- 31 commit(s) contributed to the release.
 - 16 day(s) passed between the first and last commit.
 - 16 day(s) passed between releases.
 
 ### 🚀 Features in beta10
 
+- [54421a0](https://github.com/HafiziRuslan/RasPiAPRS/commit/54421a0c1dd7349a672c1288323854ce4723aa31) feat(main): add timezone support for build date parsing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-15T02:48:59+08:00*
 - [941e6b0](https://github.com/HafiziRuslan/RasPiAPRS/commit/941e6b028bec5acf5a75c558e86d1471ad5d0ba2) feat(utils): add tracking key helper function *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-14T16:55:33+08:00*
 - [dd2f6cf](https://github.com/HafiziRuslan/RasPiAPRS/commit/dd2f6cf7138a30a75ff05152201078f78699068c) feat(aprs): improve send_all logic to track sent messages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T09:02:59+08:00*
 - [f2c6642](https://github.com/HafiziRuslan/RasPiAPRS/commit/f2c6642b69e58b7461186aa5eb9edaeedc34324d) refactor(main): consolidate message sequences *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T06:59:15+08:00*
@@ -1321,4 +1322,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-15T01:01:20.288575118+08:00
+generated using git-cliff on 2026-04-15T02:49:51.380226110+08:00
