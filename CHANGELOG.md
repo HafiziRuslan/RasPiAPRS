@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta10] - (2026-04-15T11:43:34+08:00)
+## [beta10] - (2026-04-15T12:55:17+08:00)
 
-- 32 commit(s) contributed to the release.
+- 33 commit(s) contributed to the release.
 - 17 day(s) passed between the first and last commit.
 - 17 day(s) passed between releases.
 
@@ -45,6 +45,10 @@ All notable changes to this project will be documented in this file.
 - [5ddcd11](https://github.com/HafiziRuslan/RasPiAPRS/commit/5ddcd11324ff0af6411f3821f5930365c785eff3) docs(README): add WhatsApp support to remote alerts *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T05:31:41+08:00*
 - [9edbe6d](https://github.com/HafiziRuslan/RasPiAPRS/commit/9edbe6d792456ba3585947cdc05f96d7bd4ac566) docs(env): update env comment for whatsapp format *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T05:14:30+08:00*
 - [124945a](https://github.com/HafiziRuslan/RasPiAPRS/commit/124945adb8d0d541b3a2a0e1a00a2016b24a7497) docs(RasPiAPRS): update project description and keywords *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-06T16:59:47+08:00*
+
+### 🎨 Styling in beta10
+
+- [122858a](https://github.com/HafiziRuslan/RasPiAPRS/commit/122858a1f512e68fd4cf3e571b37e804ebfe52f2) style(core): format sequence number and message structure *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-15T12:55:17+08:00*
 
 ### 🧪 Testing in beta10
 
@@ -1323,4 +1327,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-15T11:44:26.604957807+08:00
+generated using git-cliff on 2026-04-15T12:56:15.113819990+08:00
