@@ -1418,7 +1418,7 @@ class ScheduledMessageHandler:
 			wa_msg += f'>{", ".join(path_list)}'
 		tg_msg += f'\nTo: <b>{parsed["addresse"]}</b>\n{f"MessageID: <b>{parsed['msgNo']}</b>" if parsed.get("msgNo") else ""}\nMessage: <b>{parsed["message_text"]}</b>'
 		wa_msg += f'>{parsed["addresse"]}{f", ID: {parsed['msgNo']}, " if parsed.get("msgNo") else ", "}Msg: {parsed["message_text"]}'
-		await aprs_sender.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_tid)
+		await aprs_sender.tg_logger.log(tg_msg, tid=self.cfg.telegram_msg_tid)
 		await aprs_sender.wa_logger.log(wa_msg)
 		return True
 
@@ -1709,7 +1709,7 @@ class APRSSender:
 						f'{f"MsgID: <b>{msg_no}</b>" if msg_no else ""}\nMessage: <b>{message_text}</b>'
 					)
 					wa_msg = f'Msg -> {from_call}>{addresse}{f", ID: {msg_no}, " if msg_no else ", "}Msg: {message_text}'
-					asyncio.create_task(self.tg_logger.log(tg_msg, topic_id=self.cfg.telegram_msg_tid))
+					asyncio.create_task(self.tg_logger.log(tg_msg, tid=self.cfg.telegram_msg_tid))
 					if from_call != 'WTSAPP':
 						asyncio.create_task(self.wa_logger.log(wa_msg))
 			else:
