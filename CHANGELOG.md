@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta10] - (2026-04-15T02:48:59+08:00)
+## [beta10] - (2026-04-15T11:43:34+08:00)
 
-- 31 commit(s) contributed to the release.
-- 16 day(s) passed between the first and last commit.
-- 16 day(s) passed between releases.
+- 32 commit(s) contributed to the release.
+- 17 day(s) passed between the first and last commit.
+- 17 day(s) passed between releases.
 
 ### 🚀 Features in beta10
 
@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta10
 
+- [1fde61a](https://github.com/HafiziRuslan/RasPiAPRS/commit/1fde61a1bccdf3181cfe6ec5dd54eebcd7c4fa53) refactor(main): update telegram logger parameter from topic_id to tid *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-15T11:43:34+08:00*
 - [5055db2](https://github.com/HafiziRuslan/RasPiAPRS/commit/5055db2719acd99c7e221fc01c75181a630b8ab9) refactor(config): rename Telegram variables to constant naming convention *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-15T01:00:26+08:00*
 - [c4b1ebf](https://github.com/HafiziRuslan/RasPiAPRS/commit/c4b1ebfcbd97a5c4239d902c95e4c05f4028c137) refactor(telegram): simplify message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-14T23:28:23+08:00*
 - [4f90e84](https://github.com/HafiziRuslan/RasPiAPRS/commit/4f90e84e6297b3d75c1d650305792be45666e963) refactor(core): improve env handling and message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-14T16:00:57+08:00*
@@ -1322,4 +1323,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-15T02:49:51.380226110+08:00
+generated using git-cliff on 2026-04-15T11:44:26.604957807+08:00
