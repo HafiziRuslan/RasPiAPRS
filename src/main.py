@@ -1400,7 +1400,7 @@ class ScheduledMessageHandler:
 		path_str = ''
 		if from_call:
 			path_str = f',TCPIP*,qAC,{self.cfg.from_call}'
-		payload = f'{source}>{self.cfg.to_call}{path_str}::{addrcall:9s}:{message}{{{seq}'
+		payload = f'{source}>{self.cfg.to_call}{path_str}::{addrcall:9s}:{message}{{{seq:05d}'
 		try:
 			parsed = aprslib.parse(payload)
 		except APRSParseError as err:
@@ -1411,12 +1411,12 @@ class ScheduledMessageHandler:
 		wa_msg = f'{parsed["from"]}'
 		if parsed.get('via'):
 			tg_msg += f'\nvia: <b>{parsed["via"]}</b>'
-			wa_msg += f'>{parsed["via"]}'
+			wa_msg += f',{parsed["via"]}'
 		path_list = parsed.get('path')
 		if path_list:
 			tg_msg += f'\nPath: <b>{", ".join(path_list)}</b>'
-			wa_msg += f'>{", ".join(path_list)}'
-		tg_msg += f'\nTo: <b>{parsed["addresse"]}</b>\n{f"MessageID: <b>{parsed['msgNo']}</b>" if parsed.get("msgNo") else ""}\nMessage: <b>{parsed["message_text"]}</b>'
+			wa_msg += f',{", ".join(path_list)}'
+		tg_msg += f'\nTo: <b>{parsed["addresse"]}</b>\n{f"MessageID: <b>{parsed['msgNo']}</b>" if parsed.get("msgNo") else ""}\nMessageText: <b>{parsed["message_text"]}</b>'
 		wa_msg += f'>{parsed["addresse"]}{f", ID: {parsed['msgNo']}, " if parsed.get("msgNo") else ", "}Msg: {parsed["message_text"]}'
 		await aprs_sender.tg_logger.log(tg_msg, tid=self.cfg.telegram_msg_tid)
 		await aprs_sender.wa_logger.log(wa_msg)
