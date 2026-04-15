@@ -119,7 +119,7 @@ class Config:
 	additional_sender: list[str] | None = None
 	additional_sender_raw: str | None = None
 	log_level_raw: int = 2
-	log_max_bytes: float = 1.0
+	log_max_size: float = 1.0
 	log_max_count: int = 3
 	_env_mtime: float = 0.0
 
@@ -215,7 +215,7 @@ class Config:
 		self._env_mtime = current_mtime
 		dotenv.load_dotenv(env_file, override=True)
 		self.log_level_raw = self._env_get_int('LOG_LEVEL', 2)
-		self.log_max_bytes = self._env_get_float('LOG_MAX_BYTES', 1)
+		self.log_max_size = self._env_get_float('LOG_MAX_SIZE', 1.0)
 		self.log_max_count = self._env_get_int('LOG_MAX_COUNT', 3)
 		self.call = os.getenv('APRS_CALL', 'N0CALL')
 		self.ssid = self._env_get_int('APRS_SSID', 0, 'SSID value error')
@@ -446,14 +446,14 @@ def configure_logging(cfg: Config):
 		logging.ERROR: '4-error.log',
 		logging.CRITICAL: '5-critical.log',
 	}
-	max_bytes = cfg.log_max_bytes * 1024 * 1024
+	max_size = cfg.log_max_size * 1024 * 1024
 	max_count = cfg.log_max_count
 	for level, filename in log_files.items():
 		if level < log_level:
 			continue
 		try:
 			path = os.path.join(log_dir, filename)
-			handler = NumberedRotatingFileHandler(path, maxBytes=max_bytes, backupCount=max_count)
+			handler = NumberedRotatingFileHandler(path, maxBytes=max_size, backupCount=max_count)
 			handler.setLevel(level)
 			handler.addFilter(LevelFilter(level))
 			handler.setFormatter(formatter)
