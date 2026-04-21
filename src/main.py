@@ -1399,7 +1399,7 @@ class ScheduledMessageHandler:
 		message = f'{template} from {gridsquare} via {app_id}'[:67]
 		path_str = ''
 		if from_call:
-			path_str = f',TCPIP*,qAC,{self.cfg.from_call}'
+			path_str = f',{self.cfg.from_call}*,qAR,{self.cfg.from_call}'
 		payload = f'{source}>{self.cfg.to_call}{path_str}::{addrcall:9s}:{message}{{{seq:05d}'
 		try:
 			parsed = aprslib.parse(payload)
