@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta10] - (2026-04-15T13:02:44+08:00)
+## [beta10] - (2026-04-21T17:29:35+08:00)
 
-- 34 commit(s) contributed to the release.
-- 17 day(s) passed between the first and last commit.
-- 17 day(s) passed between releases.
+- 35 commit(s) contributed to the release.
+- 23 day(s) passed between the first and last commit.
+- 23 day(s) passed between releases.
 
 ### 🚀 Features in beta10
 
@@ -56,6 +56,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta10
 
+- [1d00233](https://github.com/HafiziRuslan/RasPiAPRS/commit/1d002339e2b15e8310a9d9fb85ebaa63a8d524ce) build(sbom): update software bill of materials *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-21T17:29:35+08:00*
 - [03d7ef3](https://github.com/HafiziRuslan/RasPiAPRS/commit/03d7ef325720cb4bb5a281593c68267f600033ec) chore(logging): update log max size from bytes to size units *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-15T13:02:44+08:00*
 - [7c2d377](https://github.com/HafiziRuslan/RasPiAPRS/commit/7c2d377864cd141c50981b497cf92d5f66b6f4e7) chore(sbom): update serial number and timestamp *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-14T15:34:44+08:00*
 - [5bd779c](https://github.com/HafiziRuslan/RasPiAPRS/commit/5bd779c660f4a3df6fb3625afe33fcfec9ef9b6c) chore(troubleshoot): add uv to dependencies *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T05:30:24+08:00*
@@ -1328,4 +1329,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-15T13:03:27.178410272+08:00
+generated using git-cliff on 2026-04-21T17:30:27.300808388+08:00
