@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta10] - (2026-04-21T17:29:35+08:00)
+## [beta10] - (2026-04-21T17:50:34+08:00)
 
-- 35 commit(s) contributed to the release.
+- 36 commit(s) contributed to the release.
 - 23 day(s) passed between the first and last commit.
 - 23 day(s) passed between releases.
 
@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta10
 
+- [f7b5022](https://github.com/HafiziRuslan/RasPiAPRS/commit/f7b502211c14c6cf98b0ba69744a1b8978f95e0e) refactor(msg): simplify path_str using from_call *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-21T17:50:34+08:00*
 - [1fde61a](https://github.com/HafiziRuslan/RasPiAPRS/commit/1fde61a1bccdf3181cfe6ec5dd54eebcd7c4fa53) refactor(main): update telegram logger parameter from topic_id to tid *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-15T11:43:34+08:00*
 - [5055db2](https://github.com/HafiziRuslan/RasPiAPRS/commit/5055db2719acd99c7e221fc01c75181a630b8ab9) refactor(config): rename Telegram variables to constant naming convention *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-15T01:00:26+08:00*
 - [c4b1ebf](https://github.com/HafiziRuslan/RasPiAPRS/commit/c4b1ebfcbd97a5c4239d902c95e4c05f4028c137) refactor(telegram): simplify message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-14T23:28:23+08:00*
@@ -1329,4 +1330,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-21T17:30:27.300808388+08:00
+generated using git-cliff on 2026-04-21T17:51:22.933097054+08:00
