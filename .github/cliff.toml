@@ -17,9 +17,6 @@ body = """
   \n## [unreleased]
 {% endif %}
 - {{ statistics.commit_count }} commit(s) contributed to the release.
-{%- if statistics.commits_timespan > 0 && statistics.commits_timespan != statistics.days_passed_since_last_release %}
-  - {{ statistics.commits_timespan }} day(s) passed between the first and last commit.
-{%- endif %}
 {%- if statistics.conventional_commit_count > 0 %}
   - {{ statistics.conventional_commit_count }} commit(s) parsed as conventional.
 {%- endif %}
