@@ -2,9 +2,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:c9f7ee05-2b42-4c4f-b8fb-710aa79d6088",
+  "serialNumber": "urn:uuid:06232a42-3b3b-4492-a061-36dff1a7be5e",
   "metadata": {
-    "timestamp": "2026-04-21T09:29:24.336629800Z",
+    "timestamp": "2026-04-22T14:04:26.081303300Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
@@ -14,9 +14,9 @@
     ],
     "component": {
       "type": "library",
-      "bom-ref": "raspiaprs-1@0.1b10",
+      "bom-ref": "raspiaprs-1@0.1b11",
       "name": "raspiaprs",
-      "version": "0.1b10",
+      "version": "0.1b11",
       "properties": [
         {
           "name": "uv:package:is_project_root",
@@ -77,10 +77,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "certifi-9@2026.2.25",
+      "bom-ref": "certifi-9@2026.4.22",
       "name": "certifi",
-      "version": "2026.2.25",
-      "purl": "pkg:pypi/certifi@2026.2.25"
+      "version": "2026.4.22",
+      "purl": "pkg:pypi/certifi@2026.4.22"
     },
     {
       "type": "library",
@@ -147,10 +147,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "idna-19@3.11",
+      "bom-ref": "idna-19@3.12",
       "name": "idna",
-      "version": "3.11",
-      "purl": "pkg:pypi/idna@3.11"
+      "version": "3.12",
+      "purl": "pkg:pypi/idna@3.12"
     },
     {
       "type": "library",
@@ -242,7 +242,7 @@
     {
       "ref": "anyio-5@4.13.0",
       "dependsOn": [
-        "idna-19@3.11"
+        "idna-19@3.12"
       ]
     },
     {
@@ -260,7 +260,7 @@
       ]
     },
     {
-      "ref": "certifi-9@2026.2.25",
+      "ref": "certifi-9@2026.4.22",
       "dependsOn": []
     },
     {
@@ -292,7 +292,7 @@
     {
       "ref": "httpcore-16@1.0.9",
       "dependsOn": [
-        "certifi-9@2026.2.25",
+        "certifi-9@2026.4.22",
         "h11-15@0.16.0"
       ]
     },
@@ -300,9 +300,9 @@
       "ref": "httpx-17@0.28.1",
       "dependsOn": [
         "anyio-5@4.13.0",
-        "certifi-9@2026.2.25",
+        "certifi-9@2026.4.22",
         "httpcore-16@1.0.9",
-        "idna-19@3.11"
+        "idna-19@3.12"
       ]
     },
     {
@@ -310,7 +310,7 @@
       "dependsOn": []
     },
     {
-      "ref": "idna-19@3.11",
+      "ref": "idna-19@3.12",
       "dependsOn": []
     },
     {
@@ -349,7 +349,7 @@
       ]
     },
     {
-      "ref": "raspiaprs-1@0.1b10",
+      "ref": "raspiaprs-1@0.1b11",
       "dependsOn": [
         "aiohttp-3@3.13.5",
         "aprslib-6@0.7.2",
@@ -370,7 +370,7 @@
     {
       "ref": "yarl-28@1.23.0",
       "dependsOn": [
-        "idna-19@3.11",
+        "idna-19@3.12",
         "multidict-20@6.7.1",
         "propcache-22@0.4.1"
       ]
