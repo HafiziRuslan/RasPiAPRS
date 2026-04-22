@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [beta11] - (2026-04-22T22:05:37+08:00)
+
+- 2 commit(s) contributed to the release.
+
+### 🚜 Refactor in beta11
+
+- [229b3ad](https://github.com/HafiziRuslan/RasPiAPRS/commit/229b3ad649e4c4b80b2a5bcdfdb13e60a7608bef) refactor(dependencies): update certifi and idna packages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-22T22:05:06+08:00*
+
+### ⚙️ Miscellaneous Tasks in beta11
+
+- [594e70d](https://github.com/HafiziRuslan/RasPiAPRS/commit/594e70daa213ec10bab63df925102234f5e50c53) chore(project): bump version to 0.1b11 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-22T22:05:37+08:00*
+
+---
+
 ## [beta10] - (2026-04-22T22:01:10+08:00)
 
 - 40 commit(s) contributed to the release.
@@ -1327,4 +1341,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-22T22:02:09.548183112+08:00
+generated using git-cliff on 2026-04-22T22:06:30.973586170+08:00
