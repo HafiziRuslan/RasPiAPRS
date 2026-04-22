@@ -1,6 +1,6 @@
 [project]
 name = 'RasPiAPRS'
-version = '0.1b10'
+version = '0.1b11'
 description = 'APRS telemetry for Pi-Star/WPSD/AllStarLink/DVSwitch'
 keywords = ['amateur-radio', 'aprs', 'aprs-beacon', 'aprs-telemetry', 'aprs-messaging', 'mmdvm', 'pi-star', 'wpsd', 'allstarlink', 'dvswitch']
 readme = 'README.md'
