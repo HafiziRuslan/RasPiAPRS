@@ -2,11 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta10] - (2026-04-21T17:59:09+08:00)
+## [beta10] - (2026-04-22T22:01:10+08:00)
 
-- 37 commit(s) contributed to the release.
-- 23 day(s) passed between the first and last commit.
-- 23 day(s) passed between releases.
+- 40 commit(s) contributed to the release.
+- 24 day(s) passed between releases.
 
 ### 🚀 Features in beta10
 
@@ -29,6 +28,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta10
 
+- [e940c82](https://github.com/HafiziRuslan/RasPiAPRS/commit/e940c827422b8b28501847e4da8d9618a4b5e34a) refactor(github/cliff.toml): optimize JSON structure for clarity *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-22T22:00:26+08:00*
 - [f7b5022](https://github.com/HafiziRuslan/RasPiAPRS/commit/f7b502211c14c6cf98b0ba69744a1b8978f95e0e) refactor(msg): simplify path_str using from_call *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-21T17:50:34+08:00*
 - [1fde61a](https://github.com/HafiziRuslan/RasPiAPRS/commit/1fde61a1bccdf3181cfe6ec5dd54eebcd7c4fa53) refactor(main): update telegram logger parameter from topic_id to tid *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-15T11:43:34+08:00*
 - [5055db2](https://github.com/HafiziRuslan/RasPiAPRS/commit/5055db2719acd99c7e221fc01c75181a630b8ab9) refactor(config): rename Telegram variables to constant naming convention *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-15T01:00:26+08:00*
@@ -43,6 +43,7 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation in beta10
 
+- [5ed21a6](https://github.com/HafiziRuslan/RasPiAPRS/commit/5ed21a6365fede97bb9033100bbb031a6c3c7834) chore(.env): set APRS_SSID to 0 for base station *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-22T22:01:10+08:00*
 - [c217a8e](https://github.com/HafiziRuslan/RasPiAPRS/commit/c217a8edc643787a9dc79ddf61daaa598d75373c) docs(config): add missing configuration comments *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-21T17:59:09+08:00*
 - [5ddcd11](https://github.com/HafiziRuslan/RasPiAPRS/commit/5ddcd11324ff0af6411f3821f5930365c785eff3) docs(README): add WhatsApp support to remote alerts *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T05:31:41+08:00*
 - [9edbe6d](https://github.com/HafiziRuslan/RasPiAPRS/commit/9edbe6d792456ba3585947cdc05f96d7bd4ac566) docs(env): update env comment for whatsapp format *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-07T05:14:30+08:00*
@@ -58,6 +59,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta10
 
+- [abf93f3](https://github.com/HafiziRuslan/RasPiAPRS/commit/abf93f3e7950c11bfca8b0238545319710b4dd62) chore(github): update cliff release notes logic *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-22T21:20:14+08:00*
 - [1d00233](https://github.com/HafiziRuslan/RasPiAPRS/commit/1d002339e2b15e8310a9d9fb85ebaa63a8d524ce) build(sbom): update software bill of materials *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-21T17:29:35+08:00*
 - [03d7ef3](https://github.com/HafiziRuslan/RasPiAPRS/commit/03d7ef325720cb4bb5a281593c68267f600033ec) chore(logging): update log max size from bytes to size units *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-15T13:02:44+08:00*
 - [7c2d377](https://github.com/HafiziRuslan/RasPiAPRS/commit/7c2d377864cd141c50981b497cf92d5f66b6f4e7) chore(sbom): update serial number and timestamp *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-14T15:34:44+08:00*
@@ -71,7 +73,6 @@ All notable changes to this project will be documented in this file.
 ## [beta9] - (2026-03-30T07:30:59+08:00)
 
 - 37 commit(s) contributed to the release.
-- 5 day(s) passed between the first and last commit.
 - 6 day(s) passed between releases.
 
 ### 🚀 Features in beta9
@@ -131,7 +132,6 @@ All notable changes to this project will be documented in this file.
 ## [beta8] - (2026-03-24T01:30:37+08:00)
 
 - 201 commit(s) contributed to the release.
-- 27 day(s) passed between the first and last commit.
 - 27 day(s) passed between releases.
 
 ### 🚀 Features in beta8
@@ -367,7 +367,6 @@ All notable changes to this project will be documented in this file.
 ## [beta7] - (2026-02-25T01:48:56+08:00)
 
 - 82 commit(s) contributed to the release.
-- 7 day(s) passed between the first and last commit.
 - 8 day(s) passed between releases.
 
 ### 🚀 Features in beta7
@@ -469,7 +468,6 @@ All notable changes to this project will be documented in this file.
 ## [beta6] - (2026-02-16T12:09:17+08:00)
 
 - 45 commit(s) contributed to the release.
-- 27 day(s) passed between the first and last commit.
 - 27 day(s) passed between releases.
 
 ### 🚀 Features in beta6
@@ -537,7 +535,6 @@ All notable changes to this project will be documented in this file.
 ## [beta5] - (2026-01-20T08:43:15+08:00)
 
 - 130 commit(s) contributed to the release.
-- 20 day(s) passed between the first and last commit.
 - 20 day(s) passed between releases.
 
 ### 🚀 Features in beta5
@@ -694,7 +691,6 @@ All notable changes to this project will be documented in this file.
 ## [beta4] - (2025-12-31T17:03:49+08:00)
 
 - 616 commit(s) contributed to the release.
-- 2057 day(s) passed between the first and last commit.
 
 ### 🚀 Features in beta4
 
@@ -1331,4 +1327,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-21T18:00:00.625237509+08:00
+generated using git-cliff on 2026-04-22T22:02:09.548183112+08:00
