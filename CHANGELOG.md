@@ -2,9 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta11] - (2026-04-22T22:05:37+08:00)
+## [beta11] - (2026-04-26T23:44:31+08:00)
 
-- 2 commit(s) contributed to the release.
+- 4 commit(s) contributed to the release.
+- 4 day(s) passed between releases.
+
+### 🐛 Bug Fixes in beta11
+
+- [a1793ef](https://github.com/HafiziRuslan/RasPiAPRS/commit/a1793ef39264dd67d17459585351512e67a598e3) fix(main): add blocked sender validation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-26T23:44:31+08:00*
 
 ### 🚜 Refactor in beta11
 
@@ -12,6 +17,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta11
 
+- [f85184d](https://github.com/HafiziRuslan/RasPiAPRS/commit/f85184df8e14e3d1515a33fdf75e562405efeab4) chore(dependencies): update idna to 3.13 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-26T23:42:29+08:00*
 - [594e70d](https://github.com/HafiziRuslan/RasPiAPRS/commit/594e70daa213ec10bab63df925102234f5e50c53) chore(project): bump version to 0.1b11 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-22T22:05:37+08:00*
 
 ---
@@ -1341,4 +1347,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-22T22:06:30.973586170+08:00
+generated using git-cliff on 2026-04-26T23:45:30.644006700+08:00
