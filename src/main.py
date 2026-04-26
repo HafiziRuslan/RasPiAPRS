@@ -309,9 +309,26 @@ class Config:
 			valid_senders = []
 			raw_senders = self.additional_sender_raw.split(',')
 			needs_cleanup = False
+			blocked_senders = {
+				'N0SIGN',
+				'1234567',
+				'206',
+				'SHERIFF',
+				'CALLSIGN',
+				'SCIROCCO',
+				'SCIROCCM',
+				'TEST',
+				'LINK',
+				'PISTAR',
+				'G1NGER',
+				'EMCOMM',
+				'ST0NY',
+			}
 			for sender in raw_senders:
 				sender = sender.strip().upper()
-				if not sender:
+				if not sender or sender in blocked_senders:
+					if sender in blocked_senders:
+						needs_cleanup = True
 					continue
 				base, ssid_str = sender.rsplit('-', 1) if '-' in sender else (sender, None)
 				is_valid = False
