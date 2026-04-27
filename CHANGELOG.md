@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta11] - (2026-04-26T23:44:31+08:00)
+## [beta11] - (2026-04-27T23:48:22+08:00)
 
-- 4 commit(s) contributed to the release.
-- 4 day(s) passed between releases.
+- 5 commit(s) contributed to the release.
+- 5 day(s) passed between releases.
 
 ### 🐛 Bug Fixes in beta11
 
+- [bf2f4c1](https://github.com/HafiziRuslan/RasPiAPRS/commit/bf2f4c1f77d85842c9e7b17e6fe266c8a8954565) fix(navigation):adjust distance threshold and add health check *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-27T23:48:22+08:00*
 - [a1793ef](https://github.com/HafiziRuslan/RasPiAPRS/commit/a1793ef39264dd67d17459585351512e67a598e3) fix(main): add blocked sender validation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-26T23:44:31+08:00*
 
 ### 🚜 Refactor in beta11
@@ -1347,4 +1348,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-26T23:45:30.644006700+08:00
+generated using git-cliff on 2026-04-27T23:49:39.125380227+08:00
