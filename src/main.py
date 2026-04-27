@@ -844,13 +844,13 @@ class GPSHandler:
 			pos, sat = gps_data
 		else:
 			now = dt.datetime.now(dt.timezone.utc)
-			if (now - max(self._current_pos.timestamp, self._current_sat.timestamp)).total_seconds() > 600:
+			if not self.healthy or (now - max(self._current_pos.timestamp, self._current_sat.timestamp)).total_seconds() > 600:
 				lat, lon, alt = self._get_fallback_location()
 				self._current_pos = GPSFix(now, lat, lon, alt, 0.0, 0.0)
 				self._current_sat = SATFix(now, 0, 0)
 			pos, sat = self._current_pos, self._current_sat
 		dist = self.calculate_distance(pos.lat, pos.lon, self.cfg.latitude, self.cfg.longitude)
-		if dist <= 50:
+		if dist <= 30:
 			pos = pos._replace(lat=self.cfg.latitude, lon=self.cfg.longitude, alt=self.cfg.altitude)
 		return pos, sat
 
