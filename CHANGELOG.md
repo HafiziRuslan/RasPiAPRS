@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta11] - (2026-04-27T23:48:22+08:00)
+## [beta11] - (2026-04-28T18:05:05+08:00)
 
-- 5 commit(s) contributed to the release.
-- 5 day(s) passed between releases.
+- 6 commit(s) contributed to the release.
+- 6 day(s) passed between releases.
 
 ### 🐛 Bug Fixes in beta11
 
@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta11
 
+- [f885ed3](https://github.com/HafiziRuslan/RasPiAPRS/commit/f885ed3f4d3bdea5d3483fc47bd97d450b999145) chore(sbom): update serial number, timestamp, and tool version *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-28T18:05:05+08:00*
 - [f85184d](https://github.com/HafiziRuslan/RasPiAPRS/commit/f85184df8e14e3d1515a33fdf75e562405efeab4) chore(dependencies): update idna to 3.13 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-26T23:42:29+08:00*
 - [594e70d](https://github.com/HafiziRuslan/RasPiAPRS/commit/594e70daa213ec10bab63df925102234f5e50c53) chore(project): bump version to 0.1b11 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-22T22:05:37+08:00*
 
@@ -1348,4 +1349,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-04-27T23:49:39.125380227+08:00
+generated using git-cliff on 2026-04-28T18:06:27.918216257+08:00
