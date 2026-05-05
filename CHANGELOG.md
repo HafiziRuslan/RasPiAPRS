@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta11] - (2026-05-06T01:41:42+08:00)
+## [beta11] - (2026-05-06T01:47:18+08:00)
 
-- 10 commit(s) contributed to the release.
+- 11 commit(s) contributed to the release.
 - 13 day(s) passed between releases.
 
 ### 🐛 Bug Fixes in beta11
@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta11
 
+- [dd1f72a](https://github.com/HafiziRuslan/RasPiAPRS/commit/dd1f72abe406700ec90b0cd260d900f0352e068c) refactor(session): reorder gps coordinate retrieval *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-06T01:47:18+08:00*
 - [229b3ad](https://github.com/HafiziRuslan/RasPiAPRS/commit/229b3ad649e4c4b80b2a5bcdfdb13e60a7608bef) refactor(dependencies): update certifi and idna packages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-22T22:05:06+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta11
@@ -1352,4 +1353,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-05-06T01:42:49.372935937+08:00
+generated using git-cliff on 2026-05-06T01:51:00.733561455+08:00
