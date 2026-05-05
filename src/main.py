@@ -1953,12 +1953,12 @@ def setup_signal_handling(reload_event):
 async def initialize_session(cfg):
 	"""Initialize the APRS session components."""
 	cfg.reload()
-	if cfg.latitude == 0 and cfg.longitude == 0:
-		cfg.latitude, cfg.longitude = await GPSHandler.get_coordinates()
 	gps_handler = GPSHandler(cfg)
 	if cfg.gpsd_enabled:
 		loc_data, _ = await gps_handler.get_loc_and_sat()
 		_, cfg.latitude, cfg.longitude, cfg.altitude, _, _ = loc_data
+	if cfg.latitude == 0 and cfg.longitude == 0:
+		cfg.latitude, cfg.longitude = await GPSHandler.get_coordinates()
 	tg_logger = TelegramLogger(cfg)
 	wa_logger = WhatsAppLogger(cfg)
 	sys_stats = SystemStats(cfg)
