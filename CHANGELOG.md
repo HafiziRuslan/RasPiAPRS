@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta11] - (2026-05-06T01:47:18+08:00)
+## [beta11] - (2026-05-06T13:49:05+08:00)
 
-- 11 commit(s) contributed to the release.
-- 13 day(s) passed between releases.
+- 12 commit(s) contributed to the release.
+- 14 day(s) passed between releases.
 
 ### 🐛 Bug Fixes in beta11
 
@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta11
 
+- [0270671](https://github.com/HafiziRuslan/RasPiAPRS/commit/0270671af406ee18396e3090187a380ffa4e360f) build(sbom): update SBOM with new tool version *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-06T13:49:05+08:00*
 - [a85fb6a](https://github.com/HafiziRuslan/RasPiAPRS/commit/a85fb6a6b54c35b86dd6c39049a8dda0a14881b1) build(sbom): update SBOM metadata and tool version *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-06T01:41:42+08:00*
 - [10afa51](https://github.com/HafiziRuslan/RasPiAPRS/commit/10afa5137ff00279bd110e59d055e4cb726d7e1d) build(deps): bump actions/github-script from 8 to 9 *by [@dependabot[bot]](https://github.com/dependabot[bot]) on 2026-05-01T00:18:33+08:00*
 - [f885ed3](https://github.com/HafiziRuslan/RasPiAPRS/commit/f885ed3f4d3bdea5d3483fc47bd97d450b999145) chore(sbom): update serial number, timestamp, and tool version *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-28T18:05:05+08:00*
@@ -1353,4 +1354,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-05-06T01:51:00.733561455+08:00
+generated using git-cliff on 2026-05-06T13:50:10.802781587+08:00
