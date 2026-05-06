@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta11] - (2026-05-07T06:23:47+08:00)
+## [beta11] - (2026-05-07T07:26:56+08:00)
 
-- 13 commit(s) contributed to the release.
+- 14 commit(s) contributed to the release.
 - 14 day(s) passed between releases.
 
 ### 🐛 Bug Fixes in beta11
 
+- [709d6a1](https://github.com/HafiziRuslan/RasPiAPRS/commit/709d6a1e126309afaa97e869ff8b315acf632f6b) fix (symbol): Resolve symbol error during smartbeaconing *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-07T07:26:56+08:00*
 - [e74b85d](https://github.com/HafiziRuslan/RasPiAPRS/commit/e74b85d129b70a2889309feacc29f0345f06aacb) docs(ANSRVR): add DMR looping advisory PDF *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-28T22:39:33+08:00*
 - [bf2f4c1](https://github.com/HafiziRuslan/RasPiAPRS/commit/bf2f4c1f77d85842c9e7b17e6fe266c8a8954565) fix(navigation):adjust distance threshold and add health check *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-27T23:48:22+08:00*
 - [a1793ef](https://github.com/HafiziRuslan/RasPiAPRS/commit/a1793ef39264dd67d17459585351512e67a598e3) fix(main): add blocked sender validation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-04-26T23:44:31+08:00*
@@ -1355,4 +1356,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-05-07T06:24:58.203229426+08:00
+generated using git-cliff on 2026-05-07T07:27:50.113553949+08:00
