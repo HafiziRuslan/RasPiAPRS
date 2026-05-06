@@ -1772,7 +1772,7 @@ class APRSSender:
 		timestamp, tg_timestamp = self._get_timestamps(cur_time)
 		symbt = symbt or self.cfg.symbol_table
 		symb = symb or self.cfg.symbol
-		if self.cfg.symbol_overlay:
+		if self.cfg.symbol_overlay and symb not in ['(', '>']:
 			symbt = self.cfg.symbol_overlay
 		extstr = ''
 		ext_tg = ''
