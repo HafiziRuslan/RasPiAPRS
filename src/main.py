@@ -47,14 +47,11 @@ import aprslib
 import aprslib.util
 import dateutil.tz
 import dotenv
-import humanize
 import psutil
 import symbols
-import telegram
 from aprslib.exceptions import ConnectionError as APRSConnectionError
 from aprslib.exceptions import ParseError as APRSParseError
 from aprslib.exceptions import UnknownFormat
-from geopy.geocoders import Nominatim
 from gpsdclient import GPSDClient
 from itu_appendix42 import ItuAppendix42
 
@@ -922,6 +919,8 @@ class Geolocation:
 
 	def get_address(self, lat, lon):
 		"""Get address from coordinates, using a local cache."""
+		from geopy.geocoders import Nominatim
+
 		coord_key = f'{lat:.4f},{lon:.4f}'
 		if coord_key in self._cache:
 			return self._cache[coord_key]
@@ -1054,11 +1053,13 @@ class SystemStats(object):
 	def __init__(self, cfg):
 		self.cfg = cfg
 		self._cache = {}
-		self._temp_history = deque()
-		self._mem_history = deque()
+		# Reduced history window to 60 seconds to save memory
+		self._history_window = 60
+		self._temp_history = deque(maxlen=self._history_window)
+		self._mem_history = deque(maxlen=self._history_window)
 		self._mmdvmhost_mtime: float = 0.0
 		self._mmdvmhost_raw_config: dict = {}
-		self._cpu_history = deque()
+		self._cpu_history = deque(maxlen=self._history_window)
 
 	def _get_cached(self, key, func, ttl=10, default=None):
 		"""Get cached data."""
@@ -1089,15 +1090,15 @@ class SystemStats(object):
 
 	def _prune_history(self, history, now, window=None):
 		"""Prune old entries from history."""
-		window = window or self.cfg.sleep
-		while history and history[0][0] < now - window:
+		win = window or self._history_window
+		while history and history[0][0] < now - win:
 			history.popleft()
 
 	def _record_history(self, history, value, now, window=None):
 		"""Records historical data points."""
-		window = window or self.cfg.sleep
+		win = window or self._history_window
 		history.append((now, value))
-		self._prune_history(history, now, window)
+		self._prune_history(history, now, win)
 
 	def _update_history(self, history, fetch_func, now):
 		"""Update historical data points."""
@@ -1114,6 +1115,8 @@ class SystemStats(object):
 
 	def _calculate_uptime(self):
 		"""Calculate human-readable uptime."""
+		import humanize
+
 		uptime_seconds = dt.datetime.now(dt.timezone.utc).timestamp() - psutil.boot_time()
 		uptime = dt.timedelta(seconds=uptime_seconds)
 		u_str = humanize.precisedelta(uptime, minimum_unit='minutes', format='%0.0f')
@@ -1123,6 +1126,8 @@ class SystemStats(object):
 
 	def _calculate_traffic(self):
 		"""Calculate network traffic info from vnstat."""
+		import humanize
+
 		try:
 			output = subprocess.check_output(['vnstat', '--json', 'f', '1'], text=True)
 			data = json.loads(output)
@@ -1283,6 +1288,8 @@ class SystemStats(object):
 
 	def _fetch_mmdvm_all(self):
 		"""Unified fetch for MMDVM info and PHG from MMDVMHost configuration."""
+		import humanize
+
 		phg_str = self._calc_phg(self.cfg.phg_power, self.cfg.phg_height, self.cfg.phg_gain, self.cfg.phg_direction)
 		mmdvm_file_path = self.cfg.mmdvmhost_file
 		if not (os.path.isfile(mmdvm_file_path) and os.access(mmdvm_file_path, os.R_OK)):
@@ -1455,21 +1462,16 @@ class TelegramLogger(object):
 			logging.error('Telegram token or chat ID is missing. Disabling Telegram logging.')
 			self.enabled = False
 			return
+		import telegram
+
 		self.bot = telegram.Bot(self.token)
 		self.tid = cfg.telegram_tid
 		self.loc_tid = cfg.telegram_loc_tid
 
-	async def __aenter__(self):
-		if self.bot:
-			await self.bot.initialize()
-		return self
-
-	async def __aexit__(self, exc_type, exc_val, exc_tb):
-		if self.bot:
-			await self.bot.shutdown()
-
 	async def _call_with_retry(self, func, *args, **kwargs):
 		"""Retry Telegram API calls with exponential backoff."""
+		import telegram
+
 		max_retries = 3
 		delay = 1
 		for attempt in range(max_retries):
@@ -1757,6 +1759,8 @@ class APRSSender:
 
 	async def send_position(self, gps_data=None, is_moving=False, symbt=None, symb=None):
 		"""Send APRS position packet to APRS-IS."""
+		import humanize
+
 		loc_data, _ = gps_data if gps_data else await self.gps_handler.get_loc_and_sat()
 		cur_time, cur_lat, cur_lon, cur_alt, cur_spd, cur_cse = loc_data
 		latstr = APRSConverter.lat_to_aprs(cur_lat)
@@ -1842,6 +1846,8 @@ class APRSSender:
 
 	async def send_telemetry(self, gps_data=None):
 		"""Send APRS telemetry information to APRS-IS."""
+		import humanize
+
 		seq = next(self.telem_seq)
 		cputemp = self.sys_stats.avg_temp
 		cpuload = self.sys_stats.avg_cpu
