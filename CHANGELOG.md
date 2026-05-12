@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta11] - (2026-05-07T07:26:56+08:00)
+## [beta11] - (2026-05-13T00:56:19+08:00)
 
-- 14 commit(s) contributed to the release.
-- 14 day(s) passed between releases.
+- 15 commit(s) contributed to the release.
+- 20 day(s) passed between releases.
 
 ### 🐛 Bug Fixes in beta11
 
@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta11
 
+- [b82fab0](https://github.com/HafiziRuslan/RasPiAPRS/commit/b82fab0ec0e3bf15caf90a5992fb1d9372a78f8c) chore(dependencies): bump idna and propcache versions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-13T00:56:19+08:00*
 - [17a4914](https://github.com/HafiziRuslan/RasPiAPRS/commit/17a491407580cff062ee7581d17ad8f7ee51156c) chore(bom): bump uv version and timestamp *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-07T06:23:47+08:00*
 - [0270671](https://github.com/HafiziRuslan/RasPiAPRS/commit/0270671af406ee18396e3090187a380ffa4e360f) build(sbom): update SBOM with new tool version *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-06T13:49:05+08:00*
 - [a85fb6a](https://github.com/HafiziRuslan/RasPiAPRS/commit/a85fb6a6b54c35b86dd6c39049a8dda0a14881b1) build(sbom): update SBOM metadata and tool version *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-06T01:41:42+08:00*
@@ -1356,4 +1357,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-05-07T07:27:50.113553949+08:00
+generated using git-cliff on 2026-05-13T00:57:23.960849754+08:00
