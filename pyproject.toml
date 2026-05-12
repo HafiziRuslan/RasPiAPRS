@@ -30,16 +30,16 @@ urls.history = 'https://github.com/HafiziRuslan/RasPiAPRS/blob/master/CHANGELOG.
 urls.issuetracker = 'https://github.com/HafiziRuslan/RasPiAPRS/issues'
 requires-python = '>=3.13'
 dependencies = [
-  'aiohttp>=3.13.5',
-  'aprslib>=0.7.2',
-  'callsign-regex>=0.7.1',
-  'geopy>=2.4.1',
-  'gpsdclient>=1.3.2',
-  'humanize>=4.15.0',
-  'psutil>=7.2.2',
-  'python-dateutil>=2.9.0.post0',
-  'python-dotenv>=1.2.2',
-  'python-telegram-bot>=22.7',
+  'aiohttp',
+  'aprslib',
+  'callsign-regex',
+  'geopy',
+  'gpsdclient',
+  'humanize',
+  'psutil',
+  'python-dateutil',
+  'python-dotenv',
+  'python-telegram-bot',
 ]
 
 [tool.ruff]

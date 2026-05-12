@@ -2,14 +2,14 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:d8a1ad94-be02-4d5c-a58e-0a3aa96344ce",
+  "serialNumber": "urn:uuid:2b46b06e-4a75-427f-a82d-85c90c304ed8",
   "metadata": {
-    "timestamp": "2026-05-06T22:15:39.524154400Z",
+    "timestamp": "2026-05-12T16:54:01.656594300Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
         "name": "uv",
-        "version": "0.11.11"
+        "version": "0.11.13"
       }
     ],
     "component": {
@@ -147,10 +147,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "idna-19@3.13",
+      "bom-ref": "idna-19@3.14",
       "name": "idna",
-      "version": "3.13",
-      "purl": "pkg:pypi/idna@3.13"
+      "version": "3.14",
+      "purl": "pkg:pypi/idna@3.14"
     },
     {
       "type": "library",
@@ -168,10 +168,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "propcache-22@0.4.1",
+      "bom-ref": "propcache-22@0.5.2",
       "name": "propcache",
-      "version": "0.4.1",
-      "purl": "pkg:pypi/propcache@0.4.1"
+      "version": "0.5.2",
+      "purl": "pkg:pypi/propcache@0.5.2"
     },
     {
       "type": "library",
@@ -229,7 +229,7 @@
         "attrs-7@26.1.0",
         "frozenlist-11@1.8.0",
         "multidict-20@6.7.1",
-        "propcache-22@0.4.1",
+        "propcache-22@0.5.2",
         "yarl-28@1.23.0"
       ]
     },
@@ -242,7 +242,7 @@
     {
       "ref": "anyio-5@4.13.0",
       "dependsOn": [
-        "idna-19@3.13"
+        "idna-19@3.14"
       ]
     },
     {
@@ -302,7 +302,7 @@
         "anyio-5@4.13.0",
         "certifi-9@2026.4.22",
         "httpcore-16@1.0.9",
-        "idna-19@3.13"
+        "idna-19@3.14"
       ]
     },
     {
@@ -310,7 +310,7 @@
       "dependsOn": []
     },
     {
-      "ref": "idna-19@3.13",
+      "ref": "idna-19@3.14",
       "dependsOn": []
     },
     {
@@ -324,7 +324,7 @@
       ]
     },
     {
-      "ref": "propcache-22@0.4.1",
+      "ref": "propcache-22@0.5.2",
       "dependsOn": []
     },
     {
@@ -370,9 +370,9 @@
     {
       "ref": "yarl-28@1.23.0",
       "dependsOn": [
-        "idna-19@3.13",
+        "idna-19@3.14",
         "multidict-20@6.7.1",
-        "propcache-22@0.4.1"
+        "propcache-22@0.5.2"
       ]
     }
   ]
