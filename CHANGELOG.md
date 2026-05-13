@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta12] - (2026-05-13T16:17:06+08:00)
+## [beta12] - (2026-05-13T16:23:12+08:00)
 
-- 2 commit(s) contributed to the release.
+- 3 commit(s) contributed to the release.
 - 1 day(s) passed between releases.
 
 ### 📚 Documentation in beta12
@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta12
 
+- [e74c8e1](https://github.com/HafiziRuslan/RasPiAPRS/commit/e74c8e1247a5ca6ff1c2dd3e682f9826e190e787) build(system): add RasPiAPRS systemd service configuration *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-13T16:23:12+08:00*
 - [83ddbef](https://github.com/HafiziRuslan/RasPiAPRS/commit/83ddbef294e034f3479481a769f58a6938869092) chore(version): bump to 0.1b12 and update deps *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-13T15:57:09+08:00*
 
 ---
@@ -1373,4 +1374,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-05-13T16:18:24.453482182+08:00
+generated using git-cliff on 2026-05-13T16:24:16.187601402+08:00
