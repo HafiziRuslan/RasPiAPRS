@@ -1,6 +1,6 @@
 [Unit]
 Description=RasPiAPRS Monitoring Service
-After=network.target gpsd.service
+After=network-online.target gpsd.service
 
 [Service]
 Type=simple
