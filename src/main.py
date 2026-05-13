@@ -1228,10 +1228,10 @@ class SystemStats(object):
 						try:
 							d_str = f'{kvpart[-1]}{kvpart[-5]}{kvpart[-4]} {kvpart[-3]}'
 							dt_obj = dt.datetime.strptime(d_str, '%Y%b%d %H:%M:%S')
-							if len(kvpart) >= 6 and (tz_str := kvpart[-2]).isalpha():
-								if tz := dateutil.tz.gettz(tz_str):
-									dt_obj = dt_obj.replace(tzinfo=tz)
-							build_date = dt_obj.astimezone(dt.timezone.utc).isoformat()
+							# if len(kvpart) >= 6 and (tz_str := kvpart[-2]).isalpha():
+							# 	if tz := dateutil.tz.gettz(tz_str):
+							# 		dt_obj = dt_obj.replace(tzinfo=tz)
+							build_date = dt_obj.replace(dt.timezone.utc).strftime('%Y%m%dT%H%M%SZ')
 						except (ValueError, IndexError):
 							pass
 				rel_ver = re.match(r'^[\d.]+', release).group() if re.match(r'^[\d.]+', release) else release
