@@ -2,10 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta12] - (2026-05-13T15:57:09+08:00)
+## [beta12] - (2026-05-13T16:17:06+08:00)
 
-- 1 commit(s) contributed to the release.
+- 2 commit(s) contributed to the release.
 - 1 day(s) passed between releases.
+
+### 📚 Documentation in beta12
+
+- [93aaf2e](https://github.com/HafiziRuslan/RasPiAPRS/commit/93aaf2e47f08f10b8c386d45387e9111b3bd1cd3) docs(README): add emojis and formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-13T16:17:06+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta12
 
@@ -1369,4 +1373,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-05-13T15:58:13.895267193+08:00
+generated using git-cliff on 2026-05-13T16:18:24.453482182+08:00
