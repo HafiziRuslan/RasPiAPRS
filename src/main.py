@@ -1468,6 +1468,12 @@ class TelegramLogger(object):
 		self.tid = cfg.telegram_tid
 		self.loc_tid = cfg.telegram_loc_tid
 
+	async def __aenter__(self):
+		return self
+
+	async def __aexit__(self, exc_type, exc_val, exc_tb):
+		pass
+
 	async def _call_with_retry(self, func, *args, **kwargs):
 		"""Retry Telegram API calls with exponential backoff."""
 		import telegram
