@@ -8,6 +8,7 @@ User=root
 WorkingDirectory=/opt/RasPiAPRS
 ExecStart=/bin/bash /opt/RasPiAPRS/main.sh
 ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGINT
 KillMode=process
 Restart=always
 RestartSec=20
