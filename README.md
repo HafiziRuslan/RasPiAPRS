@@ -1,7 +1,6 @@
-# RasPiAPRS
+# 🛰️ RasPiAPRS
 
 <div style="text-align: center;">
-
 ![RasPiAPRS Logo](misc/raspiaprs_2x1.png)
 
 ![Ko-Fi sponsors](https://img.shields.io/badge/kofi-tip-FF6433?style=for-the-badge&logo=kofi&logoColor=FF6433&logoSize=auto&link=https%3A%2F%2Fko-fi.com%2Fhafiziruslan)
@@ -21,28 +20,28 @@
   <tr><td style="text-align: end;">Gitea</td><td><a href="https://gitea.com/HafiziRuslan/RasPiAPRS">HafiziRuslan/RasPiAPRS</a></td></tr>
 </table>
 
-## About
+## 📖 About
 
 **RasPiAPRS** is a monitoring tool designed for Raspberry Pi nodes running radio software such as Pi-Star, WPSD, or AllStarLink. It tracks system health and location data, broadcasting this information over the APRS network.
 
-## Key Functions
+## 🛠️ Key Functions
 
-* **APRS-IS Filtering**: Allows defining server-side filters to receive only relevant packets (e.g., specific callsigns or geographic radius), optimizing data usage.
-* **Telemetry Tracking**: Monitors specific hardware metrics including CPU temperature/load, memory/disk usage, and network traffic.
-* **SmartBeaconing**: Reduces network congestion by dynamically adjusting beacon frequency based on the station's speed and heading.
-* **Dynamic Symbols**: Automatically switches the APRS map icon (e.g., stationary vs. moving) based on real-time GPS motion.
-* **Remote Alerts**: Supports WhatsApp and Telegram Bot API for sending system status updates directly to your device.
-* **Visualization**: Formats and logs telemetry data for display on platforms like `aprs.fi`.
+- **APRS-IS Filtering**: Allows defining server-side filters to receive only relevant packets (e.g., specific callsigns or geographic radius), optimizing data usage.
+- **Telemetry Tracking**: Monitors specific hardware metrics including CPU temperature/load, memory/disk usage, and network traffic.
+- **SmartBeaconing**: Reduces network congestion by dynamically adjusting beacon frequency based on the station's speed and heading.
+- **Dynamic Symbols**: Automatically switches the APRS map icon (e.g., stationary vs. moving) based on real-time GPS motion.
+- **Remote Alerts**: Supports WhatsApp and Telegram Bot API for sending system status updates directly to your device.
+- **Visualization**: Formats and logs telemetry data for display on platforms like `aprs.fi`.
 
-## Requirements
+## 📌 Requirements
 
 The following packages are required for the application to interface with hardware and manage dependencies:
 
-* `curl` & `git`: Used for initial installation and the integrated self-updating mechanism.
-* `gcc` & `python3-dev`: Required to compile Python C-extensions for system monitoring libraries.
-* `gpsd` & `gpsd-clients`: Interfaces with GPS hardware to provide location and timing data.
-* `uv`: A high-performance Python package installer used to manage application dependencies.
-* `vnstat`: A network traffic monitor used to report data usage in telemetry.
+- `curl` & `git`: Used for initial installation and the integrated self-updating mechanism.
+- `gcc` & `python3-dev`: Required to compile Python C-extensions for system monitoring libraries.
+- `gpsd` & `gpsd-clients`: Interfaces with GPS hardware to provide location and timing data.
+- `uv`: A high-performance Python package installer used to manage application dependencies.
+- `vnstat`: A network traffic monitor used to report data usage in telemetry.
 
 The startup script will attempt to install them automatically if they are missing.
 
@@ -54,14 +53,14 @@ echo "deb https://debian.griffo.io/apt $(lsb_release -sc 2>/dev/null) main" | su
 sudo apt update && sudo apt install uv
 ```
 
-## Installation
+## 📥 Installation
 
 ```bash
 git clone https://github.com/HafiziRuslan/RasPiAPRS.git
 cd RasPiAPRS
 ```
 
-## Configuration
+## ⚙️ Configuration
 
 Copy the sample environment file and edit it with your credentials and station settings.
 
@@ -70,7 +69,7 @@ cp .env.sample .env
 nano .env
 ```
 
-## Starting
+## 🚀 Starting
 
 Run the startup script with `sudo`. The script will automatically check for system dependencies, update the application, and manage the Python virtual environment.
 
@@ -78,17 +77,40 @@ Run the startup script with `sudo`. The script will automatically check for syst
 sudo ./main.sh
 ```
 
-## AutoStart
+## 🤖 AutoStart (Systemd Service)
 
-To ensure the script starts automatically after a reboot, add the following line to `/etc/crontab` (or your preferred cron manager).
+To run the bot automatically on system boot, it is recommended to use a systemd service.
 
-```bash
-@reboot pi-star cd /home/pi-star/RasPiAPRS && ./main.sh 2>&1
-```
+1. Copy the service file to the systemd directory:
 
-*Note: Replace `pi-star` with your actual system username if different.*
+  ```bash
+  sudo cp raspiaprs.service /etc/systemd/system/
+  ```
 
-## Update
+2. Adjust the *'WorkingDirectory'* and *'ExecStart'* parameters to match your installation path:
+
+  ```bash
+  sudo nano /etc/systemd/system/raspiaprs.service
+  ```
+
+  ```properties
+  WorkingDirectory=/YourDir/RasPiAPRS
+  ExecStart=/bin/bash /YourDir/RasPiAPRS/main.sh
+  ```
+
+3. Reload the systemd daemon:
+
+  ```bash
+  sudo systemctl daemon-reload
+  ```
+
+4. Enable the service to start on boot and run as a daemon:
+
+  ```bash
+  sudo systemctl enable --now raspiaprs
+  ```
+
+## 🔄 Update
 
 Manual updates are generally **not required** as `main.sh` performs a check every time it starts. To force a manual update:
 
@@ -96,7 +118,7 @@ Manual updates are generally **not required** as `main.sh` performs a check ever
 git pull --autostash
 ```
 
-## Telemetry Example
+## 📊 Telemetry Example
 
 You can see an example of the metrics logged by my WPSD node [9W4GPA](https://aprs.fi/telemetry/a/9W4GPA?range=day).
 
@@ -108,7 +130,7 @@ This is the screenshot taken from `aprs.fi` of _CPU temperature_, _CPU load aver
 
 </div>
 
-## Hardware used for testing
+## 💻 Hardware used for testing
 
 1. Raspberry Pi Zero 2 W
 2. Waveshare SIM7600G-H 4G HAT (B)
@@ -116,6 +138,6 @@ This is the screenshot taken from `aprs.fi` of _CPU temperature_, _CPU load aver
 4. MMDVM Duplex Dual HAT
 5. Nextion NX4024K032
 
-## Source
+## 📂 Source
 
 [0x9900/aprstar](https://github.com/0x9900/aprstar)
