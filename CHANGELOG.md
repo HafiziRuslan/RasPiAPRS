@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta12] - (2026-05-13T18:28:53+08:00)
+## [beta12] - (2026-05-13T18:35:34+08:00)
 
-- 5 commit(s) contributed to the release.
+- 6 commit(s) contributed to the release.
 - 1 day(s) passed between releases.
 
 ### 🐛 Bug Fixes in beta12
 
+- [b126b78](https://github.com/HafiziRuslan/RasPiAPRS/commit/b126b780d26c2369937769b43e640e3f7375b481) fix(raspiaprs.service): added SIGINT signal handling for graceful shutdown *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-13T18:35:34+08:00*
 - [288ef6e](https://github.com/HafiziRuslan/RasPiAPRS/commit/288ef6eff3bc8e9c154b795798c800da6c70003b) fix(auth): implement retry logic for Telegram API calls with exponential backoff *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-13T16:31:20+08:00*
 
 ### 🚜 Refactor in beta12
@@ -1382,4 +1383,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-05-13T18:30:52.516558445+08:00
+generated using git-cliff on 2026-05-13T18:36:43.813454089+08:00
