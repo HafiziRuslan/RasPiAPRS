@@ -2,14 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta12] - (2026-05-13T16:31:20+08:00)
+## [beta12] - (2026-05-13T18:28:53+08:00)
 
-- 4 commit(s) contributed to the release.
+- 5 commit(s) contributed to the release.
 - 1 day(s) passed between releases.
 
 ### 🐛 Bug Fixes in beta12
 
 - [288ef6e](https://github.com/HafiziRuslan/RasPiAPRS/commit/288ef6eff3bc8e9c154b795798c800da6c70003b) fix(auth): implement retry logic for Telegram API calls with exponential backoff *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-13T16:31:20+08:00*
+
+### 🚜 Refactor in beta12
+
+- [d2788ae](https://github.com/HafiziRuslan/RasPiAPRS/commit/d2788aed36002322842603c21fde3c86fafcda0e) refactor(main): remove unused timezone handling and simplify build_date calculation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-13T18:28:53+08:00*
 
 ### 📚 Documentation in beta12
 
@@ -1378,4 +1382,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-05-13T16:33:21.012116616+08:00
+generated using git-cliff on 2026-05-13T18:30:52.516558445+08:00
