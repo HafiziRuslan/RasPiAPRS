@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [beta12] - (2026-05-13T15:57:09+08:00)
+
+- 1 commit(s) contributed to the release.
+- 1 day(s) passed between releases.
+
+### ⚙️ Miscellaneous Tasks in beta12
+
+- [83ddbef](https://github.com/HafiziRuslan/RasPiAPRS/commit/83ddbef294e034f3479481a769f58a6938869092) chore(version): bump to 0.1b12 and update deps *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-13T15:57:09+08:00*
+
+---
+
 ## [beta11] - (2026-05-13T01:10:27+08:00)
 
 - 16 commit(s) contributed to the release.
@@ -1358,4 +1369,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-05-13T01:11:44.558485506+08:00
+generated using git-cliff on 2026-05-13T15:58:13.895267193+08:00
