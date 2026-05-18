@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta12] - (2026-05-19T00:42:28+08:00)
+## [beta12] - (2026-05-19T01:01:34+08:00)
 
-- 8 commit(s) contributed to the release.
+- 9 commit(s) contributed to the release.
 - 6 day(s) passed between releases.
 
 ### 🐛 Bug Fixes in beta12
 
+- [1f0a76a](https://github.com/HafiziRuslan/RasPiAPRS/commit/1f0a76a54323b1364394a4c710361cd3498bc6ba) fix(main): correct app name splitting character *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-19T01:01:34+08:00*
 - [68bca47](https://github.com/HafiziRuslan/RasPiAPRS/commit/68bca473833c7c30cdb9906f9af28ba63879a0d5) fix(raspiaprs): update service dependency to network-online.target *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-13T18:42:13+08:00*
 - [b126b78](https://github.com/HafiziRuslan/RasPiAPRS/commit/b126b780d26c2369937769b43e640e3f7375b481) fix(raspiaprs.service): added SIGINT signal handling for graceful shutdown *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-13T18:35:34+08:00*
 - [288ef6e](https://github.com/HafiziRuslan/RasPiAPRS/commit/288ef6eff3bc8e9c154b795798c800da6c70003b) fix(auth): implement retry logic for Telegram API calls with exponential backoff *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-13T16:31:20+08:00*
@@ -1385,4 +1386,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-05-19T00:44:09.681237446+08:00
+generated using git-cliff on 2026-05-19T01:03:00.602216998+08:00
