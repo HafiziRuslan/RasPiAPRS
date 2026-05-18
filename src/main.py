@@ -2068,14 +2068,14 @@ async def main():
 			await asyncio.sleep(2)
 		gps_data = await gps_handler.get_loc_and_sat()
 		async with tg_logger:
-			await tg_logger.log(f'🚀 {cfg.app_name.split("-")[0]} Started')
+			await tg_logger.log(f'🚀 {cfg.app_name.split("/")[0]} Started')
 			try:
 				await process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, scheduled_msg_handler, gps_handler, gps_data)
 			finally:
 				if reload_event.is_set():
-					await tg_logger.log(f'🔄 {cfg.app_name.split("-")[0]} Reloaded')
+					await tg_logger.log(f'🔄 {cfg.app_name.split("/")[0]} Reloaded')
 				else:
-					await tg_logger.log(f'🛑 {cfg.app_name.split("-")[0]} Stopped')
+					await tg_logger.log(f'🛑 {cfg.app_name.split("/")[0]} Stopped')
 				await tg_logger.stop_location()
 				if health_check_task:
 					health_check_task.cancel()
