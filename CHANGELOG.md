@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta12] - (2026-05-13T18:42:13+08:00)
+## [beta12] - (2026-05-19T00:42:28+08:00)
 
-- 7 commit(s) contributed to the release.
-- 1 day(s) passed between releases.
+- 8 commit(s) contributed to the release.
+- 6 day(s) passed between releases.
 
 ### 🐛 Bug Fixes in beta12
 
@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta12
 
+- [b3ae730](https://github.com/HafiziRuslan/RasPiAPRS/commit/b3ae73082c78aac9d4e028e17c55d103360fdbf2) refactor(msg_sequences): replace single sequence with per-source/addrcall persistent storage *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-19T00:42:28+08:00*
 - [d2788ae](https://github.com/HafiziRuslan/RasPiAPRS/commit/d2788aed36002322842603c21fde3c86fafcda0e) refactor(main): remove unused timezone handling and simplify build_date calculation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-13T18:28:53+08:00*
 
 ### 📚 Documentation in beta12
@@ -1384,4 +1385,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-05-13T18:43:21.990721379+08:00
+generated using git-cliff on 2026-05-19T00:44:09.681237446+08:00
