@@ -1355,7 +1355,7 @@ class ScheduledMessageHandler:
 		self.gps_handler = gps_handler
 		self.tracking = PersistentDict(self.cfg.msg_tracking_file)
 		self.messages = []
-		self.sequence = Sequence(self.cfg.lib_dir, name='msg_sequence', modulo=100000)
+		self.sequences = PersistentDict(f'{self.cfg.lib_dir}/msg_sequences.json')
 		self._init_messages()
 
 	def _init_messages(self):
@@ -1418,7 +1418,12 @@ class ScheduledMessageHandler:
 		_, lat, lon, _, _, _ = loc_data
 		gridsquare = APRSConverter.latlon_to_grid(lat, lon)
 		source = from_call or self.cfg.from_call
-		seq = next(self.sequence)
+		seq_key = f'{source}:{addrcall}'
+		seq = (self.sequences.get(seq_key, 0) + 1) % 100000
+		if seq == 0:
+			seq = 1
+		self.sequences[seq_key] = seq
+		self.sequences.flush()
 		app_id = '/'.join(self.cfg.app_name.split('/')[:2])
 		message = f'{template} from {gridsquare} via {app_id}'[:67]
 		path_str = ''
