@@ -2,10 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta12] - (2026-05-19T01:01:34+08:00)
+## [beta12] - (2026-05-19T18:18:03+08:00)
 
-- 9 commit(s) contributed to the release.
-- 6 day(s) passed between releases.
+- 10 commit(s) contributed to the release.
+- 7 day(s) passed between releases.
+
+### 🚀 Features in beta12
+
+- [ae47bfc](https://github.com/HafiziRuslan/RasPiAPRS/commit/ae47bfca4541b5a00aec36d0ce29711fe37f3995) feat(main): improve network traffic display and version update *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-19T18:18:03+08:00*
 
 ### 🐛 Bug Fixes in beta12
 
@@ -1386,4 +1390,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-05-19T01:03:00.602216998+08:00
+generated using git-cliff on 2026-05-19T18:19:33.419270591+08:00
