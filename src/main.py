@@ -133,7 +133,7 @@ class Config:
 				git_sha = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD^'], cwd=repo_path).decode('ascii').strip()
 			except Exception:
 				pass
-		meta = {'name': 'RasPiAPRS', 'version': '0.1', 'github': 'https://git.new/RasPiAPRS'}
+		meta = {'name': 'RasPiAPRS', 'version': '0.0', 'github': 'https://git.new/RasPiAPRS'}
 		try:
 			with open(os.path.join(repo_path, 'pyproject.toml'), 'rb') as f:
 				data = tomllib.load(f).get('project', {})
@@ -1134,6 +1134,7 @@ class SystemStats(object):
 			best_rx, best_tx, max_total, found = 0, 0, -1, False
 			if data.get('interfaces'):
 				for iface in data['interfaces']:
+					net = iface.get('name')
 					fiveminute_traffic = iface.get('traffic', {}).get('fiveminute')
 					if fiveminute_traffic:
 						last_entry = fiveminute_traffic[-1]
@@ -1143,7 +1144,7 @@ class SystemStats(object):
 							max_total, best_rx, best_tx, found = total, rx_bytes, tx_bytes, True
 			if found:
 				rxtx = humanize.naturalsize(best_rx + best_tx).replace(' ', '')
-				return f'net: {rxtx}'
+				return f'{net}: {rxtx}'
 		except Exception as e:
 			logging.debug('Could not fetch vnstat 5-min traffic: %s', e)
 		return ''
