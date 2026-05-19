@@ -1,15 +1,18 @@
 [Unit]
 Description=RasPiAPRS Monitoring Service
+Wants=network-online.target
 After=network-online.target gpsd.service
 
 [Service]
 Type=simple
 User=root
 WorkingDirectory=/opt/RasPiAPRS
+ExecStartPre=/bin/sleep 180
 ExecStart=/bin/bash /opt/RasPiAPRS/main.sh
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
-KillMode=process
+RestartKillSignal=SIGINT
+KillMode=control-group
 Restart=always
 RestartSec=20
 StandardOutput=inherit
