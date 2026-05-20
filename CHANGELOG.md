@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta12] - (2026-05-19T18:46:18+08:00)
+## [beta12] - (2026-05-20T13:18:44+08:00)
 
-- 11 commit(s) contributed to the release.
-- 7 day(s) passed between releases.
+- 12 commit(s) contributed to the release.
+- 8 day(s) passed between releases.
 
 ### 🚀 Features in beta12
 
@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta12
 
+- [24177c9](https://github.com/HafiziRuslan/RasPiAPRS/commit/24177c9070f9dc3f9cba456d52c204eea1822a11) fix(deps): update yarl to 1.24.2 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-20T13:18:44+08:00*
 - [1f0a76a](https://github.com/HafiziRuslan/RasPiAPRS/commit/1f0a76a54323b1364394a4c710361cd3498bc6ba) fix(main): correct app name splitting character *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-19T01:01:34+08:00*
 - [68bca47](https://github.com/HafiziRuslan/RasPiAPRS/commit/68bca473833c7c30cdb9906f9af28ba63879a0d5) fix(raspiaprs): update service dependency to network-online.target *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-13T18:42:13+08:00*
 - [b126b78](https://github.com/HafiziRuslan/RasPiAPRS/commit/b126b780d26c2369937769b43e640e3f7375b481) fix(raspiaprs.service): added SIGINT signal handling for graceful shutdown *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-13T18:35:34+08:00*
@@ -1391,4 +1392,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-05-19T18:49:06.783588751+08:00
+generated using git-cliff on 2026-05-20T13:19:49.441601335+08:00
