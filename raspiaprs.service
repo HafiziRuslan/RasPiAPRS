@@ -1,5 +1,5 @@
 [Unit]
-Description=RasPiAPRS Monitoring Service
+Description=Raspberry Pi APRS Monitoring Service
 Wants=network-online.target
 After=network-online.target gpsd.service
 
@@ -7,14 +7,14 @@ After=network-online.target gpsd.service
 Type=simple
 User=root
 WorkingDirectory=/opt/RasPiAPRS
-ExecStartPre=/bin/sleep 180
+ExecStartPre=/bin/sleep 30
 ExecStart=/bin/bash /opt/RasPiAPRS/main.sh
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
 RestartKillSignal=SIGINT
 KillMode=control-group
 Restart=always
-RestartSec=20
+RestartSec=15
 StandardOutput=inherit
 StandardError=inherit
 
