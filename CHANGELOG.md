@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta12] - (2026-05-20T13:18:44+08:00)
+## [beta12] - (2026-05-20T15:40:25+08:00)
 
-- 12 commit(s) contributed to the release.
+- 13 commit(s) contributed to the release.
 - 8 day(s) passed between releases.
 
 ### 🚀 Features in beta12
@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta12
 
+- [f476a5a](https://github.com/HafiziRuslan/RasPiAPRS/commit/f476a5a20c2fe21ffe7a4b001fd7498f779d5a12) chore(raspiaprs): reduce service startup delay and restart interval *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-20T15:40:25+08:00*
 - [e74c8e1](https://github.com/HafiziRuslan/RasPiAPRS/commit/e74c8e1247a5ca6ff1c2dd3e682f9826e190e787) build(system): add RasPiAPRS systemd service configuration *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-13T16:23:12+08:00*
 - [83ddbef](https://github.com/HafiziRuslan/RasPiAPRS/commit/83ddbef294e034f3479481a769f58a6938869092) chore(version): bump to 0.1b12 and update deps *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-13T15:57:09+08:00*
 
@@ -1392,4 +1393,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-05-20T13:19:49.441601335+08:00
+generated using git-cliff on 2026-05-20T15:41:53.863912703+08:00
