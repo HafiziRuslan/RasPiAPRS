@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta12] - (2026-05-20T15:40:25+08:00)
+## [beta12] - (2026-05-23T00:44:29+08:00)
 
-- 13 commit(s) contributed to the release.
-- 8 day(s) passed between releases.
+- 14 commit(s) contributed to the release.
+- 10 day(s) passed between releases.
 
 ### 🚀 Features in beta12
 
@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta12
 
+- [e9168b8](https://github.com/HafiziRuslan/RasPiAPRS/commit/e9168b84c84ac5fff5295404372d5cb4b2538b43) fix(msg): skip ack when station already in path *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-23T00:44:29+08:00*
 - [24177c9](https://github.com/HafiziRuslan/RasPiAPRS/commit/24177c9070f9dc3f9cba456d52c204eea1822a11) fix(deps): update yarl to 1.24.2 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-20T13:18:44+08:00*
 - [1f0a76a](https://github.com/HafiziRuslan/RasPiAPRS/commit/1f0a76a54323b1364394a4c710361cd3498bc6ba) fix(main): correct app name splitting character *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-19T01:01:34+08:00*
 - [68bca47](https://github.com/HafiziRuslan/RasPiAPRS/commit/68bca473833c7c30cdb9906f9af28ba63879a0d5) fix(raspiaprs): update service dependency to network-online.target *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-13T18:42:13+08:00*
@@ -1393,4 +1394,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-05-20T15:41:53.863912703+08:00
+generated using git-cliff on 2026-05-23T00:45:45.959824004+08:00
