@@ -45,7 +45,7 @@ from typing import NamedTuple
 import aiohttp
 import aprslib
 import aprslib.util
-import dateutil.tz
+# import dateutil.tz
 import dotenv
 import psutil
 import symbols
@@ -1729,7 +1729,11 @@ class APRSSender:
 				addresse = parsed_packet.get('addresse', 'UNKNOWN')
 				message_text = parsed_packet.get('message_text', '')
 				msg_no = parsed_packet.get('msgNo')
+				path = parsed_packet.get('path', [])
 				if addresse == self.cfg.from_call and msg_no:
+					if self.cfg.from_call in path:
+						logging.debug('Skipping ACK for message %s from %s: station already in path', msg_no, from_call)
+						return
 					ack_payload = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:ack{msg_no}'
 					logging.debug('Replying acknowledge for message %s from %s', msg_no, from_call)
 					asyncio.create_task(self.send_packet(ack_payload, 'ack'))
