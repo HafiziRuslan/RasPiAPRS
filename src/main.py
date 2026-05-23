@@ -45,6 +45,7 @@ from typing import NamedTuple
 import aiohttp
 import aprslib
 import aprslib.util
+
 # import dateutil.tz
 import dotenv
 import psutil
@@ -1158,7 +1159,7 @@ class SystemStats(object):
 		self._cache['uptime'] = (self._calculate_uptime(), now)
 		self._cache['traffic_info'] = (self._calculate_traffic(), now)
 		try:
-			self._cache['storage_used'] = (psutil.disk_usage('/').used, now)
+			self._cache['storage_used'] = (sum(psutil.disk_usage(p.mountpoint).used for p in psutil.disk_partitions(all=False)), now)
 		except Exception:
 			pass
 
@@ -1187,7 +1188,9 @@ class SystemStats(object):
 	@property
 	def storage_used(self):
 		"""Get used disk space in bits."""
-		return self._get_cached('storage_used', lambda: psutil.disk_usage('/').used, ttl=60, default=0)
+		return self._get_cached(
+			'storage_used', lambda: sum(psutil.disk_usage(p.mountpoint).used for p in psutil.disk_partitions(all=False)), ttl=60, default=0
+		)
 
 	@property
 	def uptime(self):
