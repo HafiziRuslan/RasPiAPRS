@@ -1235,7 +1235,7 @@ class SystemStats(object):
 							# if len(kvpart) >= 6 and (tz_str := kvpart[-2]).isalpha():
 							# 	if tz := dateutil.tz.gettz(tz_str):
 							# 		dt_obj = dt_obj.replace(tzinfo=tz)
-							build_date = dt_obj.replace(dt.timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+							build_date = dt_obj.replace(tzinfo=dt.timezone.utc).strftime('%Y%m%dT%H%M%SZ')
 						except (ValueError, IndexError):
 							pass
 				rel_ver = re.match(r'^[\d.]+', release).group() if re.match(r'^[\d.]+', release) else release
