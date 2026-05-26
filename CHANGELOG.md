@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta12] - (2026-05-23T22:19:13+08:00)
+## [beta12] - (2026-05-26T12:01:20+08:00)
 
-- 15 commit(s) contributed to the release.
-- 11 day(s) passed between releases.
+- 17 commit(s) contributed to the release.
+- 14 day(s) passed between releases.
 
 ### 🚀 Features in beta12
 
@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta12
 
+- [4c35bf7](https://github.com/HafiziRuslan/RasPiAPRS/commit/4c35bf7938ac2d06f3ff3c66df3d7412c0c3246b) fix(main): correct timezone replacement in build date formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-26T12:01:20+08:00*
 - [f94ac51](https://github.com/HafiziRuslan/RasPiAPRS/commit/f94ac51e0ca461afc8415f0126c61f2562ba8af2) fix(metrics): improve storage used calculation to sum across all disk partitions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-23T22:19:13+08:00*
 - [e9168b8](https://github.com/HafiziRuslan/RasPiAPRS/commit/e9168b84c84ac5fff5295404372d5cb4b2538b43) fix(msg): skip ack when station already in path *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-23T00:44:29+08:00*
 - [24177c9](https://github.com/HafiziRuslan/RasPiAPRS/commit/24177c9070f9dc3f9cba456d52c204eea1822a11) fix(deps): update yarl to 1.24.2 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-20T13:18:44+08:00*
@@ -33,6 +34,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta12
 
+- [bf36daf](https://github.com/HafiziRuslan/RasPiAPRS/commit/bf36daf92070f908fca9bb500c2dca271863b447) build(deps): update package versions for aiohappyeyeballs, certifi, and idna *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-23T22:23:03+08:00*
 - [f476a5a](https://github.com/HafiziRuslan/RasPiAPRS/commit/f476a5a20c2fe21ffe7a4b001fd7498f779d5a12) chore(raspiaprs): reduce service startup delay and restart interval *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-20T15:40:25+08:00*
 - [e74c8e1](https://github.com/HafiziRuslan/RasPiAPRS/commit/e74c8e1247a5ca6ff1c2dd3e682f9826e190e787) build(system): add RasPiAPRS systemd service configuration *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-13T16:23:12+08:00*
 - [83ddbef](https://github.com/HafiziRuslan/RasPiAPRS/commit/83ddbef294e034f3479481a769f58a6938869092) chore(version): bump to 0.1b12 and update deps *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-13T15:57:09+08:00*
@@ -1395,4 +1397,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-05-23T22:20:40.836911305+08:00
+generated using git-cliff on 2026-05-26T12:02:25.464846609+08:00
