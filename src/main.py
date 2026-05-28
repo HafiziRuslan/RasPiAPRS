@@ -1123,7 +1123,7 @@ class SystemStats(object):
 		u_str = humanize.precisedelta(uptime, minimum_unit='minutes', format='%0.0f')
 		for pattern, repl in [(r' years?', 'y'), (r' months?', 'mo'), (r' days?', 'd'), (r' hours?', 'h'), (r' minutes?', 'm'), (r' and|,', '')]:
 			u_str = re.sub(pattern, repl, u_str)
-		return f'up: {u_str}'
+		return f'up {u_str}'
 
 	def _calculate_traffic(self):
 		"""Calculate network traffic info from vnstat."""
@@ -1145,7 +1145,7 @@ class SystemStats(object):
 							max_total, best_rx, best_tx, found = total, rx_bytes, tx_bytes, True
 			if found:
 				rxtx = humanize.naturalsize(best_rx + best_tx).replace(' ', '')
-				return f'{net}: {rxtx}'
+				return f'{net} {rxtx}'
 		except Exception as e:
 			logging.debug('Could not fetch vnstat 5-min traffic: %s', e)
 		return ''
@@ -1910,7 +1910,7 @@ class APRSSender:
 		if self.cfg.gpsd_enabled:
 			_, u_sat, n_sat = sat_data
 			if u_sat > 0:
-				sats_info = f'gps: {u_sat}/{n_sat}'
+				sats_info = f'gps {u_sat}/{n_sat}'
 		stat_text = f'{timestamp}{"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
 		tg_text = f'Time: <b>{tg_timestamp}</b>\nText: <b>{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}</b>'
 		wa_text = '; '.join(filter(None, [gridsquare, uptime, sats_info]))
