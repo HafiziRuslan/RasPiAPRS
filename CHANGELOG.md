@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta12] - (2026-05-30T17:36:50+08:00)
+## [beta12] - (2026-05-30T17:44:20+08:00)
 
-- 19 commit(s) contributed to the release.
+- 20 commit(s) contributed to the release.
 - 18 day(s) passed between releases.
 
 ### 🚀 Features in beta12
@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta12
 
+- [6bd83c4](https://github.com/HafiziRuslan/RasPiAPRS/commit/6bd83c4b21c939632b2af40772e5b8d11095b33d) fix(APRS): improve connection handling and error recovery *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-30T17:44:20+08:00*
 - [4c35bf7](https://github.com/HafiziRuslan/RasPiAPRS/commit/4c35bf7938ac2d06f3ff3c66df3d7412c0c3246b) fix(main): correct timezone replacement in build date formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-26T12:01:20+08:00*
 - [f94ac51](https://github.com/HafiziRuslan/RasPiAPRS/commit/f94ac51e0ca461afc8415f0126c61f2562ba8af2) fix(metrics): improve storage used calculation to sum across all disk partitions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-23T22:19:13+08:00*
 - [e9168b8](https://github.com/HafiziRuslan/RasPiAPRS/commit/e9168b84c84ac5fff5295404372d5cb4b2538b43) fix(msg): skip ack when station already in path *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-23T00:44:29+08:00*
@@ -1399,4 +1400,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-05-30T17:38:06.226686151+08:00
+generated using git-cliff on 2026-05-30T17:45:22.772524991+08:00
