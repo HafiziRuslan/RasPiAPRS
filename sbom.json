@@ -2,9 +2,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:dd2445c1-4660-4ebb-90cf-5a3d865d7f33",
+  "serialNumber": "urn:uuid:25dd5d11-6104-4890-afd0-eaefba7dba60",
   "metadata": {
-    "timestamp": "2026-05-23T14:17:11.854218000Z",
+    "timestamp": "2026-05-30T09:44:59.093299900Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
@@ -147,10 +147,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "idna-19@3.16",
+      "bom-ref": "idna-19@3.17",
       "name": "idna",
-      "version": "3.16",
-      "purl": "pkg:pypi/idna@3.16"
+      "version": "3.17",
+      "purl": "pkg:pypi/idna@3.17"
     },
     {
       "type": "library",
@@ -241,7 +241,7 @@
     {
       "ref": "anyio-5@4.13.0",
       "dependsOn": [
-        "idna-19@3.16"
+        "idna-19@3.17"
       ]
     },
     {
@@ -293,14 +293,14 @@
         "anyio-5@4.13.0",
         "certifi-9@2026.5.20",
         "httpcore-16@1.0.9",
-        "idna-19@3.16"
+        "idna-19@3.17"
       ]
     },
     {
       "ref": "humanize-18@4.15.0"
     },
     {
-      "ref": "idna-19@3.16"
+      "ref": "idna-19@3.17"
     },
     {
       "ref": "multidict-20@6.7.1"
@@ -354,7 +354,7 @@
     {
       "ref": "yarl-28@1.24.2",
       "dependsOn": [
-        "idna-19@3.16",
+        "idna-19@3.17",
         "multidict-20@6.7.1",
         "propcache-22@0.5.2"
       ]
