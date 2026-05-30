@@ -1670,6 +1670,11 @@ class APRSSender:
 
 	async def connect(self):
 		"""Establish connection to APRS-IS with retries."""
+		if self.ais:
+			with contextlib.suppress(Exception):
+				self.ais.close()
+			self.ais = None
+
 		logging.info('Connecting to APRS-IS server %s:%d as %s', self.cfg.aprsis_server, self.cfg.aprsis_port, self.cfg.from_call)
 		loop = asyncio.get_running_loop()
 		max_retries = 5
@@ -1684,6 +1689,8 @@ class APRSSender:
 					raise APRSConnectionError('Failed to initialize aprslib.IS object.')
 				logging.debug('Attempting connect to APRS-IS %s', self.ais.server)
 				await loop.run_in_executor(None, self.ais.connect)
+				if not getattr(self.ais, '_connected', False):
+					raise APRSConnectionError('Failed to verify connection state after connect.')
 				if self.cfg.aprsis_filter:
 					await loop.run_in_executor(None, self.ais.set_filter, self.cfg.aprsis_filter)
 					logging.info('APRS-IS filter set to: %s', self.cfg.aprsis_filter)
@@ -1766,15 +1773,20 @@ class APRSSender:
 		"""Send a packet with random delay and retry logic."""
 		while True:
 			try:
-				if not self.ais:
+				if not self.ais or not getattr(self.ais, '_connected', False):
 					await self.connect()
-				await asyncio.sleep(random.uniform(0, 5))
-				self.ais.sendall(payload)
+				await asyncio.sleep(random.uniform(0.5, 2.0))
+				loop = asyncio.get_running_loop()
+				await loop.run_in_executor(None, self.ais.sendall, payload)
 				logging.info(payload)
 				return
 			except (APRSConnectionError, BrokenPipeError, ConnectionResetError, OSError) as err:
-				logging.error('APRS connection error at %s: %s', log_context, err)
-				await self.connect()
+				logging.error('APRS connection error at %s: %s. Reconnecting...', log_context, err)
+				if self.ais:
+					with contextlib.suppress(Exception):
+						self.ais.close()
+					self.ais = None
+				await asyncio.sleep(5)
 
 	async def send_position(self, gps_data=None, is_moving=False, symbt=None, symb=None):
 		"""Send APRS position packet to APRS-IS."""
