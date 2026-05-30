@@ -63,7 +63,7 @@ class Config:
 	log_dir: str = '/var/log/RasPiAPRS'
 	lib_dir: str = '/var/lib/RasPiAPRS'
 	mmdvmhost_file: str = ''
-	gps_file: str = f'{tmp_dir}/gps.json'
+	gps_file: str = f'{lib_dir}/gps.json'
 	location_id_file: str = f'{tmp_dir}/location_id.tmp'
 	status_file: str = f'{tmp_dir}/status.tmp'
 	msg_tracking_file: str = f'{lib_dir}/msg_tracking.pkl'
