@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 # 	Send APRS position and telemetry from Raspberry Pi to APRS-IS.
 # 	Copyright (C) 2026  HafiziRuslan
 #
@@ -15,7 +14,6 @@
 #
 # 	You should have received a copy of the GNU General Public License
 # 	along with this program. If not, see <https://www.gnu.org/licenses/>.
-
 import asyncio
 import contextlib
 import datetime as dt
@@ -41,7 +39,6 @@ from collections import deque
 from dataclasses import dataclass
 from typing import Callable
 from typing import NamedTuple
-
 import aiohttp
 import aprslib
 import aprslib.util
@@ -209,7 +206,6 @@ class Config:
 			current_mtime = 0.0
 		if self._env_mtime != 0.0 and current_mtime <= self._env_mtime and self.mmdvmhost_file:
 			return
-
 		self._env_mtime = current_mtime
 		dotenv.load_dotenv(env_file, override=True)
 		self.log_level_raw = self._env_get_int('LOG_LEVEL', 2)
@@ -524,7 +520,6 @@ class PersistentDict(UserDict):
 	def _load(self):
 		if not os.path.exists(self.file_path):
 			return {}
-
 		if self._is_pickle:
 			try:
 				with open(self.file_path, 'rb') as f:
@@ -997,12 +992,22 @@ class SmartBeaconing(object):
 		turn_threshold = self.sb_mta + (self.sb_tsl / (spd_kmh if spd_kmh > 0 else 1))
 		return heading_change > turn_threshold, heading_change, turn_threshold
 
-	def should_send(self, gps_data):
+	def should_send(self, gps_data, is_at_sea=False):
 		"""Determine if a beacon should be sent based on GPS data."""
 		if not gps_data:
 			return False
-		_, _, _, _, spd, cse = gps_data
+		_, _, _, alt, spd, cse = gps_data
 		now = time.time()
+		spd_kmh = int(APRSConverter.spd_to_kmh(spd))
+		spd_knt = int(APRSConverter.spd_to_knot(spd))
+		if spd_knt > 100 and alt > 300:
+			self.symbt, self.symb = '/', '^'  # Plane
+		elif is_at_sea and spd_knt > 5:
+			self.symbt, self.symb = '/', 's'  # Boat
+		elif spd_kmh > 5 or self.is_moving:
+			_, self.symbt, self.symb = self._calculate_rate(spd_kmh)
+		else:
+			self.symbt, self.symb = self.cfg.symbol_table, self.cfg.symbol
 		if not self.initialized:
 			self.initialized = True
 			self.last_beacon_time = now
@@ -1216,7 +1221,6 @@ class SystemStats(object):
 				os_name = ' '.join(filter(None, [vendor, version, f'({codename})' if codename else None]))
 			except (AttributeError, OSError):
 				os_name = platform.platform()
-
 			kernel_ver = ''
 			try:
 				sysname = platform.system()
@@ -1674,7 +1678,6 @@ class APRSSender:
 			with contextlib.suppress(Exception):
 				self.ais.close()
 			self.ais = None
-
 		logging.info('Connecting to APRS-IS server %s:%d as %s', self.cfg.aprsis_server, self.cfg.aprsis_port, self.cfg.from_call)
 		loop = asyncio.get_running_loop()
 		max_retries = 5
@@ -1959,7 +1962,6 @@ class APRSSender:
 def aprs_consumer_worker(call, passcode, server, port, aprs_filter, queue):
 	"""Isolated worker process to handle the blocking APRS-IS consumer."""
 	import time
-
 	import aprslib
 
 	while True:
@@ -2010,23 +2012,23 @@ async def initialize_session(cfg):
 	return aprs_sender, tg_logger, timer, sb, sys_stats, scheduled_msg_handler, gps_handler
 
 
-def should_send_position(cfg, timer_tick, sb, gps_data):
+def should_send_position(cfg, timer_tick, sb, gps_data, is_at_sea=False):
 	"""Determine if a position update is needed."""
-	return (cfg.gpsd_enabled and cfg.smartbeaconing_enabled and sb.should_send(gps_data)) or (timer_tick % 1200 == 1)
+	return (cfg.gpsd_enabled and cfg.smartbeaconing_enabled and sb.should_send(gps_data, is_at_sea)) or (timer_tick % 1200 == 1)
 
 
-def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender):
+def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, is_at_sea=False):
 	class Task(NamedTuple):
 		condition: bool
 		func: Callable
 		args: tuple
 		kwargs: dict
 
-	loc_data, _ = gps_data if gps_data else None
+	loc_data, _ = gps_data if gps_data else (None, None)
 	return [
 		Task(timer_tick % 21600 == 1, aprs_sender.send_header, (), {}),
 		Task(
-			should_send_position(cfg, timer_tick, sb, loc_data),
+			should_send_position(cfg, timer_tick, sb, loc_data, is_at_sea),
 			aprs_sender.send_position,
 			(),
 			{'gps_data': gps_data, 'is_moving': sb.is_moving, 'symbt': sb.symbt, 'symb': sb.symb},
@@ -2043,9 +2045,12 @@ async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, sch
 			break
 		if timer_tick % 20 == 0:
 			sys_stats.update_metrics()
+		loc_data, _ = gps_data
+		address = aprs_sender.geolocation.get_address(loc_data.lat, loc_data.lon)
+		is_at_sea = not address or not any(k in address for k in ['country', 'state', 'road', 'suburb', 'town', 'village'])
 		packet_sent_this_cycle = False
 		position_packet_was_sent = False
-		tasks_to_run = _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender)
+		tasks_to_run = _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, is_at_sea)
 		for task in tasks_to_run:
 			if task.condition:
 				try:
