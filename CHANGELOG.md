@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta12] - (2026-05-30T17:44:20+08:00)
+## [beta12] - (2026-05-30T17:46:03+08:00)
 
-- 20 commit(s) contributed to the release.
+- 21 commit(s) contributed to the release.
 - 18 day(s) passed between releases.
 
 ### 🚀 Features in beta12
@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta12
 
+- [38b7da6](https://github.com/HafiziRuslan/RasPiAPRS/commit/38b7da6cf9c44a54042b46064c5e418eaccc745b) fix(auth): upgrade idna to 3.17 for enhanced security and compatibility *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-30T17:46:03+08:00*
 - [6bd83c4](https://github.com/HafiziRuslan/RasPiAPRS/commit/6bd83c4b21c939632b2af40772e5b8d11095b33d) fix(APRS): improve connection handling and error recovery *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-30T17:44:20+08:00*
 - [4c35bf7](https://github.com/HafiziRuslan/RasPiAPRS/commit/4c35bf7938ac2d06f3ff3c66df3d7412c0c3246b) fix(main): correct timezone replacement in build date formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-26T12:01:20+08:00*
 - [f94ac51](https://github.com/HafiziRuslan/RasPiAPRS/commit/f94ac51e0ca461afc8415f0126c61f2562ba8af2) fix(metrics): improve storage used calculation to sum across all disk partitions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-23T22:19:13+08:00*
@@ -1400,4 +1401,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-05-30T17:45:22.772524991+08:00
+generated using git-cliff on 2026-05-30T17:46:59.071707945+08:00
