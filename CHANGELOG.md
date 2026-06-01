@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta12] - (2026-06-02T01:54:35+08:00)
+## [beta12] - (2026-06-02T01:56:23+08:00)
 
-- 25 commit(s) contributed to the release.
+- 26 commit(s) contributed to the release.
 - 20 day(s) passed between releases.
 
 ### 🚀 Features in beta12
@@ -41,6 +41,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta12
 
+- [b9a2129](https://github.com/HafiziRuslan/RasPiAPRS/commit/b9a212902ba6cfc7ce425ca6371f3e1edb423139) chore(): remove unused UnknownFormat import *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-02T01:56:23+08:00*
 - [b9a9fdd](https://github.com/HafiziRuslan/RasPiAPRS/commit/b9a9fdd4c7136aa0e679b01fc2233c6fdbfb3b63) chore(bom): update serial number and timestamp *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-02T01:38:03+08:00*
 - [bf36daf](https://github.com/HafiziRuslan/RasPiAPRS/commit/bf36daf92070f908fca9bb500c2dca271863b447) build(deps): update package versions for aiohappyeyeballs, certifi, and idna *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-23T22:23:03+08:00*
 - [f476a5a](https://github.com/HafiziRuslan/RasPiAPRS/commit/f476a5a20c2fe21ffe7a4b001fd7498f779d5a12) chore(raspiaprs): reduce service startup delay and restart interval *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-20T15:40:25+08:00*
@@ -1405,4 +1406,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-02T01:55:34.262994570+08:00
+generated using git-cliff on 2026-06-02T01:57:20.744750256+08:00
