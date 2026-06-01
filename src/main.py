@@ -1901,7 +1901,7 @@ class APRSSender:
 			_, sat_data = gps_data if gps_data else await self.gps_handler.get_loc_and_sat()
 			_, uSat, nSat = sat_data
 			payload += f',{uSat:d}'
-			if uSat > 0:
+			if nSat > 0:
 				tg_tlm += f'\nGPS Lock: <b>{uSat}</b>\nGPS Avail: <b>{nSat}</b>'
 				wa_tlm += f', {uSat}/{nSat}'
 		await self.send_packet(payload, 'telemetry')
@@ -1921,9 +1921,9 @@ class APRSSender:
 		traffic = self.sys_stats.traffic_info
 		sats_info = ''
 		if self.cfg.gpsd_enabled:
-			_, u_sat, n_sat = sat_data
-			if u_sat > 0:
-				sats_info = f'gps {u_sat}/{n_sat}'
+			_, uSat, nSat = sat_data
+			if nSat > 0:
+				sats_info = f'gps {uSat}/{nSat}'
 		stat_text = f'{timestamp}{"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
 		tg_text = f'Time: <b>{tg_timestamp}</b>\nText: <b>{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}</b>'
 		wa_text = '; '.join(filter(None, [gridsquare, uptime, sats_info]))
