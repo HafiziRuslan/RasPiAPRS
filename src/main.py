@@ -1735,7 +1735,7 @@ class APRSSender:
 			return
 		try:
 			parsed_packet = aprslib.parse(packet)
-			if 'message' in parsed_packet.get('format') and not parsed_packet.get('response') and parsed_packet is not UnknownFormat:
+			if 'message' in parsed_packet.get('format') and not parsed_packet.get('response'):
 				from_call = parsed_packet.get('from', 'UNKNOWN')
 				addresse = parsed_packet.get('addresse', 'UNKNOWN')
 				message_text = parsed_packet.get('message_text', '')
@@ -2005,6 +2005,7 @@ async def initialize_session(cfg):
 	telem_seq = Sequence(cfg.lib_dir, name='telem_sequence', modulo=1000)
 	aprs_sender = APRSSender(cfg, tg_logger, wa_logger, sys_stats, gps_handler, geolocation, telem_seq)
 	await aprs_sender.connect()
+	await aprs_sender.send_header() # Send header immediately on startup
 	timer = Timer(cfg.tmp_dir)
 	sb = SmartBeaconing(cfg)
 	scheduled_msg_handler = ScheduledMessageHandler(cfg, gps_handler)
