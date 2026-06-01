@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta12] - (2026-06-02T02:02:23+08:00)
+## [beta12] - (2026-06-02T02:06:40+08:00)
 
-- 27 commit(s) contributed to the release.
+- 28 commit(s) contributed to the release.
 - 20 day(s) passed between releases.
 
 ### 🚀 Features in beta12
@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta12
 
+- [fdcfbbd](https://github.com/HafiziRuslan/RasPiAPRS/commit/fdcfbbdb43e43ecbc8da984c6dfd233af7b7f8fa) fix(main): correct GPS satellite count condition *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-02T02:06:40+08:00*
 - [033f527](https://github.com/HafiziRuslan/RasPiAPRS/commit/033f527fcc983066c985fcf451b1bd45151ac568) fix(main): disable immediate APRS header send on startup *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-02T02:02:23+08:00*
 - [e8c7273](https://github.com/HafiziRuslan/RasPiAPRS/commit/e8c7273d06b9d4ef201609a9f3a60819a644ddb0) fix(auth, data): update should_send_position to include is_at_sea parameter for accurate position handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-30T18:14:45+08:00*
 - [38b7da6](https://github.com/HafiziRuslan/RasPiAPRS/commit/38b7da6cf9c44a54042b46064c5e418eaccc745b) fix(auth): upgrade idna to 3.17 for enhanced security and compatibility *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-30T17:46:03+08:00*
@@ -1407,4 +1408,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-02T02:03:25.676931984+08:00
+generated using git-cliff on 2026-06-02T02:07:36.344127592+08:00
