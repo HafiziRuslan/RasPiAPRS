@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta12] - (2026-06-02T01:41:23+08:00)
+## [beta12] - (2026-06-02T01:54:35+08:00)
 
-- 24 commit(s) contributed to the release.
+- 25 commit(s) contributed to the release.
 - 20 day(s) passed between releases.
 
 ### 🚀 Features in beta12
 
+- [569c607](https://github.com/HafiziRuslan/RasPiAPRS/commit/569c6076fdb4f213b31d260060d02799b4a24bb6) feat(aprs):send header immediately on startup *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-02T01:54:35+08:00*
 - [89d2c09](https://github.com/HafiziRuslan/RasPiAPRS/commit/89d2c099a91ed1d3609bb735e8b7645a7b0e5b83) feat(service): improve service startup and restart behavior *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-19T18:46:18+08:00*
 - [ae47bfc](https://github.com/HafiziRuslan/RasPiAPRS/commit/ae47bfca4541b5a00aec36d0ce29711fe37f3995) feat(main): improve network traffic display and version update *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-19T18:18:03+08:00*
 
@@ -1404,4 +1405,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-02T01:42:16.479904689+08:00
+generated using git-cliff on 2026-06-02T01:55:34.262994570+08:00
