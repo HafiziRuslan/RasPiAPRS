@@ -1687,9 +1687,7 @@ class APRSSender:
 				self.ais = aprslib.IS(
 					callsign=self.cfg.from_call, passwd=self.cfg.aprs_passcode, host=self.cfg.aprsis_server, port=self.cfg.aprsis_port
 				)
-				if self.ais is None:
-					logging.critical('Failed to create aprslib.IS instance; object is None.')
-					raise APRSConnectionError('Failed to initialize aprslib.IS object.')
+				# Removed redundant check for self.ais is None, as aprslib.IS always returns an object or raises an error.
 				logging.debug('Attempting connect to APRS-IS %s', self.ais.server)
 				await loop.run_in_executor(None, self.ais.connect)
 				if not getattr(self.ais, '_connected', False):
@@ -1783,13 +1781,14 @@ class APRSSender:
 				await loop.run_in_executor(None, self.ais.sendall, payload)
 				logging.info(payload)
 				return
-			except (APRSConnectionError, BrokenPipeError, ConnectionResetError, OSError) as err:
+			except (APRSConnectionError, BrokenPipeError, ConnectionResetError, OSError, AttributeError) as err:
 				logging.error('APRS connection error at %s: %s. Reconnecting...', log_context, err)
 				if self.ais:
 					with contextlib.suppress(Exception):
 						self.ais.close()
-					self.ais = None
+				self.ais = None
 				await asyncio.sleep(5)
+				await self.connect()
 
 	async def send_position(self, gps_data=None, is_moving=False, symbt=None, symb=None):
 		"""Send APRS position packet to APRS-IS."""
