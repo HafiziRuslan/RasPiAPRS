@@ -49,7 +49,6 @@ import psutil
 import symbols
 from aprslib.exceptions import ConnectionError as APRSConnectionError
 from aprslib.exceptions import ParseError as APRSParseError
-from aprslib.exceptions import UnknownFormat
 from gpsdclient import GPSDClient
 from itu_appendix42 import ItuAppendix42
 
