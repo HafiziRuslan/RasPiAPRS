@@ -2,14 +2,14 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:1bcd8db7-690f-4fef-b329-cc3c3992ef1e",
+  "serialNumber": "urn:uuid:0e9b7463-8d87-4c11-be9e-10a0dbd34dfd",
   "metadata": {
-    "timestamp": "2026-06-01T17:35:27.722389900Z",
+    "timestamp": "2026-06-03T23:18:15.917482100Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
         "name": "uv",
-        "version": "0.11.17"
+        "version": "0.11.18"
       }
     ],
     "component": {
@@ -35,10 +35,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "aiohttp-3@3.13.5",
+      "bom-ref": "aiohttp-3@3.14.0",
       "name": "aiohttp",
-      "version": "3.13.5",
-      "purl": "pkg:pypi/aiohttp@3.13.5"
+      "version": "3.14.0",
+      "purl": "pkg:pypi/aiohttp@3.14.0"
     },
     {
       "type": "library",
@@ -147,10 +147,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "idna-19@3.17",
+      "bom-ref": "idna-19@3.18",
       "name": "idna",
-      "version": "3.17",
-      "purl": "pkg:pypi/idna@3.17"
+      "version": "3.18",
+      "purl": "pkg:pypi/idna@3.18"
     },
     {
       "type": "library",
@@ -221,7 +221,7 @@
       "ref": "aiohappyeyeballs-2@2.6.2"
     },
     {
-      "ref": "aiohttp-3@3.13.5",
+      "ref": "aiohttp-3@3.14.0",
       "dependsOn": [
         "aiohappyeyeballs-2@2.6.2",
         "aiosignal-4@1.4.0",
@@ -241,7 +241,7 @@
     {
       "ref": "anyio-5@4.13.0",
       "dependsOn": [
-        "idna-19@3.17"
+        "idna-19@3.18"
       ]
     },
     {
@@ -293,14 +293,14 @@
         "anyio-5@4.13.0",
         "certifi-9@2026.5.20",
         "httpcore-16@1.0.9",
-        "idna-19@3.17"
+        "idna-19@3.18"
       ]
     },
     {
       "ref": "humanize-18@4.15.0"
     },
     {
-      "ref": "idna-19@3.17"
+      "ref": "idna-19@3.18"
     },
     {
       "ref": "multidict-20@6.7.1"
@@ -336,7 +336,7 @@
     {
       "ref": "raspiaprs-1@0.1b12",
       "dependsOn": [
-        "aiohttp-3@3.13.5",
+        "aiohttp-3@3.14.0",
         "aprslib-6@0.7.2",
         "callsign-regex-8@0.7.1",
         "geopy-13@2.4.1",
@@ -354,7 +354,7 @@
     {
       "ref": "yarl-28@1.24.2",
       "dependsOn": [
-        "idna-19@3.17",
+        "idna-19@3.18",
         "multidict-20@6.7.1",
         "propcache-22@0.5.2"
       ]
