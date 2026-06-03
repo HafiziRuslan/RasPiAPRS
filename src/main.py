@@ -1439,24 +1439,24 @@ class ScheduledMessageHandler:
 		payload = f'{source}>{self.cfg.to_call}{path_str}::{addrcall:9s}:{message}{{{seq:05d}'
 		try:
 			parsed = aprslib.parse(payload)
+			if await aprs_sender.send_packet(payload, name):
+				tg_msg = f'<u>Message {name}</u>\n\nFrom: <b>{parsed["from"]}</b>'
+				wa_msg = f'{parsed["from"]}'
+				if parsed.get('via'):
+					tg_msg += f'\nvia: <b>{parsed["via"]}</b>'
+					wa_msg += f',{parsed["via"]}'
+				path_list = parsed.get('path')
+				if path_list:
+					tg_msg += f'\nPath: <b>{", ".join(path_list)}</b>'
+					wa_msg += f',{", ".join(path_list)}'
+				tg_msg += f'\nTo: <b>{parsed["addresse"]}</b>\n{f"MessageID: <b>{parsed['msgNo']}</b>" if parsed.get("msgNo") else ""}\nMessageText: <b>{parsed["message_text"]}</b>'
+				wa_msg += f'>{parsed["addresse"]}{f", ID: {parsed['msgNo']}, " if parsed.get("msgNo") else ", "}Msg: {parsed["message_text"]}'
+				await aprs_sender.tg_logger.log(tg_msg, tid=self.cfg.telegram_msg_tid)
+				await aprs_sender.wa_logger.log(wa_msg)
+				return True
 		except APRSParseError as err:
 			logging.error('APRS packet parsing error at %s: %s', name, err)
-			return False
-		await aprs_sender.send_packet(payload, name)
-		tg_msg = f'<u>Message {name}</u>\n\nFrom: <b>{parsed["from"]}</b>'
-		wa_msg = f'{parsed["from"]}'
-		if parsed.get('via'):
-			tg_msg += f'\nvia: <b>{parsed["via"]}</b>'
-			wa_msg += f',{parsed["via"]}'
-		path_list = parsed.get('path')
-		if path_list:
-			tg_msg += f'\nPath: <b>{", ".join(path_list)}</b>'
-			wa_msg += f',{", ".join(path_list)}'
-		tg_msg += f'\nTo: <b>{parsed["addresse"]}</b>\n{f"MessageID: <b>{parsed['msgNo']}</b>" if parsed.get("msgNo") else ""}\nMessageText: <b>{parsed["message_text"]}</b>'
-		wa_msg += f'>{parsed["addresse"]}{f", ID: {parsed['msgNo']}, " if parsed.get("msgNo") else ", "}Msg: {parsed["message_text"]}'
-		await aprs_sender.tg_logger.log(tg_msg, tid=self.cfg.telegram_msg_tid)
-		await aprs_sender.wa_logger.log(wa_msg)
-		return True
+		return False
 
 
 class TelegramLogger(object):
@@ -1744,19 +1744,23 @@ class APRSSender:
 					if self.cfg.from_call in path:
 						logging.debug('Skipping ACK for message %s from %s: station already in path', msg_no, from_call)
 						return
-					ack_payload = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:ack{msg_no}'
-					logging.debug('Replying acknowledge for message %s from %s', msg_no, from_call)
-					asyncio.create_task(self.send_packet(ack_payload, 'ack'))
-					tg_msg = (
-						f'<u>APRS Message Received</u>\n\n'
-						f'From: <b>{from_call}</b>\n'
-						f'To: <b>{addresse}</b>\n'
-						f'{f"MsgID: <b>{msg_no}</b>" if msg_no else ""}\nMessage: <b>{message_text}</b>'
-					)
-					wa_msg = f'Msg -> {from_call}>{addresse}{f", ID: {msg_no}, " if msg_no else ", "}Msg: {message_text}'
-					asyncio.create_task(self.tg_logger.log(tg_msg, tid=self.cfg.telegram_msg_tid))
-					if from_call != 'WTSAPP':
-						asyncio.create_task(self.wa_logger.log(wa_msg))
+
+					async def respond():
+						ack_payload = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:ack{msg_no}'
+						logging.debug('Replying acknowledge for message %s from %s', msg_no, from_call)
+						if await self.send_packet(ack_payload, 'ack'):
+							tg_msg = (
+								f'<u>APRS Message Received</u>\n\n'
+								f'From: <b>{from_call}</b>\n'
+								f'To: <b>{addresse}</b>\n'
+								f'{f"MsgID: <b>{msg_no}</b>" if msg_no else ""}\nMessage: <b>{message_text}</b>'
+							)
+							wa_msg = f'Msg -> {from_call}>{addresse}{f", ID: {msg_no}, " if msg_no else ", "}Msg: {message_text}'
+							await self.tg_logger.log(tg_msg, tid=self.cfg.telegram_msg_tid)
+							if from_call != 'WTSAPP':
+								await self.wa_logger.log(wa_msg)
+
+					asyncio.create_task(respond())
 			else:
 				logging.debug(
 					'Ignoring non-message APRS packet of type %s from %s: %s',
@@ -1769,9 +1773,9 @@ class APRSSender:
 		except Exception as e:
 			logging.error('Unexpected error in APRS callback: %s', e, exc_info=True)
 
-	async def send_packet(self, payload, log_context='packet'):
+	async def send_packet(self, payload, log_context='packet', max_retries=3):
 		"""Send a packet with random delay and retry logic."""
-		while True:
+		for attempt in range(max_retries):
 			try:
 				if not self.ais or not getattr(self.ais, '_connected', False):
 					await self.connect()
@@ -1779,15 +1783,17 @@ class APRSSender:
 				loop = asyncio.get_running_loop()
 				await loop.run_in_executor(None, self.ais.sendall, payload)
 				logging.info(payload)
-				return
+				return True
 			except (APRSConnectionError, BrokenPipeError, ConnectionResetError, OSError, AttributeError) as err:
 				logging.error('APRS connection error at %s: %s. Reconnecting...', log_context, err)
 				if self.ais:
 					with contextlib.suppress(Exception):
 						self.ais.close()
 				self.ais = None
-				await asyncio.sleep(5)
-				await self.connect()
+				if attempt < max_retries - 1:
+					await asyncio.sleep(5)
+		logging.error('Failed to send %s after %d attempts.', log_context, max_retries)
+		return False
 
 	async def send_position(self, gps_data=None, is_moving=False, symbt=None, symb=None):
 		"""Send APRS position packet to APRS-IS."""
@@ -1851,9 +1857,11 @@ class APRSSender:
 			f'Comment: <b>{comment}</b>'
 		)
 		wa_pos = f'Pos -> {cur_lat}, {cur_lon}, {cur_alt}m{ext_wa}'
-		await self.send_packet(payload, 'position')
-		await self.tg_logger.log(tg_pos, cur_lat, cur_lon, cur_cse)
-		await self.wa_logger.log(wa_pos)
+		if await self.send_packet(payload, 'position'):
+			await self.tg_logger.log(tg_pos, cur_lat, cur_lon, cur_cse)
+			await self.wa_logger.log(wa_pos)
+			return True
+		return False
 
 	async def send_header(self):
 		"""Send APRS header information to APRS-IS."""
@@ -1873,8 +1881,10 @@ class APRSSender:
 			f'Equations: <b>{",".join(eqns)}</b>\n\n'
 			f'Value: <code>[a,b,c]=(a×v²)+(b×v)+c</code>'
 		)
-		await self.send_packet(payload, 'header')
-		await self.tg_logger.log(tg_hdr)
+		if await self.send_packet(payload, 'header'):
+			await self.tg_logger.log(tg_hdr)
+			return True
+		return False
 
 	async def send_telemetry(self, gps_data=None):
 		"""Send APRS telemetry information to APRS-IS."""
@@ -1904,9 +1914,11 @@ class APRSSender:
 			if nSat > 0:
 				tg_tlm += f'\nGPS Lock: <b>{uSat}</b>\nGPS Avail: <b>{nSat}</b>'
 				wa_tlm += f', {uSat}/{nSat}'
-		await self.send_packet(payload, 'telemetry')
-		await self.tg_logger.log(tg_tlm)
-		await self.wa_logger.log(wa_tlm)
+		if await self.send_packet(payload, 'telemetry'):
+			await self.tg_logger.log(tg_tlm)
+			await self.wa_logger.log(wa_tlm)
+			return True
+		return False
 
 	async def send_status(self, gps_data=None):
 		"""Send APRS status information to APRS-IS."""
@@ -1937,14 +1949,16 @@ class APRSSender:
 						return
 			except (IOError, OSError):
 				pass
-		await self.send_packet(payload, 'status')
-		try:
-			with open(self.cfg.status_file, 'w') as f:
-				f.write(payload)
-		except (IOError, OSError):
-			pass
-		await self.tg_logger.log(tg_stat)
-		await self.wa_logger.log(wa_stat)
+		if await self.send_packet(payload, 'status'):
+			try:
+				with open(self.cfg.status_file, 'w') as f:
+					f.write(payload)
+			except (IOError, OSError):
+				pass
+			await self.tg_logger.log(tg_stat)
+			await self.wa_logger.log(wa_stat)
+			return True
+		return False
 
 	def close(self):
 		"""Close the APRS-IS connection and stop the consumer process."""
