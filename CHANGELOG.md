@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta12] - (2026-06-04T07:21:09+08:00)
+## [beta12] - (2026-06-04T07:23:24+08:00)
 
-- 29 commit(s) contributed to the release.
+- 30 commit(s) contributed to the release.
 - 22 day(s) passed between releases.
 
 ### 🚀 Features in beta12
@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta12
 
+- [6bbd063](https://github.com/HafiziRuslan/RasPiAPRS/commit/6bbd0633642255c4946e4272687964293bcaf7bb) refactor(pylock.toml): upgrade aiohttp from 3.13.5 to 3.14.0 with new wheel versions for android, ios, and macosx platforms *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-04T07:23:24+08:00*
 - [7f50145](https://github.com/HafiziRuslan/RasPiAPRS/commit/7f50145bce350d722cb585ca16d26337969b792f) refactor(main): drop null check, improve reconnection *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-02T01:41:23+08:00*
 - [c7d20b2](https://github.com/HafiziRuslan/RasPiAPRS/commit/c7d20b2c74b1ecdb44d56290f79cfd10046a843a) refactor(config): update gps file path to lib directory *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-30T17:36:50+08:00*
 - [ac415ec](https://github.com/HafiziRuslan/RasPiAPRS/commit/ac415ecd2651376fead24bb4b4e9162f96d484d0) refactor(utils): remove unnecessary colons from status messages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-05-28T16:57:01+08:00*
@@ -1409,4 +1410,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-04T07:22:02.057075669+08:00
+generated using git-cliff on 2026-06-04T07:24:15.769227856+08:00
