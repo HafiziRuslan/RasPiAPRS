@@ -2285,7 +2285,7 @@ async def main():
 			gps_polling_task = asyncio.create_task(gps_handler.run_polling())
 			await asyncio.sleep(2)
 		gps_data = await gps_handler.get_loc_and_sat()
-		async with aprs_sender:
+		async with aprs_sender.tg_logger, aprs_sender.wa_logger, aprs_sender.sg_logger:
 			appName = cfg.app_name.split('/')[0]
 			startText = f'🚀 {appName} Started'
 			reloadText = f'🔄 {appName} Reloaded'
