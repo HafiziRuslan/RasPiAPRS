@@ -1706,14 +1706,15 @@ class SignalLogger:
 	async def log(self, message: str):
 		"""Send a formatted message to Signal via CallMeBot API."""
 		if not self.enabled:
-			uuid_pattern = r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
-			if re.fullmatch(uuid_pattern, self.number):
-				clean_number = self.number
-			else:
-				clean_number = f'+{re.sub(r"\D", "", self.number)}'
-			if not clean_number:
-				logging.error('Signal number is invalid. Cannot send message.')
-				return False
+			return False
+		uuid_pattern = r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+		if re.fullmatch(uuid_pattern, self.number):
+			clean_number = self.number
+		else:
+			clean_number = f'+{re.sub(r"\D", "", self.number)}'
+		if not clean_number:
+			logging.error('Signal number is invalid. Cannot send message.')
+			return False
 		import urllib.parse
 
 		encoded_message = urllib.parse.quote_plus(f'{message}\n\n{self.cfg.app_name}')
