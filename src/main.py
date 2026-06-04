@@ -2177,7 +2177,7 @@ async def initialize_session(cfg):
 	timer = Timer(cfg.tmp_dir)
 	sb = SmartBeaconing(cfg)
 	scheduled_msg_handler = ScheduledMessageHandler(cfg, gps_handler)
-	return aprs_sender, tg_logger, wa_logger, sg_logger, timer, sb, sys_stats, scheduled_msg_handler, gps_handler
+	return aprs_sender, timer, sb, sys_stats, scheduled_msg_handler, gps_handler
 
 
 def should_send_position(cfg, timer_tick, sb, gps_data, is_at_sea=False):
@@ -2253,33 +2253,33 @@ async def main():
 	aprs_consumer_task = None
 	while True:
 		reload_event.clear()
-		aprs_sender, tg_logger, wa_logger, sg_logger, timer, sb, sys_stats, scheduled_msg_handler, gps_handler = await initialize_session(cfg)
+		aprs_sender, timer, sb, sys_stats, scheduled_msg_handler, gps_handler = await initialize_session(cfg)
 		aprs_consumer_task = asyncio.create_task(aprs_sender.run_consumer())
 		if cfg.gpsd_enabled:
 			health_check_task = asyncio.create_task(gps_handler.run_health_check())
 			gps_polling_task = asyncio.create_task(gps_handler.run_polling())
 			await asyncio.sleep(2)
 		gps_data = await gps_handler.get_loc_and_sat()
-		async with tg_logger:
+		async with aprs_sender.tg_logger:
 			appName = cfg.app_name.split('/')[0]
 			startText = f'🚀 {appName} Started'
 			reloadText = f'🔄 {appName} Reloaded'
 			stopText = f'🛑 {appName} Stopped'
-			await tg_logger.log(startText)
-			await wa_logger.log(startText)
-			await sg_logger.log(startText)
+			await aprs_sender.tg_logger.log(startText)
+			await aprs_sender.wa_logger.log(startText)
+			await aprs_sender.sg_logger.log(startText)
 			try:
 				await process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, scheduled_msg_handler, gps_handler, gps_data)
 			finally:
 				if reload_event.is_set():
-					await tg_logger.log(reloadText)
-					await wa_logger.log(reloadText)
-					await sg_logger.log(reloadText)
+					await aprs_sender.tg_logger.log(reloadText)
+					await aprs_sender.wa_logger.log(reloadText)
+					await aprs_sender.sg_logger.log(reloadText)
 				else:
-					await tg_logger.log(stopText)
-					await wa_logger.log(stopText)
-					await sg_logger.log(stopText)
-				await tg_logger.stop_location()
+					await aprs_sender.tg_logger.log(stopText)
+					await aprs_sender.wa_logger.log(stopText)
+					await aprs_sender.sg_logger.log(stopText)
+				await aprs_sender.tg_logger.stop_location()
 				if health_check_task:
 					health_check_task.cancel()
 				if gps_polling_task:
