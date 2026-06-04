@@ -1494,6 +1494,15 @@ class TelegramLogger(object):
 		self.tid = cfg.telegram_tid
 		self.loc_tid = cfg.telegram_loc_tid
 
+	async def __aenter__(self):
+		"""Enter the asynchronous context."""
+		return self
+
+	async def __aexit__(self, exc_type, exc_val, exc_tb):
+		"""Exit the asynchronous context and stop live location."""
+		if self.enabled and self.bot:
+			await self.stop_location()
+
 	async def _call_with_retry(self, func, *args, **kwargs):
 		"""Retry Telegram API calls with exponential backoff."""
 		import telegram
@@ -1636,6 +1645,14 @@ class WhatsAppLogger:
 			self.enabled = False
 			return
 
+	async def __aenter__(self):
+		"""Enter the asynchronous context."""
+		return self
+
+	async def __aexit__(self, exc_type, exc_val, exc_tb):
+		"""Exit the asynchronous context."""
+		pass
+
 	async def log(self, message: str):
 		"""Send a formatted message to WhatsApp via CallMeBot API."""
 		if not self.enabled:
@@ -1677,6 +1694,14 @@ class SignalLogger:
 			logging.error('Signal number or API key is missing. Disabling Signal logging.')
 			self.enabled = False
 			return
+
+	async def __aenter__(self):
+		"""Enter the asynchronous context."""
+		return self
+
+	async def __aexit__(self, exc_type, exc_val, exc_tb):
+		"""Exit the asynchronous context."""
+		pass
 
 	async def log(self, message: str):
 		"""Send a formatted message to Signal via CallMeBot API."""
@@ -2260,7 +2285,7 @@ async def main():
 			gps_polling_task = asyncio.create_task(gps_handler.run_polling())
 			await asyncio.sleep(2)
 		gps_data = await gps_handler.get_loc_and_sat()
-		async with aprs_sender.tg_logger:
+		async with aprs_sender:
 			appName = cfg.app_name.split('/')[0]
 			startText = f'🚀 {appName} Started'
 			reloadText = f'🔄 {appName} Reloaded'
