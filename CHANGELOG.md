@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta13] - (2026-06-05T03:54:05+08:00)
+## [beta13] - (2026-06-05T04:06:18+08:00)
 
-- 13 commit(s) contributed to the release.
+- 14 commit(s) contributed to the release.
 - 1 day(s) passed between releases.
 
 ### 🚀 Features in beta13
@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta13
 
+- [37569fd](https://github.com/HafiziRuslan/RasPiAPRS/commit/37569fd214d0ae41c8c41f2dc93cfece6b84a7da) refactor(main): remove redundant connect call and reposition header_sent flag *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T04:06:18+08:00*
 - [e2281f7](https://github.com/HafiziRuslan/RasPiAPRS/commit/e2281f7eef39d513fa7ee9b826371d8d96c9ed6a) refactor(core): make send_header conditional and add reconnection *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T03:54:05+08:00*
 - [65f616c](https://github.com/HafiziRuslan/RasPiAPRS/commit/65f616c966e39b57c798dadb66f100c1c5131014) refactor(main.sh): relocate copyright notice to runtime output *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T02:12:00+08:00*
 - [eb2715c](https://github.com/HafiziRuslan/RasPiAPRS/commit/eb2715c536666715968db2a652912c5baf8504aa) refactor: update api key naming convention *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T02:07:30+08:00*
@@ -1442,4 +1443,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-05T03:55:19.536689304+08:00
+generated using git-cliff on 2026-06-05T04:07:08.433654700+08:00
