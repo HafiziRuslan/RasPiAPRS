@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta13] - (2026-06-05T02:07:30+08:00)
+## [beta13] - (2026-06-05T02:12:00+08:00)
 
-- 5 commit(s) contributed to the release.
+- 6 commit(s) contributed to the release.
 - 1 day(s) passed between releases.
 
 ### 🚀 Features in beta13
@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta13
 
+- [65f616c](https://github.com/HafiziRuslan/RasPiAPRS/commit/65f616c966e39b57c798dadb66f100c1c5131014) refactor(main.sh): relocate copyright notice to runtime output *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T02:12:00+08:00*
 - [eb2715c](https://github.com/HafiziRuslan/RasPiAPRS/commit/eb2715c536666715968db2a652912c5baf8504aa) refactor: update api key naming convention *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T02:07:30+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta13
@@ -1434,4 +1435,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-05T02:08:28.302931388+08:00
+generated using git-cliff on 2026-06-05T02:13:00.871979910+08:00
