@@ -277,11 +277,11 @@ class Config:
 		self.whatsapp_enabled = self._env_get_bool('WHATSAPP_ENABLE')
 		if self.whatsapp_enabled:
 			self.whatsapp_number = os.getenv('WHATSAPP_NUMBER')
-			self.whatsapp_apikey = os.getenv('WHATSAPP_APIKEY')
+			self.whatsapp_apikey = os.getenv('WHATSAPP_API_KEY')
 		self.signal_enabled = self._env_get_bool('SIGNAL_ENABLE')
 		if self.signal_enabled:
 			self.signal_number = os.getenv('SIGNAL_NUMBER')
-			self.signal_apikey = os.getenv('SIGNAL_APIKEY')
+			self.signal_apikey = os.getenv('SIGNAL_API_KEY')
 		self.aprsphnet_enabled = self._env_get_bool('APRSPHNET_ENABLE')
 		self.aprsthursday_enabled = self._env_get_bool('APRSTHURSDAY_ENABLE')
 		self.aprsaturday_enabled = self._env_get_bool('APRSATURDAY_ENABLE')
