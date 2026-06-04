@@ -1430,7 +1430,7 @@ class ScheduledMessageHandler:
 
 	async def _send_one(self, aprs_sender, name, addrcall, template, from_call=None, gps_data=None, **kwargs):
 		"""Send a single scheduled message to APRS-IS if it's due."""
-		loc_data, _ = gps_data if gps_data else await self.gps_handler.get_loc_and_sat()
+		loc_data, _ = gps_data if gps_data else (None, None)
 		_, lat, lon, _, _, _ = loc_data
 		gridsquare = APRSConverter.latlon_to_grid(lat, lon)
 		source = from_call or self.cfg.from_call
@@ -2171,7 +2171,7 @@ async def initialize_session(cfg):
 	sys_stats.update_metrics()
 	geolocation = Geolocation(cfg.app_name, cfg.project_url, cfg.nominatim_cache_file)
 	telem_seq = Sequence(cfg.lib_dir, name='telem_sequence', modulo=1000)
-	aprs_sender = APRSSender(cfg, tg_logger, wa_logger, sys_stats, gps_handler, geolocation, telem_seq)
+	aprs_sender = APRSSender(cfg, tg_logger, wa_logger, sg_logger, sys_stats, gps_handler, geolocation, telem_seq)
 	await aprs_sender.connect()
 	# await aprs_sender.send_header() # Send header immediately on startup
 	timer = Timer(cfg.tmp_dir)
