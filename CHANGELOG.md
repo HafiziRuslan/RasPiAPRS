@@ -2,14 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta13] - (2026-06-05T01:41:27+08:00)
+## [beta13] - (2026-06-05T01:52:56+08:00)
 
-- 2 commit(s) contributed to the release.
+- 3 commit(s) contributed to the release.
 - 1 day(s) passed between releases.
 
 ### 🚀 Features in beta13
 
 - [482b811](https://github.com/HafiziRuslan/RasPiAPRS/commit/482b8114362da300024db96f056c4ce30ea2662f) feat(signal): add Signal messaging support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T01:41:27+08:00*
+
+### 🐛 Bug Fixes in beta13
+
+- [ddd8357](https://github.com/HafiziRuslan/RasPiAPRS/commit/ddd835745f63cb2130e7acd843c6d2a3eb68d2a1) fix(auth, data): missing tuple in APRSSender *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T01:52:56+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta13
 
@@ -1425,4 +1429,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-05T01:42:29.930206455+08:00
+generated using git-cliff on 2026-06-05T01:53:55.913290589+08:00
