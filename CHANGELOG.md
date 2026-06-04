@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta13] - (2026-06-05T01:57:34+08:00)
+## [beta13] - (2026-06-05T02:07:30+08:00)
 
-- 4 commit(s) contributed to the release.
+- 5 commit(s) contributed to the release.
 - 1 day(s) passed between releases.
 
 ### 🚀 Features in beta13
@@ -15,6 +15,10 @@ All notable changes to this project will be documented in this file.
 
 - [c6a37e8](https://github.com/HafiziRuslan/RasPiAPRS/commit/c6a37e872d47af29606a16b16ceb8b7389ac20e1) fix(auth, data): remove unused import `wa_logger` and `sg_logger` from session initialization and cleanup routines *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T01:57:34+08:00*
 - [ddd8357](https://github.com/HafiziRuslan/RasPiAPRS/commit/ddd835745f63cb2130e7acd843c6d2a3eb68d2a1) fix(auth, data): missing tuple in APRSSender *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T01:52:56+08:00*
+
+### 🚜 Refactor in beta13
+
+- [eb2715c](https://github.com/HafiziRuslan/RasPiAPRS/commit/eb2715c536666715968db2a652912c5baf8504aa) refactor: update api key naming convention *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T02:07:30+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta13
 
@@ -1430,4 +1434,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-05T01:58:35.309417074+08:00
+generated using git-cliff on 2026-06-05T02:08:28.302931388+08:00
