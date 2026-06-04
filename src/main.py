@@ -1887,7 +1887,7 @@ class APRSSender:
 				await loop.run_in_executor(None, self.ais.sendall, payload)
 				logging.info(payload)
 				return True
-			except (APRSConnectionError, BrokenPipeError, ConnectionResetError, OSError, AttributeError) as err:
+			except (APRSConnectionError, OSError, AttributeError) as err:
 				logging.error('APRS connection error at %s: %s. Reconnecting...', log_context, err)
 				if self.ais:
 					with contextlib.suppress(Exception):
@@ -2218,7 +2218,7 @@ def should_send_position(cfg, timer_tick, sb, gps_data, is_at_sea=False):
 	return (cfg.gpsd_enabled and cfg.smartbeaconing_enabled and sb.should_send(gps_data, is_at_sea)) or (timer_tick % 1200 == 1)
 
 
-def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, is_at_sea=False,):
+def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, is_at_sea=False):
 	class Task(NamedTuple):
 		condition: bool
 		func: Callable
