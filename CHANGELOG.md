@@ -2,10 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta13] - (2026-06-05T01:00:13+08:00)
+## [beta13] - (2026-06-05T01:41:27+08:00)
 
-- 1 commit(s) contributed to the release.
+- 2 commit(s) contributed to the release.
 - 1 day(s) passed between releases.
+
+### 🚀 Features in beta13
+
+- [482b811](https://github.com/HafiziRuslan/RasPiAPRS/commit/482b8114362da300024db96f056c4ce30ea2662f) feat(signal): add Signal messaging support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T01:41:27+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta13
 
@@ -1421,4 +1425,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-05T01:02:13.073745384+08:00
+generated using git-cliff on 2026-06-05T01:42:29.930206455+08:00
