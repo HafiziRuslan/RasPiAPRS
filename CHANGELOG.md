@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta13] - (2026-06-05T02:46:18+08:00)
+## [beta13] - (2026-06-05T02:59:36+08:00)
 
-- 10 commit(s) contributed to the release.
+- 11 commit(s) contributed to the release.
 - 1 day(s) passed between releases.
 
 ### 🚀 Features in beta13
@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta13
 
+- [5b44f91](https://github.com/HafiziRuslan/RasPiAPRS/commit/5b44f91e3d0c742145eecd96b15a3760b8a8eb11) fix(auth): validate signal number format and clean invalid input *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T02:59:36+08:00*
 - [a7f9943](https://github.com/HafiziRuslan/RasPiAPRS/commit/a7f99430b06ed8954b039ef30182918f2008b71b) fix(main): improve message encoding for WhatsApp and Signal APIs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T02:46:18+08:00*
 - [c6a37e8](https://github.com/HafiziRuslan/RasPiAPRS/commit/c6a37e872d47af29606a16b16ceb8b7389ac20e1) fix(auth, data): remove unused import `wa_logger` and `sg_logger` from session initialization and cleanup routines *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T01:57:34+08:00*
 - [ddd8357](https://github.com/HafiziRuslan/RasPiAPRS/commit/ddd835745f63cb2130e7acd843c6d2a3eb68d2a1) fix(auth, data): missing tuple in APRSSender *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T01:52:56+08:00*
@@ -1439,4 +1440,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-05T02:47:19.862562660+08:00
+generated using git-cliff on 2026-06-05T03:00:34.579821555+08:00
