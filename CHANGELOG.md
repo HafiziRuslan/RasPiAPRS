@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta13] - (2026-06-05T04:13:57+08:00)
+## [beta13] - (2026-06-05T04:18:39+08:00)
 
-- 15 commit(s) contributed to the release.
+- 16 commit(s) contributed to the release.
 - 1 day(s) passed between releases.
 
 ### 🚀 Features in beta13
@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta13
 
+- [aaa50a4](https://github.com/HafiziRuslan/RasPiAPRS/commit/aaa50a419783d0fa535b03c53d1f09f5f4d8fbf2) fix(auth): rename function `_get_tasks` to follow naming convention and remove async keyword *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T04:18:39+08:00*
 - [1f76b13](https://github.com/HafiziRuslan/RasPiAPRS/commit/1f76b13889335c4345511d0802363bea1e398683) fix(auth): remove unnecessary 'OK' check in response validation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T03:07:40+08:00*
 - [5b44f91](https://github.com/HafiziRuslan/RasPiAPRS/commit/5b44f91e3d0c742145eecd96b15a3760b8a8eb11) fix(auth): validate signal number format and clean invalid input *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T02:59:36+08:00*
 - [a7f9943](https://github.com/HafiziRuslan/RasPiAPRS/commit/a7f99430b06ed8954b039ef30182918f2008b71b) fix(main): improve message encoding for WhatsApp and Signal APIs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T02:46:18+08:00*
@@ -1444,4 +1445,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-05T04:14:55.581206390+08:00
+generated using git-cliff on 2026-06-05T04:19:47.868802314+08:00
