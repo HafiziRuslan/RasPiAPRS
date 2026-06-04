@@ -1663,7 +1663,7 @@ class WhatsAppLogger:
 			return False
 		import urllib.parse
 
-		encoded_message = urllib.parse.quoteplus(message)
+		encoded_message = urllib.parse.quote_plus(f'{message}\n\n`{self.cfg.app_name}`')
 		api_url = f'https://api.callmebot.com/whatsapp.php?phone={clean_number}&apikey={self.apikey}&text={encoded_message}'
 		try:
 			async with aiohttp.ClientSession() as session:
@@ -1716,7 +1716,7 @@ class SignalLogger:
 				return False
 		import urllib.parse
 
-		encoded_message = urllib.parse.quoteplus(message)
+		encoded_message = urllib.parse.quote_plus(f'{message}\n\n{self.cfg.app_name}')
 		api_url = f'https://signal.callmebot.com/signal/send.php?phone={clean_number}&apikey={self.apikey}&text={encoded_message}'
 		try:
 			async with aiohttp.ClientSession() as session:
