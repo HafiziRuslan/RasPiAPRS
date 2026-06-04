@@ -2207,7 +2207,6 @@ async def initialize_session(cfg):
 	telem_seq = Sequence(cfg.lib_dir, name='telem_sequence', modulo=1000)
 	aprs_sender = APRSSender(cfg, tg_logger, wa_logger, sg_logger, sys_stats, gps_handler, geolocation, telem_seq)
 	await aprs_sender.connect()
-	await aprs_sender.send_header()
 	timer = Timer(cfg.tmp_dir)
 	sb = SmartBeaconing(cfg)
 	scheduled_msg_handler = ScheduledMessageHandler(cfg, gps_handler)
