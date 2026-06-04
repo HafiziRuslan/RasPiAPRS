@@ -105,6 +105,10 @@ class Config:
 	telegram_msg_tid: int | None = None
 	whatsapp_enabled: bool = False
 	whatsapp_number: str | None = None
+	whatsapp_apikey: str | None = None
+	signal_enabled: bool = False
+	signal_number: str | None = None
+	signal_apikey: str | None = None
 	aprsphnet_enabled: bool = False
 	aprsthursday_enabled: bool = False
 	aprsaturday_enabled: bool = False
@@ -273,6 +277,11 @@ class Config:
 		self.whatsapp_enabled = self._env_get_bool('WHATSAPP_ENABLE')
 		if self.whatsapp_enabled:
 			self.whatsapp_number = os.getenv('WHATSAPP_NUMBER')
+			self.whatsapp_apikey = os.getenv('WHATSAPP_APIKEY')
+		self.signal_enabled = self._env_get_bool('SIGNAL_ENABLE')
+		if self.signal_enabled:
+			self.signal_number = os.getenv('SIGNAL_NUMBER')
+			self.signal_apikey = os.getenv('SIGNAL_APIKEY')
 		self.aprsphnet_enabled = self._env_get_bool('APRSPHNET_ENABLE')
 		self.aprsthursday_enabled = self._env_get_bool('APRSTHURSDAY_ENABLE')
 		self.aprsaturday_enabled = self._env_get_bool('APRSATURDAY_ENABLE')
@@ -1441,18 +1450,23 @@ class ScheduledMessageHandler:
 			parsed = aprslib.parse(payload)
 			if await aprs_sender.send_packet(payload, name):
 				tg_msg = f'<u>Message {name}</u>\n\nFrom: <b>{parsed["from"]}</b>'
-				wa_msg = f'{parsed["from"]}'
+				wa_msg = f'_Message {name}_\n\nFrom: *{parsed["from"]}*'
+				sg_msg = f'Message {name}\n\nFrom: {parsed["from"]}'
 				if parsed.get('via'):
 					tg_msg += f'\nvia: <b>{parsed["via"]}</b>'
-					wa_msg += f',{parsed["via"]}'
+					wa_msg += f'\nvia: *{parsed["via"]}*'
+					sg_msg += f'\nvia: {parsed["via"]}'
 				path_list = parsed.get('path')
 				if path_list:
 					tg_msg += f'\nPath: <b>{", ".join(path_list)}</b>'
-					wa_msg += f',{", ".join(path_list)}'
+					wa_msg += f'\nPath: *{", ".join(path_list)}*'
+					sg_msg += f'\nPath: {", ".join(path_list)}'
 				tg_msg += f'\nTo: <b>{parsed["addresse"]}</b>\n{f"MessageID: <b>{parsed['msgNo']}</b>" if parsed.get("msgNo") else ""}\nMessageText: <b>{parsed["message_text"]}</b>'
-				wa_msg += f'>{parsed["addresse"]}{f", ID: {parsed['msgNo']}, " if parsed.get("msgNo") else ", "}Msg: {parsed["message_text"]}'
+				wa_msg += f'\nTo: *{parsed["addresse"]}*\n{f"MessageID: *{parsed['msgNo']}*" if parsed.get("msgNo") else ""}\nMessageText: *{parsed["message_text"]}*'
+				sg_msg += f'\nTo: {parsed["addresse"]}\n{f"MessageID: {parsed['msgNo']}" if parsed.get("msgNo") else ""}\nMessageText: {parsed["message_text"]}'
 				await aprs_sender.tg_logger.log(tg_msg, tid=self.cfg.telegram_msg_tid)
 				await aprs_sender.wa_logger.log(wa_msg)
+				await aprs_sender.sg_logger.log(sg_msg)
 				return True
 		except APRSParseError as err:
 			logging.error('APRS packet parsing error at %s: %s', name, err)
@@ -1479,12 +1493,6 @@ class TelegramLogger(object):
 		self.bot = telegram.Bot(self.token)
 		self.tid = cfg.telegram_tid
 		self.loc_tid = cfg.telegram_loc_tid
-
-	async def __aenter__(self):
-		return self
-
-	async def __aexit__(self, exc_type, exc_val, exc_tb):
-		pass
 
 	async def _call_with_retry(self, func, *args, **kwargs):
 		"""Retry Telegram API calls with exponential backoff."""
@@ -1614,50 +1622,100 @@ class TelegramLogger(object):
 
 
 class WhatsAppLogger:
-	"""Class to handle sending APRS messages to the WTSAPP gateway."""
+	"""Class to handle sending WhatsApp messages via CallMeBot API."""
 
 	def __init__(self, cfg):
 		self.cfg = cfg
 		self.enabled = cfg.whatsapp_enabled
 		self.number = cfg.whatsapp_number
-		self.aprs_sender = None
-		self._timestamps = deque()
+		self.apikey = cfg.whatsapp_apikey
+		if not self.enabled:
+			return
+		if not self.number or not self.apikey:
+			logging.error('WhatsApp number or API key is missing. Disabling WhatsApp logging.')
+			self.enabled = False
+			return
 
 	async def log(self, message: str):
-		"""Send a formatted APRS message to WTSAPP, splitting into chunks if necessary."""
-		if not self.enabled or not self.aprs_sender or not self.number:
-			return
-		clean_number = re.sub(r'\D', '', self.number)
+		"""Send a formatted message to WhatsApp via CallMeBot API."""
+		if not self.enabled:
+			return False
+		clean_number = f'+{re.sub(r"\D", "", self.number)}'
 		if not clean_number:
+			logging.error('WhatsApp number is invalid. Cannot send message.')
+			return False
+		import urllib.parse
+
+		encoded_message = urllib.parse.quoteplus(message)
+		api_url = f'https://api.callmebot.com/whatsapp.php?phone={clean_number}&apikey={self.apikey}&text={encoded_message}'
+		try:
+			async with aiohttp.ClientSession() as session:
+				async with session.get(api_url) as response:
+					response_text = await response.text()
+					if response.status == 200 and 'OK' in response_text:
+						logging.info('Successfully sent WhatsApp message via CallMeBot.')
+						return True
+					else:
+						logging.error('Failed to send WhatsApp message via CallMeBot (Status: %d, Response: %s)', response.status, response_text)
+						return False
+		except Exception as e:
+			logging.error('Error sending WhatsApp message via CallMeBot API: %s', e)
+			return False
+
+
+class SignalLogger:
+	"""Class to handle sending Signal messages via CallMeBot API."""
+
+	def __init__(self, cfg):
+		self.cfg = cfg
+		self.enabled = cfg.signal_enabled
+		self.number = cfg.signal_number
+		self.apikey = cfg.signal_apikey
+		if not self.enabled:
 			return
-		prefix = f'@+{clean_number} '
-		max_chunk = 67 - len(prefix)
-		if max_chunk <= 0:
-			logging.error('WhatsApp number is too long for APRS message limits.')
+		if not self.number or not self.apikey:
+			logging.error('Signal number or API key is missing. Disabling Signal logging.')
+			self.enabled = False
 			return
-		chunks = [message[i : i + max_chunk] for i in range(0, len(message), max_chunk)]
-		now = time.time()
-		while self._timestamps and self._timestamps[0] < now - 600:
-			self._timestamps.popleft()
-		if len(self._timestamps) + len(chunks) > 50:
-			logging.warning('WhatsApp rate limit reached (50 msgs/10 min). Skipping message.')
-			return
-		for chunk in chunks:
-			message_body = f'{prefix}{chunk}'
-			payload = f'{self.cfg.from_call}>{self.cfg.to_call}::WTSAPP   :{message_body}'
-			self._timestamps.append(time.time())
-			await self.aprs_sender.send_packet(payload, 'whatsapp')
+
+	async def log(self, message: str):
+		"""Send a formatted message to Signal via CallMeBot API."""
+		if not self.enabled:
+			uuid_pattern = r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+			if re.fullmatch(uuid_pattern, self.number):
+				clean_number = self.number
+			else:
+				clean_number = f'+{re.sub(r"\D", "", self.number)}'
+			if not clean_number:
+				logging.error('Signal number is invalid. Cannot send message.')
+				return False
+		import urllib.parse
+
+		encoded_message = urllib.parse.quoteplus(message)
+		api_url = f'https://signal.callmebot.com/signal/send.php?phone={clean_number}&apikey={self.apikey}&text={encoded_message}'
+		try:
+			async with aiohttp.ClientSession() as session:
+				async with session.get(api_url) as response:
+					response_text = await response.text()
+					if response.status == 200 and 'OK' in response_text:
+						logging.info('Successfully sent Signal message via CallMeBot.')
+						return True
+					else:
+						logging.error('Failed to send Signal message via CallMeBot (Status: %d, Response: %s)', response.status, response_text)
+						return False
+		except Exception as e:
+			logging.error('Error sending Signal message via CallMeBot API: %s', e)
+			return False
 
 
 class APRSSender:
 	"""Class to handle APRS connection and packet sending."""
 
-	def __init__(self, cfg, tg_logger, wa_logger, sys_stats, gps_handler, geolocation, telem_seq):
+	def __init__(self, cfg, tg_logger, wa_logger, sg_logger, sys_stats, gps_handler, geolocation, telem_seq):
 		self.cfg = cfg
 		self.tg_logger = tg_logger
 		self.wa_logger = wa_logger
-		if self.wa_logger:
-			self.wa_logger.aprs_sender = self
+		self.sg_logger = sg_logger
 		self.sys_stats = sys_stats
 		self.gps_handler = gps_handler
 		self.geolocation = geolocation
@@ -1755,10 +1813,21 @@ class APRSSender:
 								f'To: <b>{addresse}</b>\n'
 								f'{f"MsgID: <b>{msg_no}</b>" if msg_no else ""}\nMessage: <b>{message_text}</b>'
 							)
-							wa_msg = f'Msg -> {from_call}>{addresse}{f", ID: {msg_no}, " if msg_no else ", "}Msg: {message_text}'
+							wa_msg = (
+								f'_APRS Message Received_\n\n'
+								f'From: *{from_call}*\n'
+								f'To: *{addresse}*\n'
+								f'{f"MsgID: *{msg_no}*" if msg_no else ""}\nMessage: *{message_text}*'
+							)
+							sg_msg = (
+								f'APRS Message Received\n\n'
+								f'From: {from_call}\n'
+								f'To: {addresse}\n'
+								f'{f"MsgID: {msg_no}" if msg_no else ""}\nMessage: {message_text}'
+							)
 							await self.tg_logger.log(tg_msg, tid=self.cfg.telegram_msg_tid)
-							if from_call != 'WTSAPP':
-								await self.wa_logger.log(wa_msg)
+							await self.wa_logger.log(wa_msg)
+							await self.sg_logger.log(sg_msg)
 
 					asyncio.create_task(respond())
 			else:
@@ -1836,13 +1905,34 @@ class APRSSender:
 					f'\n\t\tGain: <b>{humanize.metric(int(g), "dB", precision=1)}</b>'
 					f'\n\t\tDirection: <b>{dir_txt}{dir_deg}</b>'
 				)
+				ext_wa = (
+					f'\n\t{mmdvmphg}'
+					f'\n\t\tPower: *{humanize.metric(int(p_w), "W", precision=1)}*'
+					f'\n\t\tHeight: *{humanize.metric(int(h_ft), "ft", precision=1)}*'
+					f'\n\t\tGain: *{humanize.metric(int(g), "dB", precision=1)}*'
+					f'\n\t\tDirection: *{dir_txt}{dir_deg}*'
+				)
+				ext_sg = (
+					f'\n\t{mmdvmphg}'
+					f'\n\t\tPower: {humanize.metric(int(p_w), "W", precision=1)}'
+					f'\n\t\tHeight: {humanize.metric(int(h_ft), "ft", precision=1)}'
+					f'\n\t\tGain: {humanize.metric(int(g), "dB", precision=1)}'
+					f'\n\t\tDirection: {dir_txt}{dir_deg}'
+				)
 		else:
 			extstr = f'{csestr}/{spdknt}'
 			ext_tg = (
 				f'\n\tHeading: <b>{int(cur_cse)}°</b>'
 				f'\n\tSpeed: <b>{humanize.metric(float(spdkmh), "km/h", precision=1)}</b> | <b>{humanize.metric(float(spdknt), "kn", precision=1)}</b> | <b>{humanize.metric(cur_spd, "m/s")}</b>'
 			)
-			ext_wa = f', {int(cur_cse)}°, {humanize.metric(float(spdkmh), "km/h", precision=1)}'
+			ext_wa = (
+				f'\n\tHeading: *{int(cur_cse)}°*'
+				f'\n\tSpeed: *{humanize.metric(float(spdkmh), "km/h", precision=1)}* | *{humanize.metric(float(spdknt), "kn", precision=1)}* | *{humanize.metric(cur_spd, "m/s")}*'
+			)
+			ext_sg = (
+				f'\n\tHeading: {int(cur_cse)}°'
+				f'\n\tSpeed: {humanize.metric(float(spdkmh), "km/h", precision=1)} | {humanize.metric(float(spdknt), "kn", precision=1)} | {humanize.metric(cur_spd, "m/s")}'
+			)
 		lookup_table = symbt if symbt in ['/', '\\'] else '\\'
 		sym_desc = symbols.get_desc(lookup_table, symb)
 		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:/{timestamp}{latstr}{symbt}{lonstr}{symb}{extstr}{altstr}{comment}'
@@ -1856,10 +1946,30 @@ class APRSSender:
 			f'\tAltitude: <b>{cur_alt}m</b>{ext_tg}\n'
 			f'Comment: <b>{comment}</b>'
 		)
-		wa_pos = f'Pos -> {cur_lat}, {cur_lon}, {cur_alt}m{ext_wa}'
+		wa_pos = (
+			f'_{self.cfg.from_call} Position_\n\n'
+			f'Time: *{tg_timestamp}*\n'
+			f'Symbol: *{symbt}{symb} _({sym_desc})_*\n'
+			f'Position:\n'
+			f'\tLatitude: *{cur_lat}*\n'
+			f'\tLongitude: *{cur_lon}*\n'
+			f'\tAltitude: *{cur_alt}m*{ext_wa}\n'
+			f'Comment: *{comment}*'
+		)
+		sg_pos = (
+			f'{self.cfg.from_call} Position\n\n'
+			f'Time: {tg_timestamp}\n'
+			f'Symbol: {symbt}{symb} ({sym_desc})\n'
+			f'Position:\n'
+			f'\tLatitude: {cur_lat}\n'
+			f'\tLongitude: {cur_lon}\n'
+			f'\tAltitude: {cur_alt}m{ext_sg}\n'
+			f'Comment: {comment}'
+		)
 		if await self.send_packet(payload, 'position'):
 			await self.tg_logger.log(tg_pos, cur_lat, cur_lon, cur_cse)
 			await self.wa_logger.log(wa_pos)
+			await self.sg_logger.log(sg_pos)
 			return True
 		return False
 
@@ -1881,8 +1991,24 @@ class APRSSender:
 			f'Equations: <b>{",".join(eqns)}</b>\n\n'
 			f'Value: <code>[a,b,c]=(a×v²)+(b×v)+c</code>'
 		)
+		wa_hdr = (
+			f'_{self.cfg.from_call} Header_\n\n'
+			f'Parameters: *{",".join(params)}*\n'
+			f'Units: *{",".join(units)}*\n'
+			f'Equations: *{",".join(eqns)}*\n\n'
+			f'Value: `[a,b,c]=(a×v²)+(b×v)+c`'
+		)
+		sg_hdr = (
+			f'{self.cfg.from_call} Header\n\n'
+			f'Parameters: {",".join(params)}\n'
+			f'Units: {",".join(units)}\n'
+			f'Equations: {",".join(eqns)}\n\n'
+			f'Value: [a,b,c]=(a×v²)+(b×v)+c'
+		)
 		if await self.send_packet(payload, 'header'):
 			await self.tg_logger.log(tg_hdr)
+			await self.wa_logger.log(wa_hdr)
+			await self.sg_logger.log(sg_hdr)
 			return True
 		return False
 
@@ -1906,17 +2032,34 @@ class APRSSender:
 			f'RAM Used: <b>{humanize.naturalsize(memused, binary=True)}</b>\n'
 			f'ROM Used: <b>{humanize.naturalsize(diskused, binary=True)}</b>'
 		)
-		wa_tlm = f'Tel -> #{seq}, {cputemp / 10:.1f} C, {cpuload / 10:.1f} %, {humanize.naturalsize(memused, binary=True)}, {humanize.naturalsize(diskused, binary=True)}'
+		wa_tlm = (
+			f'_{self.cfg.from_call} Telemetry_\n\n'
+			f'Sequence: *#{seq}*\n'
+			f'CPU Temp: *{cputemp / 10:.1f} °C*\n'
+			f'CPU Load: *{cpuload / 10:.1f} %*\n'
+			f'RAM Used: *{humanize.naturalsize(memused, binary=True)}*\n'
+			f'ROM Used: *{humanize.naturalsize(diskused, binary=True)}*'
+		)
+		sg_tlm = (
+			f'{self.cfg.from_call} Telemetry\n\n'
+			f'Sequence: #{seq}\n'
+			f'CPU Temp: {cputemp / 10:.1f} °C\n'
+			f'CPU Load: {cpuload / 10:.1f} %\n'
+			f'RAM Used: {humanize.naturalsize(memused, binary=True)}\n'
+			f'ROM Used: {humanize.naturalsize(diskused, binary=True)}'
+		)
 		if self.cfg.gpsd_enabled:
 			_, sat_data = gps_data if gps_data else await self.gps_handler.get_loc_and_sat()
 			_, uSat, nSat = sat_data
 			payload += f',{uSat:d}'
 			if nSat > 0:
 				tg_tlm += f'\nGPS Lock: <b>{uSat}</b>\nGPS Avail: <b>{nSat}</b>'
-				wa_tlm += f', {uSat}/{nSat}'
+				wa_tlm += f'\nGPS Lock: *{uSat}*\nGPS Avail: *{nSat}*'
+				sg_tlm += f'\nGPS Lock: {uSat}\nGPS Avail: {nSat}'
 		if await self.send_packet(payload, 'telemetry'):
 			await self.tg_logger.log(tg_tlm)
 			await self.wa_logger.log(wa_tlm)
+			await self.sg_logger.log(sg_tlm)
 			return True
 		return False
 
@@ -1936,12 +2079,22 @@ class APRSSender:
 			_, uSat, nSat = sat_data
 			if nSat > 0:
 				sats_info = f'gps {uSat}/{nSat}'
-		stat_text = f'{timestamp}{"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
-		tg_text = f'Time: <b>{tg_timestamp}</b>\nText: <b>{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}</b>'
-		wa_text = '; '.join(filter(None, [gridsquare, uptime, sats_info]))
-		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:>{stat_text}'
-		tg_stat = f'<u>{self.cfg.from_call} Status</u>\n\n{tg_text}'
-		wa_stat = f'Stat -> {wa_text}'
+		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:>{timestamp}{"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
+		tg_stat = (
+			f'<u>{self.cfg.from_call} Status</u>\n\n'
+			f'Time: <b>{tg_timestamp}</b>\n'
+			f'Text: <b>{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}</b>'
+		)
+		wa_stat = (
+			f'_{self.cfg.from_call} Status_\n\n'
+			f'Time: *{tg_timestamp}*\n'
+			f'Text: *{"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}*'
+		)
+		sg_stat = (
+			f'{self.cfg.from_call} Status\n\n'
+			f'Time: {tg_timestamp}\n'
+			f'Text: {"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
+		)
 		if os.path.exists(self.cfg.status_file):
 			try:
 				with open(self.cfg.status_file, 'r') as f:
@@ -1957,6 +2110,7 @@ class APRSSender:
 				pass
 			await self.tg_logger.log(tg_stat)
 			await self.wa_logger.log(wa_stat)
+			await self.sg_logger.log(sg_stat)
 			return True
 		return False
 
@@ -2012,6 +2166,7 @@ async def initialize_session(cfg):
 		cfg.latitude, cfg.longitude = await GPSHandler.get_coordinates()
 	tg_logger = TelegramLogger(cfg)
 	wa_logger = WhatsAppLogger(cfg)
+	sg_logger = SignalLogger(cfg)
 	sys_stats = SystemStats(cfg)
 	sys_stats.update_metrics()
 	geolocation = Geolocation(cfg.app_name, cfg.project_url, cfg.nominatim_cache_file)
@@ -2022,7 +2177,7 @@ async def initialize_session(cfg):
 	timer = Timer(cfg.tmp_dir)
 	sb = SmartBeaconing(cfg)
 	scheduled_msg_handler = ScheduledMessageHandler(cfg, gps_handler)
-	return aprs_sender, tg_logger, timer, sb, sys_stats, scheduled_msg_handler, gps_handler
+	return aprs_sender, tg_logger, wa_logger, sg_logger, timer, sb, sys_stats, scheduled_msg_handler, gps_handler
 
 
 def should_send_position(cfg, timer_tick, sb, gps_data, is_at_sea=False):
@@ -2098,7 +2253,7 @@ async def main():
 	aprs_consumer_task = None
 	while True:
 		reload_event.clear()
-		aprs_sender, tg_logger, timer, sb, sys_stats, scheduled_msg_handler, gps_handler = await initialize_session(cfg)
+		aprs_sender, tg_logger, wa_logger, sg_logger, timer, sb, sys_stats, scheduled_msg_handler, gps_handler = await initialize_session(cfg)
 		aprs_consumer_task = asyncio.create_task(aprs_sender.run_consumer())
 		if cfg.gpsd_enabled:
 			health_check_task = asyncio.create_task(gps_handler.run_health_check())
@@ -2106,14 +2261,24 @@ async def main():
 			await asyncio.sleep(2)
 		gps_data = await gps_handler.get_loc_and_sat()
 		async with tg_logger:
-			await tg_logger.log(f'🚀 {cfg.app_name.split("/")[0]} Started')
+			appName = cfg.app_name.split('/')[0]
+			startText = f'🚀 {appName} Started'
+			reloadText = f'🔄 {appName} Reloaded'
+			stopText = f'🛑 {appName} Stopped'
+			await tg_logger.log(startText)
+			await wa_logger.log(startText)
+			await sg_logger.log(startText)
 			try:
 				await process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, scheduled_msg_handler, gps_handler, gps_data)
 			finally:
 				if reload_event.is_set():
-					await tg_logger.log(f'🔄 {cfg.app_name.split("/")[0]} Reloaded')
+					await tg_logger.log(reloadText)
+					await wa_logger.log(reloadText)
+					await sg_logger.log(reloadText)
 				else:
-					await tg_logger.log(f'🛑 {cfg.app_name.split("/")[0]} Stopped')
+					await tg_logger.log(stopText)
+					await wa_logger.log(stopText)
+					await sg_logger.log(stopText)
 				await tg_logger.stop_location()
 				if health_check_task:
 					health_check_task.cancel()
