@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta13] - (2026-06-05T02:12:00+08:00)
+## [beta13] - (2026-06-05T02:22:19+08:00)
 
-- 6 commit(s) contributed to the release.
+- 7 commit(s) contributed to the release.
 - 1 day(s) passed between releases.
 
 ### 🚀 Features in beta13
 
+- [694ceec](https://github.com/HafiziRuslan/RasPiAPRS/commit/694ceec8fce692059dbc5aedc58956191822a459) feat(main): add async context manager support to messaging modules *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T02:22:19+08:00*
 - [482b811](https://github.com/HafiziRuslan/RasPiAPRS/commit/482b8114362da300024db96f056c4ce30ea2662f) feat(signal): add Signal messaging support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T01:41:27+08:00*
 
 ### 🐛 Bug Fixes in beta13
@@ -1435,4 +1436,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-05T02:13:00.871979910+08:00
+generated using git-cliff on 2026-06-05T02:23:17.399918624+08:00
