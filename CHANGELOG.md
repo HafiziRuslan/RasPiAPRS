@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [beta13] - (2026-06-05T01:00:13+08:00)
+
+- 1 commit(s) contributed to the release.
+- 1 day(s) passed between releases.
+
+### ⚙️ Miscellaneous Tasks in beta13
+
+- [32935be](https://github.com/HafiziRuslan/RasPiAPRS/commit/32935be0ea50536ad0ffe85573d88260a5a2aa95) chore(release):bump version to 0.1b13- bump version to 0.1b13 in pyproject.toml, sbom.json, uv.lock *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T01:00:13+08:00*
+
+---
+
 ## [beta12] - (2026-06-04T07:23:24+08:00)
 
 - 30 commit(s) contributed to the release.
@@ -1410,4 +1421,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-04T07:24:15.769227856+08:00
+generated using git-cliff on 2026-06-05T01:02:13.073745384+08:00
