@@ -1895,7 +1895,6 @@ class APRSSender:
 				self.ais = None
 				if attempt < max_retries - 1:
 					await asyncio.sleep(5)
-					await self.connect()
 		logging.error('Failed to send %s after %d attempts.', log_context, max_retries)
 		return False
 
@@ -2242,7 +2241,6 @@ async def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, is_at_sea=False
 
 async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, scheduled_msg_handler, gps_handler, gps_data):
 	"""Run the main processing loop."""
-	header_sent = False
 	while True:
 		timer_tick = next(timer)
 		if reload_event.is_set():
@@ -2254,6 +2252,7 @@ async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, sch
 		is_at_sea = not address or not any(k in address for k in ['country', 'state', 'road', 'suburb', 'town', 'village'])
 		packet_sent_this_cycle = False
 		position_packet_was_sent = False
+		header_sent = False
 		tasks_to_run = _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, is_at_sea, not header_sent)
 		for task in tasks_to_run:
 			if task.condition:
