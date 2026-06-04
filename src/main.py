@@ -2207,6 +2207,7 @@ async def initialize_session(cfg):
 	telem_seq = Sequence(cfg.lib_dir, name='telem_sequence', modulo=1000)
 	aprs_sender = APRSSender(cfg, tg_logger, wa_logger, sg_logger, sys_stats, gps_handler, geolocation, telem_seq)
 	await aprs_sender.connect()
+	await aprs_sender.send_header()
 	timer = Timer(cfg.tmp_dir)
 	sb = SmartBeaconing(cfg)
 	scheduled_msg_handler = ScheduledMessageHandler(cfg, gps_handler)
@@ -2218,7 +2219,7 @@ def should_send_position(cfg, timer_tick, sb, gps_data, is_at_sea=False):
 	return (cfg.gpsd_enabled and cfg.smartbeaconing_enabled and sb.should_send(gps_data, is_at_sea)) or (timer_tick % 1200 == 1)
 
 
-async def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, is_at_sea=False, force_header=False):
+async def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, is_at_sea=False,):
 	class Task(NamedTuple):
 		condition: bool
 		func: Callable
@@ -2228,7 +2229,7 @@ async def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, is_at_sea=False
 	gps_handler = GPSHandler(cfg)
 	loc_data, _ = gps_data if gps_data else await gps_handler.get_loc_and_sat()
 	return [
-		Task((timer_tick % 21600 == 1) or force_header, aprs_sender.send_header, (), {}),
+		Task((timer_tick % 21600 == 1), aprs_sender.send_header, (), {}),
 		Task(
 			should_send_position(cfg, timer_tick, sb, loc_data, is_at_sea),
 			aprs_sender.send_position,
@@ -2252,8 +2253,7 @@ async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, sch
 		is_at_sea = not address or not any(k in address for k in ['country', 'state', 'road', 'suburb', 'town', 'village'])
 		packet_sent_this_cycle = False
 		position_packet_was_sent = False
-		header_sent = False
-		tasks_to_run = _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, is_at_sea, not header_sent)
+		tasks_to_run = _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, is_at_sea)
 		for task in tasks_to_run:
 			if task.condition:
 				try:
@@ -2261,8 +2261,6 @@ async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, sch
 					sent = res if isinstance(res, bool) else True
 					if sent:
 						packet_sent_this_cycle = True
-						if task.func == aprs_sender.send_header:
-							header_sent = True
 						if task.func == aprs_sender.send_position:
 							position_packet_was_sent = True
 				except Exception as e:
