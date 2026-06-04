@@ -2219,15 +2219,14 @@ def should_send_position(cfg, timer_tick, sb, gps_data, is_at_sea=False):
 	return (cfg.gpsd_enabled and cfg.smartbeaconing_enabled and sb.should_send(gps_data, is_at_sea)) or (timer_tick % 1200 == 1)
 
 
-async def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, is_at_sea=False,):
+def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, is_at_sea=False,):
 	class Task(NamedTuple):
 		condition: bool
 		func: Callable
 		args: tuple
 		kwargs: dict
 
-	gps_handler = GPSHandler(cfg)
-	loc_data, _ = gps_data if gps_data else await gps_handler.get_loc_and_sat()
+	loc_data, _ = gps_data if gps_data else (None, None)
 	return [
 		Task((timer_tick % 21600 == 1), aprs_sender.send_header, (), {}),
 		Task(
