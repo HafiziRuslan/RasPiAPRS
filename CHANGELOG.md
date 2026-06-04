@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta13] - (2026-06-05T02:26:07+08:00)
+## [beta13] - (2026-06-05T02:30:37+08:00)
 
-- 8 commit(s) contributed to the release.
+- 9 commit(s) contributed to the release.
 - 1 day(s) passed between releases.
 
 ### 🚀 Features in beta13
 
+- [7b74df4](https://github.com/HafiziRuslan/RasPiAPRS/commit/7b74df49b1b79b232d1f9b71cfd98c7b447a03bc) feat(main): add async context management to aprs sender *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T02:30:37+08:00*
 - [5085d58](https://github.com/HafiziRuslan/RasPiAPRS/commit/5085d5837c44875d9e72224e11a390b9f37b9b2e) feat(main): enhance logging capabilities *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T02:26:07+08:00*
 - [694ceec](https://github.com/HafiziRuslan/RasPiAPRS/commit/694ceec8fce692059dbc5aedc58956191822a459) feat(main): add async context manager support to messaging modules *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T02:22:19+08:00*
 - [482b811](https://github.com/HafiziRuslan/RasPiAPRS/commit/482b8114362da300024db96f056c4ce30ea2662f) feat(signal): add Signal messaging support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T01:41:27+08:00*
@@ -1437,4 +1438,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-05T02:27:04.761561569+08:00
+generated using git-cliff on 2026-06-05T02:31:40.103474078+08:00
