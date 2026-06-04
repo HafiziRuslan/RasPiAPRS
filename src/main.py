@@ -1749,6 +1749,14 @@ class APRSSender:
 		self._queue = multiprocessing.Queue()
 		self._consumer_proc = None
 
+	async def __aenter__(self):
+		"""Enter the asynchronous context."""
+		return self
+
+	async def __aexit__(self, exc_type, exc_val, exc_tb):
+		"""Exit the asynchronous context and close resources."""
+		self.close()
+
 	def _get_timestamps(self, source_time: dt.datetime | None = None) -> tuple[str, str]:
 		"""Generate APRS and ISO8601 timestamps."""
 		ctime = source_time or dt.datetime.now(dt.timezone.utc)
@@ -2285,7 +2293,7 @@ async def main():
 			gps_polling_task = asyncio.create_task(gps_handler.run_polling())
 			await asyncio.sleep(2)
 		gps_data = await gps_handler.get_loc_and_sat()
-		async with aprs_sender.tg_logger, aprs_sender.wa_logger, aprs_sender.sg_logger:
+		async with aprs_sender:
 			appName = cfg.app_name.split('/')[0]
 			startText = f'🚀 {appName} Started'
 			reloadText = f'🔄 {appName} Reloaded'
