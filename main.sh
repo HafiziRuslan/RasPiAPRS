@@ -1,10 +1,6 @@
 #!/bin/bash
 set -e
 
-echo "        RasPiAPRS  Copyright (C) 2026  HafiziRuslan
-        This program comes with ABSOLUTELY NO WARRANTY.
-        This is free software, and you are welcome to redistribute it under certain conditions."
-
 # --- Constants and Globals ---
 LOG_FILE="/var/log/RasPiAPRS.log"
 RESTART_DELAY=5
@@ -248,6 +244,10 @@ run_app() {
   local RETRY_COUNT=0
 
   while true; do
+    # Print to original stdout (console)
+    echo "        RasPiAPRS  Copyright (C) 2026  HafiziRuslan
+        This program comes with ABSOLUTELY NO WARRANTY.
+        This is free software, and you are welcome to redistribute it under certain conditions." >&3
     local START_TIME
     START_TIME=$(date +%s)
     set +e
