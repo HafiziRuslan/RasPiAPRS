@@ -362,6 +362,8 @@ class Config:
 			group_filter_string = 'g/' + '/'.join(unique_group_calls)
 			if group_filter_string not in filter_parts:
 				filter_parts.append(group_filter_string)
+		if 't/m' not in filter_parts:
+			filter_parts.append('t/m')
 		if filter_parts:
 			self.aprsis_filter = ' '.join(filter_parts)
 		else:
