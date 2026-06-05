@@ -1777,10 +1777,7 @@ class APRSSender:
 		retry_delay = 5
 		for attempt in range(max_retries):
 			try:
-				self.ais = aprslib.IS(
-					callsign=self.cfg.from_call, passwd=self.cfg.aprs_passcode, host=self.cfg.aprsis_server, port=self.cfg.aprsis_port
-				)
-				# Removed redundant check for self.ais is None, as aprslib.IS always returns an object or raises an error.
+				self.ais = aprslib.IS(callsign=self.cfg.from_call, passwd=self.cfg.aprs_passcode, host=self.cfg.aprsis_server, port=self.cfg.aprsis_port)
 				logging.debug('Attempting connect to APRS-IS %s', self.ais.server)
 				await loop.run_in_executor(None, self.ais.connect)
 				if not getattr(self.ais, '_connected', False):
@@ -1795,6 +1792,10 @@ class APRSSender:
 				logging.warning('APRS connection error (attempt %d/%d): %s', attempt + 1, max_retries, err)
 			except Exception as e:
 				logging.error('Unexpected error (attempt %d/%d): %s', attempt + 1, max_retries, e, exc_info=True)
+			if self.ais:
+				with contextlib.suppress(Exception):
+					self.ais.close()
+				self.ais = None
 			if attempt < max_retries - 1:
 				await asyncio.sleep(retry_delay)
 				retry_delay = min(retry_delay * 2, 60)
