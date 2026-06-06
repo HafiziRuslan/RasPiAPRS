@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta13] - (2026-06-06T22:33:48+08:00)
+## [beta13] - (2026-06-06T22:55:34+08:00)
 
-- 21 commit(s) contributed to the release.
+- 22 commit(s) contributed to the release.
 - 3 day(s) passed between releases.
 
 ### 🚀 Features in beta13
@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta13
 
+- [5e72488](https://github.com/HafiziRuslan/RasPiAPRS/commit/5e72488121f8ac166f45dc90fa20390a6806a132) refactor(send_packet): move sleep after sending payload *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-06T22:55:34+08:00*
 - [a4cd12b](https://github.com/HafiziRuslan/RasPiAPRS/commit/a4cd12b7de2f7d29c61b3f39d95b61eae5ad9033) refactor(position): remove is_at_sea parameter preventing periodic position update *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-06T22:33:48+08:00*
 - [2535d2d](https://github.com/HafiziRuslan/RasPiAPRS/commit/2535d2d20c4cce3df878367826ad0ec5add9eea0) refactor(connect): enhance error handling and resource cleanup *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T17:20:35+08:00*
 - [7615be1](https://github.com/HafiziRuslan/RasPiAPRS/commit/7615be138cd89a42e99133ec065041e7cf2130fb) refactor(main.py): simplify error handling and update function naming *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T04:26:32+08:00*
@@ -1450,4 +1451,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-06T22:34:48.489740831+08:00
+generated using git-cliff on 2026-06-06T22:56:44.134796675+08:00
