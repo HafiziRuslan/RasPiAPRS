@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta13] - (2026-06-05T17:20:35+08:00)
+## [beta13] - (2026-06-06T22:33:48+08:00)
 
-- 20 commit(s) contributed to the release.
-- 2 day(s) passed between releases.
+- 21 commit(s) contributed to the release.
+- 3 day(s) passed between releases.
 
 ### 🚀 Features in beta13
 
@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta13
 
+- [a4cd12b](https://github.com/HafiziRuslan/RasPiAPRS/commit/a4cd12b7de2f7d29c61b3f39d95b61eae5ad9033) refactor(position): remove is_at_sea parameter preventing periodic position update *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-06T22:33:48+08:00*
 - [2535d2d](https://github.com/HafiziRuslan/RasPiAPRS/commit/2535d2d20c4cce3df878367826ad0ec5add9eea0) refactor(connect): enhance error handling and resource cleanup *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T17:20:35+08:00*
 - [7615be1](https://github.com/HafiziRuslan/RasPiAPRS/commit/7615be138cd89a42e99133ec065041e7cf2130fb) refactor(main.py): simplify error handling and update function naming *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T04:26:32+08:00*
 - [0aec357](https://github.com/HafiziRuslan/RasPiAPRS/commit/0aec357031df0276554a5f177adcc90ba61b43c6) refactor(server): improve code structure and readability *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T04:23:11+08:00*
@@ -1449,4 +1450,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-05T17:22:09.931042158+08:00
+generated using git-cliff on 2026-06-06T22:34:48.489740831+08:00
