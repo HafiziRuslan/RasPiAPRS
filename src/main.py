@@ -1002,19 +1002,14 @@ class SmartBeaconing(object):
 		turn_threshold = self.sb_mta + (self.sb_tsl / (spd_kmh if spd_kmh > 0 else 1))
 		return heading_change > turn_threshold, heading_change, turn_threshold
 
-	def should_send(self, gps_data, is_at_sea=False):
+	def should_send(self, gps_data):
 		"""Determine if a beacon should be sent based on GPS data."""
 		if not gps_data:
 			return False
-		_, _, _, alt, spd, cse = gps_data
+		_, _, _, _, spd, cse = gps_data
 		now = time.time()
 		spd_kmh = int(APRSConverter.spd_to_kmh(spd))
-		spd_knt = int(APRSConverter.spd_to_knot(spd))
-		if spd_knt > 100 and alt > 300:
-			self.symbt, self.symb = '/', '^'  # Plane
-		elif is_at_sea and spd_knt > 5:
-			self.symbt, self.symb = '/', 's'  # Boat
-		elif spd_kmh > 5 or self.is_moving:
+		if spd_kmh > 5 or self.is_moving:
 			_, self.symbt, self.symb = self._calculate_rate(spd_kmh)
 		else:
 			self.symbt, self.symb = self.cfg.symbol_table, self.cfg.symbol
@@ -2216,12 +2211,12 @@ async def initialize_session(cfg):
 	return aprs_sender, timer, sb, sys_stats, scheduled_msg_handler, gps_handler
 
 
-def should_send_position(cfg, timer_tick, sb, gps_data, is_at_sea=False):
+def should_send_position(cfg, timer_tick, sb, gps_data):
 	"""Determine if a position update is needed."""
-	return (cfg.gpsd_enabled and cfg.smartbeaconing_enabled and sb.should_send(gps_data, is_at_sea)) or (timer_tick % 1200 == 1)
+	return (cfg.gpsd_enabled and cfg.smartbeaconing_enabled and sb.should_send(gps_data)) or (timer_tick % 1200 == 1)
 
 
-def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, is_at_sea=False):
+def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender):
 	class Task(NamedTuple):
 		condition: bool
 		func: Callable
@@ -2232,7 +2227,7 @@ def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, is_at_sea=False):
 	return [
 		Task((timer_tick % 21600 == 1), aprs_sender.send_header, (), {}),
 		Task(
-			should_send_position(cfg, timer_tick, sb, loc_data, is_at_sea),
+			should_send_position(cfg, timer_tick, sb, loc_data),
 			aprs_sender.send_position,
 			(),
 			{'gps_data': gps_data, 'is_moving': sb.is_moving, 'symbt': sb.symbt, 'symb': sb.symb},
@@ -2249,12 +2244,9 @@ async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, sch
 			break
 		if timer_tick % 20 == 0:
 			sys_stats.update_metrics()
-		loc_data, _ = gps_data
-		address = aprs_sender.geolocation.get_address(loc_data.lat, loc_data.lon)
-		is_at_sea = not address or not any(k in address for k in ['country', 'state', 'road', 'suburb', 'town', 'village'])
 		packet_sent_this_cycle = False
 		position_packet_was_sent = False
-		tasks_to_run = _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender, is_at_sea)
+		tasks_to_run = _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender)
 		for task in tasks_to_run:
 			if task.condition:
 				try:
