@@ -1880,10 +1880,10 @@ class APRSSender:
 			try:
 				if not self.ais or not getattr(self.ais, '_connected', False):
 					await self.connect()
-				await asyncio.sleep(random.uniform(0.5, 2.0))
 				loop = asyncio.get_running_loop()
 				await loop.run_in_executor(None, self.ais.sendall, payload)
 				logging.info(payload)
+				await asyncio.sleep(random.uniform(0.5, 2.0))
 				return True
 			except (APRSConnectionError, OSError, AttributeError) as err:
 				logging.error('APRS connection error at %s: %s. Reconnecting...', log_context, err)
