@@ -1378,7 +1378,7 @@ class ScheduledMessageHandler:
 			('aprsphnet_enabled', 'APRSPHNet', None, 'APRSPH', 'NET #{}', dt.timezone.utc),
 			('aprsthursday_enabled', 'APRSThursday', 3, 'ANSRVR', 'CQ HOTG #{}', dt.timezone.utc),
 			('aprsaturday_enabled', 'APRSaturday', 5, '9M4GHZ', 'CQ DXMY #{}', dt.timezone.utc),
-			('aprsmysunday_enabled', 'APRSMYSunday', 6, 'APRSMY', 'CHECK #{}', dt.timezone(dt.timedelta(hours=8))),
+			('aprsmysunday_enabled', 'APRSMYSunday', 6, 'APRSMY', 'CHECK #{}', dt.timezone.utc),
 			('aprshamfinity_enabled', 'APRSHamfinity', 6, '9M4GKS', 'CQ HAMFINITY #{}', dt.timezone.utc),
 		]
 		for attr, name, weekday, addrcall, template_fmt, tz in definitions:
@@ -1458,9 +1458,13 @@ class ScheduledMessageHandler:
 					tg_msg += f'\nPath: <b>{", ".join(path_list)}</b>'
 					wa_msg += f'\nPath: *{", ".join(path_list)}*'
 					sg_msg += f'\nPath: {", ".join(path_list)}'
-				tg_msg += f'\nTo: <b>{parsed["addresse"]}</b>\n{f"MessageID: <b>{parsed['msgNo']}</b>" if parsed.get("msgNo") else ""}\nMessageText: <b>{parsed["message_text"]}</b>'
-				wa_msg += f'\nTo: *{parsed["addresse"]}*\n{f"MessageID: *{parsed['msgNo']}*" if parsed.get("msgNo") else ""}\nMessageText: *{parsed["message_text"]}*'
-				sg_msg += f'\nTo: {parsed["addresse"]}\n{f"MessageID: {parsed['msgNo']}" if parsed.get("msgNo") else ""}\nMessageText: {parsed["message_text"]}'
+				tg_msg += f'\nTo: <b>{parsed["addresse"]}</b>\nMsgTxt: <b>{parsed["message_text"]}</b>'
+				wa_msg += f'\nTo: *{parsed["addresse"]}*\nMsgTxt: *{parsed["message_text"]}*'
+				sg_msg += f'\nTo: {parsed["addresse"]}\nMsgTxt: {parsed["message_text"]}'
+				if parsed.get('msgNo'):
+					tg_msg += f'\nMsgID: <b>{parsed["msgNo"]}</b>'
+					wa_msg += f'\nMsgID: *{parsed["msgNo"]}*'
+					sg_msg += f'\nMsgID: {parsed["msgNo"]}'
 				await aprs_sender.tg_logger.log(tg_msg, tid=self.cfg.telegram_msg_tid)
 				await aprs_sender.wa_logger.log(wa_msg)
 				await aprs_sender.sg_logger.log(sg_msg)
@@ -1772,7 +1776,9 @@ class APRSSender:
 		retry_delay = 5
 		for attempt in range(max_retries):
 			try:
-				self.ais = aprslib.IS(callsign=self.cfg.from_call, passwd=self.cfg.aprs_passcode, host=self.cfg.aprsis_server, port=self.cfg.aprsis_port)
+				self.ais = aprslib.IS(
+					callsign=self.cfg.from_call, passwd=self.cfg.aprs_passcode, host=self.cfg.aprsis_server, port=self.cfg.aprsis_port
+				)
 				logging.debug('Attempting connect to APRS-IS %s', self.ais.server)
 				await loop.run_in_executor(None, self.ais.connect)
 				if not getattr(self.ais, '_connected', False):
@@ -1839,24 +1845,13 @@ class APRSSender:
 						ack_payload = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:ack{msg_no}'
 						logging.debug('Replying acknowledge for message %s from %s', msg_no, from_call)
 						if await self.send_packet(ack_payload, 'ack'):
-							tg_msg = (
-								f'<u>APRS Message Received</u>\n\n'
-								f'From: <b>{from_call}</b>\n'
-								f'To: <b>{addresse}</b>\n'
-								f'{f"MsgID: <b>{msg_no}</b>" if msg_no else ""}\nMessage: <b>{message_text}</b>'
-							)
-							wa_msg = (
-								f'_APRS Message Received_\n\n'
-								f'From: *{from_call}*\n'
-								f'To: *{addresse}*\n'
-								f'{f"MsgID: *{msg_no}*" if msg_no else ""}\nMessage: *{message_text}*'
-							)
-							sg_msg = (
-								f'APRS Message Received\n\n'
-								f'From: {from_call}\n'
-								f'To: {addresse}\n'
-								f'{f"MsgID: {msg_no}" if msg_no else ""}\nMessage: {message_text}'
-							)
+							tg_msg = f'<u>APRS Message Received</u>\n\nFrom: <b>{from_call}</b>\nTo: <b>{addresse}</b>\nMsgTxt: <b>{message_text}</b>'
+							wa_msg = f'_APRS Message Received_\n\nFrom: *{from_call}*\nTo: *{addresse}*\nMsgTxt: *{message_text}*'
+							sg_msg = f'APRS Message Received\n\nFrom: {from_call}\nTo: {addresse}\nMsgTxt: {message_text}'
+							if msg_no:
+								tg_msg += f'\nMsgID: <b>{msg_no}</b>'
+								wa_msg += f'\nMsgID: *{msg_no}*'
+								sg_msg += f'\nMsgID: {msg_no}'
 							await self.tg_logger.log(tg_msg, tid=self.cfg.telegram_msg_tid)
 							await self.wa_logger.log(wa_msg)
 							await self.sg_logger.log(sg_msg)
