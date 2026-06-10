@@ -1130,8 +1130,16 @@ class SystemStats(object):
 
 		uptime_seconds = dt.datetime.now(dt.timezone.utc).timestamp() - psutil.boot_time()
 		uptime = dt.timedelta(seconds=uptime_seconds)
-		u_str = humanize.precisedelta(uptime, minimum_unit='minutes', format='%0.0f')
-		for pattern, repl in [(r' years?', 'y'), (r' months?', 'mo'), (r' days?', 'd'), (r' hours?', 'h'), (r' minutes?', 'm'), (r' and|,', '')]:
+		u_str = humanize.precisedelta(uptime, minimum_unit='seconds', format='%0.0f')
+		for pattern, repl in [
+			(r' years?', 'y'),
+			(r' months?', 'mo'),
+			(r' days?', 'd'),
+			(r' hours?', 'h'),
+			(r' minutes?', 'm'),
+			(r' seconds?', 's'),
+			(r' and|,', ''),
+		]:
 			u_str = re.sub(pattern, repl, u_str)
 		return f'up {u_str}'
 
