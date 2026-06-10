@@ -2,9 +2,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:a3fbfeb4-4485-4d80-b4de-2e8f13789a8c",
+  "serialNumber": "urn:uuid:d0c11313-e291-4f25-9112-21bf57518fc0",
   "metadata": {
-    "timestamp": "2026-06-04T16:58:29.031759700Z",
+    "timestamp": "2026-06-10T05:43:46.715153800Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
@@ -35,10 +35,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "aiohttp-3@3.14.0",
+      "bom-ref": "aiohttp-3@3.14.1",
       "name": "aiohttp",
-      "version": "3.14.0",
-      "purl": "pkg:pypi/aiohttp@3.14.0"
+      "version": "3.14.1",
+      "purl": "pkg:pypi/aiohttp@3.14.1"
     },
     {
       "type": "library",
@@ -221,7 +221,7 @@
       "ref": "aiohappyeyeballs-2@2.6.2"
     },
     {
-      "ref": "aiohttp-3@3.14.0",
+      "ref": "aiohttp-3@3.14.1",
       "dependsOn": [
         "aiohappyeyeballs-2@2.6.2",
         "aiosignal-4@1.4.0",
@@ -336,7 +336,7 @@
     {
       "ref": "raspiaprs-1@0.1b13",
       "dependsOn": [
-        "aiohttp-3@3.14.0",
+        "aiohttp-3@3.14.1",
         "aprslib-6@0.7.2",
         "callsign-regex-8@0.7.1",
         "geopy-13@2.4.1",
