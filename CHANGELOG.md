@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta13] - (2026-06-10T13:44:19+08:00)
+## [beta13] - (2026-06-13T01:34:15+08:00)
 
-- 25 commit(s) contributed to the release.
-- 7 day(s) passed between releases.
+- 27 commit(s) contributed to the release.
+- 9 day(s) passed between releases.
 
 ### 🚀 Features in beta13
 
@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta13
 
+- [043e50a](https://github.com/HafiziRuslan/RasPiAPRS/commit/043e50ad9eae3d45b0577e7a24f956fbf634b072) refactor(code): update APRSThursday address and add APRSPHNet configuration *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-13T01:32:55+08:00*
 - [789fe60](https://github.com/HafiziRuslan/RasPiAPRS/commit/789fe60d50b8f41bcb4c42c055611072efad75ac) refactor(main.py): update uptime calculation to use seconds as minimum unit *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-10T13:41:42+08:00*
 - [9072481](https://github.com/HafiziRuslan/RasPiAPRS/commit/90724818495b645550ac2074d2d61c72547e62a6) refactor(utilities): standardize timezone handling and simplify message formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-07T22:50:33+08:00*
 - [5e72488](https://github.com/HafiziRuslan/RasPiAPRS/commit/5e72488121f8ac166f45dc90fa20390a6806a132) refactor(send_packet): move sleep after sending payload *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-06T22:55:34+08:00*
@@ -41,6 +42,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta13
 
+- [c4d6c51](https://github.com/HafiziRuslan/RasPiAPRS/commit/c4d6c5101c898b06e30060ee3f4c5f56de5440c4) build(pylock.toml): update python-telegram-bot version from 22.7 to 22.8 with new pypi package references *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-13T01:34:15+08:00*
 - [08b0bda](https://github.com/HafiziRuslan/RasPiAPRS/commit/08b0bdaf60ac5d9c191929baab347cbd6afd8e63) chore(dependencies): bump aiohttp to 3.14.1 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-10T13:44:19+08:00*
 - [32935be](https://github.com/HafiziRuslan/RasPiAPRS/commit/32935be0ea50536ad0ffe85573d88260a5a2aa95) chore(release):bump version to 0.1b13- bump version to 0.1b13 in pyproject.toml, sbom.json, uv.lock *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T01:00:13+08:00*
 
@@ -1454,4 +1456,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-10T13:46:09.242862187+08:00
+generated using git-cliff on 2026-06-13T01:35:31.542325283+08:00
