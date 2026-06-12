@@ -2,14 +2,14 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:d0c11313-e291-4f25-9112-21bf57518fc0",
+  "serialNumber": "urn:uuid:8508b325-d699-493e-8750-ba0c7a87099b",
   "metadata": {
-    "timestamp": "2026-06-10T05:43:46.715153800Z",
+    "timestamp": "2026-06-12T17:27:05.552436300Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
         "name": "uv",
-        "version": "0.11.19"
+        "version": "0.11.21"
       }
     ],
     "component": {
@@ -196,10 +196,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "python-telegram-bot-26@22.7",
+      "bom-ref": "python-telegram-bot-26@22.8",
       "name": "python-telegram-bot",
-      "version": "22.7",
-      "purl": "pkg:pypi/python-telegram-bot@22.7"
+      "version": "22.8",
+      "purl": "pkg:pypi/python-telegram-bot@22.8"
     },
     {
       "type": "library",
@@ -327,7 +327,7 @@
       "ref": "python-dotenv-25@1.2.2"
     },
     {
-      "ref": "python-telegram-bot-26@22.7",
+      "ref": "python-telegram-bot-26@22.8",
       "dependsOn": [
         "httpcore-16@1.0.9",
         "httpx-17@0.28.1"
@@ -345,7 +345,7 @@
         "psutil-23@7.2.2",
         "python-dateutil-24@2.9.0.post0",
         "python-dotenv-25@1.2.2",
-        "python-telegram-bot-26@22.7"
+        "python-telegram-bot-26@22.8"
       ]
     },
     {
