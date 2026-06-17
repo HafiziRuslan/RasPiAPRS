@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta13] - (2026-06-18T01:44:06+08:00)
+## [beta13] - (2026-06-18T01:46:01+08:00)
 
-- 31 commit(s) contributed to the release.
+- 33 commit(s) contributed to the release.
 - 14 day(s) passed between releases.
 
 ### 🚀 Features in beta13
@@ -49,6 +49,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta13
 
+- [4e629a3](https://github.com/HafiziRuslan/RasPiAPRS/commit/4e629a3d3aa79f262ee7f7e487fb85ef51845480) build(deps): bump anyio from 4.13.0 to 4.14.0 in the python group *by [@dependabot[bot]](https://github.com/dependabot[bot]) on 2026-06-17T00:15:45+08:00*
 - [c4d6c51](https://github.com/HafiziRuslan/RasPiAPRS/commit/c4d6c5101c898b06e30060ee3f4c5f56de5440c4) build(pylock.toml): update python-telegram-bot version from 22.7 to 22.8 with new pypi package references *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-13T01:34:15+08:00*
 - [08b0bda](https://github.com/HafiziRuslan/RasPiAPRS/commit/08b0bdaf60ac5d9c191929baab347cbd6afd8e63) chore(dependencies): bump aiohttp to 3.14.1 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-10T13:44:19+08:00*
 - [32935be](https://github.com/HafiziRuslan/RasPiAPRS/commit/32935be0ea50536ad0ffe85573d88260a5a2aa95) chore(release):bump version to 0.1b13- bump version to 0.1b13 in pyproject.toml, sbom.json, uv.lock *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T01:00:13+08:00*
@@ -1463,4 +1464,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-18T01:45:04.917751324+08:00
+generated using git-cliff on 2026-06-18T01:47:04.686224466+08:00
