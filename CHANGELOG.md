@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta13] - (2026-06-18T00:24:19+08:00)
+## [beta13] - (2026-06-18T00:28:32+08:00)
 
-- 29 commit(s) contributed to the release.
+- 30 commit(s) contributed to the release.
 - 14 day(s) passed between releases.
 
 ### 🚀 Features in beta13
@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 
 ### 💼 Other in beta13
 
+- [ba8935f](https://github.com/HafiziRuslan/RasPiAPRS/commit/ba8935f49cd2fd28ba7516388f0f491d41995215) Update aprsmx link info *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-18T00:28:32+08:00*
 - [c771dac](https://github.com/HafiziRuslan/RasPiAPRS/commit/c771dac4f599e521bf9a081437f84c260a7cc400) Add aprsmx_enabled configuration option *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-18T00:24:19+08:00*
 - [3a32430](https://github.com/HafiziRuslan/RasPiAPRS/commit/3a32430ac2cdc095ff096d7fbb7c5ba279ff024d) add aprsmx option *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-18T00:08:34+08:00*
 
@@ -1461,4 +1462,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-18T00:25:23.288717486+08:00
+generated using git-cliff on 2026-06-18T00:29:34.312759246+08:00
