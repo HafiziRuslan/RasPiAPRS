@@ -109,6 +109,7 @@ class Config:
 	signal_enabled: bool = False
 	signal_number: str | None = None
 	signal_apikey: str | None = None
+	aprsmx_enabled: bool = False
 	aprsphnet_enabled: bool = False
 	aprsthursday_enabled: bool = False
 	aprsaturday_enabled: bool = False
@@ -283,6 +284,7 @@ class Config:
 			self.signal_number = os.getenv('SIGNAL_NUMBER')
 			self.signal_apikey = os.getenv('SIGNAL_API_KEY')
 		self.aprsphnet_enabled = self._env_get_bool('APRSPHNET_ENABLE')
+		self.aprsmx_enabled = self._env_get_bool('APRSMX_ENABLE')
 		self.aprsthursday_enabled = self._env_get_bool('APRSTHURSDAY_ENABLE')
 		self.aprsaturday_enabled = self._env_get_bool('APRSATURDAY_ENABLE')
 		self.aprsmysunday_enabled = self._env_get_bool('APRSMYSUNDAY_ENABLE')
@@ -1383,6 +1385,7 @@ class ScheduledMessageHandler:
 		"""Initialize scheduled messages."""
 		self.messages = []
 		definitions = [
+			('aprsmx_enabled', 'APRSMX', 2, 'XE1JMB-10', 'CQ {}', dt.timezone.utc),
 			('aprsthursday_enabled', 'APRSThursday', 3, 'APRSPH', 'HOTG #{}', dt.timezone.utc),
 			('aprsaturday_enabled', 'APRSaturday', 5, '9M4GHZ', 'CQ DXMY #{}', dt.timezone.utc),
 			('aprsmysunday_enabled', 'APRSMYSunday', 6, 'APRSMY', 'CHECK #{}', dt.timezone.utc),
