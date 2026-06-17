@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta13] - (2026-06-13T01:34:15+08:00)
+## [beta13] - (2026-06-18T00:08:34+08:00)
 
-- 27 commit(s) contributed to the release.
-- 9 day(s) passed between releases.
+- 28 commit(s) contributed to the release.
+- 14 day(s) passed between releases.
 
 ### 🚀 Features in beta13
 
@@ -24,6 +24,10 @@ All notable changes to this project will be documented in this file.
 - [a7f9943](https://github.com/HafiziRuslan/RasPiAPRS/commit/a7f99430b06ed8954b039ef30182918f2008b71b) fix(main): improve message encoding for WhatsApp and Signal APIs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T02:46:18+08:00*
 - [c6a37e8](https://github.com/HafiziRuslan/RasPiAPRS/commit/c6a37e872d47af29606a16b16ceb8b7389ac20e1) fix(auth, data): remove unused import `wa_logger` and `sg_logger` from session initialization and cleanup routines *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T01:57:34+08:00*
 - [ddd8357](https://github.com/HafiziRuslan/RasPiAPRS/commit/ddd835745f63cb2130e7acd843c6d2a3eb68d2a1) fix(auth, data): missing tuple in APRSSender *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T01:52:56+08:00*
+
+### 💼 Other in beta13
+
+- [3a32430](https://github.com/HafiziRuslan/RasPiAPRS/commit/3a32430ac2cdc095ff096d7fbb7c5ba279ff024d) add aprsmx option *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-18T00:08:34+08:00*
 
 ### 🚜 Refactor in beta13
 
@@ -1456,4 +1460,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-13T01:35:31.542325283+08:00
+generated using git-cliff on 2026-06-18T00:09:27.406372359+08:00
