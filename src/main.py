@@ -43,7 +43,6 @@ import aiohttp
 import aprslib
 import aprslib.util
 
-# import dateutil.tz
 import dotenv
 import psutil
 import symbols
@@ -1242,23 +1241,8 @@ class SystemStats(object):
 				release = platform.release()
 				version_str = platform.version()
 				build_no = version_str.split()[0] if version_str else ''
-				build_date = ''
-				if iso_match := re.search(r'(\d{4}-\d{2}-\d{2})', version_str):
-					build_date = iso_match.group(1)
-				else:
-					kvpart = version_str.split()
-					if len(kvpart) >= 5:
-						try:
-							d_str = f'{kvpart[-1]}{kvpart[-5]}{kvpart[-4]} {kvpart[-3]}'
-							dt_obj = dt.datetime.strptime(d_str, '%Y%b%d %H:%M:%S')
-							# if len(kvpart) >= 6 and (tz_str := kvpart[-2]).isalpha():
-							# 	if tz := dateutil.tz.gettz(tz_str):
-							# 		dt_obj = dt_obj.replace(tzinfo=tz)
-							build_date = dt_obj.replace(tzinfo=dt.timezone.utc).strftime('%Y%m%dT%H%M%SZ')
-						except (ValueError, IndexError):
-							pass
 				rel_ver = re.match(r'^[\d.]+', release).group() if re.match(r'^[\d.]+', release) else release
-				rel_info = ''.join(filter(None, [rel_ver, build_no, f'({build_date})' if build_date else None]))
+				rel_info = ''.join(filter(None, [rel_ver, build_no]))
 				raw_machine = platform.machine()
 				arch_map = {
 					'aarch64': 'arm64',
