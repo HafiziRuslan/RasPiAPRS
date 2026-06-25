@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta13] - (2026-06-19T01:24:05+08:00)
+## [beta13] - (2026-06-25T12:26:48+08:00)
 
-- 34 commit(s) contributed to the release.
-- 15 day(s) passed between releases.
+- 36 commit(s) contributed to the release.
+- 22 day(s) passed between releases.
 
 ### 🚀 Features in beta13
 
@@ -49,6 +49,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta13
 
+- [a4efc2e](https://github.com/HafiziRuslan/RasPiAPRS/commit/a4efc2e944a4093d9a2aa7fca36a160aa31f994c) build(deps): bump certifi in the python group *by [@dependabot[bot]](https://github.com/dependabot[bot]) on 2026-06-24T00:15:00+08:00*
 - [426dfdf](https://github.com/HafiziRuslan/RasPiAPRS/commit/426dfdfe8ee884e9a0d90dbb8216c3903e9baeec) remove build date from comment *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-19T01:24:05+08:00*
 - [4e629a3](https://github.com/HafiziRuslan/RasPiAPRS/commit/4e629a3d3aa79f262ee7f7e487fb85ef51845480) build(deps): bump anyio from 4.13.0 to 4.14.0 in the python group *by [@dependabot[bot]](https://github.com/dependabot[bot]) on 2026-06-17T00:15:45+08:00*
 - [c4d6c51](https://github.com/HafiziRuslan/RasPiAPRS/commit/c4d6c5101c898b06e30060ee3f4c5f56de5440c4) build(pylock.toml): update python-telegram-bot version from 22.7 to 22.8 with new pypi package references *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-13T01:34:15+08:00*
@@ -1465,4 +1466,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-19T01:24:50.008444036+08:00
+generated using git-cliff on 2026-06-25T12:27:29.885625947+08:00
