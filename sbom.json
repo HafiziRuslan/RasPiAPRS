@@ -2,14 +2,14 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:8508b325-d699-493e-8750-ba0c7a87099b",
+  "serialNumber": "urn:uuid:3fb53eb0-c50f-4c5d-a01a-e6ea730ce9ee",
   "metadata": {
-    "timestamp": "2026-06-12T17:27:05.552436300Z",
+    "timestamp": "2026-06-26T18:29:14.326478600Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
         "name": "uv",
-        "version": "0.11.21"
+        "version": "0.11.24"
       }
     ],
     "component": {
@@ -49,10 +49,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "anyio-5@4.13.0",
+      "bom-ref": "anyio-5@4.14.1",
       "name": "anyio",
-      "version": "4.13.0",
-      "purl": "pkg:pypi/anyio@4.13.0"
+      "version": "4.14.1",
+      "purl": "pkg:pypi/anyio@4.14.1"
     },
     {
       "type": "library",
@@ -77,10 +77,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "certifi-9@2026.5.20",
+      "bom-ref": "certifi-9@2026.6.17",
       "name": "certifi",
-      "version": "2026.5.20",
-      "purl": "pkg:pypi/certifi@2026.5.20"
+      "version": "2026.6.17",
+      "purl": "pkg:pypi/certifi@2026.6.17"
     },
     {
       "type": "library",
@@ -239,7 +239,7 @@
       ]
     },
     {
-      "ref": "anyio-5@4.13.0",
+      "ref": "anyio-5@4.14.1",
       "dependsOn": [
         "idna-19@3.18"
       ]
@@ -257,7 +257,7 @@
       ]
     },
     {
-      "ref": "certifi-9@2026.5.20"
+      "ref": "certifi-9@2026.6.17"
     },
     {
       "ref": "et-xmlfile-10@2.0.0"
@@ -283,15 +283,15 @@
     {
       "ref": "httpcore-16@1.0.9",
       "dependsOn": [
-        "certifi-9@2026.5.20",
+        "certifi-9@2026.6.17",
         "h11-15@0.16.0"
       ]
     },
     {
       "ref": "httpx-17@0.28.1",
       "dependsOn": [
-        "anyio-5@4.13.0",
-        "certifi-9@2026.5.20",
+        "anyio-5@4.14.1",
+        "certifi-9@2026.6.17",
         "httpcore-16@1.0.9",
         "idna-19@3.18"
       ]
