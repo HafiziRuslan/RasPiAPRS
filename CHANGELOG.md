@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta13] - (2026-06-27T02:34:49+08:00)
+## [beta13] - (2026-07-01T03:05:43+08:00)
 
-- 37 commit(s) contributed to the release.
-- 23 day(s) passed between releases.
+- 38 commit(s) contributed to the release.
+- 27 day(s) passed between releases.
 
 ### 🚀 Features in beta13
 
@@ -53,6 +53,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta13
 
+- [040e985](https://github.com/HafiziRuslan/RasPiAPRS/commit/040e9858a6ae12f65b4dcee2fd2656a76b375a93) chore(dependencies): bump humanize to 4.16.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T03:05:43+08:00*
 - [a4efc2e](https://github.com/HafiziRuslan/RasPiAPRS/commit/a4efc2e944a4093d9a2aa7fca36a160aa31f994c) build(deps): bump certifi in the python group *by [@dependabot[bot]](https://github.com/dependabot[bot]) on 2026-06-24T00:15:00+08:00*
 - [426dfdf](https://github.com/HafiziRuslan/RasPiAPRS/commit/426dfdfe8ee884e9a0d90dbb8216c3903e9baeec) remove build date from comment *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-19T01:24:05+08:00*
 - [4e629a3](https://github.com/HafiziRuslan/RasPiAPRS/commit/4e629a3d3aa79f262ee7f7e487fb85ef51845480) build(deps): bump anyio from 4.13.0 to 4.14.0 in the python group *by [@dependabot[bot]](https://github.com/dependabot[bot]) on 2026-06-17T00:15:45+08:00*
@@ -1470,4 +1471,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-06-27T02:36:01.518237214+08:00
+generated using git-cliff on 2026-07-01T03:07:11.038519456+08:00
