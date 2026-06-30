@@ -1,6 +1,7 @@
 # 🛰️ RasPiAPRS
 
 <div style="text-align: center;">
+
 ![RasPiAPRS Logo](misc/raspiaprs_2x1.png)
 
 ![Ko-Fi sponsors](https://img.shields.io/badge/kofi-tip-FF6433?style=for-the-badge&logo=kofi&logoColor=FF6433&logoSize=auto&link=https%3A%2F%2Fko-fi.com%2Fhafiziruslan)
@@ -32,6 +33,30 @@
 - **Dynamic Symbols**: Automatically switches the APRS map icon (e.g., stationary vs. moving) based on real-time GPS motion.
 - **Remote Alerts**: Supports WhatsApp and Telegram Bot API for sending system status updates directly to your device.
 - **Visualization**: Formats and logs telemetry data for display on platforms like `aprs.fi`.
+
+## 🌐 APRS-IS Network (APRSnet)
+
+The **APRS-IS (Automatic Packet Reporting System-Internet Service)** is a global network used to propagate APRS packets over the internet. This project utilizes APRS-IS to:
+- **Global Reach**: Transmit telemetry and location data without requiring a local RF gate or digipeater.
+- **Bi-directional Messaging**: Receive commands or messages via the internet-based APRS infrastructure.
+- **Reliability**: Ensure system metrics are logged even when radio conditions are poor.
+
+## 🌐 Optional APRS Network Events
+
+RasPiAPRS supports participation in several optional APRS network events by enabling specific transmissions:
+
+*   **APRSPHNet**: Enables daily transmissions to APRSPH for the APRSPHNet event.
+    *   More info: [aprs.ph](https://aprs.ph)
+*   **APRSMX**: Enables transmissions to XE1JMB-10 for the APRSMX (Wednesday) event.
+    *   More info: [xe1jmb.duckdns.org](http://xe1jmb.duckdns.org:5000)
+*   **APRSThursday**: Enables transmissions to APRSPH / ANSRVR for the APRSThursday event.
+    *   More info: [aprs.to](https://aprs.to/events/aprs_thursday) / [aprsph.net](https://aprsph.net/aprsthursday)
+*   **APRSaturday**: Enables transmissions to 9M4GHZ for the APRSaturday event.
+    *   More info: [cqdx.my](https://cqdx.my/aprs)
+*   **APRSMYSunday**: Enables transmissions to APRSMY for the APRSMYSunday event.
+    *   More info: [aprsmy.hamradio.my](https://aprsmy.hamradio.my)
+*   **APRSHamfinity**: Enables transmissions to 9M4GKS for the APRSHamfinity (Sunday) event.
+    *   More info: [aprs.hamfinity.com](https://aprs.hamfinity.com)
 
 ## 📌 Requirements
 
