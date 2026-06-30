@@ -78,6 +78,7 @@ class Config:
 	symbol_table: str = '/'
 	symbol_overlay: str | None = None
 	aprsis_server: str = 'rotate.aprs2.net'
+	aprsis_servers: list[str] = ['rotate.aprs2.net', 'rotate.aprs.net']
 	aprsis_port: int = 14580
 	aprsis_filter: str | None = None
 	phg_power: float | None = 0.1
@@ -246,7 +247,10 @@ class Config:
 		self.phg_height = self._env_get_float('PHG_HEIGHT', 5.0)
 		self.phg_gain = self._env_get_float('PHG_GAIN', 3)
 		self.phg_direction = self._env_get_float('PHG_DIRECTION', 0)
-		self.aprsis_server = os.getenv('APRSIS_SERVER', 'rotate.aprs2.net')
+		aprsis_servers_raw = os.getenv('APRSIS_SERVER', 'rotate.aprs2.net')
+		self.aprsis_servers = [s.strip() for s in aprsis_servers_raw.split(',') if s.strip()]
+		if not self.aprsis_servers:
+			self.aprsis_servers = ['rotate.aprs2.net', 'rotate.aprs.net']
 		self.aprsis_port = self._env_get_int('APRSIS_PORT', 14580, 'APRSIS Port value error')
 		self.aprsis_filter = os.getenv('APRSIS_FILTER')
 		self.aprs_passcode = os.getenv('APRS_PASSCODE')
@@ -1745,6 +1749,7 @@ class APRSSender:
 		self.telem_seq = telem_seq
 		self._queue = multiprocessing.Queue()
 		self._consumer_proc = None
+		self._current_aprsis_server_index = 0  # Added for multiple server rotation
 
 	async def __aenter__(self):
 		"""Enter the asynchronous context."""
@@ -1765,15 +1770,21 @@ class APRSSender:
 			with contextlib.suppress(Exception):
 				self.ais.close()
 			self.ais = None
-		logging.info('Connecting to APRS-IS server %s:%d as %s', self.cfg.aprsis_server, self.cfg.aprsis_port, self.cfg.from_call)
 		loop = asyncio.get_running_loop()
-		max_retries = 5
-		retry_delay = 5
-		for attempt in range(max_retries):
+		max_retries_per_server = 5
+		total_server_attempts = 0
+		while total_server_attempts < len(self.cfg.aprsis_servers) * max_retries_per_server:
+			current_server = self.cfg.aprsis_servers[self._current_aprsis_server_index]
+			logging.info(
+				'Connecting to APRS-IS server %s:%d (attempt %d/%d) as %s',
+				current_server,
+				self.cfg.aprsis_port,
+				(total_server_attempts % max_retries_per_server) + 1,
+				max_retries_per_server,
+				self.cfg.from_call,
+			)
 			try:
-				self.ais = aprslib.IS(
-					callsign=self.cfg.from_call, passwd=self.cfg.aprs_passcode, host=self.cfg.aprsis_server, port=self.cfg.aprsis_port
-				)
+				self.ais = aprslib.IS(callsign=self.cfg.from_call, passwd=self.cfg.aprs_passcode, host=current_server, port=self.cfg.aprsis_port)
 				logging.debug('Attempting connect to APRS-IS %s', self.ais.server)
 				await loop.run_in_executor(None, self.ais.connect)
 				if not getattr(self.ais, '_connected', False):
@@ -1783,28 +1794,45 @@ class APRSSender:
 					logging.info('APRS-IS filter set to: %s', self.cfg.aprsis_filter)
 				if self.ais._connected:
 					logging.info('Connected to APRS-IS server %s:%d as %s', self.ais.server[0], self.ais.server[1], self.ais.callsign)
-				return
+					return
 			except APRSConnectionError as err:
-				logging.warning('APRS connection error (attempt %d/%d): %s', attempt + 1, max_retries, err)
+				logging.warning(
+					'APRS connection error to %s:%d (attempt %d/%d): %s',
+					current_server,
+					self.cfg.aprsis_port,
+					(total_server_attempts % max_retries_per_server) + 1,
+					max_retries_per_server,
+					err,
+				)
 			except Exception as e:
-				logging.error('Unexpected error (attempt %d/%d): %s', attempt + 1, max_retries, e, exc_info=True)
-			if self.ais:
-				with contextlib.suppress(Exception):
-					self.ais.close()
-				self.ais = None
-			if attempt < max_retries - 1:
-				await asyncio.sleep(retry_delay)
-				retry_delay = min(retry_delay * 2, 60)
-			else:
-				logging.critical('All attempts to connect to APRS-IS failed, exiting.')
-				sys.exit(getattr(os, 'EX_NOHOST', 1))
+				logging.error(
+					'Unexpected error connecting to %s:%d (attempt %d/%d): %s',
+					current_server,
+					self.cfg.aprsis_port,
+					(total_server_attempts % max_retries_per_server) + 1,
+					max_retries_per_server,
+					e,
+					exc_info=True,
+				)
+			finally:
+				if self.ais:
+					with contextlib.suppress(Exception):
+						self.ais.close()
+					self.ais = None
+			total_server_attempts += 1
+			if total_server_attempts % max_retries_per_server == 0:
+				self._current_aprsis_server_index = (self._current_aprsis_server_index + 1) % len(self.cfg.aprsis_servers)
+				logging.info('Cycling to next APRS-IS server.')
+			await asyncio.sleep(5)
+		logging.critical('All attempts to connect to any APRS-IS server failed, exiting.')
+		sys.exit(getattr(os, 'EX_NOHOST', 1))
 
 	async def run_consumer(self):
 		"""Polls the multiprocessing queue for received packets."""
 		loop = asyncio.get_running_loop()
 		self._consumer_proc = multiprocessing.Process(
 			target=aprs_consumer_worker,
-			args=(self.cfg.from_call, self.cfg.aprs_passcode, self.cfg.aprsis_server, self.cfg.aprsis_port, self.cfg.aprsis_filter, self._queue),
+			args=(self.cfg.from_call, self.cfg.aprs_passcode, self.cfg.aprsis_servers, self.cfg.aprsis_port, self.cfg.aprsis_filter, self._queue),
 			daemon=True,
 		)
 		self._consumer_proc.start()
@@ -2147,20 +2175,38 @@ class APRSSender:
 				pass
 
 
-def aprs_consumer_worker(call, passcode, server, port, aprs_filter, queue):
+def aprs_consumer_worker(call, passcode, servers, port, aprs_filter, queue):
 	"""Isolated worker process to handle the blocking APRS-IS consumer."""
 	import time
 	import aprslib
+	import logging
+	import contextlib
 
+	logging.basicConfig(level=logging.INFO, format='%(asctime)s | (Worker) %(levelname)-8s | %(name)s.%(funcName)s:%(lineno)d | %(message)s')
+	current_server_idx = 0
 	while True:
+		current_server = servers[current_server_idx]
+		logging.info('Consumer attempting to connect to APRS-IS server %s:%d', current_server, port)
+		ais = None
 		try:
-			ais = aprslib.IS(callsign=call, passwd=passcode, host=server, port=port)
+			ais = aprslib.IS(callsign=call, passwd=passcode, host=current_server, port=port)
 			ais.connect()
 			if aprs_filter:
 				ais.set_filter(aprs_filter)
+			logging.info('Consumer connected and listening to APRS-IS server %s:%d', current_server, port)
 			ais.consumer(lambda packet: queue.put(packet), raw=True)
-		except Exception:
-			time.sleep(10)
+			logging.warning('Consumer connection to %s:%d terminated. Reconnecting...', current_server, port)
+		except aprslib.exceptions.ConnectionError as err:
+			logging.warning('Consumer connection error to %s:%d: %s', current_server, port, err)
+		except Exception as e:
+			logging.error('Consumer unexpected error with %s:%d: %s', current_server, port, e, exc_info=True)
+		finally:
+			if ais:
+				with contextlib.suppress(Exception):
+					ais.close()
+		current_server_idx = (current_server_idx + 1) % len(servers)
+		logging.info('Consumer cycling to next APRS-IS server. Retrying in 10 seconds...')
+		time.sleep(10)
 
 
 def setup_signal_handling(reload_event):
