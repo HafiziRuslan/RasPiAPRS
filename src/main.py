@@ -36,7 +36,7 @@ import time
 import tomllib
 from collections import UserDict
 from collections import deque
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Callable
 from typing import NamedTuple
 import aiohttp
@@ -77,8 +77,8 @@ class Config:
 	symbol: str = 'n'
 	symbol_table: str = '/'
 	symbol_overlay: str | None = None
-	aprsis_server: str = 'rotate.aprs2.net'
-	aprsis_servers: list[str] = ['rotate.aprs2.net', 'rotate.aprs.net']
+	aprsis_server: str = 'rotate.aprs2.net,rotate.aprs.net'
+	aprsis_servers: list[str] = field(default_factory=lambda: ['rotate.aprs2.net', 'rotate.aprs.net'])
 	aprsis_port: int = 14580
 	aprsis_filter: str | None = None
 	phg_power: float | None = 0.1
@@ -239,7 +239,7 @@ class Config:
 					if self.mmdvmhost_file:
 						break
 			if not self.mmdvmhost_file:
-				for p in ['/etc/mmdvmhost', '/etc/MMDVM.ini', '/opt/MMDVMHost/MMDVM.ini']:
+				for p in ['/etc/mmdvmhost', '/etc/MMDVM.ini', '/opt/MMDVMHost/MMDVM.ini', '/opt/MMDVM_Bridge/MMDVM_Bridge.ini']:
 					if os.path.isfile(p) and os.access(p, os.R_OK):
 						self.mmdvmhost_file = p
 						break
@@ -247,7 +247,7 @@ class Config:
 		self.phg_height = self._env_get_float('PHG_HEIGHT', 5.0)
 		self.phg_gain = self._env_get_float('PHG_GAIN', 3)
 		self.phg_direction = self._env_get_float('PHG_DIRECTION', 0)
-		aprsis_servers_raw = os.getenv('APRSIS_SERVER', 'rotate.aprs2.net')
+		aprsis_servers_raw = os.getenv('APRSIS_SERVER', 'rotate.aprs2.net,rotate.aprs.net')
 		self.aprsis_servers = [s.strip() for s in aprsis_servers_raw.split(',') if s.strip()]
 		if not self.aprsis_servers:
 			self.aprsis_servers = ['rotate.aprs2.net', 'rotate.aprs.net']
@@ -309,7 +309,7 @@ class Config:
 			self.aprs_passcode = aprslib.passcode(self.call)
 		self.additional_sender = None
 		events_active = any(
-			[self.aprsphnet_enabled, self.aprsthursday_enabled, self.aprsaturday_enabled, self.aprsmysunday_enabled, self.aprshamfinity_enabled]
+			[self.aprsphnet_enabled, self.aprsmx_enabled, self.aprsthursday_enabled, self.aprsaturday_enabled, self.aprsmysunday_enabled, self.aprshamfinity_enabled]
 		)
 		if events_active and self.additional_sender_raw:
 			ituappendix42 = ItuAppendix42()
