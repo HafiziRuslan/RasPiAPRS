@@ -290,8 +290,8 @@ class Config:
 		self.aprsmx_enabled = self._env_get_bool('APRSMX_ENABLE')
 		self.aprsthursday_enabled = self._env_get_bool('APRSTHURSDAY_ENABLE')
 		self.aprsaturday_enabled = self._env_get_bool('APRSATURDAY_ENABLE')
-		self.aprsmysunday_enabled = self._env_get_bool('APRSMYSUNDAY_ENABLE')
 		self.aprshamfinity_enabled = self._env_get_bool('APRSHAMFINITY_ENABLE')
+		self.aprsmysunday_enabled = self._env_get_bool('APRSMYSUNDAY_ENABLE')
 		self.additional_sender_raw = os.getenv('ADDITIONAL_SENDER')
 		self.validate()
 
@@ -309,7 +309,14 @@ class Config:
 			self.aprs_passcode = aprslib.passcode(self.call)
 		self.additional_sender = None
 		events_active = any(
-			[self.aprsphnet_enabled, self.aprsmx_enabled, self.aprsthursday_enabled, self.aprsaturday_enabled, self.aprsmysunday_enabled, self.aprshamfinity_enabled]
+			[
+				self.aprsphnet_enabled,
+				self.aprsmx_enabled,
+				self.aprsthursday_enabled,
+				self.aprsaturday_enabled,
+				self.aprshamfinity_enabled,
+				self.aprsmysunday_enabled,
+			]
 		)
 		if events_active and self.additional_sender_raw:
 			ituappendix42 = ItuAppendix42()
@@ -1373,12 +1380,12 @@ class ScheduledMessageHandler:
 		"""Initialize scheduled messages."""
 		self.messages = []
 		definitions = [
+			('aprsphnet_enabled', 'APRSPHNet', None, 'APRSPH', 'NET #{}', dt.timezone.utc),
 			('aprsmx_enabled', 'APRSMX', 2, 'XE1JMB-10', 'CQ {}', dt.timezone.utc),
 			('aprsthursday_enabled', 'APRSThursday', 3, 'APRSPH', 'HOTG #{}', dt.timezone.utc),
 			('aprsaturday_enabled', 'APRSaturday', 5, '9M4GHZ', 'CQ DXMY #{}', dt.timezone.utc),
-			('aprsmysunday_enabled', 'APRSMYSunday', 6, 'APRSMY', 'CHECK #{}', dt.timezone.utc),
 			('aprshamfinity_enabled', 'APRSHamfinity', 6, '9M4GKS', 'CQ HAMFINITY #{}', dt.timezone.utc),
-			('aprsphnet_enabled', 'APRSPHNet', None, 'APRSPH', 'NET #{}', dt.timezone.utc),
+			('aprsmysunday_enabled', 'APRSMYSunday', 6, 'APRSMY', 'CHECK #{}', dt.timezone.utc),
 		]
 		for attr, name, weekday, addrcall, template_fmt, tz in definitions:
 			if getattr(self.cfg, attr, False):
@@ -1898,6 +1905,10 @@ class APRSSender:
 			try:
 				if not self.ais or not getattr(self.ais, '_connected', False):
 					await self.connect()
+				if not self.ais:
+					logging.error('APRS-IS connection object is None after connection attempt. Cannot send packet.')
+					await asyncio.sleep(5)
+					continue
 				loop = asyncio.get_running_loop()
 				await loop.run_in_executor(None, self.ais.sendall, payload)
 				logging.info(payload)
