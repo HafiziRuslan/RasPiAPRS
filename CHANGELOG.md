@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta13] - (2026-07-01T03:05:43+08:00)
+## [beta13] - (2026-07-01T03:37:22+08:00)
 
-- 38 commit(s) contributed to the release.
+- 40 commit(s) contributed to the release.
 - 27 day(s) passed between releases.
 
 ### 🚀 Features in beta13
@@ -47,8 +47,13 @@ All notable changes to this project will be documented in this file.
 - [65f616c](https://github.com/HafiziRuslan/RasPiAPRS/commit/65f616c966e39b57c798dadb66f100c1c5131014) refactor(main.sh): relocate copyright notice to runtime output *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T02:12:00+08:00*
 - [eb2715c](https://github.com/HafiziRuslan/RasPiAPRS/commit/eb2715c536666715968db2a652912c5baf8504aa) refactor: update api key naming convention *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-05T02:07:30+08:00*
 
+### 📚 Documentation in beta13
+
+- [3f0f50b](https://github.com/HafiziRuslan/RasPiAPRS/commit/3f0f50bb1538285e050e4726be795925f1629e2f) docs(README): add APRS-IS network documentation and optional event sections *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T03:36:49+08:00*
+
 ### 🧪 Testing in beta13
 
+- [1da1d6c](https://github.com/HafiziRuslan/RasPiAPRS/commit/1da1d6ced9afa9c75d5de6bcdad7e2139a288eed) chore(sbom): update serialNumber and timestamp in CycloneDX SBOM *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T03:37:22+08:00*
 - [a68a402](https://github.com/HafiziRuslan/RasPiAPRS/commit/a68a4028b03a66d9c6216ee213eab566953d2db4) chore(dependencies): update all dependencies to latest versions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-06-27T02:34:49+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta13
@@ -1471,4 +1476,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-07-01T03:07:11.038519456+08:00
+generated using git-cliff on 2026-07-01T03:38:41.943576844+08:00
