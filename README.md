@@ -15,7 +15,9 @@
 </div>
 
 <table style="margin-left: auto; margin-right: auto;">
-  <tr><th colspan="2" style="text-align: center;">Mirrors (daily update)</th></tr>
+  <tr><th colspan="2" style="text-align: center;">Master</th></tr>
+  <tr><td style="text-align: end;">GitHub</td><td><a href="https://github.com/HafiziRuslan/RasPiAPRS">HafiziRuslan/RasPiAPRS</a></td></tr>
+  <tr><th colspan="2" style="text-align: center;">Mirrors (delayed daily update)</th></tr>
   <tr><td style="text-align: end;">GitLab</td><td><a href="https://gitlab.com/hafiziruslan/RasPiAPRS">hafiziruslan/RasPiAPRS</a></td></tr>
   <tr><td style="text-align: end;">Codeberg</td><td><a href="https://codeberg.org/hafiziruslan/RasPiAPRS">hafiziruslan/RasPiAPRS</a></td></tr>
   <tr><td style="text-align: end;">Gitea</td><td><a href="https://gitea.com/HafiziRuslan/RasPiAPRS">HafiziRuslan/RasPiAPRS</a></td></tr>
@@ -31,12 +33,13 @@
 - **Telemetry Tracking**: Monitors specific hardware metrics including CPU temperature/load, memory/disk usage, and network traffic.
 - **SmartBeaconing**: Reduces network congestion by dynamically adjusting beacon frequency based on the station's speed and heading.
 - **Dynamic Symbols**: Automatically switches the APRS map icon (e.g., stationary vs. moving) based on real-time GPS motion.
-- **Remote Alerts**: Supports WhatsApp and Telegram Bot API for sending system status updates directly to your device.
+- **Remote Alerts**: Supports ~~WhatsApp~~, Signal, and Telegram Bot API for sending system status updates directly to your device.
 - **Visualization**: Formats and logs telemetry data for display on platforms like `aprs.fi`.
 
 ## 🌐 APRS-IS Network (APRSnet)
 
 The **APRS-IS (Automatic Packet Reporting System-Internet Service)** is a global network used to propagate APRS packets over the internet. This project utilizes APRS-IS to:
+
 - **Global Reach**: Transmit telemetry and location data without requiring a local RF gate or digipeater.
 - **Bi-directional Messaging**: Receive commands or messages via the internet-based APRS infrastructure.
 - **Reliability**: Ensure system metrics are logged even when radio conditions are poor.
@@ -45,18 +48,68 @@ The **APRS-IS (Automatic Packet Reporting System-Internet Service)** is a global
 
 RasPiAPRS supports participation in several optional APRS network events by enabling specific transmissions:
 
-*   **APRSPHNet**: Enables daily transmissions to APRSPH for the APRSPHNet event.
-    *   More info: [aprs.ph](https://aprs.ph)
-*   **APRSMX**: Enables transmissions to XE1JMB-10 for the APRSMX (Wednesday) event.
-    *   More info: [xe1jmb.duckdns.org](http://xe1jmb.duckdns.org:5000)
-*   **APRSThursday**: Enables transmissions to APRSPH / ANSRVR for the APRSThursday event.
-    *   More info: [aprs.to](https://aprs.to/events/aprs_thursday) / [aprsph.net](https://aprsph.net/aprsthursday)
-*   **APRSaturday**: Enables transmissions to 9M4GHZ for the APRSaturday event.
-    *   More info: [cqdx.my](https://cqdx.my/aprs)
-*   **APRSMYSunday**: Enables transmissions to APRSMY for the APRSMYSunday event.
-    *   More info: [aprsmy.hamradio.my](https://aprsmy.hamradio.my)
-*   **APRSHamfinity**: Enables transmissions to 9M4GKS for the APRSHamfinity (Sunday) event.
-    *   More info: [aprs.hamfinity.com](https://aprs.hamfinity.com)
+<table style="margin-left: auto; margin-right: auto; text-align:center;">
+  <thead>
+    <tr>
+      <th style="text-align: center;">#</th>
+      <th style="text-align: center;">Event</th>
+      <th style="text-align: center;">Frequency</th>
+      <th style="text-align: center;">TimeZone</th>
+      <th style="text-align: center;">Source</th>
+      <th style="text-align: center;">Info</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td><b>APRSPHNet</b></td>
+      <td>Daily</td>
+      <td>UTC</td>
+      <td>APRSPH</td>
+      <td><a href="https://aprs.ph">aprs.ph</a></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><b>APRSMX</b></td>
+      <td>Wednesday</td>
+      <td>UTC</td>
+      <td>XE1JMB-10</td>
+      <td><a href="http://xe1jmb.duckdns.org:5000">xe1jmb.duckdns.org</a></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><b>APRSThursday</b></td>
+      <td>Thursday</td>
+      <td>UTC</td>
+      <td>ANSRVR / APRSPH</td>
+      <td><a href="https://aprs.to/events/aprs_thursday">aprs.to</a> / <a href="https://aprsph.net/aprsthursday">aprsph.net</a></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><b>APRSaturday</b></td>
+      <td>Saturday</td>
+      <td>UTC</td>
+      <td>9M4GHZ</td>
+      <td><a href="https://cqdx.my/aprs">cqdx.my</a></td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><b>APRSMYSunday</b></td>
+      <td>Sunday</td>
+      <td>GMT+8</td>
+      <td>APRSMY</td>
+      <td><a href="https://aprsmy.hamradio.my">aprsmy.hamradio.my</a></td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><b>APRSHamfinity</b></td>
+      <td>Sunday</td>
+      <td>UTC</td>
+      <td>9M4GKS</td>
+      <td><a href="https://aprs.hamfinity.com">aprs.hamfinity.com</a></td>
+    </tr>
+  </tbody>
+</table>
 
 ## 📌 Requirements
 
@@ -108,32 +161,32 @@ To run the bot automatically on system boot, it is recommended to use a systemd 
 
 1. Copy the service file to the systemd directory:
 
-  ```bash
-  sudo cp raspiaprs.service /etc/systemd/system/
-  ```
+    ```bash
+    sudo cp raspiaprs.service /etc/systemd/system/
+    ```
 
 2. Adjust the *'WorkingDirectory'* and *'ExecStart'* parameters to match your installation path:
 
-  ```bash
-  sudo nano /etc/systemd/system/raspiaprs.service
-  ```
+    ```bash
+    sudo nano /etc/systemd/system/raspiaprs.service
+    ```
 
-  ```properties
-  WorkingDirectory=/YourDir/RasPiAPRS
-  ExecStart=/bin/bash /YourDir/RasPiAPRS/main.sh
-  ```
+    ```properties
+    WorkingDirectory=/YourDir/RasPiAPRS
+    ExecStart=/bin/bash /YourDir/RasPiAPRS/main.sh
+    ```
 
 3. Reload the systemd daemon:
 
-  ```bash
-  sudo systemctl daemon-reload
-  ```
+    ```bash
+    sudo systemctl daemon-reload
+    ```
 
 4. Enable the service to start on boot and run as a daemon:
 
-  ```bash
-  sudo systemctl enable --now raspiaprs
-  ```
+    ```bash
+    sudo systemctl enable --now raspiaprs
+    ```
 
 ## 🔄 Update
 
@@ -145,7 +198,7 @@ git pull --autostash
 
 ## 📊 Telemetry Example
 
-You can see an example of the metrics logged by my WPSD node [9W4GPA](https://aprs.fi/telemetry/a/9W4GPA?range=day).
+You can see an example of the metrics logged by my WPSD node [9W2LGX](https://aprs.fi/telemetry/a/9W2LGX?range=day).
 
 This is the screenshot taken from `aprs.fi` of _CPU temperature_, _CPU load average_, _Memory used_, _Disk usage_ and _GPS usage_ from my WPSD node.
 
