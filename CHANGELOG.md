@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [beta14] - (2026-07-01T06:25:39+08:00)
+
+- 2 commit(s) contributed to the release.
+
+### 🚀 Features in beta14
+
+- [a94a078](https://github.com/HafiziRuslan/RasPiAPRS/commit/a94a07874edf1fd877a77a34d08dc6bdc4df950a) feat(aprsis): support multiple APRS-IS servers *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T06:25:39+08:00*
+- [1358347](https://github.com/HafiziRuslan/RasPiAPRS/commit/1358347734a2421613c00d4d21ebeb83fb4d5633) feat(core): bump version to 0.1b14 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T06:24:35+08:00*
+
+---
+
 ## [beta13] - (2026-07-01T06:03:40+08:00)
 
 - 41 commit(s) contributed to the release.
@@ -1477,4 +1488,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-07-01T06:06:25.445125546+08:00
+generated using git-cliff on 2026-07-01T06:27:00.014794416+08:00
