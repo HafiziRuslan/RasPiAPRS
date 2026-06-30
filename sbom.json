@@ -2,14 +2,14 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:3fb53eb0-c50f-4c5d-a01a-e6ea730ce9ee",
+  "serialNumber": "urn:uuid:1094193b-d066-46c5-b670-2a9b1231f549",
   "metadata": {
-    "timestamp": "2026-06-26T18:29:14.326478600Z",
+    "timestamp": "2026-06-30T19:03:47.426919700Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
         "name": "uv",
-        "version": "0.11.24"
+        "version": "0.11.25"
       }
     ],
     "component": {
@@ -140,10 +140,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "humanize-18@4.15.0",
+      "bom-ref": "humanize-18@4.16.0",
       "name": "humanize",
-      "version": "4.15.0",
-      "purl": "pkg:pypi/humanize@4.15.0"
+      "version": "4.16.0",
+      "purl": "pkg:pypi/humanize@4.16.0"
     },
     {
       "type": "library",
@@ -297,7 +297,7 @@
       ]
     },
     {
-      "ref": "humanize-18@4.15.0"
+      "ref": "humanize-18@4.16.0"
     },
     {
       "ref": "idna-19@3.18"
@@ -341,7 +341,7 @@
         "callsign-regex-8@0.7.1",
         "geopy-13@2.4.1",
         "gpsdclient-14@1.3.2",
-        "humanize-18@4.15.0",
+        "humanize-18@4.16.0",
         "psutil-23@7.2.2",
         "python-dateutil-24@2.9.0.post0",
         "python-dotenv-25@1.2.2",
