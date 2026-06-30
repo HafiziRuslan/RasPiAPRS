@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta13] - (2026-07-01T03:37:22+08:00)
+## [beta13] - (2026-07-01T06:03:40+08:00)
 
-- 40 commit(s) contributed to the release.
+- 41 commit(s) contributed to the release.
 - 27 day(s) passed between releases.
 
 ### 🚀 Features in beta13
@@ -49,6 +49,7 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation in beta13
 
+- [652a3c2](https://github.com/HafiziRuslan/RasPiAPRS/commit/652a3c22e81c687b3738c9f3c0d974f7a655b3e8) docs(readme): restructure mirrors and alerts *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T06:03:40+08:00*
 - [3f0f50b](https://github.com/HafiziRuslan/RasPiAPRS/commit/3f0f50bb1538285e050e4726be795925f1629e2f) docs(README): add APRS-IS network documentation and optional event sections *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T03:36:49+08:00*
 
 ### 🧪 Testing in beta13
@@ -1476,4 +1477,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-07-01T03:38:41.943576844+08:00
+generated using git-cliff on 2026-07-01T06:06:25.445125546+08:00
