@@ -199,7 +199,7 @@ update_application() {
 
       if [ "$UPDATE_SUCCESS" = true ] && [ "$(sudo -u "$dir_own" git rev-parse HEAD)" = "$REMOTE" ]; then
         if ! sudo -u "$dir_own" git diff --quiet "$LOCAL" HEAD -- pyproject.toml; then
-          log_msg INFO "Application updated. Forcing environement recreation."
+          log_msg INFO "Application updated. Forcing environment recreation."
           sudo -u "$dir_own" uv venv -c
         fi
 
