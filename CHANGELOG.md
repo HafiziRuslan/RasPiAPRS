@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta14] - (2026-07-01T08:37:35+08:00)
+## [beta14] - (2026-07-01T09:16:27+08:00)
 
-- 7 commit(s) contributed to the release.
+- 8 commit(s) contributed to the release.
 - 1 day(s) passed between releases.
 
 ### 🚀 Features in beta14
@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta14
 
+- [339d721](https://github.com/HafiziRuslan/RasPiAPRS/commit/339d721826bf9e2aac6cdc1d5f3f73470074271f) fix(aprs): enhance APRS error handling and logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T09:16:27+08:00*
 - [68599c1](https://github.com/HafiziRuslan/RasPiAPRS/commit/68599c119a7ba38537a6452faff823a68fe92a44) fix(update): fix spelling of "environment" in log message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T06:59:43+08:00*
 
 ### 🚜 Refactor in beta14
@@ -1500,4 +1501,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-07-01T08:38:55.728852742+08:00
+generated using git-cliff on 2026-07-01T09:17:44.804602237+08:00
