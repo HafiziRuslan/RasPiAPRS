@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta14] - (2026-07-01T22:48:08+08:00)
+## [beta14] - (2026-07-01T23:43:20+08:00)
 
-- 14 commit(s) contributed to the release.
+- 15 commit(s) contributed to the release.
 - 1 day(s) passed between releases.
 
 ### 🚀 Features in beta14
 
+- [e8bdb71](https://github.com/HafiziRuslan/RasPiAPRS/commit/e8bdb718855ba2f184e008cc99ac885cc7732d12) feat(filter): add u/call to filter parts *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T23:43:20+08:00*
 - [8bf215c](https://github.com/HafiziRuslan/RasPiAPRS/commit/8bf215c1133f18ad0fecc4f9115bb5993b380b99) feat(sysinfo): add hardware model to osinfo *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T22:48:08+08:00*
 - [f5d5cb0](https://github.com/HafiziRuslan/RasPiAPRS/commit/f5d5cb0df78636ff2a0dcbcf96e5536d9b883145) style(code): remove dead comment lines *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T10:35:55+08:00*
 - [9146645](https://github.com/HafiziRuslan/RasPiAPRS/commit/914664589850eab3f0d3727cec1f8fe2e47d1f2b) feat(main): add callback log handler and improve APRS packet logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T10:12:30+08:00*
@@ -1510,4 +1511,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-07-01T22:49:26.402131535+08:00
+generated using git-cliff on 2026-07-01T23:45:13.027378773+08:00
