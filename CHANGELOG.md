@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta14] - (2026-07-01T23:43:20+08:00)
+## [beta14] - (2026-07-02T00:43:48+08:00)
 
-- 15 commit(s) contributed to the release.
+- 16 commit(s) contributed to the release.
 - 1 day(s) passed between releases.
 
 ### 🚀 Features in beta14
@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta14
 
+- [d8a1613](https://github.com/HafiziRuslan/RasPiAPRS/commit/d8a161398df80814f28df1829ca5d54048ac0242) refactor(core): reorganize os info order and expand mode metadata *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-02T00:43:48+08:00*
 - [a09186b](https://github.com/HafiziRuslan/RasPiAPRS/commit/a09186bac387249f4f34d86e6ca2c6b3631142bc) refactor(config): remove sleep config and hardcode interval *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T21:19:14+08:00*
 - [824a606](https://github.com/HafiziRuslan/RasPiAPRS/commit/824a606dfb244ef9d30527cc38dd50c3c751e7de) fix(timer): adjust position send interval *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T10:18:45+08:00*
 - [339d721](https://github.com/HafiziRuslan/RasPiAPRS/commit/339d721826bf9e2aac6cdc1d5f3f73470074271f) fix(aprs): enhance APRS error handling and logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T09:16:27+08:00*
@@ -1511,4 +1512,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-07-01T23:45:13.027378773+08:00
+generated using git-cliff on 2026-07-02T00:45:00.075124543+08:00
