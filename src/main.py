@@ -1755,8 +1755,8 @@ class APRSSender:
 		self.ais = None
 		self.telem_seq = telem_seq
 		self._queue = multiprocessing.Queue()
+		self._out_queue = multiprocessing.Queue()
 		self._consumer_proc = None
-		self._current_aprsis_server_index = 0  # Added for multiple server rotation
 
 	async def __aenter__(self):
 		"""Enter the asynchronous context."""
@@ -1839,7 +1839,15 @@ class APRSSender:
 		loop = asyncio.get_running_loop()
 		self._consumer_proc = multiprocessing.Process(
 			target=aprs_consumer_worker,
-			args=(self.cfg.from_call, self.cfg.aprs_passcode, self.cfg.aprsis_servers, self.cfg.aprsis_port, self.cfg.aprsis_filter, self._queue),
+			args=(
+				self.cfg.from_call,
+				self.cfg.aprs_passcode,
+				self.cfg.aprsis_servers,
+				self.cfg.aprsis_port,
+				self.cfg.aprsis_filter,
+				self._queue,
+				self._out_queue,
+			),
 			daemon=True,
 		)
 		self._consumer_proc.start()
@@ -1900,30 +1908,14 @@ class APRSSender:
 			logging.error('Unexpected error in APRS callback: %s', e, exc_info=True)
 
 	async def send_packet(self, payload, log_context='packet', max_retries=3):
-		"""Send a packet with random delay and retry logic."""
-		for attempt in range(max_retries):
-			try:
-				if not self.ais or not getattr(self.ais, '_connected', False):
-					await self.connect()
-				if not self.ais:
-					logging.error('APRS-IS connection object is None after connection attempt. Cannot send packet.')
-					await asyncio.sleep(5)
-					continue
-				loop = asyncio.get_running_loop()
-				await loop.run_in_executor(None, self.ais.sendall, payload)
-				logging.info(payload)
-				await asyncio.sleep(random.uniform(0.5, 2.0))
-				return True
-			except (APRSConnectionError, OSError, AttributeError) as err:
-				logging.error('APRS connection error at %s: %s. Reconnecting...', log_context, err)
-				if self.ais:
-					with contextlib.suppress(Exception):
-						self.ais.close()
-				self.ais = None
-				if attempt < max_retries - 1:
-					await asyncio.sleep(5)
-		logging.error('Failed to send %s after %d attempts.', log_context, max_retries)
-		return False
+		"""Send a packet by putting it into the worker's outbound queue."""
+		try:
+			self._out_queue.put(payload)
+			await asyncio.sleep(random.uniform(0.5, 2.0))
+			return True
+		except Exception as e:
+			logging.error('Failed to queue %s: %s', log_context, e)
+			return False
 
 	async def send_position(self, gps_data=None, is_moving=False, symbt=None, symb=None):
 		"""Send APRS position packet to APRS-IS."""
@@ -2186,16 +2178,34 @@ class APRSSender:
 				pass
 
 
-def aprs_consumer_worker(call, passcode, servers, port, aprs_filter, queue):
+def aprs_consumer_worker(call, passcode, servers, port, aprs_filter, queue, out_queue):
 	"""Isolated worker process to handle the blocking APRS-IS consumer."""
 	import time
 	import aprslib
 	import logging
 	import contextlib
+	import threading
 	from aprslib.exceptions import ConnectionError, LoginError
 
 	logging.basicConfig(level=logging.INFO, format='%(asctime)s | (Worker) %(levelname)-8s | %(name)s.%(funcName)s:%(lineno)d | %(message)s')
 	current_server_idx = 0
+	ais = None
+
+	def sender_thread():
+		nonlocal ais
+		while True:
+			try:
+				payload = out_queue.get()
+				if ais and getattr(ais, '_connected', False):
+					ais.sendall(payload)
+					logging.info('(Worker) Sent: %s', payload.strip())
+				else:
+					logging.warning('(Worker) Dropping packet, not connected: %s', payload.strip())
+			except Exception as e:
+				logging.error('(Worker) Error in sender thread: %s', e)
+
+	threading.Thread(target=sender_thread, daemon=True).start()
+
 	while True:
 		current_server = servers[current_server_idx]
 		logging.info('Consumer attempting to connect to APRS-IS server %s:%d', current_server, port)
@@ -2255,7 +2265,6 @@ async def initialize_session(cfg):
 	geolocation = Geolocation(cfg.app_name, cfg.project_url, cfg.nominatim_cache_file)
 	telem_seq = Sequence(cfg.lib_dir, name='telem_sequence', modulo=1000)
 	aprs_sender = APRSSender(cfg, tg_logger, wa_logger, sg_logger, sys_stats, gps_handler, geolocation, telem_seq)
-	await aprs_sender.connect()
 	timer = Timer(cfg.tmp_dir)
 	sb = SmartBeaconing(cfg)
 	scheduled_msg_handler = ScheduledMessageHandler(cfg, gps_handler)
