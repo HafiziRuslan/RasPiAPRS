@@ -374,8 +374,8 @@ class Config:
 			group_filter_string = 'g/' + '/'.join(unique_group_calls)
 			if group_filter_string not in filter_parts:
 				filter_parts.append(group_filter_string)
-		if 't/m' not in filter_parts:
-			filter_parts.append('t/m')
+		# if f't/m/{self.from_call}/15' not in filter_parts:
+		# 	filter_parts.append(f't/m/{self.from_call}/15')
 		if filter_parts:
 			self.aprsis_filter = ' '.join(filter_parts)
 		else:
@@ -493,6 +493,19 @@ def configure_logging(cfg: Config):
 			logger.addHandler(handler)
 		except (OSError, PermissionError) as e:
 			logging.error('Failed to create %s: %s', filename, e)
+
+		try:
+			path = os.path.join(log_dir, 'callback.log')
+			callback_handler = NumberedRotatingFileHandler(path, maxBytes=max_size, backupCount=max_count)
+			callback_handler.setLevel(logging.DEBUG)
+			callback_handler.setFormatter(formatter)
+
+			callback_specific_logger = logging.getLogger('aprs.callback')
+			callback_specific_logger.propagate = False
+			callback_specific_logger.addHandler(callback_handler)
+			callback_specific_logger.setLevel(logging.DEBUG)
+		except (OSError, PermissionError) as e:
+			logging.error('Failed to create callback.log: %s', e)
 
 
 class PersistentCounter:
@@ -1863,13 +1876,13 @@ class APRSSender:
 		"""Callback function to process incoming APRS packets from the server."""
 		if isinstance(packet, bytes):
 			packet = packet.decode('ascii', errors='replace')
-		logging.info('Received APRS packet: %s', packet)
 		if packet.split(':', 1)[-1][:1] in '#$%)*,<?T[_{}':
 			return
 		try:
 			parsed_packet = aprslib.parse(packet)
 			packet_format = parsed_packet.get('format', '')
 			if packet_format and isinstance(packet_format, str) and 'message' in packet_format and not parsed_packet.get('response'):
+				logging.info('Received APRS packet: [%s]', packet)
 				from_call = parsed_packet.get('from', 'UNKNOWN')
 				addresse = parsed_packet.get('addresse', 'UNKNOWN')
 				message_text = parsed_packet.get('message_text', '')
@@ -1898,17 +1911,14 @@ class APRSSender:
 					asyncio.create_task(respond())
 			else:
 				logging.debug(
-					'Ignoring non-message APRS packet of type %s from %s: %s',
-					parsed_packet.get('format', 'unknown'),
-					parsed_packet.get('from', 'UNKNOWN'),
-					packet,
+					'Ignoring APRS packet %s from %s: [%s]', parsed_packet.get('format', 'unknown'), parsed_packet.get('from', 'UNKNOWN'), packet
 				)
 		except APRSParseError as e:
-			logging.warning('Failed to parse incoming APRS packet: %s - Raw: %s', e, packet)
+			logging.warning('Failed to parse incoming APRS packet: %s [%s]', e, packet)
 		except (TypeError, ValueError, KeyError) as e:
-			logging.error('Data error in APRS callback: %s - Raw: %s', e, packet)
+			logging.error('Data error in APRS callback: %s [%s]', e, packet)
 		except Exception as e:
-			logging.error('Unexpected error in APRS callback: %s - Raw: %s', e, packet)
+			logging.error('Unexpected error in APRS callback: %s [%s]', e, packet)
 
 	async def send_packet(self, payload, log_context='packet', max_retries=3):
 		"""Send a packet by putting it into the worker's outbound queue."""
