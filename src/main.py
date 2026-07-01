@@ -1304,7 +1304,7 @@ class SystemStats(object):
 				kernel_ver = ' '.join(filter(None, [sysname, rel_info, machine]))
 			except Exception as e:
 				logging.error('Unexpected error: %s', e)
-			return f'{", ".join(filter(None, [os_name, hardware_model, kernel_ver]))}'
+			return f'{", ".join(filter(None, [hardware_model, kernel_ver, os_name]))}'
 
 		return self._get_cached('os_info', _fetch, ttl=3600, default='')
 
@@ -1375,14 +1375,31 @@ class SystemStats(object):
 			shift = f'({"+" if offset > 0 else ""}{humanize.metric(offset, "Hz", precision=2)})' if offset != 0 else None
 		except (ValueError, TypeError):
 			tx_str, shift = '', None
-		cc_ts = ''
+		mmode_parts = []
 		if conf.get('DMR:Enable', conf.get('Enable')) == '1':
 			cc = f'C{conf.get("DMR:ColorCode", conf.get("ColorCode", "0"))}'
-			s1 = conf.get('DMR:Slot1', conf.get('Slot1', '0')) == '1'
-			s2 = conf.get('DMR:Slot2', conf.get('Slot2', '0')) == '1'
+			s1 = conf.get('DMR Network:Slot1', conf.get('Slot1', '0')) == '1'
+			s2 = conf.get('DMR Network:Slot2', conf.get('Slot2', '0')) == '1'
 			ts = 'S1S2' if s1 and s2 else ('S1' if s1 else ('S2' if s2 else ''))
-			cc_ts = cc + ts
-		info_str = ' '.join(filter(None, [tx_str, shift, cc_ts]))
+			mmode_parts.append(f'DMR_{cc}{ts}')
+		if conf.get('D-Star:Enable') == '1' or conf.get('D-STAR:Enable') == '1':
+			ds_module = conf.get('D-Star:Module') or conf.get('D-STAR:Module')
+			mmode_parts.append(f'D-STAR_{ds_module}')
+		if conf.get('System Fusion:Enable') == '1':
+			mmode_parts.append('C4FM')
+		if conf.get('P25:Enable') == '1':
+			p25_nac = conf.get('P25:NAC')
+			mmode_parts.append(f'P25_{p25_nac}')
+		if conf.get('NXDN:Enable') == '1':
+			nx_ran = conf.get('NXDN:RAN')
+			mmode_parts.append(f'NXDN_{nx_ran}')
+		if conf.get('POCSAG:Enable') == '1':
+			mmode_parts.append('PAGER')
+		if conf.get('FM:Enable') == '1':
+			fm_ct = conf.get('FM:CTCSSFrequency')
+			mmode_parts.append(f'NFM_C{fm_ct}')
+		mmode = ', '.join(filter(None, mmode_parts))
+		info_str = ' '.join(filter(None, [tx_str, shift, mmode]))
 		if not phg_str:
 			phg_str = self._calc_phg(
 				conf.get('INFO:Power', conf.get('Power')),
@@ -1964,8 +1981,7 @@ class APRSSender:
 		spdkmh = APRSConverter.spd_to_kmh(cur_spd)
 		mmdvminfo = self.sys_stats.mmdvm_info
 		mmdvmphg = self.sys_stats.mmdvm_phg
-		osinfo = self.sys_stats.os_info
-		comment = '; '.join(filter(None, [mmdvminfo, osinfo, self.cfg.project_url]))
+		comment = '; '.join(filter(None, [mmdvminfo]))
 		timestamp, iso_timestamp = self._get_timestamps(cur_time)
 		symbt = symbt or self.cfg.symbol_table
 		symb = symb or self.cfg.symbol
