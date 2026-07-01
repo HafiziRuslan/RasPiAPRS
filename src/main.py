@@ -374,8 +374,6 @@ class Config:
 			group_filter_string = 'g/' + '/'.join(unique_group_calls)
 			if group_filter_string not in filter_parts:
 				filter_parts.append(group_filter_string)
-		# if f't/m/{self.from_call}/15' not in filter_parts:
-		# 	filter_parts.append(f't/m/{self.from_call}/15')
 		if filter_parts:
 			self.aprsis_filter = ' '.join(filter_parts)
 		else:
@@ -1690,10 +1688,12 @@ class WhatsAppLogger:
 				async with session.get(api_url) as response:
 					response_text = await response.text()
 					if response.status == 200:
-						logging.info('Successfully sent WhatsApp message via CallMeBot.')
+						logging.info(
+							'Successfully sent WhatsApp message via CallMeBot API (Status: %d, Response: %s)', response.status, response_text
+						)
 						return True
 					else:
-						logging.error('Failed to send WhatsApp message via CallMeBot (Status: %d, Response: %s)', response.status, response_text)
+						logging.error('Failed to send WhatsApp message via CallMeBot API (Status: %d, Response: %s)', response.status, response_text)
 						return False
 		except Exception as e:
 			logging.error('Error sending WhatsApp message via CallMeBot API: %s', e)
@@ -1744,10 +1744,12 @@ class SignalLogger:
 				async with session.get(api_url) as response:
 					response_text = await response.text()
 					if response.status == 200:
-						logging.info('Successfully sent Signal message via CallMeBot.')
+						logging.info(
+							'Successfully sent Signal message via CallMeBot API:  (Status: %d, Response: %s)', response.status, response_text
+						)
 						return True
 					else:
-						logging.error('Failed to send Signal message via CallMeBot (Status: %d, Response: %s)', response.status, response_text)
+						logging.error('Failed to send Signal message via CallMeBot API (Status: %d, Response: %s)', response.status, response_text)
 						return False
 		except Exception as e:
 			logging.error('Error sending Signal message via CallMeBot API: %s', e)
