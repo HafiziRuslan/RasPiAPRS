@@ -2286,7 +2286,7 @@ async def initialize_session(cfg):
 
 def should_send_position(cfg, timer_tick, sb, gps_data):
 	"""Determine if a position update is needed."""
-	return (cfg.gpsd_enabled and cfg.smartbeaconing_enabled and sb.should_send(gps_data)) or (timer_tick % 1200 == 1)
+	return (cfg.gpsd_enabled and cfg.smartbeaconing_enabled and sb.should_send(gps_data)) or (timer_tick % 1800 == 1)
 
 
 def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender):
