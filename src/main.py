@@ -1255,6 +1255,23 @@ class SystemStats(object):
 				os_name = ' '.join(filter(None, [vendor, version, f'({codename})' if codename else None]))
 			except (AttributeError, OSError):
 				os_name = platform.platform()
+			hardware_model = ''
+			if os.path.exists('/sys/firmware/devicetree/base/model'):
+				try:
+					with open('/sys/firmware/devicetree/base/model', 'r') as f_model:
+						model_from_dt = f_model.read().strip('\x00').strip()
+						if model_from_dt and ('Raspberry Pi' in model_from_dt or 'Orange Pi' in model_from_dt or 'Banana Pi' in model_from_dt):
+							hardware_model = model_from_dt
+				except Exception as e:
+					logging.debug('Could not read /sys/firmware/devicetree/base/model: %s', e)
+			if not hardware_model and os.path.exists('/proc/cpuinfo'):
+				with open('/proc/cpuinfo', 'r') as f_cpuinfo:
+					cpuinfo_content = f_cpuinfo.read()
+					model_match = re.search(r'^Model\s*:\s*(.*)$', cpuinfo_content, re.MULTILINE | re.IGNORECASE)
+					if model_match:
+						hw_model_raw = model_match.group(1).strip()
+						if 'Raspberry Pi' in hw_model_raw or 'Banana Pi' in hw_model_raw:
+							hardware_model = hw_model_raw
 			kernel_ver = ''
 			try:
 				sysname = platform.system()
@@ -1285,7 +1302,7 @@ class SystemStats(object):
 				kernel_ver = ' '.join(filter(None, [sysname, rel_info, machine]))
 			except Exception as e:
 				logging.error('Unexpected error: %s', e)
-			return f'{", ".join(filter(None, [os_name, kernel_ver]))}'
+			return f'{", ".join(filter(None, [os_name, hardware_model, kernel_ver]))}'
 
 		return self._get_cached('os_info', _fetch, ttl=3600, default='')
 
@@ -1770,6 +1787,7 @@ class APRSSender:
 		self._queue = multiprocessing.Queue()
 		self._out_queue = multiprocessing.Queue()
 		self._consumer_proc = None
+		self._aprsis_server_idx = 0
 
 	async def __aenter__(self):
 		"""Enter the asynchronous context."""
@@ -1794,7 +1812,7 @@ class APRSSender:
 		max_retries_per_server = 5
 		total_server_attempts = 0
 		while total_server_attempts < len(self.cfg.aprsis_servers) * max_retries_per_server:
-			current_server = self.cfg.aprsis_servers[self._current_aprsis_server_index]
+			current_server = self.cfg.aprsis_servers[self._aprsis_server_idx]
 			logging.info(
 				'Connecting to APRS-IS server %s:%d (attempt %d/%d) as %s',
 				current_server,
@@ -1841,7 +1859,7 @@ class APRSSender:
 					self.ais = None
 			total_server_attempts += 1
 			if total_server_attempts % max_retries_per_server == 0:
-				self._current_aprsis_server_index = (self._current_aprsis_server_index + 1) % len(self.cfg.aprsis_servers)
+				self._aprsis_server_idx = (self._aprsis_server_idx + 1) % len(self.cfg.aprsis_servers)
 				logging.info('Cycling to next APRS-IS server.')
 			await asyncio.sleep(5)
 		logging.critical('All attempts to connect to any APRS-IS server failed, exiting.')
@@ -1946,7 +1964,7 @@ class APRSSender:
 		mmdvmphg = self.sys_stats.mmdvm_phg
 		osinfo = self.sys_stats.os_info
 		comment = '; '.join(filter(None, [mmdvminfo, osinfo, self.cfg.project_url]))
-		timestamp, tg_timestamp = self._get_timestamps(cur_time)
+		timestamp, iso_timestamp = self._get_timestamps(cur_time)
 		symbt = symbt or self.cfg.symbol_table
 		symb = symb or self.cfg.symbol
 		if self.cfg.symbol_overlay and symb not in ['(', '>']:
@@ -2004,7 +2022,7 @@ class APRSSender:
 		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:/{timestamp}{latstr}{symbt}{lonstr}{symb}{extstr}{altstr}{comment}'
 		tg_pos = (
 			f'<u>{self.cfg.from_call} Position</u>\n\n'
-			f'Time: <b>{tg_timestamp}</b>\n'
+			f'Time: <b>{iso_timestamp}</b>\n'
 			f'Symbol: <b>{symbt}{symb} ({sym_desc})</b>\n'
 			f'Position:\n'
 			f'\tLatitude: <b>{cur_lat}</b>\n'
@@ -2014,7 +2032,7 @@ class APRSSender:
 		)
 		wa_pos = (
 			f'_{self.cfg.from_call} Position_\n\n'
-			f'Time: *{tg_timestamp}*\n'
+			f'Time: *{iso_timestamp}*\n'
 			f'Symbol: *{symbt}{symb} _({sym_desc})_*\n'
 			f'Position:\n'
 			f'\tLatitude: *{cur_lat}*\n'
@@ -2024,7 +2042,7 @@ class APRSSender:
 		)
 		sg_pos = (
 			f'{self.cfg.from_call} Position\n\n'
-			f'Time: {tg_timestamp}\n'
+			f'Time: {iso_timestamp}\n'
 			f'Symbol: {symbt}{symb} ({sym_desc})\n'
 			f'Position:\n'
 			f'\tLatitude: {cur_lat}\n'
@@ -2129,11 +2147,30 @@ class APRSSender:
 			return True
 		return False
 
+	async def send_beacon(self, gps_data=None):
+		"""Send a general beacon message with app name, os info and system uptime."""
+		loc_data, _ = gps_data if gps_data else await self.gps_handler.get_loc_and_sat()
+		cur_time, _, _, _, _, _ = loc_data
+		_, iso_timestamp = self._get_timestamps(cur_time)
+		appname = self.cfg.app_name
+		osinfo = self.sys_stats.os_info
+		message = f'using {appname} on {osinfo}, {self.cfg.project_url}'
+		payload = f'{self.cfg.from_call}>BEACON: {message}'
+		tg_beacon = f'<u>{self.cfg.from_call} Beacon</u>\n\nTime: <b>{iso_timestamp}</b>\nText: <b>{message}</b>'
+		wa_beacon = f'_{self.cfg.from_call} Beacon_\n\nTime: *{iso_timestamp}*\nText: *{message}*'
+		sg_beacon = f'{self.cfg.from_call} Beacon\n\nTime: {iso_timestamp}\nText: {message}'
+		if await self.send_packet(payload, 'beacon'):
+			await self.tg_logger.log(tg_beacon)
+			await self.wa_logger.log(wa_beacon)
+			await self.sg_logger.log(sg_beacon)
+			return True
+		return False
+
 	async def send_status(self, gps_data=None):
 		"""Send APRS status information to APRS-IS."""
 		loc_data, sat_data = gps_data if gps_data else await self.gps_handler.get_loc_and_sat()
 		cur_time, lat, lon, _, _, _ = loc_data
-		timestamp, tg_timestamp = self._get_timestamps(cur_time)
+		timestamp, iso_timestamp = self._get_timestamps(cur_time)
 		gridsquare = f'{APRSConverter.latlon_to_grid(lat, lon)}'
 		address = self.geolocation.get_address(lat, lon)
 		near_add = self.geolocation.format_address(address)
@@ -2148,17 +2185,17 @@ class APRSSender:
 		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:>{timestamp}{"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
 		tg_stat = (
 			f'<u>{self.cfg.from_call} Status</u>\n\n'
-			f'Time: <b>{tg_timestamp}</b>\n'
+			f'Time: <b>{iso_timestamp}</b>\n'
 			f'Text: <b>{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}</b>'
 		)
 		wa_stat = (
 			f'_{self.cfg.from_call} Status_\n\n'
-			f'Time: *{tg_timestamp}*\n'
+			f'Time: *{iso_timestamp}*\n'
 			f'Text: *{"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}*'
 		)
 		sg_stat = (
 			f'{self.cfg.from_call} Status\n\n'
-			f'Time: {tg_timestamp}\n'
+			f'Time: {iso_timestamp}\n'
 			f'Text: {"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
 		)
 		if os.path.exists(self.cfg.status_file):
@@ -2306,6 +2343,7 @@ def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender):
 			{'gps_data': gps_data, 'is_moving': sb.is_moving, 'symbt': sb.symbt, 'symb': sb.symb},
 		),
 		Task(timer_tick % 900 == 1, aprs_sender.send_telemetry, (), {'gps_data': gps_data}),
+		Task(timer_tick % 3600 == 1, aprs_sender.send_beacon, (), {'gps_data': gps_data}),
 	]
 
 
