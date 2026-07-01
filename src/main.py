@@ -1868,7 +1868,8 @@ class APRSSender:
 			return
 		try:
 			parsed_packet = aprslib.parse(packet)
-			if 'message' in parsed_packet.get('format') and not parsed_packet.get('response'):
+			packet_format = parsed_packet.get('format', '')
+			if packet_format and isinstance(packet_format, str) and 'message' in packet_format and not parsed_packet.get('response'):
 				from_call = parsed_packet.get('from', 'UNKNOWN')
 				addresse = parsed_packet.get('addresse', 'UNKNOWN')
 				message_text = parsed_packet.get('message_text', '')
@@ -1904,8 +1905,10 @@ class APRSSender:
 				)
 		except APRSParseError as e:
 			logging.warning('Failed to parse incoming APRS packet: %s - Raw: %s', e, packet)
+		except (TypeError, ValueError, KeyError) as e:
+			logging.error('Data error in APRS callback: %s - Raw: %s', e, packet)
 		except Exception as e:
-			logging.error('Unexpected error in APRS callback: %s', e, exc_info=True)
+			logging.error('Unexpected error in APRS callback: %s - Raw: %s', e, packet)
 
 	async def send_packet(self, payload, log_context='packet', max_retries=3):
 		"""Send a packet by putting it into the worker's outbound queue."""
