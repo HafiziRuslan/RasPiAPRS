@@ -2192,6 +2192,7 @@ def aprs_consumer_worker(call, passcode, servers, port, aprs_filter, queue):
 	import aprslib
 	import logging
 	import contextlib
+	from aprslib.exceptions import ConnectionError, LoginError
 
 	logging.basicConfig(level=logging.INFO, format='%(asctime)s | (Worker) %(levelname)-8s | %(name)s.%(funcName)s:%(lineno)d | %(message)s')
 	current_server_idx = 0
@@ -2206,17 +2207,20 @@ def aprs_consumer_worker(call, passcode, servers, port, aprs_filter, queue):
 				ais.set_filter(aprs_filter)
 			logging.info('Consumer connected and listening to APRS-IS server %s:%d', current_server, port)
 			ais.consumer(lambda packet: queue.put(packet), raw=True)
-			logging.warning('Consumer connection to %s:%d terminated. Reconnecting...', current_server, port)
-		except aprslib.exceptions.ConnectionError as err:
-			logging.warning('Consumer connection error to %s:%d: %s', current_server, port, err)
+		except (ConnectionError, TimeoutError, EOFError) as err:
+			logging.warning('Consumer connection lost to %s:%d: %s', current_server, port, err)
+		except LoginError as err:
+			logging.error('Consumer login failed for %s: %s', call, err)
+			time.sleep(30)
 		except Exception as e:
 			logging.error('Consumer unexpected error with %s:%d: %s', current_server, port, e, exc_info=True)
 		finally:
 			if ais:
 				with contextlib.suppress(Exception):
 					ais.close()
+			logging.info('Consumer connection closed.')
 		current_server_idx = (current_server_idx + 1) % len(servers)
-		logging.info('Consumer cycling to next APRS-IS server. Retrying in 10 seconds...')
+		logging.info('Cycling to next APRS-IS server in 10 seconds...')
 		time.sleep(10)
 
 
