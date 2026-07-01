@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta14] - (2026-07-01T10:18:45+08:00)
+## [beta14] - (2026-07-01T10:35:55+08:00)
 
-- 10 commit(s) contributed to the release.
+- 11 commit(s) contributed to the release.
 - 1 day(s) passed between releases.
 
 ### 🚀 Features in beta14
 
+- [f5d5cb0](https://github.com/HafiziRuslan/RasPiAPRS/commit/f5d5cb0df78636ff2a0dcbcf96e5536d9b883145) style(code): remove dead comment lines *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T10:35:55+08:00*
 - [9146645](https://github.com/HafiziRuslan/RasPiAPRS/commit/914664589850eab3f0d3727cec1f8fe2e47d1f2b) feat(main): add callback log handler and improve APRS packet logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T10:12:30+08:00*
 - [a94a078](https://github.com/HafiziRuslan/RasPiAPRS/commit/a94a07874edf1fd877a77a34d08dc6bdc4df950a) feat(aprsis): support multiple APRS-IS servers *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T06:25:39+08:00*
 - [1358347](https://github.com/HafiziRuslan/RasPiAPRS/commit/1358347734a2421613c00d4d21ebeb83fb4d5633) feat(core): bump version to 0.1b14 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T06:24:35+08:00*
@@ -1503,4 +1504,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-07-01T10:19:53.315201900+08:00
+generated using git-cliff on 2026-07-01T10:37:09.625074611+08:00
