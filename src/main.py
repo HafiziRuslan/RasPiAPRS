@@ -65,7 +65,6 @@ class Config:
 	nominatim_cache_file: str = f'{lib_dir}/nominatim_cache.pkl'
 	app_name: str = 'RasPiAPRS'
 	project_url: str = 'https://git.new/RasPiAPRS'
-	sleep: int = 600
 	call: str = 'N0CALL'
 	aprs_passcode: str | int = -1
 	ssid: int = 0
@@ -217,7 +216,6 @@ class Config:
 		self.log_max_count = self._env_get_int('LOG_MAX_COUNT', 3)
 		self.call = os.getenv('APRS_CALL', 'N0CALL')
 		self.ssid = self._env_get_int('APRS_SSID', 0, 'SSID value error')
-		self.sleep = self._env_get_int('SLEEP', 600, 'Sleep value error')
 		self.symbol_table = os.getenv('APRS_SYMBOL_TABLE', '/')
 		self.symbol = os.getenv('APRS_SYMBOL', 'n')
 		self.latitude = self._env_get_float('APRS_LATITUDE', 0.0)
@@ -2307,7 +2305,7 @@ def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender):
 			(),
 			{'gps_data': gps_data, 'is_moving': sb.is_moving, 'symbt': sb.symbt, 'symb': sb.symb},
 		),
-		Task(timer_tick % cfg.sleep == 1, aprs_sender.send_telemetry, (), {'gps_data': gps_data}),
+		Task(timer_tick % 900 == 1, aprs_sender.send_telemetry, (), {'gps_data': gps_data}),
 	]
 
 
