@@ -372,6 +372,8 @@ class Config:
 			group_filter_string = 'g/' + '/'.join(unique_group_calls)
 			if group_filter_string not in filter_parts:
 				filter_parts.append(group_filter_string)
+		if f'u/{self.to_call}' not in filter_parts:
+			filter_parts.append(f'u/{self.to_call}')
 		if filter_parts:
 			self.aprsis_filter = ' '.join(filter_parts)
 		else:
