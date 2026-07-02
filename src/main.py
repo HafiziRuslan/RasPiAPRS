@@ -497,7 +497,7 @@ def configure_logging(cfg: Config):
 			logging.error('Failed to create %s: %s', filename, e)
 
 		try:
-			path = os.path.join(log_dir, 'callback.log')
+			path = os.path.join(log_dir, 'aprs_traffic.log')
 			callback_handler = NumberedRotatingFileHandler(path, maxBytes=max_size, backupCount=max_count)
 			callback_handler.setLevel(logging.DEBUG)
 			callback_handler.setFormatter(formatter)
@@ -507,7 +507,7 @@ def configure_logging(cfg: Config):
 			callback_specific_logger.addHandler(callback_handler)
 			callback_specific_logger.setLevel(logging.DEBUG)
 		except (OSError, PermissionError) as e:
-			logging.error('Failed to create callback.log: %s', e)
+			logging.error('Failed to create aprs_traffic.log: %s', e)
 
 
 class PersistentCounter:
@@ -1931,12 +1931,12 @@ class APRSSender:
 				path = parsed_packet.get('path', [])
 				if addresse == self.cfg.from_call and msg_no:
 					if self.cfg.from_call in path:
-						logging.debug('Skipping ACK for message %s from %s: station already in path', msg_no, from_call)
+						logging.getLogger('aprs.callback').debug('Skipping ACK for message %s from %s: station already in path', msg_no, from_call)
 						return
 
 					async def respond():
 						ack_payload = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:ack{msg_no}'
-						logging.debug('Replying acknowledge for message %s from %s', msg_no, from_call)
+						logging.getLogger('aprs.callback').debug('Replying acknowledge for message %s from %s', msg_no, from_call)
 						if await self.send_packet(ack_payload, 'ack'):
 							tg_msg = f'<u>APRS Message Received</u>\n\nFrom: <b>{from_call}</b>\nTo: <b>{addresse}</b>\nMsgTxt: <b>{message_text}</b>'
 							wa_msg = f'_APRS Message Received_\n\nFrom: *{from_call}*\nTo: *{addresse}*\nMsgTxt: *{message_text}*'
@@ -1951,7 +1951,7 @@ class APRSSender:
 
 					asyncio.create_task(respond())
 			else:
-				logging.debug(
+				logging.getLogger('aprs.callback').debug(
 					'Ignoring APRS %s packet from %s: [%s]', parsed_packet.get('format', 'unknown'), parsed_packet.get('from', 'UNKNOWN'), packet
 				)
 		except APRSParseError as e:
