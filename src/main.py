@@ -36,21 +36,22 @@ import time
 import tomllib
 from collections import UserDict
 from collections import deque
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from dataclasses import field
 from typing import Callable
 from typing import NamedTuple
+
 import aiohttp
 import aprslib
 import aprslib.util
-
 import dotenv
+import mic_e
 import psutil
 import symbols
 from aprslib.exceptions import ConnectionError as APRSConnectionError
 from aprslib.exceptions import ParseError as APRSParseError
 from gpsdclient import GPSDClient
 from itu_appendix42 import ItuAppendix42
-import mic_e
 
 
 @dataclass
@@ -1951,7 +1952,7 @@ class APRSSender:
 					asyncio.create_task(respond())
 			else:
 				logging.debug(
-					'Ignoring APRS packet %s from %s: [%s]', parsed_packet.get('format', 'unknown'), parsed_packet.get('from', 'UNKNOWN'), packet
+					'Ignoring APRS %s packet from %s: [%s]', parsed_packet.get('format', 'unknown'), parsed_packet.get('from', 'UNKNOWN'), packet
 				)
 		except APRSParseError as e:
 			logging.warning('Failed to parse incoming APRS packet: %s [%s]', e, packet)
@@ -2251,12 +2252,14 @@ class APRSSender:
 
 def aprs_consumer_worker(call, passcode, servers, port, aprs_filter, queue, out_queue):
 	"""Isolated worker process to handle the blocking APRS-IS consumer."""
-	import time
-	import aprslib
-	import logging
 	import contextlib
+	import logging
 	import threading
-	from aprslib.exceptions import ConnectionError, LoginError
+	import time
+
+	import aprslib
+	from aprslib.exceptions import ConnectionError
+	from aprslib.exceptions import LoginError
 
 	logging.basicConfig(level=logging.INFO, format='%(asctime)s | (Worker) %(levelname)-8s | %(name)s.%(funcName)s:%(lineno)d | %(message)s')
 	current_server_idx = 0
