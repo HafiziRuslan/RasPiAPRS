@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta14] - (2026-07-02T00:43:48+08:00)
+## [beta14] - (2026-07-03T06:08:26+08:00)
 
-- 16 commit(s) contributed to the release.
-- 1 day(s) passed between releases.
+- 17 commit(s) contributed to the release.
+- 2 day(s) passed between releases.
 
 ### 🚀 Features in beta14
 
+- [0e83fed](https://github.com/HafiziRuslan/RasPiAPRS/commit/0e83fed8d26a14bc4984a0de380caabcf9e577bd) refactor(server): optimize Mic-E implementation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T06:08:26+08:00*
 - [e8bdb71](https://github.com/HafiziRuslan/RasPiAPRS/commit/e8bdb718855ba2f184e008cc99ac885cc7732d12) feat(filter): add u/call to filter parts *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T23:43:20+08:00*
 - [8bf215c](https://github.com/HafiziRuslan/RasPiAPRS/commit/8bf215c1133f18ad0fecc4f9115bb5993b380b99) feat(sysinfo): add hardware model to osinfo *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T22:48:08+08:00*
 - [f5d5cb0](https://github.com/HafiziRuslan/RasPiAPRS/commit/f5d5cb0df78636ff2a0dcbcf96e5536d9b883145) style(code): remove dead comment lines *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T10:35:55+08:00*
@@ -1512,4 +1513,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-07-02T00:45:00.075124543+08:00
+generated using git-cliff on 2026-07-03T06:10:10.731496318+08:00
