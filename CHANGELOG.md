@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta14] - (2026-07-03T06:08:26+08:00)
+## [beta14] - (2026-07-03T07:43:20+08:00)
 
-- 17 commit(s) contributed to the release.
+- 20 commit(s) contributed to the release.
 - 2 day(s) passed between releases.
 
 ### 🚀 Features in beta14
 
+- [6b905f0](https://github.com/HafiziRuslan/RasPiAPRS/commit/6b905f0ea2f850cc67e8508b0b8e7e16ab6d987c) feat(mic_e): add MicEEncoder class for Mic-E encoding *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T06:59:29+08:00*
 - [0e83fed](https://github.com/HafiziRuslan/RasPiAPRS/commit/0e83fed8d26a14bc4984a0de380caabcf9e577bd) refactor(server): optimize Mic-E implementation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T06:08:26+08:00*
 - [e8bdb71](https://github.com/HafiziRuslan/RasPiAPRS/commit/e8bdb718855ba2f184e008cc99ac885cc7732d12) feat(filter): add u/call to filter parts *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T23:43:20+08:00*
 - [8bf215c](https://github.com/HafiziRuslan/RasPiAPRS/commit/8bf215c1133f18ad0fecc4f9115bb5993b380b99) feat(sysinfo): add hardware model to osinfo *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T22:48:08+08:00*
@@ -19,6 +20,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta14
 
+- [86060de](https://github.com/HafiziRuslan/RasPiAPRS/commit/86060de7421b040b982fd58016af023d214d4028) style(aprs): organize imports and fix log message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T07:03:39+08:00*
 - [d8a1613](https://github.com/HafiziRuslan/RasPiAPRS/commit/d8a161398df80814f28df1829ca5d54048ac0242) refactor(core): reorganize os info order and expand mode metadata *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-02T00:43:48+08:00*
 - [a09186b](https://github.com/HafiziRuslan/RasPiAPRS/commit/a09186bac387249f4f34d86e6ca2c6b3631142bc) refactor(config): remove sleep config and hardcode interval *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T21:19:14+08:00*
 - [824a606](https://github.com/HafiziRuslan/RasPiAPRS/commit/824a606dfb244ef9d30527cc38dd50c3c751e7de) fix(timer): adjust position send interval *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T10:18:45+08:00*
@@ -27,6 +29,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta14
 
+- [c05cd2b](https://github.com/HafiziRuslan/RasPiAPRS/commit/c05cd2b26f943ccc97c17fe2954554029b112d0f) refactor(logging): rename log file to aprs_traffic.log *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T07:43:20+08:00*
 - [751677a](https://github.com/HafiziRuslan/RasPiAPRS/commit/751677a6b47eeb348d5ca01f1573dd8f90934422) refactor(aprs): implement outbound queue for packet sending *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T08:37:35+08:00*
 - [ad4899d](https://github.com/HafiziRuslan/RasPiAPRS/commit/ad4899ddfd5d60fad5b2ee46a1cf84a6e9f6078f) refactor(aprs): improve connection handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T08:18:09+08:00*
 - [b0ec939](https://github.com/HafiziRuslan/RasPiAPRS/commit/b0ec93972e3e8a6d10f569df1e910805e37ff8df) refactor(main): improve event list formatting and add connection error handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T07:59:22+08:00*
@@ -1513,4 +1516,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-07-03T06:10:10.731496318+08:00
+generated using git-cliff on 2026-07-03T07:44:48.672897769+08:00
