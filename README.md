@@ -32,6 +32,7 @@
 - **APRS-IS Filtering**: Allows defining server-side filters to receive only relevant packets (e.g., specific callsigns or geographic radius), optimizing data usage.
 - **Telemetry Tracking**: Monitors specific hardware metrics including CPU temperature/load, memory/disk usage, and network traffic.
 - **SmartBeaconing**: Reduces network congestion by dynamically adjusting beacon frequency based on the station's speed and heading.
+- **Mic-E Encoding**: Utilizes the Mic-E protocol to compress high-resolution GPS and status data into a compact, bandwidth-efficient format.
 - **Dynamic Symbols**: Automatically switches the APRS map icon (e.g., stationary vs. moving) based on real-time GPS motion.
 - **Remote Alerts**: Supports ~~WhatsApp~~, Signal, and Telegram Bot API for sending system status updates directly to your device.
 - **Visualization**: Formats and logs telemetry data for display on platforms like `aprs.fi`.
@@ -43,6 +44,15 @@ The **APRS-IS (Automatic Packet Reporting System-Internet Service)** is a global
 - **Global Reach**: Transmit telemetry and location data without requiring a local RF gate or digipeater.
 - **Bi-directional Messaging**: Receive commands or messages via the internet-based APRS infrastructure.
 - **Reliability**: Ensure system metrics are logged even when radio conditions are poor.
+
+## 📡 Mic-E (Micro-Encoder) Protocol
+
+This project implements the **Mic-E** reporting format to optimize data transmission. Unlike standard APRS text-based position reports, Mic-E encodes data into a highly compressed binary-coded string.
+
+- **Data Density**: Packs Latitude, Longitude, Speed, Course (Heading), Altitude, and a specific "Message Type" into a very short payload.
+- **Bandwidth Efficiency**: By reducing packet length, it minimizes "airtime" on RF gateways and reduces the load on the APRS-IS ingestion servers.
+- **Enhanced Precision**: Supports high-precision position reporting and altitude encoding within the compressed format.
+- **Station Status**: Uses the Mic-E "message" bits to convey station status (e.g., Off Duty, En Route, Emergency) without requiring extra text.
 
 ## 🌐 Optional APRS Network Events
 

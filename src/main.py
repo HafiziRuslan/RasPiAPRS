@@ -50,6 +50,7 @@ from aprslib.exceptions import ConnectionError as APRSConnectionError
 from aprslib.exceptions import ParseError as APRSParseError
 from gpsdclient import GPSDClient
 from itu_appendix42 import ItuAppendix42
+import mic_e
 
 
 @dataclass
@@ -84,6 +85,7 @@ class Config:
 	phg_height: float | None = 5
 	phg_gain: float | None = 3
 	phg_direction: float | None = 0
+	mice_enabled: bool = False
 	gpsd_enabled: bool = False
 	gpsd_host: str | None = 'localhost'
 	gpsd_port: int | None = 2947
@@ -245,6 +247,7 @@ class Config:
 		self.phg_height = self._env_get_float('PHG_HEIGHT', 5.0)
 		self.phg_gain = self._env_get_float('PHG_GAIN', 3)
 		self.phg_direction = self._env_get_float('PHG_DIRECTION', 0)
+		self.mice_enabled = self._env_get_bool('MIC-E_ENABLE')
 		aprsis_servers_raw = os.getenv('APRSIS_SERVER', 'rotate.aprs2.net,rotate.aprs.net')
 		self.aprsis_servers = [s.strip() for s in aprsis_servers_raw.split(',') if s.strip()]
 		if not self.aprsis_servers:
@@ -2367,6 +2370,23 @@ def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender):
 
 async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, scheduled_msg_handler, gps_handler, gps_data):
 	"""Run the main processing loop."""
+	if cfg.mice_enabled:
+		watcher = mic_e.MMDVMLogWatcher(cfg.mmdvmhost_file)
+
+		async def watch_mmdvm():
+			async for event in watcher.watch():
+				if event[0] == 'start':
+					_, callsign, source, msg_bits = event
+					logging.info('MMDVM TX Start: %s (%s) - Status: %s', callsign, source, msg_bits)
+					watcher.set_is_moving(sb.is_moving)
+				elif event[0] == 'end':
+					_, callsign, duration, msg_bits = event
+					logging.info('MMDVM TX End: %s (%.2fs) - Status: %s', callsign, duration, msg_bits)
+					loc, _ = await gps_handler.get_loc_and_sat()
+					dest, info = mic_e.MicEEncoder.encode(loc.lat, loc.lon, loc.spd / 0.51444, loc.cse, cfg.symbol_table, cfg.symbol, msg_bits)
+					await aprs_sender.send_packet(f'{cfg.from_call}>{dest}:{info} MMDVM:{callsign}', 'mic-e')
+
+		asyncio.create_task(watch_mmdvm())
 	while True:
 		timer_tick = next(timer)
 		if reload_event.is_set():
