@@ -2383,8 +2383,11 @@ async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, sch
 					_, callsign, duration, msg_bits = event
 					logging.info('MMDVM TX End: %s (%.2fs) - Status: %s', callsign, duration, msg_bits)
 					loc, _ = await gps_handler.get_loc_and_sat()
-					dest, info = mic_e.MicEEncoder.encode(loc.lat, loc.lon, loc.spd / 0.51444, loc.cse, cfg.symbol_table, cfg.symbol, msg_bits)
-					await aprs_sender.send_packet(f'{cfg.from_call}>{dest}:{info} MMDVM:{callsign}', 'mic-e')
+					dest, info = mic_e.MicEEncoder.encode(
+						loc.lat, loc.lon, course=loc.cse, speed=loc.spd / 0.51444, status_bits=msg_bits, symbol=cfg.symbol, table=cfg.symbol_table
+					)
+					payload = f'{cfg.from_call}>MIC:`{dest}{info} MMDVM:{callsign}'
+					await aprs_sender.send_packet(payload, 'mic-e')
 
 		asyncio.create_task(watch_mmdvm())
 	while True:

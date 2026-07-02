@@ -166,3 +166,55 @@ class MMDVMLogWatcher:
 			except Exception as e:
 				logging.debug('Error reading MMDVM log: %s', e)
 			await asyncio.sleep(1)
+
+
+class MicEEncoder:
+	"""
+	Mic-E encoder for compressed APRS packets.
+	Encodes position, speed, and course into the destination field and information field.
+	"""
+
+	def encode(self, lat, lon, course=0, speed=0, status_bits='111', symbol='/', table='['):
+		"""
+		Encodes coordinates into Mic-E format.
+		Returns (destination, information_field)
+		"""
+		# Encode Latitude and Message Bits into Destination Field
+		abs_lat = abs(lat)
+		lat_deg = int(abs_lat)
+		lat_min = (abs_lat - lat_deg) * 60
+		lat_min_int = int(lat_min)
+		lat_hun = int((lat_min - lat_min_int) * 100)
+		lat_digits = [lat_deg // 10, lat_deg % 10, lat_min_int // 10, lat_min_int % 10, lat_hun // 10, lat_hun % 10]
+		# Message bits A, B, C from status_bits
+		bits = [int(b) for b in status_bits]  # [A, B, C]
+		# North/South, Longitude Offset, West/East
+		bits.append(1 if lat >= 0 else 0)  # Bit 4: N=1, S=0
+		bits.append(1 if abs(lon) >= 100 else 0)  # Bit 5: Offset +100
+		bits.append(0 if lon >= 0 else 1)  # Bit 6: E=0, W=1
+		dest = ''
+		for i, d in enumerate(lat_digits):
+			if bits[i] == 0:
+				dest += chr(48 + d) if i < 3 else (chr(76 + d) if i == 3 else (chr(80 + d) if i == 4 else chr(76 + d)))
+			else:
+				dest += chr(65 + d) if i < 3 else (chr(80 + d) if i == 3 else (chr(65 + d) if i == 4 else chr(80 + d)))
+		# Encode Longitude into Information Field
+		abs_lon = abs(lon)
+		lon_deg = int(abs_lon)
+		if 100 <= lon_deg <= 179:
+			lon_deg -= 100
+		elif 0 <= lon_deg <= 9:
+			lon_deg += 80
+		lon_min = (abs_lon - int(abs_lon)) * 60
+		lon_min_int = int(lon_min)
+		lon_hun = int((lon_min - lon_min_int) * 100)
+		info = chr(lon_deg + 28) + chr(lon_min_int + 28) + chr(lon_hun + 28)
+		# Encode Speed and Course
+		speed_knots = int(speed)
+		course_deg = int(course)
+		s1 = (speed_knots // 10) + 28
+		s2 = (speed_knots % 10) * 10 + (course_deg // 100) + 28
+		s3 = (course_deg % 100) + 28
+		info += chr(s1) + chr(s2) + chr(s3)
+		info += symbol + table
+		return dest, info
