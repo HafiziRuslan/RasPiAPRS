@@ -445,7 +445,8 @@ def configure_logging(cfg: Config):
 		def filter(self, record):
 			return record.levelno == self.level
 
-	formatter = ISO8601Formatter('%(asctime)s | %(levelname)-8s | %(threadName)-12s | %(name)s.%(funcName)s:%(lineno)d | %(message)s')
+	formatter = ISO8601Formatter('%(asctime)s | %(levelname)-8s | %(threadName)-12s | %(name)s.%(funcName)s:%(lineno)d-35s | %(message)s')
+	traffic_formatter = ISO8601Formatter('%(asctime)s | %(message)s')
 	console = logging.StreamHandler()
 	console.setLevel(logging.WARNING)
 	console.setFormatter(formatter)
@@ -498,14 +499,14 @@ def configure_logging(cfg: Config):
 
 		try:
 			path = os.path.join(log_dir, 'aprs_traffic.log')
-			callback_handler = NumberedRotatingFileHandler(path, maxBytes=max_size, backupCount=max_count)
-			callback_handler.setLevel(logging.DEBUG)
-			callback_handler.setFormatter(formatter)
+			traffic_handler = NumberedRotatingFileHandler(path, maxBytes=max_size, backupCount=max_count)
+			traffic_handler.setLevel(logging.DEBUG)
+			traffic_handler.setFormatter(traffic_formatter)
 
-			callback_specific_logger = logging.getLogger('aprs.callback')
-			callback_specific_logger.propagate = False
-			callback_specific_logger.addHandler(callback_handler)
-			callback_specific_logger.setLevel(logging.DEBUG)
+			traffic_specific_logger = logging.getLogger('aprs.traffic')
+			traffic_specific_logger.propagate = False
+			traffic_specific_logger.addHandler(traffic_handler)
+			traffic_specific_logger.setLevel(logging.DEBUG)
 		except (OSError, PermissionError) as e:
 			logging.error('Failed to create aprs_traffic.log: %s', e)
 
@@ -1909,57 +1910,59 @@ class APRSSender:
 		while True:
 			try:
 				packet = await loop.run_in_executor(None, self._queue.get)
-				self._aprs_callback(packet)
+				self.aprs_traffic(packet)
 			except Exception as e:
 				logging.error('Error processing queued APRS packet: %s', e)
 
-	def _aprs_callback(self, packet: str):
+	def aprs_traffic(self, packet: str):
 		"""Callback function to process incoming APRS packets from the server."""
 		if isinstance(packet, bytes):
 			packet = packet.decode('ascii', errors='replace')
-		if packet.split(':', 1)[-1][:1] in '#$%)*,<?T[_{}':
-			return
-		try:
-			parsed_packet = aprslib.parse(packet)
-			packet_format = parsed_packet.get('format', '')
-			if packet_format and isinstance(packet_format, str) and 'message' in packet_format and not parsed_packet.get('response'):
-				logging.info('Received APRS packet: [%s]', packet)
-				from_call = parsed_packet.get('from', 'UNKNOWN')
-				addresse = parsed_packet.get('addresse', 'UNKNOWN')
-				message_text = parsed_packet.get('message_text', '')
-				msg_no = parsed_packet.get('msgNo')
-				path = parsed_packet.get('path', [])
-				if addresse == self.cfg.from_call and msg_no:
-					if self.cfg.from_call in path:
-						logging.getLogger('aprs.callback').debug('Skipping ACK for message %s from %s: station already in path', msg_no, from_call)
-						return
+			if packet.split(':', 1)[-1][:1] in '#$%)*,<?T[_{}':
+				return
+			try:
+				parsed_packet = aprslib.parse(packet)
+				packet_format = parsed_packet.get('format', '')
+				if packet_format and isinstance(packet_format, str) and 'message' in packet_format and not parsed_packet.get('response'):
+					from_call = parsed_packet.get('from', 'UNKNOWN')
+					addresse = parsed_packet.get('addresse', 'UNKNOWN')
+					message_text = parsed_packet.get('message_text', '')
+					msg_no = parsed_packet.get('msgNo')
+					path = parsed_packet.get('path', [])
+					logging.info('Received APRS message from %s: [%s]', from_call, packet)
+					if addresse == self.cfg.from_call and msg_no:
+						if self.cfg.from_call in path:
+							logging.getLogger('aprs_traffic').debug('Skipping ACK for message %s from %s: sender already in path', msg_no, from_call)
+							return
 
-					async def respond():
-						ack_payload = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:ack{msg_no}'
-						logging.getLogger('aprs.callback').debug('Replying acknowledge for message %s from %s', msg_no, from_call)
-						if await self.send_packet(ack_payload, 'ack'):
-							tg_msg = f'<u>APRS Message Received</u>\n\nFrom: <b>{from_call}</b>\nTo: <b>{addresse}</b>\nMsgTxt: <b>{message_text}</b>'
-							wa_msg = f'_APRS Message Received_\n\nFrom: *{from_call}*\nTo: *{addresse}*\nMsgTxt: *{message_text}*'
-							sg_msg = f'APRS Message Received\n\nFrom: {from_call}\nTo: {addresse}\nMsgTxt: {message_text}'
-							if msg_no:
-								tg_msg += f'\nMsgID: <b>{msg_no}</b>'
-								wa_msg += f'\nMsgID: *{msg_no}*'
-								sg_msg += f'\nMsgID: {msg_no}'
-							await self.tg_logger.log(tg_msg, tid=self.cfg.telegram_msg_tid)
-							await self.wa_logger.log(wa_msg)
-							await self.sg_logger.log(sg_msg)
+						async def respond():
+							ack_payload = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:ack{msg_no}'
+							logging.getLogger('aprs_traffic').debug('Replying ACK for message %s from %s', msg_no, from_call)
+							if await self.send_packet(ack_payload, 'ack'):
+								tg_msg = (
+									f'<u>APRS Message Received</u>\n\nFrom: <b>{from_call}</b>\nTo: <b>{addresse}</b>\nMsgTxt: <b>{message_text}</b>'
+								)
+								wa_msg = f'_APRS Message Received_\n\nFrom: *{from_call}*\nTo: *{addresse}*\nMsgTxt: *{message_text}*'
+								sg_msg = f'APRS Message Received\n\nFrom: {from_call}\nTo: {addresse}\nMsgTxt: {message_text}'
+								if msg_no:
+									tg_msg += f'\nMsgID: <b>{msg_no}</b>'
+									wa_msg += f'\nMsgID: *{msg_no}*'
+									sg_msg += f'\nMsgID: {msg_no}'
+								await self.tg_logger.log(tg_msg, tid=self.cfg.telegram_msg_tid)
+								await self.wa_logger.log(wa_msg)
+								await self.sg_logger.log(sg_msg)
 
-					asyncio.create_task(respond())
-			else:
-				logging.getLogger('aprs.callback').debug(
-					'Ignoring APRS %s packet from %s: [%s]', parsed_packet.get('format', 'unknown'), parsed_packet.get('from', 'UNKNOWN'), packet
-				)
-		except APRSParseError as e:
-			logging.warning('Failed to parse incoming APRS packet: %s [%s]', e, packet)
-		except (TypeError, ValueError, KeyError) as e:
-			logging.error('Data error in APRS callback: %s [%s]', e, packet)
-		except Exception as e:
-			logging.error('Unexpected error in APRS callback: %s [%s]', e, packet)
+						asyncio.create_task(respond())
+				else:
+					logging.getLogger('aprs_traffic').debug(
+						'Ignoring APRS %s packet from %s: [%s]', parsed_packet.get('format', 'unknown'), parsed_packet.get('from', 'UNKNOWN'), packet
+					)
+			except APRSParseError as e:
+				logging.warning('Failed to parse incoming APRS packet: %s [%s]', e, packet)
+			except (TypeError, ValueError, KeyError) as e:
+				logging.error('Data error in APRS callback: %s [%s]', e, packet)
+			except Exception as e:
+				logging.error('Unexpected error in APRS callback: %s [%s]', e, packet)
 
 	async def send_packet(self, payload, log_context='packet', max_retries=3):
 		"""Send a packet by putting it into the worker's outbound queue."""
@@ -2389,7 +2392,7 @@ async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, sch
 					dest, info = mic_e.MicEEncoder.encode(
 						loc.lat, loc.lon, course=loc.cse, speed=loc.spd / 0.51444, status_bits=msg_bits, symbol=cfg.symbol, table=cfg.symbol_table
 					)
-					payload = f'{cfg.from_call}>MIC:`{dest}{info} MMDVM:{callsign}'
+					payload = f'{cfg.from_call}>MIC:`{dest}{info}MMDVM:{callsign}'
 					await aprs_sender.send_packet(payload, 'mic-e')
 
 		asyncio.create_task(watch_mmdvm())
