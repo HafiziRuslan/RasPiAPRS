@@ -445,7 +445,7 @@ def configure_logging(cfg: Config):
 		def filter(self, record):
 			return record.levelno == self.level
 
-	formatter = ISO8601Formatter('%(asctime)s | %(levelname)-8s | %(threadName)-12s | %(name)s.%(funcName)s:%(lineno)d-35s | %(message)s')
+	formatter = ISO8601Formatter('%(asctime)s | %(levelname)-8s | %(threadName)-12s | %(name)s.%(funcName)s:%(lineno)d | %(message)s')
 	traffic_formatter = ISO8601Formatter('%(asctime)s | %(message)s')
 	console = logging.StreamHandler()
 	console.setLevel(logging.WARNING)
@@ -1932,18 +1932,16 @@ class APRSSender:
 					logging.info('Received APRS message from %s: [%s]', from_call, packet)
 					if addresse == self.cfg.from_call and msg_no:
 						if self.cfg.from_call in path:
-							logging.getLogger('aprs_traffic').debug('Skipping ACK for message %s from %s: sender already in path', msg_no, from_call)
+							logging.getLogger('aprs.traffic').debug('Skipping ACK for message %s from %s: sender already in path', msg_no, from_call)
 							return
 
 						async def respond():
 							ack_payload = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:ack{msg_no}'
-							logging.getLogger('aprs_traffic').debug('Replying ACK for message %s from %s', msg_no, from_call)
+							logging.getLogger('aprs.traffic').debug('Replying ACK for message %s from %s', msg_no, from_call)
 							if await self.send_packet(ack_payload, 'ack'):
-								tg_msg = (
-									f'<u>APRS Message Received</u>\n\nFrom: <b>{from_call}</b>\nTo: <b>{addresse}</b>\nMsgTxt: <b>{message_text}</b>'
-								)
-								wa_msg = f'_APRS Message Received_\n\nFrom: *{from_call}*\nTo: *{addresse}*\nMsgTxt: *{message_text}*'
-								sg_msg = f'APRS Message Received\n\nFrom: {from_call}\nTo: {addresse}\nMsgTxt: {message_text}'
+								tg_msg = f'<u>APRS Message Received</u>\n\nFrom: <b>{from_call}</b>\nMsgTxt: <b>{message_text}</b>'
+								wa_msg = f'_APRS Message Received_\n\nFrom: *{from_call}*\nMsgTxt: *{message_text}*'
+								sg_msg = f'APRS Message Received\n\nFrom: {from_call}\nMsgTxt: {message_text}'
 								if msg_no:
 									tg_msg += f'\nMsgID: <b>{msg_no}</b>'
 									wa_msg += f'\nMsgID: *{msg_no}*'
@@ -1954,7 +1952,7 @@ class APRSSender:
 
 						asyncio.create_task(respond())
 				else:
-					logging.getLogger('aprs_traffic').debug(
+					logging.getLogger('aprs.traffic').debug(
 						'Ignoring APRS %s packet from %s: [%s]', parsed_packet.get('format', 'unknown'), parsed_packet.get('from', 'UNKNOWN'), packet
 					)
 			except APRSParseError as e:
