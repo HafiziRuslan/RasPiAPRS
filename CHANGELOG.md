@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta14] - (2026-07-03T08:54:55+08:00)
+## [beta14] - (2026-07-03T09:22:43+08:00)
 
-- 21 commit(s) contributed to the release.
+- 24 commit(s) contributed to the release.
 - 3 day(s) passed between releases.
 
 ### 🚀 Features in beta14
@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta14
 
+- [a7fb5c9](https://github.com/HafiziRuslan/RasPiAPRS/commit/a7fb5c97b2fa2305bf7c6d681c3e81ba56d42eb7) refactor(mic_e): prefix mmdvm_ to log-related *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T09:18:58+08:00*
 - [86060de](https://github.com/HafiziRuslan/RasPiAPRS/commit/86060de7421b040b982fd58016af023d214d4028) style(aprs): organize imports and fix log message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T07:03:39+08:00*
 - [d8a1613](https://github.com/HafiziRuslan/RasPiAPRS/commit/d8a161398df80814f28df1829ca5d54048ac0242) refactor(core): reorganize os info order and expand mode metadata *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-02T00:43:48+08:00*
 - [a09186b](https://github.com/HafiziRuslan/RasPiAPRS/commit/a09186bac387249f4f34d86e6ca2c6b3631142bc) refactor(config): remove sleep config and hardcode interval *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T21:19:14+08:00*
@@ -29,6 +30,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta14
 
+- [f894fc7](https://github.com/HafiziRuslan/RasPiAPRS/commit/f894fc7eb7c1a9c0a2c2e780472bc00eb265ee91) refactor(logger): adjust logger and aprs logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T09:08:44+08:00*
 - [50b035c](https://github.com/HafiziRuslan/RasPiAPRS/commit/50b035c57921a2e2a3eb21d2d6ae89f0526eb371) refactor(aprs): split callback and traffic logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T08:54:55+08:00*
 - [c05cd2b](https://github.com/HafiziRuslan/RasPiAPRS/commit/c05cd2b26f943ccc97c17fe2954554029b112d0f) refactor(logging): rename log file to aprs_traffic.log *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T07:43:20+08:00*
 - [751677a](https://github.com/HafiziRuslan/RasPiAPRS/commit/751677a6b47eeb348d5ca01f1573dd8f90934422) refactor(aprs): implement outbound queue for packet sending *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T08:37:35+08:00*
@@ -38,6 +40,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta14
 
+- [bc942b3](https://github.com/HafiziRuslan/RasPiAPRS/commit/bc942b3af493bce82fa4d8ee18a2baf7af7e396b) chore(dependency): upgrade aiohappyeyeballs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T09:22:43+08:00*
 - [f593222](https://github.com/HafiziRuslan/RasPiAPRS/commit/f593222692b232655e8baa148fa44db8e311ea45) chore(config): update serial number and uv version *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T10:43:50+08:00*
 
 ---
@@ -1517,4 +1520,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-07-03T08:56:06.457892583+08:00
+generated using git-cliff on 2026-07-03T09:24:06.812816277+08:00
