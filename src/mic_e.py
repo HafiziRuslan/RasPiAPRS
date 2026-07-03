@@ -8,9 +8,9 @@ from time import time
 class MMDVMLogWatcher:
 	def __init__(self, mmdvmhost_file):
 		self.mmdvmhost_file = mmdvmhost_file
-		self.log_dir = self._get_log_dir()
-		self.file_root = self._get_file_root()
-		self.last_file = None
+		self.mmdvm_log_dir = self._get_log_dir()
+		self.mmdvm_file_root = self._get_file_root()
+		self.mmdvm_last_file = None
 		self.last_pos = 0
 		self.active_transmissions = {}  # Track active transmissions by callsign
 		self.last_transmission_time = 0  # Track last transmission time
@@ -86,7 +86,7 @@ class MMDVMLogWatcher:
 	def _get_latest_log(self):
 		"""Get the most recently modified MMDVM log file."""
 		try:
-			files = [os.path.join(self.log_dir, f) for f in os.listdir(self.log_dir) if f.startswith(self.file_root) and f.endswith('.log')]
+			files = [os.path.join(self.mmdvm_log_dir, f) for f in os.listdir(self.mmdvm_log_dir) if f.startswith(self.mmdvm_file_root) and f.endswith('.log')]
 			return max(files, key=os.path.getmtime) if files else None
 		except Exception as e:
 			logging.debug('Error getting latest MMDVM log: %s', e)
@@ -129,8 +129,8 @@ class MMDVMLogWatcher:
 			if not current_log:
 				await asyncio.sleep(10)
 				continue
-			if current_log != self.last_file:
-				self.last_file = current_log
+			if current_log != self.mmdvm_last_file:
+				self.mmdvm_last_file = current_log
 				self.last_pos = os.path.getsize(current_log)
 			try:
 				with open(current_log, 'r', errors='replace') as f:
