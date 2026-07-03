@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta14] - (2026-07-03T07:43:20+08:00)
+## [beta14] - (2026-07-03T08:54:55+08:00)
 
-- 20 commit(s) contributed to the release.
-- 2 day(s) passed between releases.
+- 21 commit(s) contributed to the release.
+- 3 day(s) passed between releases.
 
 ### 🚀 Features in beta14
 
@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta14
 
+- [50b035c](https://github.com/HafiziRuslan/RasPiAPRS/commit/50b035c57921a2e2a3eb21d2d6ae89f0526eb371) refactor(aprs): split callback and traffic logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T08:54:55+08:00*
 - [c05cd2b](https://github.com/HafiziRuslan/RasPiAPRS/commit/c05cd2b26f943ccc97c17fe2954554029b112d0f) refactor(logging): rename log file to aprs_traffic.log *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T07:43:20+08:00*
 - [751677a](https://github.com/HafiziRuslan/RasPiAPRS/commit/751677a6b47eeb348d5ca01f1573dd8f90934422) refactor(aprs): implement outbound queue for packet sending *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T08:37:35+08:00*
 - [ad4899d](https://github.com/HafiziRuslan/RasPiAPRS/commit/ad4899ddfd5d60fad5b2ee46a1cf84a6e9f6078f) refactor(aprs): improve connection handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T08:18:09+08:00*
@@ -1516,4 +1517,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-07-03T07:44:48.672897769+08:00
+generated using git-cliff on 2026-07-03T08:56:06.457892583+08:00
