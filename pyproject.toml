@@ -42,6 +42,9 @@ dependencies = [
   'python-telegram-bot',
 ]
 
+[tool.uv.sources]
+aprslib = { git = 'https://github.com/rossengeorgiev/aprs-python' }
+
 [tool.ruff]
 line-length = 150
 analyze.detect-string-imports = true
