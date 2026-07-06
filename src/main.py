@@ -1388,7 +1388,7 @@ class SystemStats(object):
 			ts = 'S1S2' if s1 and s2 else ('S1' if s1 else ('S2' if s2 else ''))
 			mmode_parts.append(f'DMR_{cc}{ts}')
 		if conf.get('D-Star:Enable') == '1' or conf.get('D-STAR:Enable') == '1':
-			ds_module = conf.get('D-Star:Module') or conf.get('D-STAR:Module')
+			ds_module = conf.get('D-Star:Module', conf.get('Module', '')) or conf.get('D-STAR:Module', conf.get('Module', ''))
 			mmode_parts.append(f'D-STAR_{ds_module}')
 		if conf.get('System Fusion:Enable') == '1':
 			mmode_parts.append('C4FM')
@@ -1401,14 +1401,14 @@ class SystemStats(object):
 		if conf.get('POCSAG:Enable') == '1':
 			mmode_parts.append('PAGER')
 		if conf.get('FM:Enable') == '1':
-			fm_ct = conf.get('FM:CTCSSFrequency')
+			fm_ct = conf.get('FM:CTCSSFrequency', conf.get('CTCSSFrequency', 0.0))
 			mmode_parts.append(f'NFM_C{fm_ct}')
 		mmode = ', '.join(filter(None, mmode_parts))
 		info_str = ' '.join(filter(None, [tx_str, shift, mmode]))
 		if not phg_str:
 			phg_str = self._calc_phg(
-				conf.get('INFO:Power', conf.get('Power')),
-				conf.get('INFO:Height', conf.get('Height')),
+				conf.get('INFO:Power', conf.get('Power', 0)),
+				conf.get('INFO:Height', conf.get('Height', 0)),
 				conf.get('INFO:Gain', conf.get('Gain', 3)),
 				conf.get('INFO:Direction', conf.get('Direction', 0)),
 			)
