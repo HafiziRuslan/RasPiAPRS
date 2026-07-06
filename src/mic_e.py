@@ -40,13 +40,13 @@ class MMDVMLogWatcher:
 							configured_log_dir = val
 							break
 			if configured_log_dir and os.path.isdir(configured_log_dir):
-				logging.info('Log directory from FilePath: %s', configured_log_dir)
+				logging.info('FilePath from MMDVMHost config: %s', configured_log_dir)
 				return configured_log_dir
 			else:
 				logging.warning('Could not find valid FilePath in [LOG] section or path is not a directory. Using default.')
 				return '/var/log/pi-star'
 		except Exception as e:
-			logging.error('Error reading MMDVMHost config: %s', e)
+			logging.error('Error reading FilePath from MMDVMHost config: %s', e)
 			return '/var/log/pi-star'
 
 	def _get_file_root(self):
