@@ -12,10 +12,10 @@ class MMDVMLogWatcher:
 		self.mmdvm_file_root = self._get_file_root()
 		self.mmdvm_last_file = None
 		self.last_pos = 0
-		self.active_transmissions = {}  # Track active transmissions by callsign
-		self.last_transmission_time = 0  # Track last transmission time
-		self.transmission_source = None  # Track if transmission is RF or network
-		self.is_moving = False  # Track if station is moving
+		self.active_transmissions = {}
+		self.last_transmission_time = 0
+		self.transmission_source = None
+		self.is_moving = False
 
 	def _get_log_dir(self):
 		"""Extract log directory from MMDVM configuration file."""
@@ -23,15 +23,13 @@ class MMDVMLogWatcher:
 			logging.warning('MMDVMHost file not found: %s. Using default log directory.', self.mmdvmhost_file)
 			return '/var/log/pi-star'
 		try:
-			log_dir = None
-			file_root = None
+			configured_log_dir = None
 			with open(self.mmdvmhost_file, 'r', encoding='utf-8', errors='replace') as f:
 				current_section = ''
 				for line in f:
 					line = line.strip()
 					if not line or line.startswith(('#', ';', '!')):
 						continue
-					# Check for section headers
 					if line.startswith('[') and ']' in line:
 						current_section = line[1 : line.find(']')].strip().upper()
 					elif '=' in line and current_section == 'LOG':
@@ -39,18 +37,13 @@ class MMDVMLogWatcher:
 						key = key.strip().upper()
 						val = val.split('#', 1)[0].split(';', 1)[0].strip()
 						if key == 'FILEPATH':
-							log_dir = os.path.dirname(val) if val else None
-						elif key == 'FILEROOT':
-							file_root = val
-			# Prefer FilePath, fallback to FileRoot if available
-			if log_dir and os.path.isdir(log_dir):
-				logging.info('Log directory from FilePath: %s', log_dir)
-				return log_dir
-			elif file_root and os.path.isdir(file_root):
-				logging.info('Log directory from FileRoot: %s', file_root)
-				return file_root
+							configured_log_dir = val
+							break
+			if configured_log_dir and os.path.isdir(configured_log_dir):
+				logging.info('Log directory from FilePath: %s', configured_log_dir)
+				return configured_log_dir
 			else:
-				logging.warning('Could not find valid FilePath or FileRoot in [LOG] section. Using default.')
+				logging.warning('Could not find valid FilePath in [LOG] section or path is not a directory. Using default.')
 				return '/var/log/pi-star'
 		except Exception as e:
 			logging.error('Error reading MMDVMHost config: %s', e)
@@ -67,7 +60,6 @@ class MMDVMLogWatcher:
 					line = line.strip()
 					if not line or line.startswith(('#', ';', '!')):
 						continue
-					# Check for section headers
 					if line.startswith('[') and ']' in line:
 						current_section = line[1 : line.find(']')].strip().upper()
 					elif '=' in line and current_section == 'LOG':
@@ -86,7 +78,11 @@ class MMDVMLogWatcher:
 	def _get_latest_log(self):
 		"""Get the most recently modified MMDVM log file."""
 		try:
-			files = [os.path.join(self.mmdvm_log_dir, f) for f in os.listdir(self.mmdvm_log_dir) if f.startswith(self.mmdvm_file_root) and f.endswith('.log')]
+			files = [
+				os.path.join(self.mmdvm_log_dir, f)
+				for f in os.listdir(self.mmdvm_log_dir)
+				if f.startswith(self.mmdvm_file_root) and f.endswith('.log')
+			]
 			return max(files, key=os.path.getmtime) if files else None
 		except Exception as e:
 			logging.debug('Error getting latest MMDVM log: %s', e)
@@ -102,7 +98,7 @@ class MMDVMLogWatcher:
 		M4 (Committed):   011 - network transmitting
 		"""
 		current_time = time()
-		idle_threshold = 900  # 15 minutes in seconds
+		idle_threshold = 900
 		# M0: Off Duty - idle for 15+ minutes after last transmission
 		if self.last_transmission_time and (current_time - self.last_transmission_time) >= idle_threshold:
 			return '111'
