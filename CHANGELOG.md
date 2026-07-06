@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta14] - (2026-07-06T23:50:08+08:00)
+## [beta14] - (2026-07-06T23:55:41+08:00)
 
-- 25 commit(s) contributed to the release.
+- 26 commit(s) contributed to the release.
 - 6 day(s) passed between releases.
 
 ### 🚀 Features in beta14
@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta14
 
+- [7607a00](https://github.com/HafiziRuslan/RasPiAPRS/commit/7607a00eee43a29387aa16beca493ce514a7361c) refactor(log): improve MMDVMHost config log messages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-06T23:55:41+08:00*
 - [f894fc7](https://github.com/HafiziRuslan/RasPiAPRS/commit/f894fc7eb7c1a9c0a2c2e780472bc00eb265ee91) refactor(logger): adjust logger and aprs logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T09:08:44+08:00*
 - [50b035c](https://github.com/HafiziRuslan/RasPiAPRS/commit/50b035c57921a2e2a3eb21d2d6ae89f0526eb371) refactor(aprs): split callback and traffic logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T08:54:55+08:00*
 - [c05cd2b](https://github.com/HafiziRuslan/RasPiAPRS/commit/c05cd2b26f943ccc97c17fe2954554029b112d0f) refactor(logging): rename log file to aprs_traffic.log *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T07:43:20+08:00*
@@ -1521,4 +1522,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-07-06T23:52:15.468156073+08:00
+generated using git-cliff on 2026-07-06T23:57:34.193685531+08:00
