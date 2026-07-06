@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta14] - (2026-07-03T09:22:43+08:00)
+## [beta14] - (2026-07-06T23:50:08+08:00)
 
-- 24 commit(s) contributed to the release.
-- 3 day(s) passed between releases.
+- 25 commit(s) contributed to the release.
+- 6 day(s) passed between releases.
 
 ### 🚀 Features in beta14
 
@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta14
 
+- [734bc71](https://github.com/HafiziRuslan/RasPiAPRS/commit/734bc712dbf161afe0f3d8559ee34008c54d93f5) fix(auth, data): rename variables to follow naming conventions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-06T23:50:08+08:00*
 - [a7fb5c9](https://github.com/HafiziRuslan/RasPiAPRS/commit/a7fb5c97b2fa2305bf7c6d681c3e81ba56d42eb7) refactor(mic_e): prefix mmdvm_ to log-related *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T09:18:58+08:00*
 - [86060de](https://github.com/HafiziRuslan/RasPiAPRS/commit/86060de7421b040b982fd58016af023d214d4028) style(aprs): organize imports and fix log message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T07:03:39+08:00*
 - [d8a1613](https://github.com/HafiziRuslan/RasPiAPRS/commit/d8a161398df80814f28df1829ca5d54048ac0242) refactor(core): reorganize os info order and expand mode metadata *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-02T00:43:48+08:00*
@@ -1520,4 +1521,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-07-03T09:24:06.812816277+08:00
+generated using git-cliff on 2026-07-06T23:52:15.468156073+08:00
