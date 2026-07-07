@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta14] - (2026-07-07T00:10:18+08:00)
+## [beta14] - (2026-07-07T12:58:52+08:00)
 
-- 27 commit(s) contributed to the release.
-- 6 day(s) passed between releases.
+- 28 commit(s) contributed to the release.
+- 7 day(s) passed between releases.
 
 ### 🚀 Features in beta14
 
@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta14
 
+- [fc0fb05](https://github.com/HafiziRuslan/RasPiAPRS/commit/fc0fb05cd2ff161eb491afb0b27e5504b58705a7) refactor(api): strip html tags from api responses *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-07T12:58:52+08:00*
 - [685fa33](https://github.com/HafiziRuslan/RasPiAPRS/commit/685fa33034a7154432f2c038a7845a680dbcb2d0) refactor(main): simplify config get with default values *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-07T00:10:18+08:00*
 - [7607a00](https://github.com/HafiziRuslan/RasPiAPRS/commit/7607a00eee43a29387aa16beca493ce514a7361c) refactor(log): improve MMDVMHost config log messages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-06T23:55:41+08:00*
 - [f894fc7](https://github.com/HafiziRuslan/RasPiAPRS/commit/f894fc7eb7c1a9c0a2c2e780472bc00eb265ee91) refactor(logger): adjust logger and aprs logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T09:08:44+08:00*
@@ -1523,4 +1524,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-07-07T00:11:39.891744014+08:00
+generated using git-cliff on 2026-07-07T13:00:15.558315475+08:00
