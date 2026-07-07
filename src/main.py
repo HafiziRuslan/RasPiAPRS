@@ -1726,6 +1726,7 @@ class WhatsAppLogger:
 			async with aiohttp.ClientSession() as session:
 				async with session.get(api_url) as response:
 					response_text = await response.text()
+					response_text = re.sub(r'<[^>]+>', '', response_text).strip()
 					if response.status == 200:
 						logging.info(
 							'Successfully sent WhatsApp message via CallMeBot API (Status: %d, Response: %s)', response.status, response_text
@@ -1782,6 +1783,7 @@ class SignalLogger:
 			async with aiohttp.ClientSession() as session:
 				async with session.get(api_url) as response:
 					response_text = await response.text()
+					response_text = re.sub(r'<[^>]+>', '', response_text).strip()
 					if response.status == 200:
 						logging.info(
 							'Successfully sent Signal message via CallMeBot API:  (Status: %d, Response: %s)', response.status, response_text
