@@ -4,7 +4,7 @@ aiohttp==3.14.1
     # via raspiaprs
 aiosignal==1.4.0
     # via aiohttp
-anyio==4.14.1
+anyio==4.14.2
     # via httpx
 aprslib @ git+https://github.com/rossengeorgiev/aprs-python@c2a0f18ce028a4cced582567a73d57f0d03cd00f
     # via raspiaprs
@@ -24,7 +24,7 @@ frozenlist==1.8.0
     #   aiosignal
 geographiclib==2.1
     # via geopy
-geopy==2.4.1
+geopy==2.5.0
     # via raspiaprs
 gpsdclient==1.3.2
     # via raspiaprs
