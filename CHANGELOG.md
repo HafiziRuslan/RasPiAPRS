@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta14] - (2026-07-07T12:58:52+08:00)
+## [beta14] - (2026-07-20T19:13:53+08:00)
 
-- 28 commit(s) contributed to the release.
-- 7 day(s) passed between releases.
+- 29 commit(s) contributed to the release.
+- 20 day(s) passed between releases.
 
 ### 🚀 Features in beta14
 
@@ -41,6 +41,10 @@ All notable changes to this project will be documented in this file.
 - [ad4899d](https://github.com/HafiziRuslan/RasPiAPRS/commit/ad4899ddfd5d60fad5b2ee46a1cf84a6e9f6078f) refactor(aprs): improve connection handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T08:18:09+08:00*
 - [b0ec939](https://github.com/HafiziRuslan/RasPiAPRS/commit/b0ec93972e3e8a6d10f569df1e910805e37ff8df) refactor(main): improve event list formatting and add connection error handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T07:59:22+08:00*
 - [c765abc](https://github.com/HafiziRuslan/RasPiAPRS/commit/c765abc6a069a3245d80d76574d605cc76f4d72e) refactor(config): enhance aprsis_servers handling and extend MMDVM config paths *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T07:11:29+08:00*
+
+### 🧪 Testing in beta14
+
+- [f617b52](https://github.com/HafiziRuslan/RasPiAPRS/commit/f617b52129e8de6e2b6653e9ffa4a39b5ad7a371) chore(dependencies): Update dependencies to latest versions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-20T19:13:53+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta14
 
@@ -1524,4 +1528,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-07-07T13:00:15.558315475+08:00
+generated using git-cliff on 2026-07-20T19:15:04.068683194+08:00
