@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta14] - (2026-07-20T19:13:53+08:00)
+## [beta14] - (2026-07-21T01:17:02+08:00)
 
-- 29 commit(s) contributed to the release.
+- 30 commit(s) contributed to the release.
 - 20 day(s) passed between releases.
 
 ### 🚀 Features in beta14
@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta14
 
+- [5f3f08c](https://github.com/HafiziRuslan/RasPiAPRS/commit/5f3f08c2507e821896cba14e14ff21cf6400e778) refactor(distance): rename vars and clamp a *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-21T01:17:02+08:00*
 - [fc0fb05](https://github.com/HafiziRuslan/RasPiAPRS/commit/fc0fb05cd2ff161eb491afb0b27e5504b58705a7) refactor(api): strip html tags from api responses *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-07T12:58:52+08:00*
 - [685fa33](https://github.com/HafiziRuslan/RasPiAPRS/commit/685fa33034a7154432f2c038a7845a680dbcb2d0) refactor(main): simplify config get with default values *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-07T00:10:18+08:00*
 - [7607a00](https://github.com/HafiziRuslan/RasPiAPRS/commit/7607a00eee43a29387aa16beca493ce514a7361c) refactor(log): improve MMDVMHost config log messages *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-06T23:55:41+08:00*
@@ -1528,4 +1529,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-07-20T19:15:04.068683194+08:00
+generated using git-cliff on 2026-07-21T01:18:32.300531349+08:00
