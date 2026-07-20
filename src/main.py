@@ -935,9 +935,10 @@ class GPSHandler:
 		R = 6371000
 		phi1 = math.radians(lat1)
 		phi2 = math.radians(lat2)
-		delta_phi = math.radians(lon2 - lon1)
-		delta_lambda = math.radians(lon2 - lon1)
-		a = math.sin(delta_phi / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(delta_lambda / 2) ** 2
+		delta_lat_rad = math.radians(lon2 - lon1)
+		delta_lon_rad = math.radians(lon2 - lon1)
+		a = math.sin(delta_lat_rad / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(delta_lon_rad / 2) ** 2
+		a = max(0.0, min(1.0, a))
 		c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
 		return R * c
 
