@@ -362,7 +362,7 @@ class Config:
 				self._cleanup_env_senders(valid_senders)
 		all_callsigns_for_group_filter = []
 		if self.from_call:
-			all_callsigns_for_group_filter.append(f'{self.from_call}*')
+			all_callsigns_for_group_filter.append(f'{self.call}*')
 		if self.additional_sender:
 			all_callsigns_for_group_filter.extend([f'{s}*' for s in self.additional_sender])
 		filter_parts = []
