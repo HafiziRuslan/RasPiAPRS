@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta14] - (2026-07-21T01:17:02+08:00)
+## [beta14] - (2026-07-21T12:22:31+08:00)
 
-- 30 commit(s) contributed to the release.
-- 20 day(s) passed between releases.
+- 31 commit(s) contributed to the release.
+- 21 day(s) passed between releases.
 
 ### 🚀 Features in beta14
 
@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta14
 
+- [f178c7d](https://github.com/HafiziRuslan/RasPiAPRS/commit/f178c7dfae56a9fc9c08c5b348cf977d9ad739f0) fix(main): correct callsign variable in group filter *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-21T12:22:31+08:00*
 - [734bc71](https://github.com/HafiziRuslan/RasPiAPRS/commit/734bc712dbf161afe0f3d8559ee34008c54d93f5) fix(auth, data): rename variables to follow naming conventions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-06T23:50:08+08:00*
 - [a7fb5c9](https://github.com/HafiziRuslan/RasPiAPRS/commit/a7fb5c97b2fa2305bf7c6d681c3e81ba56d42eb7) refactor(mic_e): prefix mmdvm_ to log-related *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T09:18:58+08:00*
 - [86060de](https://github.com/HafiziRuslan/RasPiAPRS/commit/86060de7421b040b982fd58016af023d214d4028) style(aprs): organize imports and fix log message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T07:03:39+08:00*
@@ -1529,4 +1530,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-07-21T01:18:32.300531349+08:00
+generated using git-cliff on 2026-07-21T12:23:41.711051946+08:00
