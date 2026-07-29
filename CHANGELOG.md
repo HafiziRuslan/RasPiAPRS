@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta14] - (2026-07-29T16:50:13+08:00)
+## [beta14] - (2026-07-29T17:00:54+08:00)
 
-- 32 commit(s) contributed to the release.
+- 33 commit(s) contributed to the release.
 - 29 day(s) passed between releases.
 
 ### 🚀 Features in beta14
@@ -51,6 +51,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta14
 
+- [55ebcff](https://github.com/HafiziRuslan/RasPiAPRS/commit/55ebcff6f664e63d3ac59a8c1896a992a5073109) chore(pylock.toml): update aiohttp from 3.14.1 to 3.14.3 and certifi from 2026.6.17 to 2026.7.22 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-29T17:00:54+08:00*
 - [bc942b3](https://github.com/HafiziRuslan/RasPiAPRS/commit/bc942b3af493bce82fa4d8ee18a2baf7af7e396b) chore(dependency): upgrade aiohappyeyeballs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T09:22:43+08:00*
 - [f593222](https://github.com/HafiziRuslan/RasPiAPRS/commit/f593222692b232655e8baa148fa44db8e311ea45) chore(config): update serial number and uv version *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T10:43:50+08:00*
 
@@ -1531,4 +1532,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-07-29T16:51:28.118540144+08:00
+generated using git-cliff on 2026-07-29T17:02:24.058976066+08:00
