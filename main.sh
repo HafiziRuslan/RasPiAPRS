@@ -205,7 +205,9 @@ update_application() {
 
         log_msg INFO "Verifying application integrity..."
         if sudo -u "$dir_own" git fsck --full >/dev/null 2>&1; then
-          log_msg INFO "Update applied and verified. Restarting script..."
+          log_msg INFO "Update applied and verified. Cleaning git cache..."
+          if sudo -u "$dir_own" git gc --prune=now --quiet >/dev/null 2>&1; then
+            log_msg INFO "Restarting script..."
           exec "$0" "$@"
         else
           log_msg ERROR "Application integrity check failed! Skipping restart."
