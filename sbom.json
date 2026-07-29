@@ -2,14 +2,14 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:56d4e26a-fc3d-4777-8c03-bca77a1d0776",
+  "serialNumber": "urn:uuid:3c16e171-b7d4-445d-bbbb-3efdaae2c67f",
   "metadata": {
-    "timestamp": "2026-07-20T11:12:56.363028500Z",
+    "timestamp": "2026-07-29T08:59:01.014816800Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
         "name": "uv",
-        "version": "0.11.29"
+        "version": "0.12.0"
       }
     ],
     "component": {
@@ -35,10 +35,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "aiohttp-3@3.14.1",
+      "bom-ref": "aiohttp-3@3.14.3",
       "name": "aiohttp",
-      "version": "3.14.1",
-      "purl": "pkg:pypi/aiohttp@3.14.1"
+      "version": "3.14.3",
+      "purl": "pkg:pypi/aiohttp@3.14.3"
     },
     {
       "type": "library",
@@ -77,10 +77,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "certifi-9@2026.6.17",
+      "bom-ref": "certifi-9@2026.7.22",
       "name": "certifi",
-      "version": "2026.6.17",
-      "purl": "pkg:pypi/certifi@2026.6.17"
+      "version": "2026.7.22",
+      "purl": "pkg:pypi/certifi@2026.7.22"
     },
     {
       "type": "library",
@@ -221,7 +221,7 @@
       "ref": "aiohappyeyeballs-2@2.7.1"
     },
     {
-      "ref": "aiohttp-3@3.14.1",
+      "ref": "aiohttp-3@3.14.3",
       "dependsOn": [
         "aiohappyeyeballs-2@2.7.1",
         "aiosignal-4@1.4.0",
@@ -257,7 +257,7 @@
       ]
     },
     {
-      "ref": "certifi-9@2026.6.17"
+      "ref": "certifi-9@2026.7.22"
     },
     {
       "ref": "et-xmlfile-10@2.0.0"
@@ -283,7 +283,7 @@
     {
       "ref": "httpcore-16@1.0.9",
       "dependsOn": [
-        "certifi-9@2026.6.17",
+        "certifi-9@2026.7.22",
         "h11-15@0.16.0"
       ]
     },
@@ -291,7 +291,7 @@
       "ref": "httpx-17@0.28.1",
       "dependsOn": [
         "anyio-5@4.14.2",
-        "certifi-9@2026.6.17",
+        "certifi-9@2026.7.22",
         "httpcore-16@1.0.9",
         "idna-19@3.18"
       ]
@@ -336,7 +336,7 @@
     {
       "ref": "raspiaprs-1@0.1b14",
       "dependsOn": [
-        "aiohttp-3@3.14.1",
+        "aiohttp-3@3.14.3",
         "aprslib-6@0.7.2",
         "callsign-regex-8@0.7.1",
         "geopy-13@2.5.0",
