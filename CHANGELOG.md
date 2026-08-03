@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta14] - (2026-07-29T18:05:54+08:00)
+## [beta14] - (2026-08-04T03:43:59+08:00)
 
-- 34 commit(s) contributed to the release.
-- 29 day(s) passed between releases.
+- 38 commit(s) contributed to the release.
+- 34 day(s) passed between releases.
 
 ### 🚀 Features in beta14
 
+- [923a4b0](https://github.com/HafiziRuslan/RasPiAPRS/commit/923a4b0c1e0b7e6d0cd9e59d69de992ee81e5b6b) feat(src): Add APRSSARES and APRSMX event support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-04T03:42:15+08:00*
 - [6b905f0](https://github.com/HafiziRuslan/RasPiAPRS/commit/6b905f0ea2f850cc67e8508b0b8e7e16ab6d987c) feat(mic_e): add MicEEncoder class for Mic-E encoding *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T06:59:29+08:00*
 - [0e83fed](https://github.com/HafiziRuslan/RasPiAPRS/commit/0e83fed8d26a14bc4984a0de380caabcf9e577bd) refactor(server): optimize Mic-E implementation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T06:08:26+08:00*
 - [e8bdb71](https://github.com/HafiziRuslan/RasPiAPRS/commit/e8bdb718855ba2f184e008cc99ac885cc7732d12) feat(filter): add u/call to filter parts *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T23:43:20+08:00*
@@ -46,12 +47,18 @@ All notable changes to this project will be documented in this file.
 - [b0ec939](https://github.com/HafiziRuslan/RasPiAPRS/commit/b0ec93972e3e8a6d10f569df1e910805e37ff8df) refactor(main): improve event list formatting and add connection error handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T07:59:22+08:00*
 - [c765abc](https://github.com/HafiziRuslan/RasPiAPRS/commit/c765abc6a069a3245d80d76574d605cc76f4d72e) refactor(config): enhance aprsis_servers handling and extend MMDVM config paths *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T07:11:29+08:00*
 
+### 📚 Documentation in beta14
+
+- [f6f0508](https://github.com/HafiziRuslan/RasPiAPRS/commit/f6f05082273e80edabffe107c4ecdda7c9dce2f6) docs(README): Update documentation for new APRS events *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-04T03:43:05+08:00*
+
 ### 🧪 Testing in beta14
 
 - [f617b52](https://github.com/HafiziRuslan/RasPiAPRS/commit/f617b52129e8de6e2b6653e9ffa4a39b5ad7a371) chore(dependencies): Update dependencies to latest versions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-20T19:13:53+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta14
 
+- [67fc257](https://github.com/HafiziRuslan/RasPiAPRS/commit/67fc2573b43b924896bc20ca0cd36d735a0c27c7) chore(sbom): update serial number and uv tool version *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-04T03:43:59+08:00*
+- [998254c](https://github.com/HafiziRuslan/RasPiAPRS/commit/998254c2e2a8e92b1a5da6c543b83b2a78f365d2) chore(config): Add new configuration options in .env.sample *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-04T03:42:48+08:00*
 - [55ebcff](https://github.com/HafiziRuslan/RasPiAPRS/commit/55ebcff6f664e63d3ac59a8c1896a992a5073109) chore(pylock.toml): update aiohttp from 3.14.1 to 3.14.3 and certifi from 2026.6.17 to 2026.7.22 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-29T17:00:54+08:00*
 - [bc942b3](https://github.com/HafiziRuslan/RasPiAPRS/commit/bc942b3af493bce82fa4d8ee18a2baf7af7e396b) chore(dependency): upgrade aiohappyeyeballs *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T09:22:43+08:00*
 - [f593222](https://github.com/HafiziRuslan/RasPiAPRS/commit/f593222692b232655e8baa148fa44db8e311ea45) chore(config): update serial number and uv version *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-01T10:43:50+08:00*
@@ -1533,4 +1540,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-07-29T18:07:05.918734139+08:00
+generated using git-cliff on 2026-08-04T03:47:15.674434902+08:00
