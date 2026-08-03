@@ -111,8 +111,9 @@ class Config:
 	signal_enabled: bool = False
 	signal_number: str | None = None
 	signal_apikey: str | None = None
-	aprsmx_enabled: bool = False
 	aprsphnet_enabled: bool = False
+	aprssares_enabled: bool = False
+	aprsmx_enabled: bool = False
 	aprsthursday_enabled: bool = False
 	aprsaturday_enabled: bool = False
 	aprsmysunday_enabled: bool = False
@@ -289,11 +290,12 @@ class Config:
 			self.signal_number = os.getenv('SIGNAL_NUMBER')
 			self.signal_apikey = os.getenv('SIGNAL_API_KEY')
 		self.aprsphnet_enabled = self._env_get_bool('APRSPHNET_ENABLE')
+		self.aprssares_enabled = self._env_get_bool('APRSSARES_ENABLE')
 		self.aprsmx_enabled = self._env_get_bool('APRSMX_ENABLE')
 		self.aprsthursday_enabled = self._env_get_bool('APRSTHURSDAY_ENABLE')
 		self.aprsaturday_enabled = self._env_get_bool('APRSATURDAY_ENABLE')
-		self.aprshamfinity_enabled = self._env_get_bool('APRSHAMFINITY_ENABLE')
 		self.aprsmysunday_enabled = self._env_get_bool('APRSMYSUNDAY_ENABLE')
+		self.aprshamfinity_enabled = self._env_get_bool('APRSHAMFINITY_ENABLE')
 		self.additional_sender_raw = os.getenv('ADDITIONAL_SENDER')
 		self.validate()
 
@@ -313,11 +315,12 @@ class Config:
 		events_active = any(
 			[
 				self.aprsphnet_enabled,
+				self.aprssares_enabled,
 				self.aprsmx_enabled,
 				self.aprsthursday_enabled,
 				self.aprsaturday_enabled,
-				self.aprshamfinity_enabled,
 				self.aprsmysunday_enabled,
+				self.aprshamfinity_enabled,
 			]
 		)
 		if events_active and self.additional_sender_raw:
@@ -1430,13 +1433,15 @@ class ScheduledMessageHandler:
 	def _init_messages(self):
 		"""Initialize scheduled messages."""
 		self.messages = []
+		tz_gmt8 = dt.timezone(dt.timedelta(hours=8))
 		definitions = [
 			('aprsphnet_enabled', 'APRSPHNet', None, 'APRSPH', 'NET #{}', dt.timezone.utc),
+			('aprssares_enabled', 'APRSSARES', 1, '9M4CSR', 'CQ SARES #{}', tz_gmt8),
 			('aprsmx_enabled', 'APRSMX', 2, 'XE1JMB-10', 'CQ {}', dt.timezone.utc),
 			('aprsthursday_enabled', 'APRSThursday', 3, 'APRSPH', 'HOTG #{}', dt.timezone.utc),
 			('aprsaturday_enabled', 'APRSaturday', 5, '9M4GHZ', 'CQ DXMY #{}', dt.timezone.utc),
+			('aprsmysunday_enabled', 'APRSMYSunday', 6, 'APRSMY', 'CHECK #{}', tz_gmt8),
 			('aprshamfinity_enabled', 'APRSHamfinity', 6, '9M4GKS', 'CQ HAMFINITY #{}', dt.timezone.utc),
-			('aprsmysunday_enabled', 'APRSMYSunday', 6, 'APRSMY', 'CHECK #{}', dt.timezone.utc),
 		]
 		for attr, name, weekday, addrcall, template_fmt, tz in definitions:
 			if getattr(self.cfg, attr, False):
