@@ -80,6 +80,14 @@ RasPiAPRS supports participation in several optional APRS network events by enab
     </tr>
     <tr>
       <td>2</td>
+      <td><b>SARES APRS CommCheck</b></td>
+      <td>Tuesday</td>
+      <td>GMT+8</td>
+      <td>9M4CSR</td>
+      <td><a href="https://net.hamfinity.com/public_dashboard.php?token=6991baa419be">net.hamfinity.com</a></td>
+    </tr>
+    <tr>
+      <td>3</td>
       <td><b>APRSMX</b></td>
       <td>Wednesday</td>
       <td>UTC</td>
@@ -87,7 +95,7 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="http://xe1jmb.duckdns.org:5000">xe1jmb.duckdns.org</a></td>
     </tr>
     <tr>
-      <td>3</td>
+      <td>4</td>
       <td><b>APRSThursday</b></td>
       <td>Thursday</td>
       <td>UTC</td>
@@ -95,7 +103,7 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="https://aprs.to/events/aprs_thursday">aprs.to</a> / <a href="https://aprsph.net/aprsthursday">aprsph.net</a></td>
     </tr>
     <tr>
-      <td>4</td>
+      <td>5</td>
       <td><b>APRSaturday</b></td>
       <td>Saturday</td>
       <td>UTC</td>
@@ -103,7 +111,7 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="https://cqdx.my/aprs">cqdx.my</a></td>
     </tr>
     <tr>
-      <td>5</td>
+      <td>6</td>
       <td><b>APRSMYSunday</b></td>
       <td>Sunday</td>
       <td>GMT+8</td>
@@ -111,7 +119,7 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="https://aprsmy.hamradio.my">aprsmy.hamradio.my</a></td>
     </tr>
     <tr>
-      <td>6</td>
+      <td>7</td>
       <td><b>APRSHamfinity</b></td>
       <td>Sunday</td>
       <td>UTC</td>
