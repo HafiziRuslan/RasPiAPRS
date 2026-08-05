@@ -40,6 +40,7 @@ from dataclasses import dataclass
 from dataclasses import field
 from typing import Callable
 from typing import NamedTuple
+from zoneinfo import ZoneInfo
 
 import aiohttp
 import aprslib
@@ -1433,14 +1434,14 @@ class ScheduledMessageHandler:
 	def _init_messages(self):
 		"""Initialize scheduled messages."""
 		self.messages = []
-		tz_gmt8 = dt.timezone(dt.timedelta(hours=8))
+		tz_myt = ZoneInfo('Asia/Kuala_Lumpur')
 		definitions = [
 			('aprsphnet_enabled', 'APRSPHNet', None, 'APRSPH', 'NET #{}', dt.timezone.utc),
-			('aprssares_enabled', 'APRSSARES', 1, '9M4CSR', 'CQ SARES #{}', tz_gmt8),
+			('aprssares_enabled', 'APRSSARES', 1, '9M4CSR', 'CQ SARES #{}', tz_myt),
 			('aprsmx_enabled', 'APRSMX', 2, 'XE1JMB-10', 'CQ {}', dt.timezone.utc),
 			('aprsthursday_enabled', 'APRSThursday', 3, 'APRSPH', 'HOTG #{}', dt.timezone.utc),
 			('aprsaturday_enabled', 'APRSaturday', 5, '9M4GHZ', 'CQ DXMY #{}', dt.timezone.utc),
-			('aprsmysunday_enabled', 'APRSMYSunday', 6, 'APRSMY', 'CHECK #{}', tz_gmt8),
+			('aprsmysunday_enabled', 'APRSMYSunday', 6, 'APRSMY', 'CHECK #{}', tz_myt),
 			('aprshamfinity_enabled', 'APRSHamfinity', 6, '9M4GKS', 'CQ HAMFINITY #{}', dt.timezone.utc),
 		]
 		for attr, name, weekday, addrcall, template_fmt, tz in definitions:
@@ -1818,6 +1819,7 @@ class APRSSender:
 		self.telem_seq = telem_seq
 		self._queue = multiprocessing.Queue()
 		self._out_queue = multiprocessing.Queue()
+		self._ack_queue = multiprocessing.Queue()
 		self._consumer_proc = None
 		self._aprsis_server_idx = 0
 
@@ -1910,6 +1912,7 @@ class APRSSender:
 				self.cfg.aprsis_filter,
 				self._queue,
 				self._out_queue,
+				self._ack_queue,
 			),
 			daemon=True,
 		)
@@ -1971,11 +1974,25 @@ class APRSSender:
 				logging.error('Unexpected error in APRS callback: %s [%s]', e, packet)
 
 	async def send_packet(self, payload, log_context='packet', max_retries=3):
-		"""Send a packet by putting it into the worker's outbound queue."""
+		"""Send a packet and wait for acknowledgment from the worker."""
+		msg_id = random.getrandbits(32)
 		try:
-			self._out_queue.put(payload)
-			await asyncio.sleep(random.uniform(0.5, 2.0))
-			return True
+			self._out_queue.put((msg_id, payload))
+			loop = asyncio.get_running_loop()
+			start_time = time.monotonic()
+			while time.monotonic() - start_time < 10:
+				try:
+					ack_id, success = await loop.run_in_executor(None, self._ack_queue.get, True, 0.1)
+					if ack_id == msg_id:
+						return success
+					else:
+						self._ack_queue.put((ack_id, success))
+						await asyncio.sleep(0.1)
+				except Exception:
+					await asyncio.sleep(0.1)
+					continue
+			logging.error('Timeout waiting for ACK for %s', log_context)
+			return False
 		except Exception as e:
 			logging.error('Failed to queue %s: %s', log_context, e)
 			return False
@@ -2259,7 +2276,7 @@ class APRSSender:
 				pass
 
 
-def aprs_consumer_worker(call, passcode, servers, port, aprs_filter, queue, out_queue):
+def aprs_consumer_worker(call, passcode, servers, port, aprs_filter, queue, out_queue, ack_queue):
 	"""Isolated worker process to handle the blocking APRS-IS consumer."""
 	import contextlib
 	import logging
@@ -2278,12 +2295,18 @@ def aprs_consumer_worker(call, passcode, servers, port, aprs_filter, queue, out_
 		nonlocal ais
 		while True:
 			try:
-				payload = out_queue.get()
+				msg_id, payload = out_queue.get()
 				if ais and getattr(ais, '_connected', False):
-					ais.sendall(payload)
-					logging.info('(Worker) Sent: %s', payload.strip())
+					try:
+						ais.sendall(payload)
+						logging.info('(Worker) Sent: %s', payload.strip())
+						ack_queue.put((msg_id, True))
+					except Exception as e:
+						logging.error('(Worker) Send failed: %s', e)
+						ack_queue.put((msg_id, False))
 				else:
 					logging.warning('(Worker) Dropping packet, not connected: %s', payload.strip())
+					ack_queue.put((msg_id, False))
 			except Exception as e:
 				logging.error('(Worker) Error in sender thread: %s', e)
 
