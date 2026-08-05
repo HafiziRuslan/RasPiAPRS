@@ -479,6 +479,13 @@ sdist = { url = "https://files.pythonhosted.org/packages/94/e7/b2c673351809dca68
 wheels = [{ url = "https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl", upload-time = 2024-12-04T17:35:26Z, size = 11050, hashes = { sha256 = "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274" } }]
 
 [[packages]]
+name = "tzdata"
+version = "2026.3"
+index = "https://pypi.org/simple"
+sdist = { url = "https://files.pythonhosted.org/packages/92/ff/5a28bdfd8c3ebec42564ac7d0e54ca3db65044a9314a97f9564fa7a1e926/tzdata-2026.3.tar.gz", upload-time = 2026-07-10T08:50:37Z, size = 198674, hashes = { sha256 = "4a1518b8993086a7982523e071643f3c0e5f213e75b21318e78bcabfff9d1415" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/e5/6d/b53b99a9f2766d095985947a5782f1702cabb129a34f7a802d7197af832f/tzdata-2026.3-py2.py3-none-any.whl", upload-time = 2026-07-10T08:50:36Z, size = 348168, hashes = { sha256 = "dc096730c87af6cab1b171c9d532be840741ff5d459015e7f6947bd7d7e54931" } }]
+
+[[packages]]
 name = "yarl"
 version = "1.24.5"
 index = "https://pypi.org/simple"

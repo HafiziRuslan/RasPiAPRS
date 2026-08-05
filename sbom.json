@@ -2,9 +2,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:71c2a30a-dd3a-42e5-b011-302f9ddbcbd5",
+  "serialNumber": "urn:uuid:e3615c04-688a-40e4-b599-153b619d88da",
   "metadata": {
-    "timestamp": "2026-08-03T19:42:38.442038800Z",
+    "timestamp": "2026-08-05T20:29:52.551337000Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
@@ -210,7 +210,14 @@
     },
     {
       "type": "library",
-      "bom-ref": "yarl-28@1.24.5",
+      "bom-ref": "tzdata-28@2026.3",
+      "name": "tzdata",
+      "version": "2026.3",
+      "purl": "pkg:pypi/tzdata@2026.3"
+    },
+    {
+      "type": "library",
+      "bom-ref": "yarl-29@1.24.5",
       "name": "yarl",
       "version": "1.24.5",
       "purl": "pkg:pypi/yarl@1.24.5"
@@ -229,7 +236,7 @@
         "frozenlist-11@1.8.0",
         "multidict-20@6.7.1",
         "propcache-22@0.5.2",
-        "yarl-28@1.24.5"
+        "yarl-29@1.24.5"
       ]
     },
     {
@@ -345,14 +352,18 @@
         "psutil-23@7.2.2",
         "python-dateutil-24@2.9.0.post0",
         "python-dotenv-25@1.2.2",
-        "python-telegram-bot-26@22.8"
+        "python-telegram-bot-26@22.8",
+        "tzdata-28@2026.3"
       ]
     },
     {
       "ref": "six-27@1.17.0"
     },
     {
-      "ref": "yarl-28@1.24.5",
+      "ref": "tzdata-28@2026.3"
+    },
+    {
+      "ref": "yarl-29@1.24.5",
       "dependsOn": [
         "idna-19@3.18",
         "multidict-20@6.7.1",
