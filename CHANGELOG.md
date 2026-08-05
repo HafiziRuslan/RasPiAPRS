@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta14] - (2026-08-04T03:43:59+08:00)
+## [beta14] - (2026-08-06T04:31:33+08:00)
 
-- 38 commit(s) contributed to the release.
-- 34 day(s) passed between releases.
+- 39 commit(s) contributed to the release.
+- 36 day(s) passed between releases.
 
 ### 🚀 Features in beta14
 
+- [adb93d5](https://github.com/HafiziRuslan/RasPiAPRS/commit/adb93d564ef37423eed8412ee2506f7d36a8aeb9) feat(dependencies): add tzdata dependency *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-06T04:31:33+08:00*
 - [923a4b0](https://github.com/HafiziRuslan/RasPiAPRS/commit/923a4b0c1e0b7e6d0cd9e59d69de992ee81e5b6b) feat(src): Add APRSSARES and APRSMX event support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-04T03:42:15+08:00*
 - [6b905f0](https://github.com/HafiziRuslan/RasPiAPRS/commit/6b905f0ea2f850cc67e8508b0b8e7e16ab6d987c) feat(mic_e): add MicEEncoder class for Mic-E encoding *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T06:59:29+08:00*
 - [0e83fed](https://github.com/HafiziRuslan/RasPiAPRS/commit/0e83fed8d26a14bc4984a0de380caabcf9e577bd) refactor(server): optimize Mic-E implementation *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-07-03T06:08:26+08:00*
@@ -1540,4 +1541,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-08-04T03:47:15.674434902+08:00
+generated using git-cliff on 2026-08-06T04:33:11.670275213+08:00
