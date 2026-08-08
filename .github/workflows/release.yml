@@ -81,7 +81,7 @@ jobs:
         uses: thedoctor0/zip-release@main
         with:
           type: 'zip'
-          filename: "${{ needs.version.outputs.name }}-${{ needs.version.outputs.version }}.zip"
+          filename: "${{ needs.version.outputs.name }}_${{ needs.version.outputs.version }}.zip"
           exclusions: '*.git* /.git* LICENSE /tests* *lock* *.md /misc*'
           recursive_exclusions: '*.md'
 
@@ -89,7 +89,7 @@ jobs:
         uses: ncipollo/release-action@main
         with:
           allowUpdates: true
-          artifacts: "${{ needs.version.outputs.name }}-${{ needs.version.outputs.version }}.zip"
+          artifacts: "${{ needs.version.outputs.name }}_${{ needs.version.outputs.version }}.zip"
           body: "${{ github.event.head_commit.message }}\n\nby: ${{ github.event.head_commit.author.username }} on ${{ github.event.head_commit.timestamp }}"
           commit: ${{ github.event.head_commit.id }}
           name: ${{ needs.version.outputs.version }}
