@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [beta15] - (2026-08-09T07:37:16+08:00)
+
+- 2 commit(s) contributed to the release.
+- 3 day(s) passed between releases.
+
+### ⚙️ Miscellaneous Tasks in beta15
+
+- [b78e44f](https://github.com/HafiziRuslan/RasPiAPRS/commit/b78e44fa65927cd4f1dfe736a7b4e7c40c10e5e1) chore(version): bump version to 0.1b15 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T07:37:16+08:00*
+- [48dca60](https://github.com/HafiziRuslan/RasPiAPRS/commit/48dca60f24509c602230c260d8b57c0f7542ec44) ci(actions): adjust artifact naming and telegram *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T07:17:32+08:00*
+
+---
+
 ## [beta14] - (2026-08-06T05:04:22+08:00)
 
 - 40 commit(s) contributed to the release.
@@ -1542,4 +1554,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-08-06T05:06:11.757614029+08:00
+generated using git-cliff on 2026-08-09T07:38:50.891190393+08:00
