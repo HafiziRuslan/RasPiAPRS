@@ -1,6 +1,6 @@
 [project]
 name = 'RasPiAPRS'
-version = '0.1b14'
+version = '0.1b15'
 description = 'APRS telemetry for Pi-Star/WPSD/AllStarLink/DVSwitch/SVXLink'
 keywords = ['amateur-radio', 'aprs', 'aprs-beacon', 'aprs-telemetry', 'aprs-messaging', 'mmdvm', 'pi-star', 'wpsd', 'allstarlink', 'dvswitch', 'svxlink']
 readme = 'README.md'
@@ -8,9 +8,9 @@ license = 'GPL-3.0-or-later'
 license-files = ['LICENSE']
 authors = [
   { name = 'Fred Cirera', email = 'github-fred@hidzz.com' },
-  { name = 'Hafizi Ruslan', email = '9w2lgx@mhrtech.my' },
+  { name = 'Hafizi Ruslan', email = '30207509+HafiziRuslan@users.noreply.github.com' },
 ]
-maintainers = [{ name = 'Hafizi Ruslan', email = '9w2lgx@mhrtech.my' }]
+maintainers = [{ name = 'Hafizi Ruslan', email = '30207509+HafiziRuslan@users.noreply.github.com' }]
 classifiers = [
   'Development Status :: 4 - Beta',
   'Intended Audience :: Other Audience',
@@ -28,7 +28,7 @@ urls.repository = 'https://github.com/HafiziRuslan/RasPiAPRS.git'
 urls.sourcecode = 'https://github.com/0x9900/aprstar.git'
 urls.history = 'https://github.com/HafiziRuslan/RasPiAPRS/blob/master/CHANGELOG.md'
 urls.issuetracker = 'https://github.com/HafiziRuslan/RasPiAPRS/issues'
-requires-python = '>=3.13'
+requires-python = '>= 3.13'
 dependencies = [
   'aiohttp',
   'aprslib',

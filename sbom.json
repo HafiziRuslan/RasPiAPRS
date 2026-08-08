@@ -2,21 +2,21 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:e3615c04-688a-40e4-b599-153b619d88da",
+  "serialNumber": "urn:uuid:7d59d6b4-40ff-4d78-aeed-6f0aa43e4d2f",
   "metadata": {
-    "timestamp": "2026-08-05T20:29:52.551337000Z",
+    "timestamp": "2026-08-08T23:24:01.605934900Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
         "name": "uv",
-        "version": "0.12.1"
+        "version": "0.12.3"
       }
     ],
     "component": {
       "type": "library",
-      "bom-ref": "raspiaprs-1@0.1b14",
+      "bom-ref": "raspiaprs-1@0.1b15",
       "name": "raspiaprs",
-      "version": "0.1b14",
+      "version": "0.1b15",
       "properties": [
         {
           "name": "uv:package:is_project_root",
@@ -341,7 +341,7 @@
       ]
     },
     {
-      "ref": "raspiaprs-1@0.1b14",
+      "ref": "raspiaprs-1@0.1b15",
       "dependsOn": [
         "aiohttp-3@3.14.3",
         "aprslib-6@0.7.2",
