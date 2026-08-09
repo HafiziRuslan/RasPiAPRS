@@ -2,10 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-08-09T07:37:16+08:00)
+## [beta15] - (2026-08-09T09:26:43+08:00)
 
-- 2 commit(s) contributed to the release.
-- 3 day(s) passed between releases.
+- 3 commit(s) contributed to the release.
+- 4 day(s) passed between releases.
+
+### 🚜 Refactor in beta15
+
+- [7ecee93](https://github.com/HafiziRuslan/RasPiAPRS/commit/7ecee932337e0031e6e38716899fa10a87825cea) refactor(messages): replace datetime.timezone.utc with defined timezone objects *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T09:26:43+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta15
 
@@ -1554,4 +1558,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-08-09T07:38:50.891190393+08:00
+generated using git-cliff on 2026-08-09T09:27:53.394231814+08:00
