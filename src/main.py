@@ -1434,15 +1434,16 @@ class ScheduledMessageHandler:
 	def _init_messages(self):
 		"""Initialize scheduled messages."""
 		self.messages = []
+		tz_utc = ZoneInfo('UTC')
 		tz_myt = ZoneInfo('Asia/Kuala_Lumpur')
 		definitions = [
-			('aprsphnet_enabled', 'APRSPHNet', None, 'APRSPH', 'NET #{}', dt.timezone.utc),
+			('aprsphnet_enabled', 'APRSPHNet', None, 'APRSPH', 'NET #{}', tz_utc),
 			('aprssares_enabled', 'APRSSARES', 1, '9M4CSR', 'CQ SARES #{}', tz_myt),
-			('aprsmx_enabled', 'APRSMX', 2, 'XE1JMB-10', 'CQ {}', dt.timezone.utc),
-			('aprsthursday_enabled', 'APRSThursday', 3, 'APRSPH', 'HOTG #{}', dt.timezone.utc),
-			('aprsaturday_enabled', 'APRSaturday', 5, '9M4GHZ', 'CQ DXMY #{}', dt.timezone.utc),
+			('aprsmx_enabled', 'APRSMX', 2, 'XE1JMB-10', 'CQ {}', tz_utc),
+			('aprsthursday_enabled', 'APRSThursday', 3, 'APRSPH', 'HOTG #{}', tz_utc),
+			('aprsaturday_enabled', 'APRSaturday', 5, '9M4GHZ', 'CQ DXMY #{}', tz_utc),
 			('aprsmysunday_enabled', 'APRSMYSunday', 6, 'APRSMY', 'CHECK #{}', tz_myt),
-			('aprshamfinity_enabled', 'APRSHamfinity', 6, '9M4GKS', 'CQ HAMFINITY #{}', dt.timezone.utc),
+			('aprshamfinity_enabled', 'APRSHamfinity', 6, '9M4GKS', 'CQ HAMFINITY #{}', tz_utc),
 		]
 		for attr, name, weekday, addrcall, template_fmt, tz in definitions:
 			if getattr(self.cfg, attr, False):
