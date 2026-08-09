@@ -461,6 +461,20 @@ def configure_logging(cfg: Config):
 		def filter(self, record):
 			return record.levelno == self.level
 
+	class DuplicateFilter(logging.Filter):
+		"""Filter that prevents logging the same message within a window."""
+
+		def __init__(self, maxlen=100):
+			super().__init__()
+			self.seen = deque(maxlen=maxlen)
+
+		def filter(self, record):
+			msg = record.getMessage()
+			if msg in self.seen:
+				return False
+			self.seen.append(msg)
+			return True
+
 	formatter = ISO8601Formatter('%(asctime)s | %(levelname)-8s | %(threadName)-12s | %(name)s.%(funcName)s:%(lineno)d | %(message)s')
 	traffic_formatter = ISO8601Formatter('%(asctime)s | %(message)s')
 	console = logging.StreamHandler()
@@ -522,6 +536,7 @@ def configure_logging(cfg: Config):
 			traffic_specific_logger = logging.getLogger('aprs.traffic')
 			traffic_specific_logger.propagate = False
 			traffic_specific_logger.addHandler(traffic_handler)
+			traffic_specific_logger.addFilter(DuplicateFilter())
 			traffic_specific_logger.setLevel(logging.DEBUG)
 		except (OSError, PermissionError) as e:
 			logging.error('Failed to create aprs_traffic.log: %s', e)
