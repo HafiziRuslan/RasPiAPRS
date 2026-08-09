@@ -1450,19 +1450,19 @@ class ScheduledMessageHandler:
 		tz_myt = ZoneInfo('Asia/Kuala_Lumpur')
 		tz_cst = ZoneInfo('America/Costa_Rica')
 		definitions = [
-			('aprsphnet_enabled', 'APRSPHNet', None, None, 'APRSPH', 'NET #{}', tz_utc),
-			('aprsmyanet_enabled', 'MYANET', None, None, 'MYANET', 'CQ MASUK #{}', tz_myt),
-			('aprsticanet_enabled', 'TICANET', None, None, 'TICANET', 'CQ {}', tz_cst),
-			('aprssares_enabled', 'SARES', 1, None, '9M4CSR', 'CQ {}', tz_myt),
-			('aprsmx_enabled', 'APRSMX', 2, None, 'XE1JMB-10', 'CQ {}', tz_utc),
-			('aprsthursday_enabled', 'APRSThursday', 3, None, 'APRSPH', 'HOTG #{}', tz_utc),
-			('aprsthursdaycr_enabled', 'APRSThursdayCR', 3, None, 'TICANET', 'CQ APRSDAY #{}', tz_cst),
-			('aprsaturday_enabled', 'APRSaturday', 5, None, '9M4GHZ', 'CQ DXMY #{}', tz_utc),
-			('aprsmysunday_enabled', 'APRSMYSunday', 6, None, 'APRSMY', 'CHECK #{}', tz_myt),
-			('aprshamfinity_enabled', 'HAMFINITY', 6, None, '9M4GKS', 'CQ {}', tz_utc),
-			('aprsmatutina_enabled', 'MATUTINA', 6, 2, 'TICANET', 'CQ {}', tz_cst),
+			('aprsphnet_enabled', 'APRSPHNet', None, None, 'APRSPH', 'NET', '#{}', tz_utc),
+			('aprsmyanet_enabled', 'MYANET', None, None, 'MYANET', 'CQ MASUK', '#{}', tz_myt),
+			('aprsticanet_enabled', 'TICANET', None, None, 'TICANET', 'CQ TICANET', None, tz_cst),
+			('aprssares_enabled', 'APRSSARES', 1, None, '9M4CSR', 'CQ SARES', '#{}', tz_myt),
+			('aprsmx_enabled', 'APRSMX', 2, None, 'XE1JMB-10', 'CQ APRSMX', '#{}', tz_utc),
+			('aprsthursday_enabled', 'APRSThursday', 3, None, 'APRSPH', 'HOTG', '#{}', tz_utc),
+			('aprsthursdaycr_enabled', 'APRSThursdayCR', 3, None, 'TICANET', 'APRSDAY', '#{}', tz_cst),
+			('aprsaturday_enabled', 'APRSaturday', 5, None, '9M4GHZ', 'CQ DXMY', '#{}', tz_utc),
+			('aprsmysunday_enabled', 'APRSMYSunday', 6, None, 'APRSMY', 'CHECK', '#{}', tz_myt),
+			('aprshamfinity_enabled', 'APRSHamfinity', 6, None, '9M4GKS', 'CQ HAMFINITY', '#{}', tz_utc),
+			('aprsmatutina_enabled', 'RevistaMatutina', 6, 2, 'TICANET', 'CQ MATUTINA', None, tz_cst),
 		]
-		for attr, name, weekday, weekmonth, addrcall, template_fmt, tz in definitions:
+		for attr, name, weekday, weekmonth, addrcall, command, message, tz in definitions:
 			if getattr(self.cfg, attr, False):
 				senders = [None]
 				if self.cfg.additional_sender:
@@ -1474,7 +1474,8 @@ class ScheduledMessageHandler:
 							'weekday': weekday,
 							'weekmonth': weekmonth,
 							'addrcall': addrcall,
-							'template': template_fmt.format(name),
+							'cmd': command,
+							'msg': message.format(name),
 							'tz': tz,
 							'from_call': sender,
 						}
@@ -1516,7 +1517,7 @@ class ScheduledMessageHandler:
 				any_sent = True
 		return any_sent
 
-	async def _send_one(self, aprs_sender, name, addrcall, template, from_call=None, gps_data=None, **kwargs):
+	async def _send_one(self, aprs_sender, name, addrcall, cmd, msg, from_call=None, gps_data=None, **kwargs):
 		"""Send a single scheduled message to APRS-IS if it's due."""
 		loc_data, _ = gps_data if gps_data else (None, None)
 		_, lat, lon, _, _, _ = loc_data
@@ -1529,7 +1530,9 @@ class ScheduledMessageHandler:
 		self.sequences[seq_key] = seq
 		self.sequences.flush()
 		app_id = '/'.join(self.cfg.app_name.split('/')[:2])
-		message = f'{template} from {gridsquare} via {app_id}'[:67]
+		message = f'{cmd}'
+		if msg is not None:
+			message += f' {msg} from {gridsquare} via {app_id}'[:67]
 		path_str = ''
 		if from_call:
 			path_str = f',{self.cfg.from_call}*,qAR,{self.cfg.from_call}'
