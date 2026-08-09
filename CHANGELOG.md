@@ -2,10 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-08-09T09:26:43+08:00)
+## [beta15] - (2026-08-09T10:26:15+08:00)
 
-- 3 commit(s) contributed to the release.
+- 4 commit(s) contributed to the release.
 - 4 day(s) passed between releases.
+
+### 🚀 Features in beta15
+
+- [ecb446f](https://github.com/HafiziRuslan/RasPiAPRS/commit/ecb446f3bba13b702bfe2c4e5b1638d7a53efa80) feat(aprs): add myanet, ticanet, thursdaycr, matutina support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T10:26:15+08:00*
 
 ### 🚜 Refactor in beta15
 
@@ -1558,4 +1562,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-08-09T09:27:53.394231814+08:00
+generated using git-cliff on 2026-08-09T10:27:32.816238288+08:00
