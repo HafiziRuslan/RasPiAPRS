@@ -72,7 +72,7 @@ class Config:
 	aprs_passcode: str | int = -1
 	ssid: int = 0
 	from_call: str = call
-	to_call: str = 'APP642'
+	to_call: str = 'APPRSP'
 	altitude: float = 0.0
 	latitude: float = 0.0
 	longitude: float = 0.0
@@ -392,8 +392,8 @@ class Config:
 			group_filter_string = 'g/' + '/'.join(unique_group_calls)
 			if group_filter_string not in filter_parts:
 				filter_parts.append(group_filter_string)
-		if f'u/{self.to_call}' not in filter_parts:
-			filter_parts.append(f'u/{self.to_call}')
+		if f'u/{self.to_call}/APP642' not in filter_parts:
+			filter_parts.append(f'u/{self.to_call}/APP642')
 		if filter_parts:
 			self.aprsis_filter = ' '.join(filter_parts)
 		else:
