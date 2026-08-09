@@ -514,32 +514,27 @@ def configure_logging(cfg: Config):
 	}
 	max_size = cfg.log_max_size * 1024 * 1024
 	max_count = cfg.log_max_count
-	for level, filename in log_files.items():
-		if level < log_level:
-			continue
-		try:
-			path = os.path.join(log_dir, filename)
-			handler = NumberedRotatingFileHandler(path, maxBytes=max_size, backupCount=max_count)
-			handler.setLevel(level)
-			handler.addFilter(LevelFilter(level))
-			handler.setFormatter(formatter)
-			logger.addHandler(handler)
-		except (OSError, PermissionError) as e:
-			logging.error('Failed to create %s: %s', filename, e)
 
+	def add_file_handler(target, fname, lvl, fmt, flt=None):
 		try:
-			path = os.path.join(log_dir, 'aprs_traffic.log')
-			traffic_handler = NumberedRotatingFileHandler(path, maxBytes=max_size, backupCount=max_count)
-			traffic_handler.setLevel(logging.DEBUG)
-			traffic_handler.setFormatter(traffic_formatter)
-
-			traffic_specific_logger = logging.getLogger('aprs.traffic')
-			traffic_specific_logger.propagate = False
-			traffic_specific_logger.addHandler(traffic_handler)
-			traffic_specific_logger.addFilter(DuplicateFilter())
-			traffic_specific_logger.setLevel(logging.DEBUG)
+			path = os.path.join(log_dir, fname)
+			h = NumberedRotatingFileHandler(path, maxBytes=max_size, backupCount=max_count)
+			h.setLevel(lvl)
+			h.setFormatter(fmt)
+			if flt:
+				h.addFilter(flt)
+			target.addHandler(h)
 		except (OSError, PermissionError) as e:
-			logging.error('Failed to create aprs_traffic.log: %s', e)
+			logging.error('Failed to create %s: %s', fname, e)
+
+	for lvl, fname in log_files.items():
+		if lvl >= log_level:
+			add_file_handler(logger, fname, lvl, formatter, LevelFilter(lvl))
+
+	traffic_logger = logging.getLogger('aprs.traffic')
+	traffic_logger.propagate = False
+	traffic_logger.setLevel(logging.DEBUG)
+	add_file_handler(traffic_logger, 'aprs_traffic.log', logging.DEBUG, traffic_formatter, DuplicateFilter())
 
 
 class PersistentCounter:
