@@ -2,17 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-08-09T10:26:15+08:00)
+## [beta15] - (2026-08-09T12:12:01+08:00)
 
-- 4 commit(s) contributed to the release.
+- 6 commit(s) contributed to the release.
 - 4 day(s) passed between releases.
 
 ### 🚀 Features in beta15
 
+- [b25475d](https://github.com/HafiziRuslan/RasPiAPRS/commit/b25475d327abe3df8f59ce3c1c66a6d8af75bab1) feat(logging): add duplicate message filter to logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T12:12:01+08:00*
 - [ecb446f](https://github.com/HafiziRuslan/RasPiAPRS/commit/ecb446f3bba13b702bfe2c4e5b1638d7a53efa80) feat(aprs): add myanet, ticanet, thursdaycr, matutina support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T10:26:15+08:00*
 
 ### 🚜 Refactor in beta15
 
+- [8022574](https://github.com/HafiziRuslan/RasPiAPRS/commit/8022574bf73069efb4efbcba6f61b11bead71b02) refactor(main): split template into command and message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T11:53:08+08:00*
 - [7ecee93](https://github.com/HafiziRuslan/RasPiAPRS/commit/7ecee932337e0031e6e38716899fa10a87825cea) refactor(messages): replace datetime.timezone.utc with defined timezone objects *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T09:26:43+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta15
@@ -1562,4 +1564,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-08-09T10:27:32.816238288+08:00
+generated using git-cliff on 2026-08-09T12:13:26.899143417+08:00
