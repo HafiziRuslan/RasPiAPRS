@@ -1466,11 +1466,11 @@ class ScheduledMessageHandler:
 			('aprssares_enabled', 'APRSTuesday', 1, None, '9M4CSR', 'CQ SARES', '#{}', tz_myt),
 			('aprsmx_enabled', 'APRSWednesday', 2, None, 'XE1JMB-10', 'CQ APRSMX', '#{}', tz_utc),
 			('aprsthursday_enabled', 'APRSThursday', 3, None, 'APRSPH', 'HOTG', '#{}', tz_utc),
-			('aprsthursdaycr_enabled', 'APRSThursdayCR', 3, None, 'TICANET', 'APRSDAY', '#{}', tz_cst),
+			('aprsthursdaycr_enabled', 'APRSThursdayCR', 3, None, 'TICANET', 'APRSDAY', None, tz_cst),
 			('aprsaturday_enabled', 'APRSaturday', 5, None, '9M4GHZ', 'CQ DXMY', '#{}', tz_utc),
 			('aprsmysunday_enabled', 'APRSMYSunday', 6, None, 'APRSMY', 'CHECK', '#{}', tz_myt),
 			('aprshamfinity_enabled', 'APRSunday', 6, None, '9M4GKS', 'CQ HAMFINITY', '#{}', tz_utc),
-			('aprsmatutina_enabled', 'RevistaMatutina', 6, 2, 'TICANET', 'CQ MATUTINA', '#{}', tz_cst),
+			('aprsmatutina_enabled', 'RevistaMatutina', 6, 2, 'TICANET', 'CQ MATUTINA', None, tz_cst),
 		]
 		for attr, name, weekday, weekmonth, addrcall, command, message, tz in definitions:
 			if getattr(self.cfg, attr, False):
