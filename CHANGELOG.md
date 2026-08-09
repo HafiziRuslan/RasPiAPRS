@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-08-09T14:43:07+08:00)
+## [beta15] - (2026-08-09T14:53:24+08:00)
 
-- 9 commit(s) contributed to the release.
+- 10 commit(s) contributed to the release.
 - 4 day(s) passed between releases.
 
 ### 🚀 Features in beta15
@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta15
 
+- [6a2b94c](https://github.com/HafiziRuslan/RasPiAPRS/commit/6a2b94ce826f7c70c68da7ee3468fd210a93578f) fix(ticanet): fix command not found error *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T14:53:24+08:00*
 - [6f71ecb](https://github.com/HafiziRuslan/RasPiAPRS/commit/6f71ecbb64a7ce275f9e0796124823536c6f5e88) fix(aprs): update to_call and unproto path *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T14:43:07+08:00*
 
 ### 💼 Other in beta15
@@ -1573,4 +1574,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-08-09T14:44:13.422721241+08:00
+generated using git-cliff on 2026-08-09T14:54:46.450669994+08:00
