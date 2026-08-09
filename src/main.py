@@ -113,12 +113,16 @@ class Config:
 	signal_number: str | None = None
 	signal_apikey: str | None = None
 	aprsphnet_enabled: bool = False
+	aprsmyanet_enabled: bool = False
+	aprsticanet_enabled: bool = False
 	aprssares_enabled: bool = False
 	aprsmx_enabled: bool = False
 	aprsthursday_enabled: bool = False
+	aprsthursdaycr_enabled: bool = False
 	aprsaturday_enabled: bool = False
 	aprsmysunday_enabled: bool = False
 	aprshamfinity_enabled: bool = False
+	aprsmatutina_enabled: bool = False
 	additional_sender: list[str] | None = None
 	additional_sender_raw: str | None = None
 	log_level_raw: int = 2
@@ -291,12 +295,16 @@ class Config:
 			self.signal_number = os.getenv('SIGNAL_NUMBER')
 			self.signal_apikey = os.getenv('SIGNAL_API_KEY')
 		self.aprsphnet_enabled = self._env_get_bool('APRSPHNET_ENABLE')
+		self.aprsmyanet_enabled = self._env_get_bool('APRSMYANET_ENABLE')
+		self.aprsticanet_enabled = self._env_get_bool('APRSTICANET_ENABLE')
 		self.aprssares_enabled = self._env_get_bool('APRSSARES_ENABLE')
 		self.aprsmx_enabled = self._env_get_bool('APRSMX_ENABLE')
 		self.aprsthursday_enabled = self._env_get_bool('APRSTHURSDAY_ENABLE')
+		self.aprsthursdaycr_enabled = self._env_get_bool('APRSTHURSDAYCR_ENABLE')
 		self.aprsaturday_enabled = self._env_get_bool('APRSATURDAY_ENABLE')
 		self.aprsmysunday_enabled = self._env_get_bool('APRSMYSUNDAY_ENABLE')
 		self.aprshamfinity_enabled = self._env_get_bool('APRSHAMFINITY_ENABLE')
+		self.aprsmatutina_enabled = self._env_get_bool('APRSMATUTINA_ENABLE')
 		self.additional_sender_raw = os.getenv('ADDITIONAL_SENDER')
 		self.validate()
 
@@ -316,12 +324,16 @@ class Config:
 		events_active = any(
 			[
 				self.aprsphnet_enabled,
+				self.aprsmyanet_enabled,
+				self.aprsticanet_enabled,
 				self.aprssares_enabled,
 				self.aprsmx_enabled,
 				self.aprsthursday_enabled,
+				self.aprsthursdaycr_enabled,
 				self.aprsaturday_enabled,
 				self.aprsmysunday_enabled,
 				self.aprshamfinity_enabled,
+				self.aprsmatutina_enabled,
 			]
 		)
 		if events_active and self.additional_sender_raw:
@@ -1436,23 +1448,36 @@ class ScheduledMessageHandler:
 		self.messages = []
 		tz_utc = ZoneInfo('UTC')
 		tz_myt = ZoneInfo('Asia/Kuala_Lumpur')
+		tz_cst = ZoneInfo('America/Costa_Rica')
 		definitions = [
-			('aprsphnet_enabled', 'APRSPHNet', None, 'APRSPH', 'NET #{}', tz_utc),
-			('aprssares_enabled', 'APRSSARES', 1, '9M4CSR', 'CQ SARES #{}', tz_myt),
-			('aprsmx_enabled', 'APRSMX', 2, 'XE1JMB-10', 'CQ {}', tz_utc),
-			('aprsthursday_enabled', 'APRSThursday', 3, 'APRSPH', 'HOTG #{}', tz_utc),
-			('aprsaturday_enabled', 'APRSaturday', 5, '9M4GHZ', 'CQ DXMY #{}', tz_utc),
-			('aprsmysunday_enabled', 'APRSMYSunday', 6, 'APRSMY', 'CHECK #{}', tz_myt),
-			('aprshamfinity_enabled', 'APRSHamfinity', 6, '9M4GKS', 'CQ HAMFINITY #{}', tz_utc),
+			('aprsphnet_enabled', 'APRSPHNet', None, None, 'APRSPH', 'NET #{}', tz_utc),
+			('aprsmyanet_enabled', 'MYANET', None, None, 'MYANET', 'CQ MASUK #{}', tz_myt),
+			('aprsticanet_enabled', 'TICANET', None, None, 'TICANET', 'CQ {}', tz_cst),
+			('aprssares_enabled', 'SARES', 1, None, '9M4CSR', 'CQ {}', tz_myt),
+			('aprsmx_enabled', 'APRSMX', 2, None, 'XE1JMB-10', 'CQ {}', tz_utc),
+			('aprsthursday_enabled', 'APRSThursday', 3, None, 'APRSPH', 'HOTG #{}', tz_utc),
+			('aprsthursdaycr_enabled', 'APRSThursdayCR', 3, None, 'TICANET', 'CQ APRSDAY #{}', tz_cst),
+			('aprsaturday_enabled', 'APRSaturday', 5, None, '9M4GHZ', 'CQ DXMY #{}', tz_utc),
+			('aprsmysunday_enabled', 'APRSMYSunday', 6, None, 'APRSMY', 'CHECK #{}', tz_myt),
+			('aprshamfinity_enabled', 'HAMFINITY', 6, None, '9M4GKS', 'CQ {}', tz_utc),
+			('aprsmatutina_enabled', 'MATUTINA', 6, 2, 'TICANET', 'CQ {}', tz_cst),
 		]
-		for attr, name, weekday, addrcall, template_fmt, tz in definitions:
+		for attr, name, weekday, weekmonth, addrcall, template_fmt, tz in definitions:
 			if getattr(self.cfg, attr, False):
 				senders = [None]
 				if self.cfg.additional_sender:
 					senders.extend(self.cfg.additional_sender)
 				for sender in senders:
 					self.messages.append(
-						{'name': name, 'weekday': weekday, 'addrcall': addrcall, 'template': template_fmt.format(name), 'from_call': sender, 'tz': tz}
+						{
+							'name': name,
+							'weekday': weekday,
+							'weekmonth': weekmonth,
+							'addrcall': addrcall,
+							'template': template_fmt.format(name),
+							'tz': tz,
+							'from_call': sender,
+						}
 					)
 
 	def _get_tracking_key(self, msg_info) -> str:
@@ -1464,6 +1489,8 @@ class ScheduledMessageHandler:
 		"""Return True if the message described by *msg_info* should be sent now."""
 		now = dt.datetime.now(msg_info['tz'])
 		if msg_info['weekday'] is not None and now.weekday() != msg_info['weekday']:
+			return False
+		if msg_info['weekmonth'] is not None and (now.day - 1) // 7 + 1 != msg_info['weekmonth']:
 			return False
 		today = now.strftime('%Y-%m-%d')
 		tracking_key = self._get_tracking_key(msg_info)

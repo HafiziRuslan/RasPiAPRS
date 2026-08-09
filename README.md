@@ -80,14 +80,30 @@ RasPiAPRS supports participation in several optional APRS network events by enab
     </tr>
     <tr>
       <td>2</td>
+      <td><b>MYANET</b></td>
+      <td>Daily</td>
+      <td>UTC+8</td>
+      <td>MYANET</td>
+      <td><a href="https://9w2key.blogspot.com/2025/11/myanet-aprs-bot.html">9w2key.blogspot.com</a></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><b>TICANET</b></td>
+      <td>Daily</td>
+      <td>UTC-6</td>
+      <td>TICANET</td>
+      <td><a href="https://github.com/ti3wti/TICANET?tab=readme-ov-file#eventos-soportados">ti3wti/TICANET</a></td>
+    </tr>
+    <tr>
+      <td>4</td>
       <td><b>SARES APRS CommCheck</b></td>
       <td>Tuesday</td>
-      <td>GMT+8</td>
+      <td>UTC+8</td>
       <td>9M4CSR</td>
       <td><a href="https://net.hamfinity.com/public_dashboard.php?token=6991baa419be">net.hamfinity.com</a></td>
     </tr>
     <tr>
-      <td>3</td>
+      <td>5</td>
       <td><b>APRSMX</b></td>
       <td>Wednesday</td>
       <td>UTC</td>
@@ -95,15 +111,23 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="http://xe1jmb.duckdns.org:5000">xe1jmb.duckdns.org</a></td>
     </tr>
     <tr>
-      <td>4</td>
+      <td>6</td>
       <td><b>APRSThursday</b></td>
       <td>Thursday</td>
       <td>UTC</td>
-      <td>ANSRVR / APRSPH</td>
-      <td><a href="https://aprs.to/events/aprs_thursday">aprs.to</a> / <a href="https://aprsph.net/aprsthursday">aprsph.net</a></td>
+      <td>APRSPH</td>
+      <td><a href="https://aprsph.net/aprsthursday">aprsph.net</a></td>
     </tr>
     <tr>
-      <td>5</td>
+      <td>7</td>
+      <td><b>APRS Thursday Costa Rica</b></td>
+      <td>Thursday</td>
+      <td>UTC-6</td>
+      <td>TICANET</td>
+      <td><a href="https://github.com/ti3wti/TICANET?tab=readme-ov-file#eventos-soportados">ti3wti/TICANET</a></td>
+    </tr>
+    <tr>
+      <td>8</td>
       <td><b>APRSaturday</b></td>
       <td>Saturday</td>
       <td>UTC</td>
@@ -111,20 +135,28 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="https://cqdx.my/aprs">cqdx.my</a></td>
     </tr>
     <tr>
-      <td>6</td>
+      <td>9</td>
       <td><b>APRSMYSunday</b></td>
       <td>Sunday</td>
-      <td>GMT+8</td>
+      <td>UTC+8</td>
       <td>APRSMY</td>
       <td><a href="https://aprsmy.hamradio.my">aprsmy.hamradio.my</a></td>
     </tr>
     <tr>
-      <td>7</td>
+      <td>10</td>
       <td><b>APRSHamfinity</b></td>
       <td>Sunday</td>
       <td>UTC</td>
       <td>9M4GKS</td>
       <td><a href="https://aprs.hamfinity.com">aprs.hamfinity.com</a></td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td><b>Morning Magazine</b></td>
+      <td>2<sup>nd</sup> Sunday</td>
+      <td>UTC-6</td>
+      <td>TICANET</td>
+      <td><a href="https://github.com/ti3wti/TICANET?tab=readme-ov-file#eventos-soportados">ti3wti/TICANET</a></td>
     </tr>
   </tbody>
 </table>
@@ -216,7 +248,7 @@ git pull --autostash
 
 ## 📊 Telemetry Example
 
-You can see an example of the metrics logged by my WPSD node [9W2LGX](https://aprs.fi/telemetry/a/9W2LGX?range=day).
+You can see live metrics logged by my WPSD node [9W2LGX-3](https://aprs.fi/telemetry/a/9W2LGX-3).
 
 This is the screenshot taken from `aprs.fi` of _CPU temperature_, _CPU load average_, _Memory used_, _Disk usage_ and _GPS usage_ from my WPSD node.
 
@@ -226,7 +258,7 @@ This is the screenshot taken from `aprs.fi` of _CPU temperature_, _CPU load aver
 
 </div>
 
-## 💻 Hardware used for testing
+## 💻 Hardware used
 
 1. Raspberry Pi Zero 2 W
 2. Waveshare SIM7600G-H 4G HAT (B)
