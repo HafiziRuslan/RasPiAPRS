@@ -2,15 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-08-09T12:31:50+08:00)
+## [beta15] - (2026-08-09T12:52:12+08:00)
 
-- 7 commit(s) contributed to the release.
+- 8 commit(s) contributed to the release.
 - 4 day(s) passed between releases.
 
 ### 🚀 Features in beta15
 
 - [b25475d](https://github.com/HafiziRuslan/RasPiAPRS/commit/b25475d327abe3df8f59ce3c1c66a6d8af75bab1) feat(logging): add duplicate message filter to logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T12:12:01+08:00*
 - [ecb446f](https://github.com/HafiziRuslan/RasPiAPRS/commit/ecb446f3bba13b702bfe2c4e5b1638d7a53efa80) feat(aprs): add myanet, ticanet, thursdaycr, matutina support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T10:26:15+08:00*
+
+### 💼 Other in beta15
+
+- [c8a75d6](https://github.com/HafiziRuslan/RasPiAPRS/commit/c8a75d658d93e8698f2f63347c987c999a9870ee) i18n(messages): rename weekday messages, guard formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T12:52:12+08:00*
 
 ### 🚜 Refactor in beta15
 
@@ -1565,4 +1569,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-08-09T12:33:04.985263696+08:00
+generated using git-cliff on 2026-08-09T12:53:19.199400669+08:00
