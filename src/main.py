@@ -1463,14 +1463,14 @@ class ScheduledMessageHandler:
 			('aprsphnet_enabled', 'APRSPHNet', None, None, 'APRSPH', 'NET', '#{}', tz_utc),
 			('aprsmyanet_enabled', 'MYANET', None, None, 'MYANET', 'CQ MASUK', '#{}', tz_myt),
 			('aprsticanet_enabled', 'TICANET', None, None, 'TICANET', 'CQ TICANET', None, tz_cst),
-			('aprssares_enabled', 'APRSSARES', 1, None, '9M4CSR', 'CQ SARES', '#{}', tz_myt),
-			('aprsmx_enabled', 'APRSMX', 2, None, 'XE1JMB-10', 'CQ APRSMX', '#{}', tz_utc),
+			('aprssares_enabled', 'APRSTuesday', 1, None, '9M4CSR', 'CQ SARES', '#{}', tz_myt),
+			('aprsmx_enabled', 'APRSWednesday', 2, None, 'XE1JMB-10', 'CQ APRSMX', '#{}', tz_utc),
 			('aprsthursday_enabled', 'APRSThursday', 3, None, 'APRSPH', 'HOTG', '#{}', tz_utc),
 			('aprsthursdaycr_enabled', 'APRSThursdayCR', 3, None, 'TICANET', 'APRSDAY', '#{}', tz_cst),
 			('aprsaturday_enabled', 'APRSaturday', 5, None, '9M4GHZ', 'CQ DXMY', '#{}', tz_utc),
 			('aprsmysunday_enabled', 'APRSMYSunday', 6, None, 'APRSMY', 'CHECK', '#{}', tz_myt),
-			('aprshamfinity_enabled', 'APRSHamfinity', 6, None, '9M4GKS', 'CQ HAMFINITY', '#{}', tz_utc),
-			('aprsmatutina_enabled', 'RevistaMatutina', 6, 2, 'TICANET', 'CQ MATUTINA', None, tz_cst),
+			('aprshamfinity_enabled', 'APRSunday', 6, None, '9M4GKS', 'CQ HAMFINITY', '#{}', tz_utc),
+			('aprsmatutina_enabled', 'RevistaMatutina', 6, 2, 'TICANET', 'CQ MATUTINA', '#{}', tz_cst),
 		]
 		for attr, name, weekday, weekmonth, addrcall, command, message, tz in definitions:
 			if getattr(self.cfg, attr, False):
@@ -1485,7 +1485,7 @@ class ScheduledMessageHandler:
 							'weekmonth': weekmonth,
 							'addrcall': addrcall,
 							'cmd': command,
-							'msg': message.format(name),
+							'msg': message.format(name) if message else None,
 							'tz': tz,
 							'from_call': sender,
 						}
