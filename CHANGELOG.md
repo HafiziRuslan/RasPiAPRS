@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-08-09T14:53:24+08:00)
+## [beta15] - (2026-08-10T22:43:23+08:00)
 
-- 10 commit(s) contributed to the release.
-- 4 day(s) passed between releases.
+- 11 commit(s) contributed to the release.
+- 5 day(s) passed between releases.
 
 ### 🚀 Features in beta15
 
@@ -26,6 +26,10 @@ All notable changes to this project will be documented in this file.
 - [390bfbe](https://github.com/HafiziRuslan/RasPiAPRS/commit/390bfbe1a34496abb1266cd8c9e29dfecd671589) refactor(main): extract file handler helper *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T12:31:50+08:00*
 - [8022574](https://github.com/HafiziRuslan/RasPiAPRS/commit/8022574bf73069efb4efbcba6f61b11bead71b02) refactor(main): split template into command and message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T11:53:08+08:00*
 - [7ecee93](https://github.com/HafiziRuslan/RasPiAPRS/commit/7ecee932337e0031e6e38716899fa10a87825cea) refactor(messages): replace datetime.timezone.utc with defined timezone objects *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T09:26:43+08:00*
+
+### 📚 Documentation in beta15
+
+- [6ae1a02](https://github.com/HafiziRuslan/RasPiAPRS/commit/6ae1a02d24aa5a1d70dddf34a86ae705bbc171c0) docs(readme): remove event number column from table *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-10T22:43:23+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta15
 
@@ -1574,4 +1578,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-08-09T14:54:46.450669994+08:00
+generated using git-cliff on 2026-08-10T22:44:59.899445978+08:00
