@@ -61,7 +61,6 @@ RasPiAPRS supports participation in several optional APRS network events by enab
 <table style="margin-left: auto; margin-right: auto; text-align:center;">
   <thead>
     <tr>
-      <th style="text-align: center;">#</th>
       <th style="text-align: center;">Event</th>
       <th style="text-align: center;">Frequency</th>
       <th style="text-align: center;">TimeZone</th>
@@ -71,7 +70,6 @@ RasPiAPRS supports participation in several optional APRS network events by enab
   </thead>
   <tbody>
     <tr>
-      <td>1</td>
       <td><b>APRSPHNet</b></td>
       <td>Daily</td>
       <td>UTC</td>
@@ -79,7 +77,6 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="https://aprs.ph">aprs.ph</a></td>
     </tr>
     <tr>
-      <td>2</td>
       <td><b>MYANET</b></td>
       <td>Daily</td>
       <td>UTC+8</td>
@@ -87,7 +84,6 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="https://9w2key.blogspot.com/2025/11/myanet-aprs-bot.html">9w2key.blogspot.com</a></td>
     </tr>
     <tr>
-      <td>3</td>
       <td><b>TICANET</b></td>
       <td>Daily</td>
       <td>UTC-6</td>
@@ -95,7 +91,6 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="https://github.com/ti3wti/TICANET?tab=readme-ov-file#eventos-soportados">ti3wti/TICANET</a></td>
     </tr>
     <tr>
-      <td>4</td>
       <td><b>SARES APRS CommCheck</b></td>
       <td>Tuesday</td>
       <td>UTC+8</td>
@@ -103,7 +98,6 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="https://net.hamfinity.com/public_dashboard.php?token=6991baa419be">net.hamfinity.com</a></td>
     </tr>
     <tr>
-      <td>5</td>
       <td><b>APRSMX</b></td>
       <td>Wednesday</td>
       <td>UTC</td>
@@ -111,7 +105,6 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="http://xe1jmb.duckdns.org:5000">xe1jmb.duckdns.org</a></td>
     </tr>
     <tr>
-      <td>6</td>
       <td><b>APRSThursday</b></td>
       <td>Thursday</td>
       <td>UTC</td>
@@ -119,7 +112,6 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="https://aprsph.net/aprsthursday">aprsph.net</a></td>
     </tr>
     <tr>
-      <td>7</td>
       <td><b>APRS Thursday Costa Rica</b></td>
       <td>Thursday</td>
       <td>UTC-6</td>
@@ -127,7 +119,6 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="https://github.com/ti3wti/TICANET?tab=readme-ov-file#eventos-soportados">ti3wti/TICANET</a></td>
     </tr>
     <tr>
-      <td>8</td>
       <td><b>APRSaturday</b></td>
       <td>Saturday</td>
       <td>UTC</td>
@@ -135,7 +126,6 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="https://cqdx.my/aprs">cqdx.my</a></td>
     </tr>
     <tr>
-      <td>9</td>
       <td><b>APRSMYSunday</b></td>
       <td>Sunday</td>
       <td>UTC+8</td>
@@ -143,7 +133,6 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="https://aprsmy.hamradio.my">aprsmy.hamradio.my</a></td>
     </tr>
     <tr>
-      <td>10</td>
       <td><b>APRSHamfinity</b></td>
       <td>Sunday</td>
       <td>UTC</td>
@@ -151,7 +140,6 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="https://aprs.hamfinity.com">aprs.hamfinity.com</a></td>
     </tr>
     <tr>
-      <td>11</td>
       <td><b>Morning Magazine</b></td>
       <td>2<sup>nd</sup> Sunday</td>
       <td>UTC-6</td>
