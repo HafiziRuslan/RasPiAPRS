@@ -1502,22 +1502,24 @@ class ScheduledMessageHandler:
 			return False
 		return True
 
-	async def _send_one_with_delay(self, aprs_sender, gps_data=None, **msg_info):
-		"""Perform ``_send_one`` after a random pause"""
-		await asyncio.sleep(random.randint(15, 90))
-		await self._send_one(aprs_sender, gps_data=gps_data, **msg_info)
-
 	async def send_all(self, aprs_sender, gps_data=None):
 		"""Send all due scheduled messages."""
 		any_sent = False
 		for msg_info in self.messages:
 			if await self._is_due(msg_info):
-				asyncio.create_task(self._send_one_with_delay(aprs_sender, gps_data=gps_data, **msg_info))
+				asyncio.create_task(self._send_one_with_delay(aprs_sender, msg_info, gps_data=gps_data))
 				tracking_key = self._get_tracking_key(msg_info)
 				self.tracking[tracking_key] = dt.datetime.now(msg_info['tz']).isoformat()
 				self.tracking.flush()
 				any_sent = True
 		return any_sent
+
+	async def _send_one_with_delay(self, aprs_sender, msg_info, gps_data=None):
+		"""Perform ``_send_one`` after a random pause"""
+		delay = random.randint(30, 180)
+		logging.debug('Delaying scheduled message "%s" for %d seconds', msg_info.get('name'), delay)
+		await asyncio.sleep(delay)
+		await self._send_one(aprs_sender, gps_data=gps_data, **msg_info)
 
 	async def _send_one(self, aprs_sender, name, addrcall, cmd, msg, from_call=None, gps_data=None, **kwargs):
 		"""Send a single scheduled message to APRS-IS if it's due."""
