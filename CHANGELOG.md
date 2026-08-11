@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-08-10T22:43:23+08:00)
+## [beta15] - (2026-08-12T00:43:01+08:00)
 
-- 11 commit(s) contributed to the release.
-- 5 day(s) passed between releases.
+- 12 commit(s) contributed to the release.
+- 6 day(s) passed between releases.
 
 ### 🚀 Features in beta15
 
@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta15
 
+- [49b2edc](https://github.com/HafiziRuslan/RasPiAPRS/commit/49b2edc79e48387d5ea93b6bda0d479b42f36081) chore(message): remove myanet and ticanet support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-12T00:43:01+08:00*
 - [b78e44f](https://github.com/HafiziRuslan/RasPiAPRS/commit/b78e44fa65927cd4f1dfe736a7b4e7c40c10e5e1) chore(version): bump version to 0.1b15 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T07:37:16+08:00*
 - [48dca60](https://github.com/HafiziRuslan/RasPiAPRS/commit/48dca60f24509c602230c260d8b57c0f7542ec44) ci(actions): adjust artifact naming and telegram *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T07:17:32+08:00*
 
@@ -1578,4 +1579,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-08-10T22:44:59.899445978+08:00
+generated using git-cliff on 2026-08-12T00:45:20.993595154+08:00
