@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-08-12T00:43:01+08:00)
+## [beta15] - (2026-08-12T01:28:09+08:00)
 
-- 12 commit(s) contributed to the release.
+- 13 commit(s) contributed to the release.
 - 6 day(s) passed between releases.
 
 ### 🚀 Features in beta15
 
+- [ab9b565](https://github.com/HafiziRuslan/RasPiAPRS/commit/ab9b56540cab2745da63b49209a369c7e4c64c8a) refactor: adjust parameter order and delay range in _send_one_with_delay *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-12T01:28:09+08:00*
 - [b25475d](https://github.com/HafiziRuslan/RasPiAPRS/commit/b25475d327abe3df8f59ce3c1c66a6d8af75bab1) feat(logging): add duplicate message filter to logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T12:12:01+08:00*
 - [ecb446f](https://github.com/HafiziRuslan/RasPiAPRS/commit/ecb446f3bba13b702bfe2c4e5b1638d7a53efa80) feat(aprs): add myanet, ticanet, thursdaycr, matutina support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T10:26:15+08:00*
 
@@ -1579,4 +1580,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-08-12T00:45:20.993595154+08:00
+generated using git-cliff on 2026-08-12T01:29:30.313644690+08:00
