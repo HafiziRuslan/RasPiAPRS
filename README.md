@@ -77,20 +77,6 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="https://aprs.ph">aprs.ph</a></td>
     </tr>
     <tr>
-      <td><b>MYANET</b></td>
-      <td>Daily</td>
-      <td>UTC+8</td>
-      <td>MYANET</td>
-      <td><a href="https://9w2key.blogspot.com/2025/11/myanet-aprs-bot.html">9w2key.blogspot.com</a></td>
-    </tr>
-    <tr>
-      <td><b>TICANET</b></td>
-      <td>Daily</td>
-      <td>UTC-6</td>
-      <td>TICANET</td>
-      <td><a href="https://github.com/ti3wti/TICANET?tab=readme-ov-file#eventos-soportados">ti3wti/TICANET</a></td>
-    </tr>
-    <tr>
       <td><b>SARES APRS CommCheck</b></td>
       <td>Tuesday</td>
       <td>UTC+8</td>

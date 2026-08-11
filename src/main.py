@@ -113,8 +113,6 @@ class Config:
 	signal_number: str | None = None
 	signal_apikey: str | None = None
 	aprsphnet_enabled: bool = False
-	aprsmyanet_enabled: bool = False
-	aprsticanet_enabled: bool = False
 	aprssares_enabled: bool = False
 	aprsmx_enabled: bool = False
 	aprsthursday_enabled: bool = False
@@ -295,8 +293,6 @@ class Config:
 			self.signal_number = os.getenv('SIGNAL_NUMBER')
 			self.signal_apikey = os.getenv('SIGNAL_API_KEY')
 		self.aprsphnet_enabled = self._env_get_bool('APRSPHNET_ENABLE')
-		self.aprsmyanet_enabled = self._env_get_bool('APRSMYANET_ENABLE')
-		self.aprsticanet_enabled = self._env_get_bool('APRSTICANET_ENABLE')
 		self.aprssares_enabled = self._env_get_bool('APRSSARES_ENABLE')
 		self.aprsmx_enabled = self._env_get_bool('APRSMX_ENABLE')
 		self.aprsthursday_enabled = self._env_get_bool('APRSTHURSDAY_ENABLE')
@@ -324,8 +320,6 @@ class Config:
 		events_active = any(
 			[
 				self.aprsphnet_enabled,
-				self.aprsmyanet_enabled,
-				self.aprsticanet_enabled,
 				self.aprssares_enabled,
 				self.aprsmx_enabled,
 				self.aprsthursday_enabled,
@@ -1461,8 +1455,6 @@ class ScheduledMessageHandler:
 		tz_cst = ZoneInfo('America/Costa_Rica')
 		definitions = [
 			('aprsphnet_enabled', 'APRSPHNet', None, None, 'APRSPH', 'NET', '#{}', tz_utc),
-			('aprsmyanet_enabled', 'MYANET', None, None, 'MYANET', 'CQ MASUK', '#{}', tz_myt),
-			('aprsticanet_enabled', 'TICANET', None, None, 'TICANET', 'CQ TICANET', None, tz_cst),
 			('aprssares_enabled', 'APRSTuesday', 1, None, '9M4CSR', 'CQ SARES', '#{}', tz_myt),
 			('aprsmx_enabled', 'APRSWednesday', 2, None, 'XE1JMB-10', 'CQ APRSMX', '#{}', tz_utc),
 			('aprsthursday_enabled', 'APRSThursday', 3, None, 'APRSPH', 'HOTG', '#{}', tz_utc),
