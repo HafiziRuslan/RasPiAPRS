@@ -81,7 +81,7 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td>Tuesday</td>
       <td>UTC+8</td>
       <td>9M4CSR</td>
-      <td><a href="https://net.hamfinity.com/public_dashboard.php?token=6991baa419be">net.hamfinity.com</a></td>
+      <td><a href="https://aprs.sares.org.my">aprs.sares.org.my</a></td>
     </tr>
     <tr>
       <td><b>APRSMX</b></td>
