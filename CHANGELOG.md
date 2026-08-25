@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-08-12T01:28:09+08:00)
+## [beta15] - (2026-08-25T08:53:39+08:00)
 
-- 13 commit(s) contributed to the release.
-- 6 day(s) passed between releases.
+- 14 commit(s) contributed to the release.
+- 20 day(s) passed between releases.
 
 ### 🚀 Features in beta15
 
@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 
 ### 💼 Other in beta15
 
+- [3a31181](https://github.com/HafiziRuslan/RasPiAPRS/commit/3a3118150ee38d507a4ab8fbcad5f4c4f86daf30) Update sares link *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-25T08:53:39+08:00*
 - [c8a75d6](https://github.com/HafiziRuslan/RasPiAPRS/commit/c8a75d658d93e8698f2f63347c987c999a9870ee) i18n(messages): rename weekday messages, guard formatting *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T12:52:12+08:00*
 
 ### 🚜 Refactor in beta15
@@ -1580,4 +1581,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-08-12T01:29:30.313644690+08:00
+generated using git-cliff on 2026-08-25T08:54:21.349910602+08:00
