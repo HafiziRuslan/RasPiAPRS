@@ -2425,8 +2425,9 @@ def _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender):
 		kwargs: dict
 
 	loc_data, _ = gps_data if gps_data else (None, None)
+	now = dt.datetime.now()
 	return [
-		Task((timer_tick % 21600 == 1), aprs_sender.send_header, (), {}),
+		Task((now.minute == 0 and now.second == 0), aprs_sender.send_header, (), {}),
 		Task(
 			should_send_position(cfg, timer_tick, sb, loc_data),
 			aprs_sender.send_position,
