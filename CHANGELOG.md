@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-08-26T15:51:04+08:00)
+## [beta15] - (2026-08-27T02:43:28+08:00)
 
-- 15 commit(s) contributed to the release.
+- 16 commit(s) contributed to the release.
 - 21 day(s) passed between releases.
 
 ### 🚀 Features in beta15
@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta15
 
+- [ab888b5](https://github.com/HafiziRuslan/RasPiAPRS/commit/ab888b58414b00fc9b425379597edc92bb01f68f) refactor(header): use real-time for header transmission *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-27T02:43:28+08:00*
 - [390bfbe](https://github.com/HafiziRuslan/RasPiAPRS/commit/390bfbe1a34496abb1266cd8c9e29dfecd671589) refactor(main): extract file handler helper *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T12:31:50+08:00*
 - [8022574](https://github.com/HafiziRuslan/RasPiAPRS/commit/8022574bf73069efb4efbcba6f61b11bead71b02) refactor(main): split template into command and message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T11:53:08+08:00*
 - [7ecee93](https://github.com/HafiziRuslan/RasPiAPRS/commit/7ecee932337e0031e6e38716899fa10a87825cea) refactor(messages): replace datetime.timezone.utc with defined timezone objects *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T09:26:43+08:00*
@@ -1582,4 +1583,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-08-26T15:52:13.056303423+08:00
+generated using git-cliff on 2026-08-27T02:44:56.349260035+08:00
