@@ -2,14 +2,14 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:7d59d6b4-40ff-4d78-aeed-6f0aa43e4d2f",
+  "serialNumber": "urn:uuid:f5e102b1-0ce3-4ed0-ac84-a22b2723ccc0",
   "metadata": {
-    "timestamp": "2026-08-08T23:24:01.605934900Z",
+    "timestamp": "2026-08-26T07:47:46.190072800Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
         "name": "uv",
-        "version": "0.12.3"
+        "version": "0.12.5"
       }
     ],
     "component": {
@@ -147,10 +147,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "idna-19@3.18",
+      "bom-ref": "idna-19@3.19",
       "name": "idna",
-      "version": "3.18",
-      "purl": "pkg:pypi/idna@3.18"
+      "version": "3.19",
+      "purl": "pkg:pypi/idna@3.19"
     },
     {
       "type": "library",
@@ -189,10 +189,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "python-dotenv-25@1.2.2",
+      "bom-ref": "python-dotenv-25@1.2.3",
       "name": "python-dotenv",
-      "version": "1.2.2",
-      "purl": "pkg:pypi/python-dotenv@1.2.2"
+      "version": "1.2.3",
+      "purl": "pkg:pypi/python-dotenv@1.2.3"
     },
     {
       "type": "library",
@@ -248,7 +248,7 @@
     {
       "ref": "anyio-5@4.14.2",
       "dependsOn": [
-        "idna-19@3.18"
+        "idna-19@3.19"
       ]
     },
     {
@@ -300,14 +300,14 @@
         "anyio-5@4.14.2",
         "certifi-9@2026.7.22",
         "httpcore-16@1.0.9",
-        "idna-19@3.18"
+        "idna-19@3.19"
       ]
     },
     {
       "ref": "humanize-18@4.16.0"
     },
     {
-      "ref": "idna-19@3.18"
+      "ref": "idna-19@3.19"
     },
     {
       "ref": "multidict-20@6.7.1"
@@ -331,7 +331,7 @@
       ]
     },
     {
-      "ref": "python-dotenv-25@1.2.2"
+      "ref": "python-dotenv-25@1.2.3"
     },
     {
       "ref": "python-telegram-bot-26@22.8",
@@ -351,7 +351,7 @@
         "humanize-18@4.16.0",
         "psutil-23@7.2.2",
         "python-dateutil-24@2.9.0.post0",
-        "python-dotenv-25@1.2.2",
+        "python-dotenv-25@1.2.3",
         "python-telegram-bot-26@22.8",
         "tzdata-28@2026.3"
       ]
@@ -365,7 +365,7 @@
     {
       "ref": "yarl-29@1.24.5",
       "dependsOn": [
-        "idna-19@3.18",
+        "idna-19@3.19",
         "multidict-20@6.7.1",
         "propcache-22@0.5.2"
       ]
