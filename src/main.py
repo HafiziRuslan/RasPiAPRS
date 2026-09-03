@@ -1985,9 +1985,32 @@ class APRSSender:
 							ack_payload = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:ack{msg_no}'
 							logging.getLogger('aprs.traffic').debug('Replying ACK for message %s from %s', msg_no, from_call)
 							if await self.send_packet(ack_payload, 'ack'):
-								tg_msg = f'<u>APRS Message Received</u>\n\nFrom: <b>{from_call}</b>\nMsgTxt: <b>{message_text}</b>'
-								wa_msg = f'_APRS Message Received_\n\nFrom: *{from_call}*\nMsgTxt: *{message_text}*'
-								sg_msg = f'APRS Message Received\n\nFrom: {from_call}\nMsgTxt: {message_text}'
+								if message_text.startswith('?'):
+									query = message_text.upper().strip()
+									if query == '?APRS?':
+										reply = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:Valid query: ?APRSP ?APRSS ?APRST/?PING? ?APRSV/?ABOUT/?VER/?CPU{{{msg_no}'
+										await self.send_packet(reply, 'query-reply')
+									elif query == '?APRSP':
+										await self.send_position()
+									elif query == '?APRSS':
+										await self.send_status()
+									elif query in ('?APRST', '?PING?'):
+										reply = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:Trace: APRS-IS{{{msg_no}'
+										await self.send_packet(reply, 'query-reply')
+										await self.send_header()
+										await self.send_telemetry()
+									elif query in ('?APRSV', '?ABOUT', '?VER', '?CPU'):
+										cpu_load = f'{self.sys_stats.avg_cpu / 10:.1f}%'
+										reply = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:{self.cfg.app_name}, {self.sys_stats.os_info}, CPU: {cpu_load}{{{msg_no}'
+										await self.send_packet(reply, 'query-reply')
+									else:
+										reply = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:Query unregistered. Valid query: ?APRSP ?APRSS ?APRST/?PING? ?APRSV/?ABOUT/?VER/?CPU{{{msg_no}'
+										await self.send_packet(reply, 'query-reply')
+
+								msg_head = 'Query' if query else 'Message'
+								tg_msg = f'<u>APRS {msg_head} Received</u>\n\nFrom: <b>{from_call}</b>\nMsgTxt: <b>{message_text}</b>'
+								wa_msg = f'_APRS {msg_head} Received_\n\nFrom: *{from_call}*\nMsgTxt: *{message_text}*'
+								sg_msg = f'APRS {msg_head} Received\n\nFrom: {from_call}\nMsgTxt: {message_text}'
 								if msg_no:
 									tg_msg += f'\nMsgID: <b>{msg_no}</b>'
 									wa_msg += f'\nMsgID: *{msg_no}*'
