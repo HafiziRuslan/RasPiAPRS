@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-08-27T02:43:28+08:00)
+## [beta15] - (2026-09-04T06:41:09+08:00)
 
-- 16 commit(s) contributed to the release.
-- 21 day(s) passed between releases.
+- 17 commit(s) contributed to the release.
+- 29 day(s) passed between releases.
 
 ### 🚀 Features in beta15
 
@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta15
 
+- [fa99c30](https://github.com/HafiziRuslan/RasPiAPRS/commit/fa99c30d2a6fc33a8e8c62b6a2b3969a722e83e6) chore(deps): update anyio@4.15.0, add typing-extensions@4.16.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-04T06:41:09+08:00*
 - [5bb172d](https://github.com/HafiziRuslan/RasPiAPRS/commit/5bb172dc075661c15057a8d1817fac1359e4e7cd) chore(deps): bump idna and python-dotenv *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-26T15:51:04+08:00*
 - [49b2edc](https://github.com/HafiziRuslan/RasPiAPRS/commit/49b2edc79e48387d5ea93b6bda0d479b42f36081) chore(message): remove myanet and ticanet support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-12T00:43:01+08:00*
 - [b78e44f](https://github.com/HafiziRuslan/RasPiAPRS/commit/b78e44fa65927cd4f1dfe736a7b4e7c40c10e5e1) chore(version): bump version to 0.1b15 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T07:37:16+08:00*
@@ -1583,4 +1584,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-08-27T02:44:56.349260035+08:00
+generated using git-cliff on 2026-09-04T06:42:19.172861815+08:00
