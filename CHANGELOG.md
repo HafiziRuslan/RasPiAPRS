@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-09-04T06:41:09+08:00)
+## [beta15] - (2026-09-04T06:44:48+08:00)
 
-- 17 commit(s) contributed to the release.
+- 18 commit(s) contributed to the release.
 - 29 day(s) passed between releases.
 
 ### 🚀 Features in beta15
 
+- [61a2f09](https://github.com/HafiziRuslan/RasPiAPRS/commit/61a2f095bb39ca18482b70f409d72e668e218620) feat(aprs): implement APRS query command handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-04T06:44:48+08:00*
 - [ab9b565](https://github.com/HafiziRuslan/RasPiAPRS/commit/ab9b56540cab2745da63b49209a369c7e4c64c8a) refactor: adjust parameter order and delay range in _send_one_with_delay *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-12T01:28:09+08:00*
 - [b25475d](https://github.com/HafiziRuslan/RasPiAPRS/commit/b25475d327abe3df8f59ce3c1c66a6d8af75bab1) feat(logging): add duplicate message filter to logging *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T12:12:01+08:00*
 - [ecb446f](https://github.com/HafiziRuslan/RasPiAPRS/commit/ecb446f3bba13b702bfe2c4e5b1638d7a53efa80) feat(aprs): add myanet, ticanet, thursdaycr, matutina support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T10:26:15+08:00*
@@ -1584,4 +1585,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-09-04T06:42:19.172861815+08:00
+generated using git-cliff on 2026-09-04T06:45:58.341700285+08:00
