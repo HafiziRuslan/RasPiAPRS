@@ -2,14 +2,14 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:f5e102b1-0ce3-4ed0-ac84-a22b2723ccc0",
+  "serialNumber": "urn:uuid:b177433a-5782-4d76-b480-b3889b7b5fa7",
   "metadata": {
-    "timestamp": "2026-08-26T07:47:46.190072800Z",
+    "timestamp": "2026-09-03T22:37:19.044305600Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
         "name": "uv",
-        "version": "0.12.5"
+        "version": "0.12.9"
       }
     ],
     "component": {
@@ -49,10 +49,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "anyio-5@4.14.2",
+      "bom-ref": "anyio-5@4.15.0",
       "name": "anyio",
-      "version": "4.14.2",
-      "purl": "pkg:pypi/anyio@4.14.2"
+      "version": "4.15.0",
+      "purl": "pkg:pypi/anyio@4.15.0"
     },
     {
       "type": "library",
@@ -210,14 +210,27 @@
     },
     {
       "type": "library",
-      "bom-ref": "tzdata-28@2026.3",
+      "bom-ref": "typing-extensions-28@4.16.0",
+      "name": "typing-extensions",
+      "version": "4.16.0",
+      "purl": "pkg:pypi/typing-extensions@4.16.0",
+      "properties": [
+        {
+          "name": "uv:package:marker",
+          "value": "python_full_version < '3.15'"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "tzdata-29@2026.3",
       "name": "tzdata",
       "version": "2026.3",
       "purl": "pkg:pypi/tzdata@2026.3"
     },
     {
       "type": "library",
-      "bom-ref": "yarl-29@1.24.5",
+      "bom-ref": "yarl-30@1.24.5",
       "name": "yarl",
       "version": "1.24.5",
       "purl": "pkg:pypi/yarl@1.24.5"
@@ -236,7 +249,7 @@
         "frozenlist-11@1.8.0",
         "multidict-20@6.7.1",
         "propcache-22@0.5.2",
-        "yarl-29@1.24.5"
+        "yarl-30@1.24.5"
       ]
     },
     {
@@ -246,9 +259,10 @@
       ]
     },
     {
-      "ref": "anyio-5@4.14.2",
+      "ref": "anyio-5@4.15.0",
       "dependsOn": [
-        "idna-19@3.19"
+        "idna-19@3.19",
+        "typing-extensions-28@4.16.0"
       ]
     },
     {
@@ -297,7 +311,7 @@
     {
       "ref": "httpx-17@0.28.1",
       "dependsOn": [
-        "anyio-5@4.14.2",
+        "anyio-5@4.15.0",
         "certifi-9@2026.7.22",
         "httpcore-16@1.0.9",
         "idna-19@3.19"
@@ -353,17 +367,20 @@
         "python-dateutil-24@2.9.0.post0",
         "python-dotenv-25@1.2.3",
         "python-telegram-bot-26@22.8",
-        "tzdata-28@2026.3"
+        "tzdata-29@2026.3"
       ]
     },
     {
       "ref": "six-27@1.17.0"
     },
     {
-      "ref": "tzdata-28@2026.3"
+      "ref": "typing-extensions-28@4.16.0"
     },
     {
-      "ref": "yarl-29@1.24.5",
+      "ref": "tzdata-29@2026.3"
+    },
+    {
+      "ref": "yarl-30@1.24.5",
       "dependsOn": [
         "idna-19@3.19",
         "multidict-20@6.7.1",

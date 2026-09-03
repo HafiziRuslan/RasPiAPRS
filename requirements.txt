@@ -4,7 +4,7 @@ aiohttp==3.14.3
     # via raspiaprs
 aiosignal==1.4.0
     # via aiohttp
-anyio==4.14.2
+anyio==4.15.0
     # via httpx
 aprslib @ git+https://github.com/rossengeorgiev/aprs-python@c2a0f18ce028a4cced582567a73d57f0d03cd00f
     # via raspiaprs
@@ -63,6 +63,8 @@ python-telegram-bot==22.8
     # via raspiaprs
 six==1.17.0
     # via python-dateutil
+typing-extensions==4.16.0 ; python_full_version < '3.15'
+    # via anyio
 tzdata==2026.3
     # via raspiaprs
 yarl==1.24.5
