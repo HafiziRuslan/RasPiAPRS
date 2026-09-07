@@ -117,6 +117,7 @@ class Config:
 	aprsmx_enabled: bool = False
 	aprsthursday_enabled: bool = False
 	aprsthursdaycr_enabled: bool = False
+	aprsfridaykv50s_enabled: bool = False
 	aprsaturday_enabled: bool = False
 	aprsmysunday_enabled: bool = False
 	aprshamfinity_enabled: bool = False
@@ -297,6 +298,7 @@ class Config:
 		self.aprsmx_enabled = self._env_get_bool('APRSMX_ENABLE')
 		self.aprsthursday_enabled = self._env_get_bool('APRSTHURSDAY_ENABLE')
 		self.aprsthursdaycr_enabled = self._env_get_bool('APRSTHURSDAYCR_ENABLE')
+		self.aprsfridaykv50s_enabled = self._env_get_bool('APRSFRIDAYKV50S_ENABLE')
 		self.aprsaturday_enabled = self._env_get_bool('APRSATURDAY_ENABLE')
 		self.aprsmysunday_enabled = self._env_get_bool('APRSMYSUNDAY_ENABLE')
 		self.aprshamfinity_enabled = self._env_get_bool('APRSHAMFINITY_ENABLE')
@@ -324,6 +326,7 @@ class Config:
 				self.aprsmx_enabled,
 				self.aprsthursday_enabled,
 				self.aprsthursdaycr_enabled,
+				self.aprsfridaykv50s_enabled,
 				self.aprsaturday_enabled,
 				self.aprsmysunday_enabled,
 				self.aprshamfinity_enabled,
@@ -1459,6 +1462,7 @@ class ScheduledMessageHandler:
 			('aprsmx_enabled', 'APRSWednesday', 2, None, 'XE1JMB-10', 'CQ APRSMX', '#{}', tz_utc),
 			('aprsthursday_enabled', 'APRSThursday', 3, None, 'APRSPH', 'HOTG', '#{}', tz_utc),
 			('aprsthursdaycr_enabled', 'APRSThursdayCR', 3, None, 'TICANET', 'APRSDAY', None, tz_cst),
+			('aprsfridaykv50s_enabled', 'KV50SAPRSFriday', 4, None, '9W4GTS', 'CQ KV50S', '#{}', tz_myt),
 			('aprsaturday_enabled', 'APRSaturday', 5, None, '9M4GHZ', 'CQ DXMY', '#{}', tz_utc),
 			('aprsmysunday_enabled', 'APRSMYSunday', 6, None, 'APRSMY', 'CHECK', '#{}', tz_myt),
 			('aprshamfinity_enabled', 'APRSunday', 6, None, '9M4GKS', 'CQ HAMFINITY', '#{}', tz_utc),

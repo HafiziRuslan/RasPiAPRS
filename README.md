@@ -105,6 +105,13 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="https://github.com/ti3wti/TICANET?tab=readme-ov-file#eventos-soportados">ti3wti/TICANET</a></td>
     </tr>
     <tr>
+      <td><b>Komuniti V50 Samarahan APRS Friday</b></td>
+      <td>Friday</td>
+      <td>UTC+8</td>
+      <td>9W4GTS</td>
+      <td><a href="https://net.hamfinity.com/n/0e162e43ef17">net.hamfinity.com</a></td>
+    </tr>
+    <tr>
       <td><b>APRSaturday</b></td>
       <td>Saturday</td>
       <td>UTC</td>
@@ -222,7 +229,7 @@ git pull --autostash
 
 ## 📊 Telemetry Example
 
-You can see live metrics logged by my WPSD node [9W2LGX-3](https://aprs.fi/telemetry/a/9W2LGX-3).
+You can see live metrics logged by my WPSD node [9M2FZY-3](https://aprs.fi/telemetry/a/9M2FZY-3).
 
 This is the screenshot taken from `aprs.fi` of _CPU temperature_, _CPU load average_, _Memory used_, _Disk usage_ and _GPS usage_ from my WPSD node.
 
