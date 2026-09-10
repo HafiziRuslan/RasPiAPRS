@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-09-07T19:50:32+08:00)
+## [beta15] - (2026-09-10T17:24:18+08:00)
 
-- 20 commit(s) contributed to the release.
-- 33 day(s) passed between releases.
+- 23 commit(s) contributed to the release.
+- 36 day(s) passed between releases.
 
 ### 🚀 Features in beta15
 
@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta15
 
+- [9c5d493](https://github.com/HafiziRuslan/RasPiAPRS/commit/9c5d493912e8932ec223720acb40e374bae57a99) style(messages): update message formatting for consistency *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-10T17:23:50+08:00*
 - [6a2b94c](https://github.com/HafiziRuslan/RasPiAPRS/commit/6a2b94ce826f7c70c68da7ee3468fd210a93578f) fix(ticanet): fix command not found error *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T14:53:24+08:00*
 - [6f71ecb](https://github.com/HafiziRuslan/RasPiAPRS/commit/6f71ecbb64a7ce275f9e0796124823536c6f5e88) fix(aprs): update to_call and unproto path *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T14:43:07+08:00*
 
@@ -34,10 +35,12 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation in beta15
 
+- [cd26240](https://github.com/HafiziRuslan/RasPiAPRS/commit/cd26240d6814b722fbc3e743fef75f46208f48c0) docs(misc): add APRS queries reference document *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-10T17:23:02+08:00*
 - [6ae1a02](https://github.com/HafiziRuslan/RasPiAPRS/commit/6ae1a02d24aa5a1d70dddf34a86ae705bbc171c0) docs(readme): remove event number column from table *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-10T22:43:23+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta15
 
+- [95a9faa](https://github.com/HafiziRuslan/RasPiAPRS/commit/95a9faa807a540d05085e1bef215aa5418d8658a) chore(deps): update multidict to 6.8.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-10T17:24:18+08:00*
 - [72d1a1b](https://github.com/HafiziRuslan/RasPiAPRS/commit/72d1a1b8f4652db5846e326e6b9185bd48acd4f7) chore(deps): update anyio to version 4.15.1 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-07T19:45:33+08:00*
 - [fa99c30](https://github.com/HafiziRuslan/RasPiAPRS/commit/fa99c30d2a6fc33a8e8c62b6a2b3969a722e83e6) chore(deps): update anyio@4.15.0, add typing-extensions@4.16.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-04T06:41:09+08:00*
 - [5bb172d](https://github.com/HafiziRuslan/RasPiAPRS/commit/5bb172dc075661c15057a8d1817fac1359e4e7cd) chore(deps): bump idna and python-dotenv *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-26T15:51:04+08:00*
@@ -1587,4 +1590,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-09-07T19:51:33.905001809+08:00
+generated using git-cliff on 2026-09-10T17:25:43.327411387+08:00
