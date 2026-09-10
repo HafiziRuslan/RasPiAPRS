@@ -1548,25 +1548,25 @@ class ScheduledMessageHandler:
 		try:
 			parsed = aprslib.parse(payload)
 			if await aprs_sender.send_packet(payload, name):
-				tg_msg = f'<u>Message {name}</u>\n\nFrom: <b>{parsed["from"]}</b>'
-				wa_msg = f'_Message {name}_\n\nFrom: *{parsed["from"]}*'
+				tg_msg = f'<u>Message {name}</u>\n\n<b>From</b>: {parsed["from"]}'
+				wa_msg = f'_Message {name}_\n\n*From*: {parsed["from"]}'
 				sg_msg = f'Message {name}\n\nFrom: {parsed["from"]}'
 				if parsed.get('via'):
-					tg_msg += f'\nvia: <b>{parsed["via"]}</b>'
-					wa_msg += f'\nvia: *{parsed["via"]}*'
+					tg_msg += f'\n<b>via</b>: {parsed["via"]}'
+					wa_msg += f'\n*via*: {parsed["via"]}'
 					sg_msg += f'\nvia: {parsed["via"]}'
 				path_list = parsed.get('path')
 				if path_list:
-					tg_msg += f'\nPath: <b>{", ".join(path_list)}</b>'
-					wa_msg += f'\nPath: *{", ".join(path_list)}*'
+					tg_msg += f'\n<b>Path</b>: {", ".join(path_list)}'
+					wa_msg += f'\n*Path*: {", ".join(path_list)}'
 					sg_msg += f'\nPath: {", ".join(path_list)}'
-				tg_msg += f'\nTo: <b>{parsed["addresse"]}</b>\nMsgTxt: <b>{parsed["message_text"]}</b>'
-				wa_msg += f'\nTo: *{parsed["addresse"]}*\nMsgTxt: *{parsed["message_text"]}*'
-				sg_msg += f'\nTo: {parsed["addresse"]}\nMsgTxt: {parsed["message_text"]}'
+				tg_msg += f'\n<b>To</b>: {parsed["addresse"]}\n<b>Text</b>: {parsed["message_text"]}'
+				wa_msg += f'\n*To*: {parsed["addresse"]}\n*Text*: {parsed["message_text"]}'
+				sg_msg += f'\nTo: {parsed["addresse"]}\nText: {parsed["message_text"]}'
 				if parsed.get('msgNo'):
-					tg_msg += f'\nMsgID: <b>{parsed["msgNo"]}</b>'
-					wa_msg += f'\nMsgID: *{parsed["msgNo"]}*'
-					sg_msg += f'\nMsgID: {parsed["msgNo"]}'
+					tg_msg += f'\n<b>ID</b>: {parsed["msgNo"]}'
+					wa_msg += f'\n*ID*: {parsed["msgNo"]}'
+					sg_msg += f'\nID: {parsed["msgNo"]}'
 				await aprs_sender.tg_logger.log(tg_msg, tid=self.cfg.telegram_msg_tid)
 				await aprs_sender.wa_logger.log(wa_msg)
 				await aprs_sender.sg_logger.log(sg_msg)
@@ -1989,36 +1989,37 @@ class APRSSender:
 							ack_payload = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:ack{msg_no}'
 							logging.getLogger('aprs.traffic').debug('Replying ACK for message %s from %s', msg_no, from_call)
 							if await self.send_packet(ack_payload, 'ack'):
+								msg_head = 'Message'
 								if message_text.startswith('?'):
 									query = message_text.upper().strip()
+									msg_head = 'Query'
 									if query == '?APRS?':
-										reply = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:Valid query: ?APRSP ?APRSS ?APRST/?PING? ?APRSV/?ABOUT/?VER/?CPU{{{msg_no}'
+										reply = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:Queries: ?APRSP ?APRSS ?APRST/?PING ?APRSV/?ABOUT/?VER/?CPU'
 										await self.send_packet(reply, 'query-reply')
 									elif query == '?APRSP':
 										await self.send_position()
 									elif query == '?APRSS':
 										await self.send_status()
 									elif query in ('?APRST', '?PING?'):
-										reply = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:Trace: APRS-IS{{{msg_no}'
+										reply = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:Trace: APRS-IS'
 										await self.send_packet(reply, 'query-reply')
 										await self.send_header()
 										await self.send_telemetry()
 									elif query in ('?APRSV', '?ABOUT', '?VER', '?CPU'):
 										cpu_load = f'{self.sys_stats.avg_cpu / 10:.1f}%'
-										reply = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:{self.cfg.app_name}, {self.sys_stats.os_info}, CPU: {cpu_load}{{{msg_no}'
+										reply = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:{self.cfg.app_name}, {self.sys_stats.os_info}, CPU: {cpu_load}'
 										await self.send_packet(reply, 'query-reply')
 									else:
-										reply = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:Query unregistered. Valid query: ?APRSP ?APRSS ?APRST/?PING? ?APRSV/?ABOUT/?VER/?CPU{{{msg_no}'
+										reply = f'{self.cfg.from_call}>{self.cfg.to_call}::{from_call:9s}:Unknown query. Try ?APRS?'
 										await self.send_packet(reply, 'query-reply')
 
-								msg_head = 'Query' if query else 'Message'
-								tg_msg = f'<u>APRS {msg_head} Received</u>\n\nFrom: <b>{from_call}</b>\nMsgTxt: <b>{message_text}</b>'
-								wa_msg = f'_APRS {msg_head} Received_\n\nFrom: *{from_call}*\nMsgTxt: *{message_text}*'
-								sg_msg = f'APRS {msg_head} Received\n\nFrom: {from_call}\nMsgTxt: {message_text}'
+								tg_msg = f'<u>APRS {msg_head} Received</u>\n\n<b>From</b>: {from_call}\n<b>Text</b>: {message_text}'
+								wa_msg = f'_APRS {msg_head} Received_\n\n*From*: {from_call}\n*Text*: {message_text}'
+								sg_msg = f'APRS {msg_head} Received\n\nFrom: {from_call}\nText: {message_text}'
 								if msg_no:
-									tg_msg += f'\nMsgID: <b>{msg_no}</b>'
-									wa_msg += f'\nMsgID: *{msg_no}*'
-									sg_msg += f'\nMsgID: {msg_no}'
+									tg_msg += f'\n<b>ID</b>: {msg_no}'
+									wa_msg += f'\n*ID*: {msg_no}'
+									sg_msg += f'\nID: {msg_no}'
 								await self.tg_logger.log(tg_msg, tid=self.cfg.telegram_msg_tid)
 								await self.wa_logger.log(wa_msg)
 								await self.sg_logger.log(sg_msg)
@@ -2094,17 +2095,17 @@ class APRSSender:
 				dir_deg = f' ({dir_deg}°)' if d > 0 else ''
 				ext_tg = (
 					f'\n\t{mmdvmphg}'
-					f'\n\t\tPower: <b>{humanize.metric(int(p_w), "W", precision=1)}</b>'
-					f'\n\t\tHeight: <b>{humanize.metric(int(h_ft), "ft", precision=1)}</b>'
-					f'\n\t\tGain: <b>{humanize.metric(int(g), "dB", precision=1)}</b>'
-					f'\n\t\tDirection: <b>{dir_txt}{dir_deg}</b>'
+					f'\n\t\t<b>Power</b>: {humanize.metric(int(p_w), "W", precision=1)}'
+					f'\n\t\t<b>Height</b>: {humanize.metric(int(h_ft), "ft", precision=1)}'
+					f'\n\t\t<b>Gain</b>: {humanize.metric(int(g), "dB", precision=1)}'
+					f'\n\t\t<b>Direction</b>: {dir_txt}{dir_deg}'
 				)
 				ext_wa = (
 					f'\n\t{mmdvmphg}'
-					f'\n\t\tPower: *{humanize.metric(int(p_w), "W", precision=1)}*'
-					f'\n\t\tHeight: *{humanize.metric(int(h_ft), "ft", precision=1)}*'
-					f'\n\t\tGain: *{humanize.metric(int(g), "dB", precision=1)}*'
-					f'\n\t\tDirection: *{dir_txt}{dir_deg}*'
+					f'\n\t\t*Power*: {humanize.metric(int(p_w), "W", precision=1)}'
+					f'\n\t\t*Height*: {humanize.metric(int(h_ft), "ft", precision=1)}'
+					f'\n\t\t*Gain*: {humanize.metric(int(g), "dB", precision=1)}'
+					f'\n\t\t*Direction*: {dir_txt}{dir_deg}'
 				)
 				ext_sg = (
 					f'\n\t{mmdvmphg}'
@@ -2116,12 +2117,12 @@ class APRSSender:
 		else:
 			extstr = f'{csestr}/{spdknt}'
 			ext_tg = (
-				f'\n\tHeading: <b>{int(cur_cse)}°</b>'
-				f'\n\tSpeed: <b>{humanize.metric(float(spdkmh), "km/h", precision=1)}</b> | <b>{humanize.metric(float(spdknt), "kn", precision=1)}</b> | <b>{humanize.metric(cur_spd, "m/s")}</b>'
+				f'\n\t<b>Heading</b>: {int(cur_cse)}°'
+				f'\n\t<b>Speed</b>: {humanize.metric(float(spdkmh), "km/h", precision=1)} | {humanize.metric(float(spdknt), "kn", precision=1)} | {humanize.metric(cur_spd, "m/s")}'
 			)
 			ext_wa = (
-				f'\n\tHeading: *{int(cur_cse)}°*'
-				f'\n\tSpeed: *{humanize.metric(float(spdkmh), "km/h", precision=1)}* | *{humanize.metric(float(spdknt), "kn", precision=1)}* | *{humanize.metric(cur_spd, "m/s")}*'
+				f'\n\t*Heading*: {int(cur_cse)}°'
+				f'\n\t*Speed*: {humanize.metric(float(spdkmh), "km/h", precision=1)} | {humanize.metric(float(spdknt), "kn", precision=1)} | {humanize.metric(cur_spd, "m/s")}'
 			)
 			ext_sg = (
 				f'\n\tHeading: {int(cur_cse)}°'
@@ -2132,23 +2133,23 @@ class APRSSender:
 		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:/{timestamp}{latstr}{symbt}{lonstr}{symb}{extstr}{altstr}{comment}'
 		tg_pos = (
 			f'<u>{self.cfg.from_call} Position</u>\n\n'
-			f'Time: <b>{iso_timestamp}</b>\n'
-			f'Symbol: <b>{symbt}{symb} ({sym_desc})</b>\n'
-			f'Position:\n'
-			f'\tLatitude: <b>{cur_lat}</b>\n'
-			f'\tLongitude: <b>{cur_lon}</b>\n'
-			f'\tAltitude: <b>{cur_alt}m</b>{ext_tg}\n'
-			f'Comment: <b>{comment}</b>'
+			f'<b>Time</b>: {iso_timestamp}\n'
+			f'<b>Symbol</b>: {symbt}{symb} ({sym_desc})\n'
+			f'<b>Position</b>:\n'
+			f'\t<b>Latitude</b>: {cur_lat}\n'
+			f'\t<b>Longitude</b>: {cur_lon}\n'
+			f'\t<b>Altitude</b>: {cur_alt}m{ext_tg}\n'
+			f'<b>Comment</b>: {comment}'
 		)
 		wa_pos = (
 			f'_{self.cfg.from_call} Position_\n\n'
-			f'Time: *{iso_timestamp}*\n'
-			f'Symbol: *{symbt}{symb} _({sym_desc})_*\n'
-			f'Position:\n'
-			f'\tLatitude: *{cur_lat}*\n'
-			f'\tLongitude: *{cur_lon}*\n'
-			f'\tAltitude: *{cur_alt}m*{ext_wa}\n'
-			f'Comment: *{comment}*'
+			f'*Time*: {iso_timestamp}\n'
+			f'*Symbol*: {symbt}{symb} _({sym_desc})_\n'
+			f'*Position*:\n'
+			f'\t*Latitude*: {cur_lat}\n'
+			f'\t*Longitude*: {cur_lon}\n'
+			f'\t*Altitude*: {cur_alt}m{ext_wa}\n'
+			f'*Comment*: {comment}'
 		)
 		sg_pos = (
 			f'{self.cfg.from_call} Position\n\n'
@@ -2180,17 +2181,17 @@ class APRSSender:
 		payload = f'{caller}PARM.{",".join(params)}\r\n{caller}UNIT.{",".join(units)}\r\n{caller}EQNS.{",".join(eqns)}'
 		tg_hdr = (
 			f'<u>{self.cfg.from_call} Header</u>\n\n'
-			f'Parameters: <b>{",".join(params)}</b>\n'
-			f'Units: <b>{",".join(units)}</b>\n'
-			f'Equations: <b>{",".join(eqns)}</b>\n\n'
-			f'Value: <code>[a,b,c]=(a×v²)+(b×v)+c</code>'
+			f'<b>Parameters</b>: {",".join(params)}<\n'
+			f'<b>Units</b>: {",".join(units)}<\n'
+			f'<b>Equations</b>: {",".join(eqns)}<\n\n'
+			f'<b>Value</b>: <code>[a,b,c]=(a×v²)+(b×v)+c</code>'
 		)
 		wa_hdr = (
 			f'_{self.cfg.from_call} Header_\n\n'
-			f'Parameters: *{",".join(params)}*\n'
-			f'Units: *{",".join(units)}*\n'
-			f'Equations: *{",".join(eqns)}*\n\n'
-			f'Value: `[a,b,c]=(a×v²)+(b×v)+c`'
+			f'*Parameters*: {",".join(params)}\n'
+			f'*Units*: {",".join(units)}\n'
+			f'*Equations*: {",".join(eqns)}\n\n'
+			f'*Value*: `[a,b,c]=(a×v²)+(b×v)+c`'
 		)
 		sg_hdr = (
 			f'{self.cfg.from_call} Header\n\n'
@@ -2220,19 +2221,19 @@ class APRSSender:
 		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:T#{seq:03d},{cputemp:d},{cpuload:d},{telemmemused:d},{telemdiskused:d}'
 		tg_tlm = (
 			f'<u>{self.cfg.from_call} Telemetry</u>\n\n'
-			f'Sequence: <b>#{seq}</b>\n'
-			f'CPU Temp: <b>{cputemp / 10:.1f} °C</b>\n'
-			f'CPU Load: <b>{cpuload / 10:.1f} %</b>\n'
-			f'RAM Used: <b>{humanize.naturalsize(memused, binary=True)}</b>\n'
-			f'ROM Used: <b>{humanize.naturalsize(diskused, binary=True)}</b>'
+			f'<b>Sequence</b>: #{seq}\n'
+			f'<b>CPU Temp</b>: {cputemp / 10:.1f} °C\n'
+			f'<b>CPU Load</b>: {cpuload / 10:.1f} %\n'
+			f'<b>RAM Used</b>: {humanize.naturalsize(memused, binary=True)}\n'
+			f'<b>ROM Used</b>: {humanize.naturalsize(diskused, binary=True)}'
 		)
 		wa_tlm = (
 			f'_{self.cfg.from_call} Telemetry_\n\n'
-			f'Sequence: *#{seq}*\n'
-			f'CPU Temp: *{cputemp / 10:.1f} °C*\n'
-			f'CPU Load: *{cpuload / 10:.1f} %*\n'
-			f'RAM Used: *{humanize.naturalsize(memused, binary=True)}*\n'
-			f'ROM Used: *{humanize.naturalsize(diskused, binary=True)}*'
+			f'*Sequence*: #{seq}\n'
+			f'*CPU Temp*: {cputemp / 10:.1f} °C\n'
+			f'*CPU Load*: {cpuload / 10:.1f} %\n'
+			f'*RAM Used*: {humanize.naturalsize(memused, binary=True)}\n'
+			f'*ROM Used*: {humanize.naturalsize(diskused, binary=True)}'
 		)
 		sg_tlm = (
 			f'{self.cfg.from_call} Telemetry\n\n'
@@ -2247,8 +2248,8 @@ class APRSSender:
 			_, uSat, nSat = sat_data
 			payload += f',{uSat:d}'
 			if nSat > 0:
-				tg_tlm += f'\nGPS Lock: <b>{uSat}</b>\nGPS Avail: <b>{nSat}</b>'
-				wa_tlm += f'\nGPS Lock: *{uSat}*\nGPS Avail: *{nSat}*'
+				tg_tlm += f'\n<b>GPS Lock</b>: {uSat}\n<b>GPS Avail</b>: {nSat}'
+				wa_tlm += f'\n*GPS Lock*: {uSat}\n*GPS Avail*: {nSat}'
 				sg_tlm += f'\nGPS Lock: {uSat}\nGPS Avail: {nSat}'
 		if await self.send_packet(payload, 'telemetry'):
 			await self.tg_logger.log(tg_tlm)
@@ -2266,8 +2267,8 @@ class APRSSender:
 		osinfo = self.sys_stats.os_info
 		message = f'using {appname} on {osinfo}, {self.cfg.project_url}'
 		payload = f'{self.cfg.from_call}>BEACON: {message}'
-		tg_beacon = f'<u>{self.cfg.from_call} Beacon</u>\n\nTime: <b>{iso_timestamp}</b>\nText: <b>{message}</b>'
-		wa_beacon = f'_{self.cfg.from_call} Beacon_\n\nTime: *{iso_timestamp}*\nText: *{message}*'
+		tg_beacon = f'<u>{self.cfg.from_call} Beacon</u>\n\n<b>Time</b>: {iso_timestamp}\n<b>Text</b>: {message}'
+		wa_beacon = f'_{self.cfg.from_call} Beacon_\n\n*Time*: {iso_timestamp}\n*Text*: {message}'
 		sg_beacon = f'{self.cfg.from_call} Beacon\n\nTime: {iso_timestamp}\nText: {message}'
 		if await self.send_packet(payload, 'beacon'):
 			await self.tg_logger.log(tg_beacon)
@@ -2295,13 +2296,13 @@ class APRSSender:
 		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:>{timestamp}{"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
 		tg_stat = (
 			f'<u>{self.cfg.from_call} Status</u>\n\n'
-			f'Time: <b>{iso_timestamp}</b>\n'
-			f'Text: <b>{"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}</b>'
+			f'<b>Time</b>: {iso_timestamp}\n'
+			f'<b>Text</b>: {"; ".join(filter(None, [gridsquare, near_add_tg, uptime, traffic, sats_info]))}'
 		)
 		wa_stat = (
 			f'_{self.cfg.from_call} Status_\n\n'
-			f'Time: *{iso_timestamp}*\n'
-			f'Text: *{"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}*'
+			f'*Time*: {iso_timestamp}\n'
+			f'*Text*: {"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
 		)
 		sg_stat = (
 			f'{self.cfg.from_call} Status\n\n'
