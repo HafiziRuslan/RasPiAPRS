@@ -2,14 +2,14 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:ca7f20bc-a20c-4262-bb13-f01fdc620fa2",
+  "serialNumber": "urn:uuid:08839c74-1492-4f02-bbc2-85ca5a62f7f6",
   "metadata": {
-    "timestamp": "2026-09-07T11:38:31.975082100Z",
+    "timestamp": "2026-09-10T09:19:14.705170700Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
         "name": "uv",
-        "version": "0.12.10"
+        "version": "0.12.11"
       }
     ],
     "component": {
@@ -154,10 +154,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "multidict-20@6.7.1",
+      "bom-ref": "multidict-20@6.8.0",
       "name": "multidict",
-      "version": "6.7.1",
-      "purl": "pkg:pypi/multidict@6.7.1"
+      "version": "6.8.0",
+      "purl": "pkg:pypi/multidict@6.8.0"
     },
     {
       "type": "library",
@@ -247,7 +247,7 @@
         "aiosignal-4@1.4.0",
         "attrs-7@26.1.0",
         "frozenlist-11@1.8.0",
-        "multidict-20@6.7.1",
+        "multidict-20@6.8.0",
         "propcache-22@0.5.2",
         "yarl-30@1.24.5"
       ]
@@ -324,7 +324,7 @@
       "ref": "idna-19@3.19"
     },
     {
-      "ref": "multidict-20@6.7.1"
+      "ref": "multidict-20@6.8.0"
     },
     {
       "ref": "openpyxl-21@3.1.5",
@@ -383,7 +383,7 @@
       "ref": "yarl-30@1.24.5",
       "dependsOn": [
         "idna-19@3.19",
-        "multidict-20@6.7.1",
+        "multidict-20@6.8.0",
         "propcache-22@0.5.2"
       ]
     }
