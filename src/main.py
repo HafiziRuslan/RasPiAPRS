@@ -1523,7 +1523,10 @@ class ScheduledMessageHandler:
 		delay = random.randint(30, 180)
 		logging.debug('Delaying scheduled message "%s" for %d seconds', msg_info.get('name'), delay)
 		await asyncio.sleep(delay)
-		await self._send_one(aprs_sender, gps_data=gps_data, **msg_info)
+		if await self._send_one(aprs_sender, gps_data=gps_data, **msg_info):
+			tracking_key = self._get_tracking_key(msg_info)
+			self.tracking[tracking_key] = dt.datetime.now(msg_info['tz']).isoformat()
+			self.tracking.flush()
 
 	async def _send_one(self, aprs_sender, name, addrcall, cmd, msg, from_call=None, gps_data=None, **kwargs):
 		"""Send a single scheduled message to APRS-IS if it's due."""
@@ -2496,7 +2499,7 @@ async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, sch
 		if timer_tick % 20 == 0:
 			sys_stats.update_metrics()
 		packet_sent_this_cycle = False
-		position_packet_was_sent = False
+		position_packet_triggered = False
 		tasks_to_run = _get_tasks(cfg, timer_tick, sb, gps_data, aprs_sender)
 		for task in tasks_to_run:
 			if task.condition:
@@ -2505,11 +2508,11 @@ async def process_loop(cfg, aprs_sender, timer, sb, sys_stats, reload_event, sch
 					sent = res if isinstance(res, bool) else True
 					if sent:
 						packet_sent_this_cycle = True
-						if task.func == aprs_sender.send_position:
-							position_packet_was_sent = True
+					if task.func == aprs_sender.send_position:
+						position_packet_triggered = True
 				except Exception as e:
 					logging.error('Error executing task %s: %s', task.func.__name__, e, exc_info=True)
-		if position_packet_was_sent and scheduled_msg_handler.messages:
+		if position_packet_triggered and scheduled_msg_handler.messages:
 			try:
 				res = await scheduled_msg_handler.send_all(aprs_sender, gps_data=gps_data)
 				if res:
