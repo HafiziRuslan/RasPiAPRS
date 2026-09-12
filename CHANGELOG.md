@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-09-13T04:21:50+08:00)
+## [beta15] - (2026-09-13T04:25:29+08:00)
 
-- 27 commit(s) contributed to the release.
+- 28 commit(s) contributed to the release.
 - 38 day(s) passed between releases.
 
 ### 🚀 Features in beta15
@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta15
 
+- [3beb0d7](https://github.com/HafiziRuslan/RasPiAPRS/commit/3beb0d7824f9dacf99dd9d92f1b660c8267b389d) fix(uptime): strip spaces from parsed uptime string *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-13T04:25:29+08:00*
 - [cc9fa92](https://github.com/HafiziRuslan/RasPiAPRS/commit/cc9fa924587b42f34460b763fe3eb8934dbd83c3) fix(stats): strip digits and simplify history *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-13T04:21:50+08:00*
 - [9c5d493](https://github.com/HafiziRuslan/RasPiAPRS/commit/9c5d493912e8932ec223720acb40e374bae57a99) style(messages): update message formatting for consistency *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-10T17:23:50+08:00*
 - [6a2b94c](https://github.com/HafiziRuslan/RasPiAPRS/commit/6a2b94ce826f7c70c68da7ee3468fd210a93578f) fix(ticanet): fix command not found error *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T14:53:24+08:00*
@@ -1594,4 +1595,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-09-13T04:22:51.877546812+08:00
+generated using git-cliff on 2026-09-13T04:26:36.995149298+08:00
