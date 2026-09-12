@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-09-10T17:24:18+08:00)
+## [beta15] - (2026-09-12T17:49:25+08:00)
 
-- 23 commit(s) contributed to the release.
-- 36 day(s) passed between releases.
+- 24 commit(s) contributed to the release.
+- 38 day(s) passed between releases.
 
 ### 🚀 Features in beta15
 
+- [b63dfda](https://github.com/HafiziRuslan/RasPiAPRS/commit/b63dfda6bbf88a9b1802e42cd86fb2ce04ff41d7) feat(main): add message tracking after successful send *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-12T17:49:25+08:00*
 - [892d7af](https://github.com/HafiziRuslan/RasPiAPRS/commit/892d7afd7754d26bc6d51ea5cb02e1a6453a2595) feat(config): add KV50S APRS Friday transmission support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-07T19:50:32+08:00*
 - [61a2f09](https://github.com/HafiziRuslan/RasPiAPRS/commit/61a2f095bb39ca18482b70f409d72e668e218620) feat(aprs): implement APRS query command handling *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-04T06:44:48+08:00*
 - [ab9b565](https://github.com/HafiziRuslan/RasPiAPRS/commit/ab9b56540cab2745da63b49209a369c7e4c64c8a) refactor: adjust parameter order and delay range in _send_one_with_delay *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-12T01:28:09+08:00*
@@ -1590,4 +1591,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-09-10T17:25:43.327411387+08:00
+generated using git-cliff on 2026-09-12T17:50:50.864045573+08:00
