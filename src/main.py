@@ -1190,6 +1190,7 @@ class SystemStats(object):
 			(r' minutes?', 'm'),
 			(r' seconds?', 's'),
 			(r' and|,', ''),
+			(r' ', ''),
 		]:
 			u_str = re.sub(pattern, repl, u_str)
 		return f'up {u_str}'
