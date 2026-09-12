@@ -229,7 +229,7 @@ git pull --autostash
 
 ## 📊 Telemetry Example
 
-You can see live metrics logged by my WPSD node [9M2FZY-3](https://aprs.fi/telemetry/a/9M2FZY-3).
+You can see live metrics logged by my WPSD node [9M2FZY](https://aprs.fi/telemetry/a/9M2FZY).
 
 This is the screenshot taken from `aprs.fi` of _CPU temperature_, _CPU load average_, _Memory used_, _Disk usage_ and _GPS usage_ from my WPSD node.
 
