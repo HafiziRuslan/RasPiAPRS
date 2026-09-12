@@ -1116,7 +1116,6 @@ class SystemStats(object):
 	def __init__(self, cfg):
 		self.cfg = cfg
 		self._cache = {}
-		# Reduced history window to 60 seconds to save memory
 		self._history_window = 60
 		self._temp_history = deque(maxlen=self._history_window)
 		self._mem_history = deque(maxlen=self._history_window)
@@ -1205,7 +1204,7 @@ class SystemStats(object):
 			best_rx, best_tx, max_total, found = 0, 0, -1, False
 			if data.get('interfaces'):
 				for iface in data['interfaces']:
-					net = iface.get('name')
+					net = re.sub(r'\d+$', '', iface.get('name', ''))
 					fiveminute_traffic = iface.get('traffic', {}).get('fiveminute')
 					if fiveminute_traffic:
 						last_entry = fiveminute_traffic[-1]
