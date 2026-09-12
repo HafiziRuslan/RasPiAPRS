@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-09-13T03:26:22+08:00)
+## [beta15] - (2026-09-13T04:21:50+08:00)
 
-- 26 commit(s) contributed to the release.
+- 27 commit(s) contributed to the release.
 - 38 day(s) passed between releases.
 
 ### 🚀 Features in beta15
@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta15
 
+- [cc9fa92](https://github.com/HafiziRuslan/RasPiAPRS/commit/cc9fa924587b42f34460b763fe3eb8934dbd83c3) fix(stats): strip digits and simplify history *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-13T04:21:50+08:00*
 - [9c5d493](https://github.com/HafiziRuslan/RasPiAPRS/commit/9c5d493912e8932ec223720acb40e374bae57a99) style(messages): update message formatting for consistency *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-10T17:23:50+08:00*
 - [6a2b94c](https://github.com/HafiziRuslan/RasPiAPRS/commit/6a2b94ce826f7c70c68da7ee3468fd210a93578f) fix(ticanet): fix command not found error *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T14:53:24+08:00*
 - [6f71ecb](https://github.com/HafiziRuslan/RasPiAPRS/commit/6f71ecbb64a7ce275f9e0796124823536c6f5e88) fix(aprs): update to_call and unproto path *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T14:43:07+08:00*
@@ -1593,4 +1594,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-09-13T03:27:43.502383053+08:00
+generated using git-cliff on 2026-09-13T04:22:51.877546812+08:00
