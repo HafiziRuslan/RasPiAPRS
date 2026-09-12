@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-09-12T17:49:25+08:00)
+## [beta15] - (2026-09-13T03:26:22+08:00)
 
-- 24 commit(s) contributed to the release.
+- 26 commit(s) contributed to the release.
 - 38 day(s) passed between releases.
 
 ### 🚀 Features in beta15
@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta15
 
+- [52fdf46](https://github.com/HafiziRuslan/RasPiAPRS/commit/52fdf46ecffaea433437e235db2ad10e5e9337bd) refactor(telemetry): standardize APRS Friday KV50S message name *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-13T03:26:08+08:00*
 - [ab888b5](https://github.com/HafiziRuslan/RasPiAPRS/commit/ab888b58414b00fc9b425379597edc92bb01f68f) refactor(header): use real-time for header transmission *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-27T02:43:28+08:00*
 - [390bfbe](https://github.com/HafiziRuslan/RasPiAPRS/commit/390bfbe1a34496abb1266cd8c9e29dfecd671589) refactor(main): extract file handler helper *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T12:31:50+08:00*
 - [8022574](https://github.com/HafiziRuslan/RasPiAPRS/commit/8022574bf73069efb4efbcba6f61b11bead71b02) refactor(main): split template into command and message *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T11:53:08+08:00*
@@ -36,6 +37,7 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation in beta15
 
+- [41e7547](https://github.com/HafiziRuslan/RasPiAPRS/commit/41e7547e5f409000ff30da1294635e9425b5948e) docs(readme): update telemetry example callsign reference *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-13T03:26:22+08:00*
 - [cd26240](https://github.com/HafiziRuslan/RasPiAPRS/commit/cd26240d6814b722fbc3e743fef75f46208f48c0) docs(misc): add APRS queries reference document *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-10T17:23:02+08:00*
 - [6ae1a02](https://github.com/HafiziRuslan/RasPiAPRS/commit/6ae1a02d24aa5a1d70dddf34a86ae705bbc171c0) docs(readme): remove event number column from table *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-10T22:43:23+08:00*
 
@@ -1591,4 +1593,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-09-12T17:50:50.864045573+08:00
+generated using git-cliff on 2026-09-13T03:27:43.502383053+08:00
