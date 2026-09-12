@@ -1462,7 +1462,7 @@ class ScheduledMessageHandler:
 			('aprsmx_enabled', 'APRSWednesday', 2, None, 'XE1JMB-10', 'CQ APRSMX', '#{}', tz_utc),
 			('aprsthursday_enabled', 'APRSThursday', 3, None, 'APRSPH', 'HOTG', '#{}', tz_utc),
 			('aprsthursdaycr_enabled', 'APRSThursdayCR', 3, None, 'TICANET', 'APRSDAY', None, tz_cst),
-			('aprsfridaykv50s_enabled', 'KV50SAPRSFriday', 4, None, '9W4GTS', 'CQ KV50S', '#{}', tz_myt),
+			('aprsfridaykv50s_enabled', 'APRSFridayKV50S', 4, None, '9W4GTS', 'CQ KV50S', '#{}', tz_myt),
 			('aprsaturday_enabled', 'APRSaturday', 5, None, '9M4GHZ', 'CQ DXMY', '#{}', tz_utc),
 			('aprsmysunday_enabled', 'APRSMYSunday', 6, None, 'APRSMY', 'CHECK', '#{}', tz_myt),
 			('aprshamfinity_enabled', 'APRSunday', 6, None, '9M4GKS', 'CQ HAMFINITY', '#{}', tz_utc),
