@@ -231,12 +231,20 @@ git pull --autostash
 
 You can see live metrics logged by my WPSD node [9M2FZY](https://aprs.fi/telemetry/a/9M2FZY).
 
-This is the screenshot taken from `aprs.fi` of _CPU temperature_, _CPU load average_, _Memory used_, _Disk usage_ and _GPS usage_ from my WPSD node.
+This is the screenshot taken from `aprs.fi` of _CPU average temperature_, _CPU average load_, _Memory consumption_, _Storage consumption_, and _GPS fix detected_ from my WPSD node.
 
 <div style="text-align: center;">
 
-![RasPiAPRS Metrics](misc/metrics.png)
-
+_CPU average temperature_
+![Temp](misc/aprs.fi-telemetry-a-9M2FZY.png)
+_CPU average load_
+![Load](misc/aprs.fi-telemetry-b-9M2FZY.png)
+_Memory consumption_
+![RAM](misc/aprs.fi-telemetry-c-9M2FZY.png)
+_Storage consumption_
+![ROM](misc/aprs.fi-telemetry-d-9M2FZY.png)
+_GPS fix detected_
+![GPS](misc/aprs.fi-telemetry-e-9M2FZY.png)
 </div>
 
 ## 💻 Hardware used
