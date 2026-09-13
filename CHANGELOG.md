@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-09-13T04:25:29+08:00)
+## [beta15] - (2026-09-14T02:05:40+08:00)
 
-- 28 commit(s) contributed to the release.
-- 38 day(s) passed between releases.
+- 29 commit(s) contributed to the release.
+- 39 day(s) passed between releases.
 
 ### 🚀 Features in beta15
 
@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation in beta15
 
+- [b117dc0](https://github.com/HafiziRuslan/RasPiAPRS/commit/b117dc0009d279f001505f87b4d697b21a081bcb) docs(readme): update metrics descriptions and images *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-14T02:05:40+08:00*
 - [41e7547](https://github.com/HafiziRuslan/RasPiAPRS/commit/41e7547e5f409000ff30da1294635e9425b5948e) docs(readme): update telemetry example callsign reference *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-13T03:26:22+08:00*
 - [cd26240](https://github.com/HafiziRuslan/RasPiAPRS/commit/cd26240d6814b722fbc3e743fef75f46208f48c0) docs(misc): add APRS queries reference document *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-10T17:23:02+08:00*
 - [6ae1a02](https://github.com/HafiziRuslan/RasPiAPRS/commit/6ae1a02d24aa5a1d70dddf34a86ae705bbc171c0) docs(readme): remove event number column from table *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-10T22:43:23+08:00*
@@ -1595,4 +1596,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-09-13T04:26:36.995149298+08:00
+generated using git-cliff on 2026-09-14T02:06:39.137471442+08:00
