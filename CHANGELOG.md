@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-09-14T02:05:40+08:00)
+## [beta15] - (2026-09-14T02:24:34+08:00)
 
-- 29 commit(s) contributed to the release.
+- 30 commit(s) contributed to the release.
 - 39 day(s) passed between releases.
 
 ### 🚀 Features in beta15
@@ -46,6 +46,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta15
 
+- [6dda801](https://github.com/HafiziRuslan/RasPiAPRS/commit/6dda8018161d170b9689f9586c090fd6eae13c89) chore(config): update default APRS symbol table *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-14T02:24:34+08:00*
 - [95a9faa](https://github.com/HafiziRuslan/RasPiAPRS/commit/95a9faa807a540d05085e1bef215aa5418d8658a) chore(deps): update multidict to 6.8.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-10T17:24:18+08:00*
 - [72d1a1b](https://github.com/HafiziRuslan/RasPiAPRS/commit/72d1a1b8f4652db5846e326e6b9185bd48acd4f7) chore(deps): update anyio to version 4.15.1 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-07T19:45:33+08:00*
 - [fa99c30](https://github.com/HafiziRuslan/RasPiAPRS/commit/fa99c30d2a6fc33a8e8c62b6a2b3969a722e83e6) chore(deps): update anyio@4.15.0, add typing-extensions@4.16.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-04T06:41:09+08:00*
@@ -1596,4 +1597,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-09-14T02:06:39.137471442+08:00
+generated using git-cliff on 2026-09-14T02:25:29.128757586+08:00
