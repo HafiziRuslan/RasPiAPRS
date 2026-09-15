@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-09-15T21:40:12+08:00)
+## [beta15] - (2026-09-16T02:39:42+08:00)
 
-- 33 commit(s) contributed to the release.
+- 34 commit(s) contributed to the release.
 - 41 day(s) passed between releases.
 
 ### 🚀 Features in beta15
@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta15
 
+- [588b03f](https://github.com/HafiziRuslan/RasPiAPRS/commit/588b03f6318a7761158954ecbe8068b2f8e46aa5) fix(aprs): correct RAM units and equation in header *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-16T02:39:42+08:00*
 - [0124b2f](https://github.com/HafiziRuslan/RasPiAPRS/commit/0124b2f4496799f47c848c86d4a98f15fd29cf1e) fix(satellite): compute used satellites from list *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-15T21:21:31+08:00*
 - [3beb0d7](https://github.com/HafiziRuslan/RasPiAPRS/commit/3beb0d7824f9dacf99dd9d92f1b660c8267b389d) fix(uptime): strip spaces from parsed uptime string *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-13T04:25:29+08:00*
 - [cc9fa92](https://github.com/HafiziRuslan/RasPiAPRS/commit/cc9fa924587b42f34460b763fe3eb8934dbd83c3) fix(stats): strip digits and simplify history *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-13T04:21:50+08:00*
@@ -1600,4 +1601,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-09-15T21:41:23.906617684+08:00
+generated using git-cliff on 2026-09-16T02:40:59.062413096+08:00
