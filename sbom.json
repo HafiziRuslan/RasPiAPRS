@@ -2,14 +2,14 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:bc4c923f-894b-4d3c-be55-dccbcbe7457a",
+  "serialNumber": "urn:uuid:612e6a8a-1634-44a5-aca8-f60a898baf30",
   "metadata": {
-    "timestamp": "2026-09-12T09:45:58.897642500Z",
+    "timestamp": "2026-09-15T13:24:54.245685600Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
         "name": "uv",
-        "version": "0.12.13"
+        "version": "0.12.14"
       }
     ],
     "component": {
@@ -223,10 +223,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "tzdata-29@2026.3",
+      "bom-ref": "tzdata-29@2026.4",
       "name": "tzdata",
-      "version": "2026.3",
-      "purl": "pkg:pypi/tzdata@2026.3"
+      "version": "2026.4",
+      "purl": "pkg:pypi/tzdata@2026.4"
     },
     {
       "type": "library",
@@ -367,7 +367,7 @@
         "python-dateutil-24@2.9.0.post0",
         "python-dotenv-25@1.2.3",
         "python-telegram-bot-26@22.8",
-        "tzdata-29@2026.3"
+        "tzdata-29@2026.4"
       ]
     },
     {
@@ -377,7 +377,7 @@
       "ref": "typing-extensions-28@4.16.0"
     },
     {
-      "ref": "tzdata-29@2026.3"
+      "ref": "tzdata-29@2026.4"
     },
     {
       "ref": "yarl-30@1.24.5",
