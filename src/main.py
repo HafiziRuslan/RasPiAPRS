@@ -2176,8 +2176,8 @@ class APRSSender:
 		"""Send APRS header information to APRS-IS."""
 		caller = f'{self.cfg.from_call}>{self.cfg.to_call}::{self.cfg.from_call:9s}:'
 		params = ['Temp', 'Load', 'RAM', 'ROM']
-		units = ['deg.C', '%', 'GB', 'GB']
-		eqns = ['0,0.1,0', '0,0.1,0', '0,0.001,0', '0,0.001,0']
+		units = ['deg.C', '%', 'MB', 'GB']
+		eqns = ['0,0.1,0', '0,0.1,0', '0,1,0', '0,0.001,0']
 		if self.cfg.gpsd_enabled:
 			params.append('GPS')
 			units.append('sats')
