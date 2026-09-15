@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-09-15T21:21:31+08:00)
+## [beta15] - (2026-09-15T21:28:02+08:00)
 
-- 31 commit(s) contributed to the release.
+- 32 commit(s) contributed to the release.
 - 41 day(s) passed between releases.
 
 ### 🚀 Features in beta15
@@ -47,6 +47,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta15
 
+- [6f1b491](https://github.com/HafiziRuslan/RasPiAPRS/commit/6f1b4910393b1d03932a3dd5b51252a234b96630) chore(dependencies): update tzdata to version 2026.4 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-15T21:28:02+08:00*
 - [6dda801](https://github.com/HafiziRuslan/RasPiAPRS/commit/6dda8018161d170b9689f9586c090fd6eae13c89) chore(config): update default APRS symbol table *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-14T02:24:34+08:00*
 - [95a9faa](https://github.com/HafiziRuslan/RasPiAPRS/commit/95a9faa807a540d05085e1bef215aa5418d8658a) chore(deps): update multidict to 6.8.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-10T17:24:18+08:00*
 - [72d1a1b](https://github.com/HafiziRuslan/RasPiAPRS/commit/72d1a1b8f4652db5846e326e6b9185bd48acd4f7) chore(deps): update anyio to version 4.15.1 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-07T19:45:33+08:00*
@@ -1598,4 +1599,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-09-15T21:22:38.781844913+08:00
+generated using git-cliff on 2026-09-15T21:29:13.725863490+08:00
