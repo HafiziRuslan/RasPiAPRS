@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-09-16T02:39:42+08:00)
+## [beta15] - (2026-09-16T03:58:00+08:00)
 
-- 34 commit(s) contributed to the release.
+- 35 commit(s) contributed to the release.
 - 41 day(s) passed between releases.
 
 ### 🚀 Features in beta15
@@ -49,6 +49,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta15
 
+- [6ac12b6](https://github.com/HafiziRuslan/RasPiAPRS/commit/6ac12b6fd4d490073666cfc09646aa623dfd588e) chore(sbom): update serial, timestamp, uv *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-16T03:58:00+08:00*
 - [6f1b491](https://github.com/HafiziRuslan/RasPiAPRS/commit/6f1b4910393b1d03932a3dd5b51252a234b96630) chore(dependencies): update tzdata to version 2026.4 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-15T21:28:02+08:00*
 - [6dda801](https://github.com/HafiziRuslan/RasPiAPRS/commit/6dda8018161d170b9689f9586c090fd6eae13c89) chore(config): update default APRS symbol table *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-14T02:24:34+08:00*
 - [95a9faa](https://github.com/HafiziRuslan/RasPiAPRS/commit/95a9faa807a540d05085e1bef215aa5418d8658a) chore(deps): update multidict to 6.8.0 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-10T17:24:18+08:00*
@@ -1601,4 +1602,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-09-16T02:40:59.062413096+08:00
+generated using git-cliff on 2026-09-16T03:59:00.715298086+08:00
