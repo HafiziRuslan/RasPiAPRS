@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-09-15T21:28:02+08:00)
+## [beta15] - (2026-09-15T21:40:12+08:00)
 
-- 32 commit(s) contributed to the release.
+- 33 commit(s) contributed to the release.
 - 41 day(s) passed between releases.
 
 ### 🚀 Features in beta15
@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta15
 
+- [c30c220](https://github.com/HafiziRuslan/RasPiAPRS/commit/c30c220f038093843921ce8c026a4e0e1aab0543) refactor(gps): reverse iteration order *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-15T21:40:12+08:00*
 - [52fdf46](https://github.com/HafiziRuslan/RasPiAPRS/commit/52fdf46ecffaea433437e235db2ad10e5e9337bd) refactor(telemetry): standardize APRS Friday KV50S message name *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-13T03:26:08+08:00*
 - [ab888b5](https://github.com/HafiziRuslan/RasPiAPRS/commit/ab888b58414b00fc9b425379597edc92bb01f68f) refactor(header): use real-time for header transmission *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-27T02:43:28+08:00*
 - [390bfbe](https://github.com/HafiziRuslan/RasPiAPRS/commit/390bfbe1a34496abb1266cd8c9e29dfecd671589) refactor(main): extract file handler helper *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-09T12:31:50+08:00*
@@ -1599,4 +1600,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-09-15T21:29:13.725863490+08:00
+generated using git-cliff on 2026-09-15T21:41:23.906617684+08:00
