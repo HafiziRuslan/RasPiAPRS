@@ -861,11 +861,12 @@ class GPSHandler:
 				)
 			sat_res = await self._retrieve_data('SKY', 'satellite')
 			if sat_res:
-				self._current_sat = SATFix(
-					timestamp=self._parse_gps_time(sat_res.get('time')), uSat=sat_res.get('uSat', 0), nSat=sat_res.get('nSat', 0)
-				)
+				satellites = sat_res.get('satellites', [])
+				uSat = sum(1 for s in satellites if s.get('used'))
+				nSat = len(satellites)
+				self._current_sat = SATFix(timestamp=self._parse_gps_time(sat_res.get('time')), uSat=uSat, nSat=nSat)
 				logging.debug(
-					'GPSD sat data: [time: %s, uSat: %0.0f, nSat: %0.0f]',
+					'GPSD sat data: [time: %s, uSat: %d, nSat: %d]',
 					self._current_sat.timestamp.astimezone().isoformat(timespec='seconds'),
 					self._current_sat.uSat,
 					self._current_sat.nSat,
