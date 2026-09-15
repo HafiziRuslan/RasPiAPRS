@@ -780,11 +780,11 @@ class GPSHandler:
 						return result
 				elif res_class == 'POLL' and filter_class in ('TPV', 'SKY'):
 					if filter_class == 'TPV' and 'tpv' in result:
-						for tpv in result['tpv']:
+						for tpv in reversed(result['tpv']):
 							if tpv.get('mode', 0) > 1:
 								return tpv
 					if filter_class == 'SKY' and 'sky' in result:
-						for sky in result['sky']:
+						for sky in reversed(result['sky']):
 							if sky.get('satellites'):
 								return sky
 			return None
