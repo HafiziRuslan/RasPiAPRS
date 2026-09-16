@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-09-16T03:58:00+08:00)
+## [beta15] - (2026-09-16T15:41:13+08:00)
 
-- 35 commit(s) contributed to the release.
-- 41 day(s) passed between releases.
+- 36 commit(s) contributed to the release.
+- 42 day(s) passed between releases.
 
 ### 🚀 Features in beta15
 
@@ -49,6 +49,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta15
 
+- [8867068](https://github.com/HafiziRuslan/RasPiAPRS/commit/8867068c5e1728a6003b8a413817cca56afce94c) chore(config): configure APRS symbol to 'a' in .env.sample *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-16T15:41:13+08:00*
 - [6ac12b6](https://github.com/HafiziRuslan/RasPiAPRS/commit/6ac12b6fd4d490073666cfc09646aa623dfd588e) chore(sbom): update serial, timestamp, uv *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-16T03:58:00+08:00*
 - [6f1b491](https://github.com/HafiziRuslan/RasPiAPRS/commit/6f1b4910393b1d03932a3dd5b51252a234b96630) chore(dependencies): update tzdata to version 2026.4 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-15T21:28:02+08:00*
 - [6dda801](https://github.com/HafiziRuslan/RasPiAPRS/commit/6dda8018161d170b9689f9586c090fd6eae13c89) chore(config): update default APRS symbol table *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-14T02:24:34+08:00*
@@ -1602,4 +1603,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-09-16T03:59:00.715298086+08:00
+generated using git-cliff on 2026-09-16T15:42:21.751453244+08:00
