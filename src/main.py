@@ -1509,15 +1509,20 @@ class ScheduledMessageHandler:
 
 	async def send_all(self, aprs_sender, gps_data=None):
 		"""Send all due scheduled messages."""
-		any_sent = False
-		for msg_info in self.messages:
-			if await self._is_due(msg_info):
-				asyncio.create_task(self._send_one_with_delay(aprs_sender, msg_info, gps_data=gps_data))
-				tracking_key = self._get_tracking_key(msg_info)
-				self.tracking[tracking_key] = dt.datetime.now(msg_info['tz']).isoformat()
-				self.tracking.flush()
-				any_sent = True
-		return any_sent
+		due_messages = [m for m in self.messages if await self._is_due(m)]
+		if not due_messages:
+			return False
+		for msg_info in due_messages:
+			tracking_key = self._get_tracking_key(msg_info)
+			self.tracking[tracking_key] = dt.datetime.now(msg_info['tz']).isoformat()
+		self.tracking.flush()
+
+		async def _sequential_sender():
+			for msg_info in due_messages:
+				await self._send_one_with_delay(aprs_sender, msg_info, gps_data=gps_data)
+
+		asyncio.create_task(_sequential_sender())
+		return True
 
 	async def _send_one_with_delay(self, aprs_sender, msg_info, gps_data=None):
 		"""Perform ``_send_one`` after a random pause"""
