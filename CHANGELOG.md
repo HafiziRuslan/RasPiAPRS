@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-09-16T15:41:13+08:00)
+## [beta15] - (2026-09-17T18:34:45+08:00)
 
-- 36 commit(s) contributed to the release.
-- 42 day(s) passed between releases.
+- 37 commit(s) contributed to the release.
+- 43 day(s) passed between releases.
 
 ### 🚀 Features in beta15
 
@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta15
 
+- [cbb26d1](https://github.com/HafiziRuslan/RasPiAPRS/commit/cbb26d1ff57cc758ca1088b80bf1bc9bae4653b2) refactor(scheduler): send due messages sequentially instead of in parallel *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-17T18:34:45+08:00*
 - [c30c220](https://github.com/HafiziRuslan/RasPiAPRS/commit/c30c220f038093843921ce8c026a4e0e1aab0543) refactor(gps): reverse iteration order *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-15T21:40:12+08:00*
 - [52fdf46](https://github.com/HafiziRuslan/RasPiAPRS/commit/52fdf46ecffaea433437e235db2ad10e5e9337bd) refactor(telemetry): standardize APRS Friday KV50S message name *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-13T03:26:08+08:00*
 - [ab888b5](https://github.com/HafiziRuslan/RasPiAPRS/commit/ab888b58414b00fc9b425379597edc92bb01f68f) refactor(header): use real-time for header transmission *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-27T02:43:28+08:00*
@@ -1603,4 +1604,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-09-16T15:42:21.751453244+08:00
+generated using git-cliff on 2026-09-17T18:36:01.391103764+08:00
