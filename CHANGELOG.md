@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-09-17T18:34:45+08:00)
+## [beta15] - (2026-09-22T17:07:40+08:00)
 
-- 37 commit(s) contributed to the release.
-- 43 day(s) passed between releases.
+- 39 commit(s) contributed to the release.
+- 48 day(s) passed between releases.
 
 ### 🚀 Features in beta15
 
@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta15
 
+- [ebf00c1](https://github.com/HafiziRuslan/RasPiAPRS/commit/ebf00c19a8125666ff1fa7eff83a50448fe9a40d) refactor(traffic): move net variable assignment inside conditional *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-22T17:06:58+08:00*
 - [cbb26d1](https://github.com/HafiziRuslan/RasPiAPRS/commit/cbb26d1ff57cc758ca1088b80bf1bc9bae4653b2) refactor(scheduler): send due messages sequentially instead of in parallel *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-17T18:34:45+08:00*
 - [c30c220](https://github.com/HafiziRuslan/RasPiAPRS/commit/c30c220f038093843921ce8c026a4e0e1aab0543) refactor(gps): reverse iteration order *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-15T21:40:12+08:00*
 - [52fdf46](https://github.com/HafiziRuslan/RasPiAPRS/commit/52fdf46ecffaea433437e235db2ad10e5e9337bd) refactor(telemetry): standardize APRS Friday KV50S message name *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-13T03:26:08+08:00*
@@ -50,6 +51,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta15
 
+- [36a7b1a](https://github.com/HafiziRuslan/RasPiAPRS/commit/36a7b1a98e0bbbd9255e0f95854af5c5b9698694) chore(deps): update idna, multidict, propcache, yarl *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-22T17:07:40+08:00*
 - [8867068](https://github.com/HafiziRuslan/RasPiAPRS/commit/8867068c5e1728a6003b8a413817cca56afce94c) chore(config): configure APRS symbol to 'a' in .env.sample *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-16T15:41:13+08:00*
 - [6ac12b6](https://github.com/HafiziRuslan/RasPiAPRS/commit/6ac12b6fd4d490073666cfc09646aa623dfd588e) chore(sbom): update serial, timestamp, uv *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-16T03:58:00+08:00*
 - [6f1b491](https://github.com/HafiziRuslan/RasPiAPRS/commit/6f1b4910393b1d03932a3dd5b51252a234b96630) chore(dependencies): update tzdata to version 2026.4 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-15T21:28:02+08:00*
@@ -1604,4 +1606,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-09-17T18:36:01.391103764+08:00
+generated using git-cliff on 2026-09-22T17:08:48.618158688+08:00
