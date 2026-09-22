@@ -1206,9 +1206,9 @@ class SystemStats(object):
 			best_rx, best_tx, max_total, found = 0, 0, -1, False
 			if data.get('interfaces'):
 				for iface in data['interfaces']:
-					net = re.sub(r'\d+$', '', iface.get('name', ''))
 					fiveminute_traffic = iface.get('traffic', {}).get('fiveminute')
 					if fiveminute_traffic:
+						net = re.sub(r'\d+$', '', iface.get('name', ''))
 						last_entry = fiveminute_traffic[-1]
 						rx_bytes, tx_bytes = last_entry.get('rx', 0), last_entry.get('tx', 0)
 						total = rx_bytes + tx_bytes
