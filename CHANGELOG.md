@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-09-24T22:21:44+08:00)
+## [beta15] - (2026-10-05T22:55:06+08:00)
 
-- 40 commit(s) contributed to the release.
-- 50 day(s) passed between releases.
+- 41 commit(s) contributed to the release.
+- 61 day(s) passed between releases.
 
 ### 🚀 Features in beta15
 
@@ -48,6 +48,10 @@ All notable changes to this project will be documented in this file.
 - [41e7547](https://github.com/HafiziRuslan/RasPiAPRS/commit/41e7547e5f409000ff30da1294635e9425b5948e) docs(readme): update telemetry example callsign reference *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-13T03:26:22+08:00*
 - [cd26240](https://github.com/HafiziRuslan/RasPiAPRS/commit/cd26240d6814b722fbc3e743fef75f46208f48c0) docs(misc): add APRS queries reference document *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-10T17:23:02+08:00*
 - [6ae1a02](https://github.com/HafiziRuslan/RasPiAPRS/commit/6ae1a02d24aa5a1d70dddf34a86ae705bbc171c0) docs(readme): remove event number column from table *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-08-10T22:43:23+08:00*
+
+### 🎨 Styling in beta15
+
+- [d577fe6](https://github.com/HafiziRuslan/RasPiAPRS/commit/d577fe6b47dc5ca515c65b75d1fc88b6c7275095) style(config): add spaces around equals signs in .env.sample *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-05T22:55:06+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta15
 
@@ -1607,4 +1611,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-09-24T22:22:59.531955208+08:00
+generated using git-cliff on 2026-10-05T22:56:24.488186236+08:00
