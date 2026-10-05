@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-10-05T22:55:06+08:00)
+## [beta15] - (2026-10-05T22:58:55+08:00)
 
-- 41 commit(s) contributed to the release.
+- 42 commit(s) contributed to the release.
 - 61 day(s) passed between releases.
 
 ### 🚀 Features in beta15
@@ -55,6 +55,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta15
 
+- [8a2ed5c](https://github.com/HafiziRuslan/RasPiAPRS/commit/8a2ed5c9d049e8d8b340ddd5637be6f6a7499089) chore(deps): bump python-dotenv and tzdata versions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-05T22:58:55+08:00*
 - [0c6f8ac](https://github.com/HafiziRuslan/RasPiAPRS/commit/0c6f8acfeae9f128517e92bba6bcaa0df3897a85) chore(sbom): update sbom metadata *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-24T22:21:44+08:00*
 - [36a7b1a](https://github.com/HafiziRuslan/RasPiAPRS/commit/36a7b1a98e0bbbd9255e0f95854af5c5b9698694) chore(deps): update idna, multidict, propcache, yarl *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-22T17:07:40+08:00*
 - [8867068](https://github.com/HafiziRuslan/RasPiAPRS/commit/8867068c5e1728a6003b8a413817cca56afce94c) chore(config): configure APRS symbol to 'a' in .env.sample *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-16T15:41:13+08:00*
@@ -1611,4 +1612,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-10-05T22:56:24.488186236+08:00
+generated using git-cliff on 2026-10-05T23:00:41.860373593+08:00
