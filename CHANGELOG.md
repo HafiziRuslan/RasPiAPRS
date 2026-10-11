@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta15] - (2026-10-05T22:58:55+08:00)
+## [beta15] - (2026-10-11T20:53:54+08:00)
 
-- 42 commit(s) contributed to the release.
-- 61 day(s) passed between releases.
+- 45 commit(s) contributed to the release.
+- 67 day(s) passed between releases.
 
 ### 🚀 Features in beta15
 
@@ -55,7 +55,9 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta15
 
+- [9cf79f5](https://github.com/HafiziRuslan/RasPiAPRS/commit/9cf79f5d374d8cc8e54b8a8313ffd900e2b2cca0) chore(deps): update aiohttp and multidict *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-11T20:53:54+08:00*
 - [8a2ed5c](https://github.com/HafiziRuslan/RasPiAPRS/commit/8a2ed5c9d049e8d8b340ddd5637be6f6a7499089) chore(deps): bump python-dotenv and tzdata versions *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-05T22:58:55+08:00*
+- [c2aac5b](https://github.com/HafiziRuslan/RasPiAPRS/commit/c2aac5be27b6e7df484fc0c1ae9e1e9252d09c3f) build(deps): bump MyAlbum/purge-cache from 2 to 3 *by [@dependabot[bot]](https://github.com/dependabot[bot]) on 2026-10-01T00:13:24+08:00*
 - [0c6f8ac](https://github.com/HafiziRuslan/RasPiAPRS/commit/0c6f8acfeae9f128517e92bba6bcaa0df3897a85) chore(sbom): update sbom metadata *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-24T22:21:44+08:00*
 - [36a7b1a](https://github.com/HafiziRuslan/RasPiAPRS/commit/36a7b1a98e0bbbd9255e0f95854af5c5b9698694) chore(deps): update idna, multidict, propcache, yarl *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-22T17:07:40+08:00*
 - [8867068](https://github.com/HafiziRuslan/RasPiAPRS/commit/8867068c5e1728a6003b8a413817cca56afce94c) chore(config): configure APRS symbol to 'a' in .env.sample *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-09-16T15:41:13+08:00*
@@ -1612,4 +1614,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-10-05T23:00:41.860373593+08:00
+generated using git-cliff on 2026-10-11T20:55:14.543545374+08:00
