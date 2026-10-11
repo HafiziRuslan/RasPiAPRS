@@ -2,14 +2,14 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:4f0dba65-3bde-42e2-a7e6-6773c0d2bb41",
+  "serialNumber": "urn:uuid:10d457cd-9f78-4923-9cc5-b734b432cd7f",
   "metadata": {
-    "timestamp": "2026-10-05T14:51:42.253724300Z",
+    "timestamp": "2026-10-11T12:10:25.878960200Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
         "name": "uv",
-        "version": "0.12.23"
+        "version": "0.13.0"
       }
     ],
     "component": {
@@ -35,10 +35,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "aiohttp-3@3.14.3",
+      "bom-ref": "aiohttp-3@3.14.5",
       "name": "aiohttp",
-      "version": "3.14.3",
-      "purl": "pkg:pypi/aiohttp@3.14.3"
+      "version": "3.14.5",
+      "purl": "pkg:pypi/aiohttp@3.14.5"
     },
     {
       "type": "library",
@@ -154,10 +154,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "multidict-20@6.9.1",
+      "bom-ref": "multidict-20@7.1.0",
       "name": "multidict",
-      "version": "6.9.1",
-      "purl": "pkg:pypi/multidict@6.9.1"
+      "version": "7.1.0",
+      "purl": "pkg:pypi/multidict@7.1.0"
     },
     {
       "type": "library",
@@ -241,13 +241,13 @@
       "ref": "aiohappyeyeballs-2@2.7.1"
     },
     {
-      "ref": "aiohttp-3@3.14.3",
+      "ref": "aiohttp-3@3.14.5",
       "dependsOn": [
         "aiohappyeyeballs-2@2.7.1",
         "aiosignal-4@1.4.0",
         "attrs-7@26.1.0",
         "frozenlist-11@1.8.0",
-        "multidict-20@6.9.1",
+        "multidict-20@7.1.0",
         "propcache-22@0.5.4",
         "yarl-30@1.25.1"
       ]
@@ -324,7 +324,7 @@
       "ref": "idna-19@3.20"
     },
     {
-      "ref": "multidict-20@6.9.1"
+      "ref": "multidict-20@7.1.0"
     },
     {
       "ref": "openpyxl-21@3.1.5",
@@ -357,7 +357,7 @@
     {
       "ref": "raspiaprs-1@0.1b15",
       "dependsOn": [
-        "aiohttp-3@3.14.3",
+        "aiohttp-3@3.14.5",
         "aprslib-6@0.7.2",
         "callsign-regex-8@0.7.1",
         "geopy-13@2.5.0",
@@ -383,7 +383,7 @@
       "ref": "yarl-30@1.25.1",
       "dependsOn": [
         "idna-19@3.20",
-        "multidict-20@6.9.1",
+        "multidict-20@7.1.0",
         "propcache-22@0.5.4"
       ]
     }
