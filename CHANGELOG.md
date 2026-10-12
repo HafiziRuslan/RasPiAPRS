@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [beta16] - (2026-10-12T23:09:34+08:00)
+
+- 2 commit(s) contributed to the release.
+- 1 day(s) passed between releases.
+
+### 📚 Documentation in beta16
+
+- [45f772a](https://github.com/HafiziRuslan/RasPiAPRS/commit/45f772a938a36538bf9518feb9637d163f37219e) docs(README): update repository URL *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-12T23:09:34+08:00*
+
+### ⚙️ Miscellaneous Tasks in beta16
+
+- [7be96bb](https://github.com/HafiziRuslan/RasPiAPRS/commit/7be96bb34a6634a8d8e86610ef869962e787610e) build(project): bump version to 0.1b16 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-12T23:08:23+08:00*
+
+---
+
 ## [beta15] - (2026-10-11T20:53:54+08:00)
 
 - 45 commit(s) contributed to the release.
@@ -1614,4 +1629,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-10-11T20:55:14.543545374+08:00
+generated using git-cliff on 2026-10-12T23:11:00.942440343+08:00
