@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta16] - (2026-10-12T23:09:34+08:00)
+## [beta16] - (2026-10-13T00:28:40+08:00)
 
-- 2 commit(s) contributed to the release.
+- 3 commit(s) contributed to the release.
 - 1 day(s) passed between releases.
 
 ### 📚 Documentation in beta16
@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta16
 
+- [1325108](https://github.com/HafiziRuslan/RasPiAPRS/commit/1325108d5ed80c0c47959080783f4b5221b7d850) chore(msg): change SARES and KV50S event timezones to utc *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-13T00:28:40+08:00*
 - [7be96bb](https://github.com/HafiziRuslan/RasPiAPRS/commit/7be96bb34a6634a8d8e86610ef869962e787610e) build(project): bump version to 0.1b16 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-12T23:08:23+08:00*
 
 ---
@@ -1629,4 +1630,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-10-12T23:11:00.942440343+08:00
+generated using git-cliff on 2026-10-13T00:29:57.428472257+08:00
