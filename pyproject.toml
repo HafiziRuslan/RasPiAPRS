@@ -1,7 +1,7 @@
 [project]
 name = 'RasPiAPRS'
-version = '0.1b15'
-description = 'APRS telemetry for Pi-Star/WPSD/AllStarLink/DVSwitch/SVXLink'
+version = '0.1b16'
+description = 'APRS for Pi-Star/WPSD/ASL/DVS/SVX on Raspberry Pi'
 keywords = ['amateur-radio', 'aprs', 'aprs-beacon', 'aprs-telemetry', 'aprs-messaging', 'mmdvm', 'pi-star', 'wpsd', 'allstarlink', 'dvswitch', 'svxlink']
 readme = 'README.md'
 license = 'GPL-3.0-or-later'
