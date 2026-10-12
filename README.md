@@ -79,7 +79,7 @@ RasPiAPRS supports participation in several optional APRS network events by enab
     <tr>
       <td><b>SARES APRS CommCheck</b></td>
       <td>Tuesday</td>
-      <td>UTC+8</td>
+      <td>UTC</td>
       <td>9M4CSR</td>
       <td><a href="https://aprs.sares.org.my">aprs.sares.org.my</a></td>
     </tr>
@@ -107,7 +107,7 @@ RasPiAPRS supports participation in several optional APRS network events by enab
     <tr>
       <td><b>Komuniti V50 Samarahan APRS Friday</b></td>
       <td>Friday</td>
-      <td>UTC+8</td>
+      <td>UTC</td>
       <td>9W4GTS</td>
       <td><a href="https://net.hamfinity.com/n/0e162e43ef17">net.hamfinity.com</a></td>
     </tr>
