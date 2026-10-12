@@ -154,11 +154,11 @@ The following packages are required for the application to interface with hardwa
 
 The startup script will attempt to install them automatically if they are missing.
 
-Note: to install uv using `apt`, you may use `debian.griffo.io` repository.
+Note: to install uv using `apt`, you can use `deb.griffo.io` subscription repository.
 
 ```bash
-curl -sS https://debian.griffo.io/EA0F721D231FDD3A0A17B9AC7808B4DD62C41256.asc | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/debian.griffo.io.gpg
-echo "deb https://debian.griffo.io/apt $(lsb_release -sc 2>/dev/null) main" | sudo tee /etc/apt/sources.list.d/debian.griffo.io.list
+curl -sS https://deb.griffo.io/EA0F721D231FDD3A0A17B9AC7808B4DD62C41256.asc | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/deb.griffo.io.gpg
+echo "deb https://deb.griffo.io/apt $(lsb_release -sc 2>/dev/null) main" | sudo tee /etc/apt/sources.list.d/deb.griffo.io.list
 sudo apt update && sudo apt install uv
 ```
 
