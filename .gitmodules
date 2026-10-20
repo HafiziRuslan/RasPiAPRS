@@ -1,0 +1,3 @@
+[submodule "misc/aprsspec"]
+	path = misc/aprsspec
+	url = https://github.com/wb2osz/aprsspec.git
