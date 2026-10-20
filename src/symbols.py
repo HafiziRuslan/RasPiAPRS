@@ -15,7 +15,7 @@
 
 """
 APRS Symbol Definitions
-Source: symbolsX.txt (25 Nov 2015), symbols-new.txt (17 Mar 2021)
+Source: APRS-Symbols.pdf
 """
 
 SYMBOLS = {
