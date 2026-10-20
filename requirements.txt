@@ -12,7 +12,7 @@ attrs==26.1.0
     # via aiohttp
 callsign-regex==0.7.1
     # via raspiaprs
-certifi==2026.7.22
+certifi==2026.10.19
     # via
     #   httpcore
     #   httpx
