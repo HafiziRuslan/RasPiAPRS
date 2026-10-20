@@ -2,13 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta16] - (2026-10-16T21:06:34+08:00)
+## [beta16] - (2026-10-21T00:47:59+08:00)
 
-- 5 commit(s) contributed to the release.
-- 5 day(s) passed between releases.
+- 10 commit(s) contributed to the release.
+- 9 day(s) passed between releases.
+
+### 🚀 Features in beta16
+
+- [e2a87ca](https://github.com/HafiziRuslan/RasPiAPRS/commit/e2a87cab684756eb89608ecf7ecaca3017189cba) feat(.gitmodules): add aprs-spec submodule *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T00:47:59+08:00*
+
+### 🚜 Refactor in beta16
+
+- [d826208](https://github.com/HafiziRuslan/RasPiAPRS/commit/d8262083f218c750683a5a57b0ddd004b74fb54c) refactor(gitignore): add .git* and remove .github *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T00:47:11+08:00*
+- [77b6fab](https://github.com/HafiziRuslan/RasPiAPRS/commit/77b6fabc2524105c333c30e50422fcc9aa02769e) refactor(misc): reorganize images to img directory *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T00:39:35+08:00*
 
 ### 📚 Documentation in beta16
 
+- [3f1cfaa](https://github.com/HafiziRuslan/RasPiAPRS/commit/3f1cfaa60a10119a2ecb3a6425139d4b6481af1f) docs(APRS101.pdf): remove obsolete PDF *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T00:47:40+08:00*
+- [269ab84](https://github.com/HafiziRuslan/RasPiAPRS/commit/269ab842e139fc4355bc4d4b8c88de2ed554340a) docs(misc): move documentation files to docs directory *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T00:42:05+08:00*
 - [45f772a](https://github.com/HafiziRuslan/RasPiAPRS/commit/45f772a938a36538bf9518feb9637d163f37219e) docs(README): update repository URL *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-12T23:09:34+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta16
@@ -1632,4 +1643,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-10-16T21:08:05.817482731+08:00
+generated using git-cliff on 2026-10-21T00:49:18.158924644+08:00
