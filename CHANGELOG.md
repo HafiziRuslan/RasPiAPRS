@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta16] - (2026-10-21T00:47:59+08:00)
+## [beta16] - (2026-10-21T01:01:10+08:00)
 
-- 10 commit(s) contributed to the release.
+- 13 commit(s) contributed to the release.
 - 9 day(s) passed between releases.
 
 ### 🚀 Features in beta16
@@ -18,12 +18,15 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation in beta16
 
+- [dde1301](https://github.com/HafiziRuslan/RasPiAPRS/commit/dde1301f621f7a0a44bc16bb0593c2c3d28d1e58) chore(docs): remove deprecated APRS SSID recommendations *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T01:00:13+08:00*
+- [57a8865](https://github.com/HafiziRuslan/RasPiAPRS/commit/57a8865d0d4563e637fa9f789cee25ad2f1a7c63) docs(symbols): switch to APRS-Symbols.pdf *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T00:58:46+08:00*
 - [3f1cfaa](https://github.com/HafiziRuslan/RasPiAPRS/commit/3f1cfaa60a10119a2ecb3a6425139d4b6481af1f) docs(APRS101.pdf): remove obsolete PDF *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T00:47:40+08:00*
 - [269ab84](https://github.com/HafiziRuslan/RasPiAPRS/commit/269ab842e139fc4355bc4d4b8c88de2ed554340a) docs(misc): move documentation files to docs directory *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T00:42:05+08:00*
 - [45f772a](https://github.com/HafiziRuslan/RasPiAPRS/commit/45f772a938a36538bf9518feb9637d163f37219e) docs(README): update repository URL *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-12T23:09:34+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta16
 
+- [b4060f9](https://github.com/HafiziRuslan/RasPiAPRS/commit/b4060f9ba5f1d91fa420fb022131769828409b66) chore(dependencies): update certifi to v2026.10.19 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T01:01:10+08:00*
 - [a052610](https://github.com/HafiziRuslan/RasPiAPRS/commit/a0526102aaf8b23d74c69ad06b51ed7cd40c595e) chore(sbom): update sbom metadata *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-16T21:06:34+08:00*
 - [5e057fc](https://github.com/HafiziRuslan/RasPiAPRS/commit/5e057fc98ffdc2d69111e4a1be225a7f6e8d01d4) chore(gitignore): update .gitignore with comprehensive templates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-16T21:06:01+08:00*
 - [1325108](https://github.com/HafiziRuslan/RasPiAPRS/commit/1325108d5ed80c0c47959080783f4b5221b7d850) chore(msg): change SARES and KV50S event timezones to utc *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-13T00:28:40+08:00*
@@ -1643,4 +1646,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-10-21T00:49:18.158924644+08:00
+generated using git-cliff on 2026-10-21T01:02:27.842201579+08:00
