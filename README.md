@@ -2,7 +2,7 @@
 
 <div style="text-align: center;">
 
-![RasPiAPRS Logo](misc/raspiaprs_2x1.png)
+![RasPiAPRS Logo](misc/img/raspiaprs_2x1.png)
 
 ![Ko-Fi sponsors](https://img.shields.io/badge/kofi-tip-FF6433?style=for-the-badge&logo=kofi&logoColor=FF6433&logoSize=auto&link=https%3A%2F%2Fko-fi.com%2Fhafiziruslan)
 ![Buy me a Coffee sponsors](https://img.shields.io/badge/buymeacoffee-tip-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=FFDD00&logoSize=auto&link=https%3A%2F%2Fwww.buymeacoffee.com%2Fhafiziruslan)
@@ -236,15 +236,16 @@ This is the screenshot taken from `aprs.fi` of _CPU average temperature_, _CPU a
 <div style="text-align: center;">
 
 _CPU average temperature_
-![Temp](misc/aprs.fi-telemetry-a-9M2FZY.png)
+![Temp](misc/img/aprs.fi-telemetry-a-9M2FZY.png)
 _CPU average load_
-![Load](misc/aprs.fi-telemetry-b-9M2FZY.png)
+![Load](misc/img/aprs.fi-telemetry-b-9M2FZY.png)
 _Memory consumption_
-![RAM](misc/aprs.fi-telemetry-c-9M2FZY.png)
+![RAM](misc/img/aprs.fi-telemetry-c-9M2FZY.png)
 _Storage consumption_
-![ROM](misc/aprs.fi-telemetry-d-9M2FZY.png)
+![ROM](misc/img/aprs.fi-telemetry-d-9M2FZY.png)
 _GPS fix detected_
-![GPS](misc/aprs.fi-telemetry-e-9M2FZY.png)
+![GPS](misc/img/aprs.fi-telemetry-e-9M2FZY.png)
+
 </div>
 
 ## 💻 Hardware used
