@@ -2,14 +2,14 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:1fc2f9a8-e334-48a7-b431-c370e844f7a7",
+  "serialNumber": "urn:uuid:c70ffc18-8a91-410e-b3ee-8ff6250fef68",
   "metadata": {
-    "timestamp": "2026-10-20T16:56:27.373539200Z",
+    "timestamp": "2026-10-22T13:48:11.356744900Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
         "name": "uv",
-        "version": "0.13.3"
+        "version": "0.13.4"
       }
     ],
     "component": {
@@ -182,10 +182,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "python-dateutil-24@2.9.0.post0",
+      "bom-ref": "python-dateutil-24@3.0.0",
       "name": "python-dateutil",
-      "version": "2.9.0.post0",
-      "purl": "pkg:pypi/python-dateutil@2.9.0.post0"
+      "version": "3.0.0",
+      "purl": "pkg:pypi/python-dateutil@3.0.0"
     },
     {
       "type": "library",
@@ -339,9 +339,10 @@
       "ref": "psutil-23@7.2.2"
     },
     {
-      "ref": "python-dateutil-24@2.9.0.post0",
+      "ref": "python-dateutil-24@3.0.0",
       "dependsOn": [
-        "six-27@1.17.0"
+        "six-27@1.17.0",
+        "tzdata-29@2026.5"
       ]
     },
     {
@@ -364,10 +365,9 @@
         "gpsdclient-14@1.3.2",
         "humanize-18@4.16.0",
         "psutil-23@7.2.2",
-        "python-dateutil-24@2.9.0.post0",
+        "python-dateutil-24@3.0.0",
         "python-dotenv-25@1.2.4",
-        "python-telegram-bot-26@22.8",
-        "tzdata-29@2026.5"
+        "python-telegram-bot-26@22.8"
       ]
     },
     {

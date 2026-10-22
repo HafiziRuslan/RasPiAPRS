@@ -55,7 +55,7 @@ propcache==0.5.4
     #   yarl
 psutil==7.2.2
     # via raspiaprs
-python-dateutil==2.9.0.post0
+python-dateutil==3.0.0
     # via raspiaprs
 python-dotenv==1.2.4
     # via raspiaprs
@@ -66,6 +66,6 @@ six==1.17.0
 typing-extensions==4.16.0 ; python_full_version < '3.15'
     # via anyio
 tzdata==2026.5
-    # via raspiaprs
+    # via python-dateutil
 yarl==1.25.1
     # via aiohttp
