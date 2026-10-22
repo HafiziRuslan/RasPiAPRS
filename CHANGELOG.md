@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta16] - (2026-10-21T01:01:10+08:00)
+## [beta16] - (2026-10-22T21:50:07+08:00)
 
-- 13 commit(s) contributed to the release.
-- 9 day(s) passed between releases.
+- 14 commit(s) contributed to the release.
+- 11 day(s) passed between releases.
 
 ### 🚀 Features in beta16
 
@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta16
 
+- [0b14e25](https://github.com/HafiziRuslan/RasPiAPRS/commit/0b14e25b9cbd75b7a0284ebd328b9af44527d48e) build(deps): upgrade python-dateutil to 3.0.0 and add python 3.16 support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-22T21:50:07+08:00*
 - [b4060f9](https://github.com/HafiziRuslan/RasPiAPRS/commit/b4060f9ba5f1d91fa420fb022131769828409b66) chore(dependencies): update certifi to v2026.10.19 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T01:01:10+08:00*
 - [a052610](https://github.com/HafiziRuslan/RasPiAPRS/commit/a0526102aaf8b23d74c69ad06b51ed7cd40c595e) chore(sbom): update sbom metadata *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-16T21:06:34+08:00*
 - [5e057fc](https://github.com/HafiziRuslan/RasPiAPRS/commit/5e057fc98ffdc2d69111e4a1be225a7f6e8d01d4) chore(gitignore): update .gitignore with comprehensive templates *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-16T21:06:01+08:00*
@@ -1646,4 +1647,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-10-21T01:02:27.842201579+08:00
+generated using git-cliff on 2026-10-22T21:51:39.700742211+08:00
