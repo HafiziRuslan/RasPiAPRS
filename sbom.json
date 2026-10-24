@@ -2,14 +2,14 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:c70ffc18-8a91-410e-b3ee-8ff6250fef68",
+  "serialNumber": "urn:uuid:b4cd37e4-b64e-4dbf-be4e-13d5c2f9f3a8",
   "metadata": {
-    "timestamp": "2026-10-22T13:48:11.356744900Z",
+    "timestamp": "2026-10-24T20:21:04.496689600Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
         "name": "uv",
-        "version": "0.13.4"
+        "version": "0.13.5"
       }
     ],
     "component": {
@@ -77,10 +77,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "certifi-9@2026.10.19",
+      "bom-ref": "certifi-9@2026.10.23",
       "name": "certifi",
-      "version": "2026.10.19",
-      "purl": "pkg:pypi/certifi@2026.10.19"
+      "version": "2026.10.23",
+      "purl": "pkg:pypi/certifi@2026.10.23"
     },
     {
       "type": "library",
@@ -154,10 +154,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "multidict-20@7.1.0",
+      "bom-ref": "multidict-20@7.2.0",
       "name": "multidict",
-      "version": "7.1.0",
-      "purl": "pkg:pypi/multidict@7.1.0"
+      "version": "7.2.0",
+      "purl": "pkg:pypi/multidict@7.2.0"
     },
     {
       "type": "library",
@@ -247,7 +247,7 @@
         "aiosignal-4@1.4.0",
         "attrs-7@26.1.0",
         "frozenlist-11@1.8.0",
-        "multidict-20@7.1.0",
+        "multidict-20@7.2.0",
         "propcache-22@0.5.4",
         "yarl-30@1.25.1"
       ]
@@ -278,7 +278,7 @@
       ]
     },
     {
-      "ref": "certifi-9@2026.10.19"
+      "ref": "certifi-9@2026.10.23"
     },
     {
       "ref": "et-xmlfile-10@2.0.0"
@@ -304,7 +304,7 @@
     {
       "ref": "httpcore-16@1.0.9",
       "dependsOn": [
-        "certifi-9@2026.10.19",
+        "certifi-9@2026.10.23",
         "h11-15@0.16.0"
       ]
     },
@@ -312,7 +312,7 @@
       "ref": "httpx-17@0.28.1",
       "dependsOn": [
         "anyio-5@4.15.1",
-        "certifi-9@2026.10.19",
+        "certifi-9@2026.10.23",
         "httpcore-16@1.0.9",
         "idna-19@3.20"
       ]
@@ -324,7 +324,7 @@
       "ref": "idna-19@3.20"
     },
     {
-      "ref": "multidict-20@7.1.0"
+      "ref": "multidict-20@7.2.0"
     },
     {
       "ref": "openpyxl-21@3.1.5",
@@ -383,7 +383,7 @@
       "ref": "yarl-30@1.25.1",
       "dependsOn": [
         "idna-19@3.20",
-        "multidict-20@7.1.0",
+        "multidict-20@7.2.0",
         "propcache-22@0.5.4"
       ]
     }
