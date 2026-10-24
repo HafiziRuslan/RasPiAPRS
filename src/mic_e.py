@@ -79,9 +79,7 @@ class MMDVMLogWatcher:
 		"""Get the most recently modified MMDVM log file."""
 		try:
 			files = [
-				os.path.join(self.mmdvm_log_dir, f)
-				for f in os.listdir(self.mmdvm_log_dir)
-				if f.startswith(self.mmdvm_file_root) and f.endswith('.log')
+				os.path.join(self.mmdvm_log_dir, f) for f in os.listdir(self.mmdvm_log_dir) if f.startswith(self.mmdvm_file_root) and f.endswith('.log')
 			]
 			return max(files, key=os.path.getmtime) if files else None
 		except Exception as e:

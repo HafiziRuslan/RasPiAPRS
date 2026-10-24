@@ -16,8 +16,9 @@
 # 	along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import json
-import socket
 import logging
+import socket
+
 from gpsdclient import GPSDClient
 
 
@@ -46,9 +47,8 @@ def fetch_from_gpsd(cfg, filter_class):
 
 		for i, line in enumerate(lines):
 			# For TCP client, send POLL after version header
-			if not sock_path and i == 1:
-				if hasattr(client, 'sock') and client.sock:
-					client.sock.sendall(b'?POLL;\n')
+			if not sock_path and i == 1 and hasattr(client, 'sock') and client.sock:
+				client.sock.sendall(b'?POLL;\n')
 
 			answ = line.strip()
 			if not answ or answ.startswith('{"class":"VERSION"'):

@@ -47,13 +47,17 @@ dependencies = [
 aprslib = { git = 'https://github.com/rossengeorgiev/aprs-python' }
 
 [tool.ruff]
-line-length = 150
 analyze.detect-string-imports = true
-format.quote-style = 'single'
-format.indent-style = 'tab'
+fix = true
 format.docstring-code-format = true
+format.indent-style = 'tab'
 format.line-ending = 'lf'
+format.quote-style = 'single'
 format.skip-magic-trailing-comma = true
+indent-width = 2
+line-length = 150
 lint.isort.combine-as-imports = true
 lint.isort.default-section = 'first-party'
 lint.isort.force-single-line = true
+lint.isort.force-sort-within-sections = true
+lint.isort.force-wrap-aliases = true

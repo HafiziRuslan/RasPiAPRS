@@ -36,9 +36,9 @@ import time
 import tomllib
 from collections import UserDict
 from collections import deque
+from collections.abc import Callable
 from dataclasses import dataclass
 from dataclasses import field
-from typing import Callable
 from typing import NamedTuple
 from zoneinfo import ZoneInfo
 
@@ -237,11 +237,10 @@ class Config:
 			for proc in psutil.process_iter(['name', 'cmdline']):
 				if proc.info['name'] == 'MMDVMHost' and proc.info['cmdline']:
 					for arg in proc.info['cmdline']:
-						if 'MMDVM.ini' in arg or 'mmdvmhost' in arg:
-							if os.path.isfile(arg) and os.access(arg, os.R_OK):
-								self.mmdvmhost_file = arg
-								logging.info('Found MMDVMHost configuration from active process: %s', self.mmdvmhost_file)
-								break
+						if ('MMDVM.ini' in arg or 'mmdvmhost' in arg) and os.path.isfile(arg) and os.access(arg, os.R_OK):
+							self.mmdvmhost_file = arg
+							logging.info('Found MMDVMHost configuration from active process: %s', self.mmdvmhost_file)
+							break
 					if self.mmdvmhost_file:
 						break
 			if not self.mmdvmhost_file:
@@ -361,9 +360,8 @@ class Config:
 					continue
 				base, ssid_str = sender.rsplit('-', 1) if '-' in sender else (sender, None)
 				is_valid = False
-				if ituappendix42.fullmatch(base):
-					if ssid_str is None or (ssid_str.isdigit() and 0 <= int(ssid_str) <= 15):
-						is_valid = True
+				if ituappendix42.fullmatch(base) and (ssid_str is None or (ssid_str.isdigit() and 0 <= int(ssid_str) <= 15)):
+					is_valid = True
 				if is_valid:
 					valid_senders.append(sender)
 				else:
@@ -449,7 +447,7 @@ def configure_logging(cfg: Config):
 
 	class ISO8601Formatter(logging.Formatter):
 		def formatTime(self, record, datefmt=None):
-			return dt.datetime.fromtimestamp(record.created, dt.timezone.utc).astimezone().isoformat(timespec='milliseconds')
+			return dt.datetime.fromtimestamp(record.created, dt.UTC).astimezone().isoformat(timespec='milliseconds')
 
 	class LevelFilter(logging.Filter):
 		def __init__(self, level):
@@ -549,14 +547,14 @@ class PersistentCounter:
 				self._count = int(fds.readline())
 			if self._count >= self.modulo:
 				self._count = 0
-		except (IOError, ValueError):
+		except (OSError, ValueError):
 			self._count = 0
 
 	def _save(self):
 		try:
 			with open(self.file_path, 'w') as fds:
 				fds.write(f'{self._count:d}')
-		except IOError:
+		except OSError:
 			pass
 
 	def __iter__(self):
@@ -585,14 +583,14 @@ class PersistentDict(UserDict):
 			try:
 				with open(self.file_path, 'rb') as f:
 					data = pickle.load(f)
-			except (IOError, ValueError, pickle.UnpicklingError) as e:
+			except (OSError, ValueError, pickle.UnpicklingError) as e:
 				logging.warning('Failed to load persistent dict from %s: %s', self.file_path, e)
 				return {}
 		else:
 			try:
 				with open(self.file_path, 'r') as f:
 					data = json.load(f)
-			except (IOError, ValueError, json.JSONDecodeError) as e:
+			except (OSError, ValueError, json.JSONDecodeError) as e:
 				logging.warning('Failed to load persistent dict from %s: %s', self.file_path, e)
 				return {}
 		if isinstance(data, dict):
@@ -605,13 +603,13 @@ class PersistentDict(UserDict):
 			try:
 				with open(self.file_path, 'wb') as f:
 					pickle.dump(self.data, f)
-			except (IOError, OSError) as e:
+			except OSError as e:
 				logging.error('Failed to save persistent dict to %s: %s', self.file_path, e)
 		else:
 			try:
 				with open(self.file_path, 'w') as f:
 					json.dump(self.data, f)
-			except (IOError, OSError) as e:
+			except OSError as e:
 				logging.error('Failed to save persistent dict to %s: %s', self.file_path, e)
 
 	def reload(self):
@@ -727,18 +725,18 @@ class GPSHandler:
 		self.healthy = True
 		self.unhealthy_warning_sent = False
 		fallback_lat, fallback_lon, fallback_alt = self._get_fallback_location()
-		self._current_pos = GPSFix(dt.datetime.now(dt.timezone.utc), fallback_lat, fallback_lon, fallback_alt, 0.0, 0.0)
-		self._current_sat = SATFix(dt.datetime.now(dt.timezone.utc), 0, 0)
+		self._current_pos = GPSFix(dt.datetime.now(dt.UTC), fallback_lat, fallback_lon, fallback_alt, 0.0, 0.0)
+		self._current_sat = SATFix(dt.datetime.now(dt.UTC), 0, 0)
 		self.last_valid_pos = None
 
 	def _parse_gps_time(self, raw_time):
 		"""Parse ISO8601 time string from GPSD to datetime object."""
 		if isinstance(raw_time, str):
 			try:
-				return dt.datetime.fromisoformat(raw_time.replace('Z', '+00:00'))
+				return dt.datetime.fromisoformat(raw_time)
 			except ValueError:
 				pass
-		return dt.datetime.now(dt.timezone.utc)
+		return dt.datetime.now(dt.UTC)
 
 	def _fetch_from_gpsd(self, filter_class):
 		"""Worker function to fetch data from GPSD synchronously."""
@@ -761,9 +759,8 @@ class GPSHandler:
 				client = GPSDClient(host=host, port=port, timeout=10)
 				lines = client.gpsd_lines()
 			for i, line in enumerate(lines):
-				if not sock_path and i == 1:
-					if hasattr(client, 'sock') and client.sock:
-						client.sock.sendall(b'?POLL;\n')
+				if not sock_path and i == 1 and hasattr(client, 'sock') and client.sock:
+					client.sock.sendall(b'?POLL;\n')
 				answ = line.strip()
 				if not answ or answ.startswith('{"class":"VERSION"'):
 					if filter_class == 'VERSION' and answ.startswith('{"class":"VERSION"'):
@@ -898,7 +895,7 @@ class GPSHandler:
 		if gps_data:
 			pos, sat = gps_data
 		else:
-			now = dt.datetime.now(dt.timezone.utc)
+			now = dt.datetime.now(dt.UTC)
 			if not self.healthy or (now - max(self._current_pos.timestamp, self._current_sat.timestamp)).total_seconds() > 600:
 				lat, lon, alt = self._get_fallback_location()
 				self._current_pos = GPSFix(now, lat, lon, alt, 0.0, 0.0)
@@ -939,9 +936,8 @@ class GPSHandler:
 		"""Get approximate latitude and longitude using IP address lookup."""
 		url = 'http://ip-api.com/json/'
 		try:
-			async with aiohttp.ClientSession() as session:
-				async with session.get(url) as response:
-					data = await response.json()
+			async with aiohttp.ClientSession() as session, session.get(url) as response:
+				data = await response.json()
 		except Exception as err:
 			logging.error('Failed to fetch coordinates from %s: %s', url, err)
 			return 0, 0
@@ -1013,10 +1009,10 @@ class Geolocation:
 				cc_str = f'{cc}{flag}'
 			else:
 				cc_str = f'{cc}'
-		return ' '.join([area, cc_str])
+		return f'{area} {cc_str}'
 
 
-class SmartBeaconing(object):
+class SmartBeaconing:
 	"""Class to handle SmartBeaconing logic."""
 
 	def __init__(self, cfg):
@@ -1111,7 +1107,7 @@ class SmartBeaconing(object):
 			return False
 
 
-class SystemStats(object):
+class SystemStats:
 	"""Class to handle system statistics."""
 
 	def __init__(self, cfg):
@@ -1180,7 +1176,7 @@ class SystemStats(object):
 		"""Calculate human-readable uptime."""
 		import humanize
 
-		uptime_seconds = dt.datetime.now(dt.timezone.utc).timestamp() - psutil.boot_time()
+		uptime_seconds = dt.datetime.now(dt.UTC).timestamp() - psutil.boot_time()
 		uptime = dt.timedelta(seconds=uptime_seconds)
 		u_str = humanize.precisedelta(uptime, minimum_unit='seconds', format='%0.0f')
 		for pattern, repl in [
@@ -1394,7 +1390,7 @@ class SystemStats(object):
 						if key not in conf:
 							conf[key] = val
 			self._mmdvmhost_raw_config = conf
-		except (IOError, OSError) as e:
+		except OSError as e:
 			logging.debug('Could not read MMDVMHost file %s: %s', self.cfg.mmdvmhost_file, e)
 			return {'info': '', 'phg': phg_str}
 		try:
@@ -1503,9 +1499,7 @@ class ScheduledMessageHandler:
 		today = now.strftime('%Y-%m-%d')
 		tracking_key = self._get_tracking_key(msg_info)
 		last_sent = self.tracking.get(tracking_key)
-		if last_sent and last_sent.startswith(today):
-			return False
-		return True
+		return not (last_sent and last_sent.startswith(today))
 
 	async def send_all(self, aprs_sender, gps_data=None):
 		"""Send all due scheduled messages."""
@@ -1585,19 +1579,20 @@ class ScheduledMessageHandler:
 		return False
 
 
-class TelegramLogger(object):
+class TelegramLogger:
 	"""Class to handle logging to Telegram."""
 
 	def __init__(self, cfg):
 		self.cfg = cfg
 		self.enabled = cfg.telegram_enabled
 		self.bot = None
+		self.logger = logging.getLogger('RasPiAPRS.TelegramLogger')
 		if not self.enabled:
 			return
 		self.token = cfg.telegram_token
 		self.chat_id = cfg.telegram_cid
 		if not self.token or not self.chat_id:
-			logging.error('Telegram token or chat ID is missing. Disabling Telegram logging.')
+			self.logger.error('Telegram token or chat ID is missing. Disabling Telegram logging.')
 			self.enabled = False
 			return
 		import telegram
@@ -1626,8 +1621,8 @@ class TelegramLogger(object):
 				return await func(*args, **kwargs)
 			except (telegram.error.NetworkError, telegram.error.TimedOut) as e:
 				if attempt == max_retries - 1:
-					raise e
-				logging.warning('Telegram API error (attempt %d/%d): %s. Retrying in %ds...', attempt + 1, max_retries, e, delay)
+					raise
+				self.logger.warning('Telegram API error (attempt %d/%d): %s. Retrying in %ds...', attempt + 1, max_retries, e, delay)
 				await asyncio.sleep(delay)
 				delay *= 2
 
@@ -1649,9 +1644,9 @@ class TelegramLogger(object):
 			if current_tid:
 				msg_kwargs['message_thread_id'] = current_tid
 			msg = await self._call_with_retry(self.bot.send_message, **msg_kwargs)
-			logging.info('Sent message to Telegram: %s/%s/%s', msg.chat_id, msg.message_thread_id, msg.message_id)
+			self.logger.info('Sent message to Telegram: %s/%s/%s', msg.chat_id, msg.message_thread_id, msg.message_id)
 		except Exception as e:
-			logging.error('Failed to send message to Telegram: %s', e)
+			self.logger.error('Failed to send message to Telegram: %s', e)
 
 	def _read_location_id(self):
 		"""Reads location message ID and start time from file."""
@@ -1663,8 +1658,8 @@ class TelegramLogger(object):
 				msg_id = int(parts[0])
 				start_time = float(parts[1]) if len(parts) > 1 else time.time()
 				return msg_id, start_time
-		except (IOError, ValueError, IndexError) as e:
-			logging.warning('Could not read or parse location ID file: %s', e)
+		except (OSError, ValueError, IndexError) as e:
+			self.logger.warning('Could not read or parse location ID file: %s', e)
 			return None, None
 
 	def _write_location_id(self, msg_id, start_time):
@@ -1672,8 +1667,8 @@ class TelegramLogger(object):
 		try:
 			with open(self.cfg.location_id_file, 'w') as f:
 				f.write(f'{msg_id}:{start_time}')
-		except IOError as e:
-			logging.error('Failed to save location ID: %s', e)
+		except OSError as e:
+			self.logger.error('Failed to save location ID: %s', e)
 
 	def _remove_location_id_file(self):
 		"""Removes the location ID file."""
@@ -1681,14 +1676,13 @@ class TelegramLogger(object):
 			try:
 				os.remove(self.cfg.location_id_file)
 			except OSError as e:
-				logging.error('Failed to remove location ID file: %s', e)
+				self.logger.error('Failed to remove location ID file: %s', e)
 
 	async def _update_location(self, lat, lon, cse):
 		"""Update or send live location."""
 		loc_msg_id, start_time = self._read_location_id()
-		if loc_msg_id and start_time:
-			if await self._try_edit_live_location(loc_msg_id, start_time, lat, lon, cse):
-				return
+		if loc_msg_id and start_time and await self._try_edit_live_location(loc_msg_id, start_time, lat, lon, cse):
+			return
 		await self._send_new_live_location(lat, lon, cse)
 
 	async def _try_edit_live_location(self, msg_id, start_time, lat, lon, cse):
@@ -1703,13 +1697,13 @@ class TelegramLogger(object):
 				'live_period': int(time.time() - start_time + 86400),
 			}
 			eloc = await self._call_with_retry(self.bot.edit_message_live_location, **edit_kwargs)
-			logging.info('Edited location in Telegram: %s/%s', eloc.chat_id, eloc.message_id)
+			self.logger.info('Edited location in Telegram: %s/%s', eloc.chat_id, eloc.message_id)
 			return True
 		except Exception as e:
 			if 'message is not modified' in str(e):
-				logging.debug('Live location not modified.')
+				self.logger.debug('Live location not modified.')
 				return True
-			logging.warning('Failed to edit location in Telegram: %s. Sending a new one.', e)
+			self.logger.warning('Failed to edit location in Telegram: %s. Sending a new one.', e)
 			return False
 
 	async def _send_new_live_location(self, lat, lon, cse):
@@ -1721,10 +1715,10 @@ class TelegramLogger(object):
 			elif self.tid:
 				loc_kwargs['message_thread_id'] = self.tid
 			loc = await self._call_with_retry(self.bot.send_location, **loc_kwargs)
-			logging.info('Sent location to Telegram: %s/%s/%s', loc.chat_id, loc.message_thread_id, loc.message_id)
+			self.logger.info('Sent location to Telegram: %s/%s/%s', loc.chat_id, loc.message_thread_id, loc.message_id)
 			self._write_location_id(loc.message_id, time.time())
 		except Exception as e:
-			logging.error('Failed to send new location to Telegram: %s', e)
+			self.logger.error('Failed to send new location to Telegram: %s', e)
 
 	async def stop_location(self):
 		"""Stop live location sharing."""
@@ -1735,9 +1729,9 @@ class TelegramLogger(object):
 			return
 		try:
 			await self._call_with_retry(self.bot.stop_message_live_location, chat_id=self.chat_id, message_id=location_id)
-			logging.info('Stopped live location in Telegram: %s/%s', self.chat_id, location_id)
+			self.logger.info('Stopped live location in Telegram: %s/%s', self.chat_id, location_id)
 		except Exception as e:
-			logging.warning('Failed to stop live location in Telegram: %s', e)
+			self.logger.warning('Failed to stop live location in Telegram: %s', e)
 		finally:
 			self._remove_location_id_file()
 
@@ -1750,10 +1744,11 @@ class WhatsAppLogger:
 		self.enabled = cfg.whatsapp_enabled
 		self.number = cfg.whatsapp_number
 		self.apikey = cfg.whatsapp_apikey
+		self.logger = logging.getLogger('RasPiAPRS.WhatsAppLogger')
 		if not self.enabled:
 			return
 		if not self.number or not self.apikey:
-			logging.error('WhatsApp number or API key is missing. Disabling WhatsApp logging.')
+			self.logger.error('WhatsApp number or API key is missing. Disabling WhatsApp logging.')
 			self.enabled = False
 			return
 
@@ -1763,7 +1758,6 @@ class WhatsAppLogger:
 
 	async def __aexit__(self, exc_type, exc_val, exc_tb):
 		"""Exit the asynchronous context."""
-		pass
 
 	async def log(self, message: str):
 		"""Send a formatted message to WhatsApp via CallMeBot API."""
@@ -1771,27 +1765,24 @@ class WhatsAppLogger:
 			return False
 		clean_number = f'+{re.sub(r"\D", "", self.number)}'
 		if not clean_number:
-			logging.error('WhatsApp number is invalid. Cannot send message.')
+			self.logger.error('WhatsApp number is invalid. Cannot send message.')
 			return False
 		import urllib.parse
 
 		encoded_message = urllib.parse.quote_plus(f'{message}\n\n`{self.cfg.app_name}`')
 		api_url = f'https://api.callmebot.com/whatsapp.php?phone={clean_number}&apikey={self.apikey}&text={encoded_message}'
 		try:
-			async with aiohttp.ClientSession() as session:
-				async with session.get(api_url) as response:
-					response_text = await response.text()
-					response_text = re.sub(r'<[^>]+>', '', response_text).strip()
-					if response.status == 200:
-						logging.info(
-							'Successfully sent WhatsApp message via CallMeBot API (Status: %d, Response: %s)', response.status, response_text
-						)
-						return True
-					else:
-						logging.error('Failed to send WhatsApp message via CallMeBot API (Status: %d, Response: %s)', response.status, response_text)
-						return False
+			async with aiohttp.ClientSession() as session, session.get(api_url) as response:
+				response_text = await response.text()
+				response_text = re.sub(r'<[^>]+>', '', response_text).strip()
+				if response.status == 200:
+					self.logger.info('Successfully sent WhatsApp message via CallMeBot API (Status: %d, Response: %s)', response.status, response_text)
+					return True
+				else:
+					self.logger.error('Failed to send WhatsApp message via CallMeBot API (Status: %d, Response: %s)', response.status, response_text)
+					return False
 		except Exception as e:
-			logging.error('Error sending WhatsApp message via CallMeBot API: %s', e)
+			self.logger.error('Error sending WhatsApp message via CallMeBot API: %s', e)
 			return False
 
 
@@ -1803,10 +1794,11 @@ class SignalLogger:
 		self.enabled = cfg.signal_enabled
 		self.number = cfg.signal_number
 		self.apikey = cfg.signal_apikey
+		self.logger = logging.getLogger('RasPiAPRS.SignalLogger')
 		if not self.enabled:
 			return
 		if not self.number or not self.apikey:
-			logging.error('Signal number or API key is missing. Disabling Signal logging.')
+			self.logger.error('Signal number or API key is missing. Disabling Signal logging.')
 			self.enabled = False
 			return
 
@@ -1816,7 +1808,6 @@ class SignalLogger:
 
 	async def __aexit__(self, exc_type, exc_val, exc_tb):
 		"""Exit the asynchronous context."""
-		pass
 
 	async def log(self, message: str):
 		"""Send a formatted message to Signal via CallMeBot API."""
@@ -1828,27 +1819,24 @@ class SignalLogger:
 		else:
 			clean_number = f'+{re.sub(r"\D", "", self.number)}'
 		if not clean_number:
-			logging.error('Signal number is invalid. Cannot send message.')
+			self.logger.error('Signal number is invalid. Cannot send message.')
 			return False
 		import urllib.parse
 
 		encoded_message = urllib.parse.quote_plus(f'{message}\n\n{self.cfg.app_name}')
 		api_url = f'https://signal.callmebot.com/signal/send.php?phone={clean_number}&apikey={self.apikey}&text={encoded_message}'
 		try:
-			async with aiohttp.ClientSession() as session:
-				async with session.get(api_url) as response:
-					response_text = await response.text()
-					response_text = re.sub(r'<[^>]+>', '', response_text).strip()
-					if response.status == 200:
-						logging.info(
-							'Successfully sent Signal message via CallMeBot API:  (Status: %d, Response: %s)', response.status, response_text
-						)
-						return True
-					else:
-						logging.error('Failed to send Signal message via CallMeBot API (Status: %d, Response: %s)', response.status, response_text)
-						return False
+			async with aiohttp.ClientSession() as session, session.get(api_url) as response:
+				response_text = await response.text()
+				response_text = re.sub(r'<[^>]+>', '', response_text).strip()
+				if response.status == 200:
+					self.logger.info('Successfully sent Signal message via CallMeBot API:  (Status: %d, Response: %s)', response.status, response_text)
+					return True
+				else:
+					self.logger.error('Failed to send Signal message via CallMeBot API (Status: %d, Response: %s)', response.status, response_text)
+					return False
 		except Exception as e:
-			logging.error('Error sending Signal message via CallMeBot API: %s', e)
+			self.logger.error('Error sending Signal message via CallMeBot API: %s', e)
 			return False
 
 
@@ -1881,7 +1869,7 @@ class APRSSender:
 
 	def _get_timestamps(self, source_time: dt.datetime | None = None) -> tuple[str, str]:
 		"""Generate APRS and ISO8601 timestamps."""
-		ctime = source_time or dt.datetime.now(dt.timezone.utc)
+		ctime = source_time or dt.datetime.now(dt.UTC)
 		return ctime.strftime('%d%H%Mz'), ctime.astimezone().isoformat(timespec='seconds')
 
 	async def connect(self):
@@ -2039,11 +2027,11 @@ class APRSSender:
 						'Ignoring APRS %s packet from %s: [%s]', parsed_packet.get('format', 'unknown'), parsed_packet.get('from', 'UNKNOWN'), packet
 					)
 			except APRSParseError as e:
-				logging.warning('Failed to parse incoming APRS packet: %s [%s]', e, packet)
+				logging.getLogger('aprs.traffic').warning('Failed to parse incoming APRS packet: %s [%s]', e, packet)
 			except (TypeError, ValueError, KeyError) as e:
-				logging.error('Data error in APRS callback: %s [%s]', e, packet)
+				logging.getLogger('aprs.traffic').error('Data error in APRS callback: %s [%s]', e, packet)
 			except Exception as e:
-				logging.error('Unexpected error in APRS callback: %s [%s]', e, packet)
+				logging.getLogger('aprs.traffic').error('Unexpected error in APRS callback: %s [%s]', e, packet)
 
 	async def send_packet(self, payload, log_context='packet', max_retries=3):
 		"""Send a packet and wait for acknowledgment from the worker."""
@@ -2314,22 +2302,20 @@ class APRSSender:
 			f'*Text*: {"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
 		)
 		sg_stat = (
-			f'{self.cfg.from_call} Status\n\n'
-			f'Time: {iso_timestamp}\n'
-			f'Text: {"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
+			f'{self.cfg.from_call} Status\n\nTime: {iso_timestamp}\nText: {"; ".join(filter(None, [gridsquare, near_add, uptime, traffic, sats_info]))}'
 		)
 		if os.path.exists(self.cfg.status_file):
 			try:
 				with open(self.cfg.status_file, 'r') as f:
 					if f.read() == payload:
 						return
-			except (IOError, OSError):
+			except OSError:
 				pass
 		if await self.send_packet(payload, 'status'):
 			try:
 				with open(self.cfg.status_file, 'w') as f:
 					f.write(payload)
-			except (IOError, OSError):
+			except OSError:
 				pass
 			await self.tg_logger.log(tg_stat)
 			await self.wa_logger.log(wa_stat)

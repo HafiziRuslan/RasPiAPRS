@@ -217,7 +217,7 @@ class TestMainAsync(unittest.IsolatedAsyncioTestCase):
 		sys_stats.os_info.return_value = ' Linux'
 
 		# Mock location: time, lat, lon, alt, spd, cse
-		mock_get_loc.return_value = (dt.datetime(2023, 1, 1, 12, 0, 0, tzinfo=dt.timezone.utc), 10.0, 20.0, 100.0, 10.0, 180.0)
+		mock_get_loc.return_value = (dt.datetime(2023, 1, 1, 12, 0, 0, tzinfo=dt.UTC), 10.0, 20.0, 100.0, 10.0, 180.0)
 
 		# Mock send_status to be awaitable
 		f = asyncio.Future()
@@ -309,7 +309,7 @@ class TestGps(unittest.TestCase):
 			{
 				'class': 'TPV',
 				'mode': 3,
-				'time': dt.datetime(2023, 1, 1, 12, 0, 0, tzinfo=dt.timezone.utc),
+				'time': dt.datetime(2023, 1, 1, 12, 0, 0, tzinfo=dt.UTC),
 				'lat': 10.0,
 				'lon': 20.0,
 				'alt': 30.0,
@@ -338,7 +338,7 @@ class TestGps(unittest.TestCase):
 	@patch('gps.GPSDClient')
 	def test_get_gpsd_sat_success(self, mock_gpsd_client):
 		mock_client_instance = MagicMock()
-		mock_stream = [{'class': 'SKY', 'time': dt.datetime(2023, 1, 1, 12, 0, 0, tzinfo=dt.timezone.utc), 'uSat': 8, 'nSat': 12}]
+		mock_stream = [{'class': 'SKY', 'time': dt.datetime(2023, 1, 1, 12, 0, 0, tzinfo=dt.UTC), 'uSat': 8, 'nSat': 12}]
 		mock_client_instance.dict_stream.return_value = iter(mock_stream)
 		mock_gpsd_client.return_value.__enter__.return_value = mock_client_instance
 
