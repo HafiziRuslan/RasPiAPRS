@@ -1882,17 +1882,17 @@ class APRSSender:
 		max_retries_per_server = 5
 		total_server_attempts = 0
 		while total_server_attempts < len(self.cfg.aprsis_servers) * max_retries_per_server:
-			current_server = self.cfg.aprsis_servers[self._aprsis_server_idx]
+			c_svr = self.cfg.aprsis_servers[self._aprsis_server_idx]
 			logging.info(
 				'Connecting to APRS-IS server %s:%d (attempt %d/%d) as %s',
-				current_server,
+				c_svr,
 				self.cfg.aprsis_port,
 				(total_server_attempts % max_retries_per_server) + 1,
 				max_retries_per_server,
 				self.cfg.from_call,
 			)
 			try:
-				self.ais = aprslib.IS(callsign=self.cfg.from_call, passwd=self.cfg.aprs_passcode, host=current_server, port=self.cfg.aprsis_port)
+				self.ais = aprslib.IS(callsign=self.cfg.from_call, passwd=self.cfg.aprs_passcode, host=c_svr, port=self.cfg.aprsis_port)
 				logging.debug('Attempting connect to APRS-IS %s', self.ais.server)
 				await loop.run_in_executor(None, self.ais.connect)
 				if not getattr(self.ais, '_connected', False):
@@ -1906,7 +1906,7 @@ class APRSSender:
 			except APRSConnectionError as err:
 				logging.warning(
 					'APRS connection error to %s:%d (attempt %d/%d): %s',
-					current_server,
+					c_svr,
 					self.cfg.aprsis_port,
 					(total_server_attempts % max_retries_per_server) + 1,
 					max_retries_per_server,
@@ -1915,7 +1915,7 @@ class APRSSender:
 			except Exception as e:
 				logging.error(
 					'Unexpected error connecting to %s:%d (attempt %d/%d): %s',
-					current_server,
+					c_svr,
 					self.cfg.aprsis_port,
 					(total_server_attempts % max_retries_per_server) + 1,
 					max_retries_per_server,
@@ -2346,8 +2346,9 @@ def aprs_consumer_worker(call, passcode, servers, port, aprs_filter, queue, out_
 	from aprslib.exceptions import LoginError
 
 	logging.basicConfig(level=logging.INFO, format='%(asctime)s | (Worker) %(levelname)-8s | %(name)s.%(funcName)s:%(lineno)d | %(message)s')
-	current_server_idx = 0
+	c_svr_idx = 0
 	ais = None
+	sender_thread_started = False
 
 	def sender_thread():
 		nonlocal ais
@@ -2368,32 +2369,33 @@ def aprs_consumer_worker(call, passcode, servers, port, aprs_filter, queue, out_
 			except Exception as e:
 				logging.error('(Worker) Error in sender thread: %s', e)
 
-	threading.Thread(target=sender_thread, daemon=True).start()
-
 	while True:
-		current_server = servers[current_server_idx]
-		logging.info('Consumer attempting to connect to APRS-IS server %s:%d', current_server, port)
+		c_svr = servers[c_svr_idx]
+		logging.info('Consumer attempting to connect to APRS-IS server %s:%d', c_svr, port)
 		ais = None
 		try:
-			ais = aprslib.IS(callsign=call, passwd=passcode, host=current_server, port=port)
+			ais = aprslib.IS(callsign=call, passwd=passcode, host=c_svr, port=port)
 			ais.connect()
 			if aprs_filter:
 				ais.set_filter(aprs_filter)
-			logging.info('Consumer connected and listening to APRS-IS server %s:%d', current_server, port)
+			logging.info('Consumer connected and listening to APRS-IS server %s:%d', c_svr, port)
+			if not sender_thread_started:
+				threading.Thread(target=sender_thread, daemon=True).start()
+				sender_thread_started = True
 			ais.consumer(lambda packet: queue.put(packet), raw=True)
 		except (ConnectionError, TimeoutError, EOFError) as err:
-			logging.warning('Consumer connection lost to %s:%d: %s', current_server, port, err)
+			logging.warning('Consumer connection lost to %s:%d: %s', c_svr, port, err)
 		except LoginError as err:
 			logging.error('Consumer login failed for %s: %s', call, err)
 			time.sleep(30)
 		except Exception as e:
-			logging.error('Consumer unexpected error with %s:%d: %s', current_server, port, e, exc_info=True)
+			logging.error('Consumer unexpected error with %s:%d: %s', c_svr, port, e, exc_info=True)
 		finally:
 			if ais:
 				with contextlib.suppress(Exception):
 					ais.close()
 			logging.info('Consumer connection closed.')
-		current_server_idx = (current_server_idx + 1) % len(servers)
+		c_svr_idx = (c_svr_idx + 1) % len(servers)
 		logging.info('Cycling to next APRS-IS server in 10 seconds...')
 		time.sleep(10)
 
