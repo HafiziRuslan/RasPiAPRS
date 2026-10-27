@@ -2178,9 +2178,9 @@ class APRSSender:
 		payload = f'{caller}PARM.{",".join(params)}\r\n{caller}UNIT.{",".join(units)}\r\n{caller}EQNS.{",".join(eqns)}'
 		tg_hdr = (
 			f'<u>{self.cfg.from_call} Header</u>\n\n'
-			f'<b>Parameters</b>: {",".join(params)}<\n'
-			f'<b>Units</b>: {",".join(units)}<\n'
-			f'<b>Equations</b>: {",".join(eqns)}<\n\n'
+			f'<b>Parameters</b>: {",".join(params)}\n'
+			f'<b>Units</b>: {",".join(units)}\n'
+			f'<b>Equations</b>: {",".join(eqns)}\n\n'
 			f'<b>Value</b>: <code>[a,b,c]=(a×v²)+(b×v)+c</code>'
 		)
 		wa_hdr = (
