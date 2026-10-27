@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta16] - (2026-10-28T00:19:10+08:00)
+## [beta16] - (2026-10-28T00:35:25+08:00)
 
-- 18 commit(s) contributed to the release.
+- 19 commit(s) contributed to the release.
 - 16 day(s) passed between releases.
 
 ### 🚀 Features in beta16
@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta16
 
+- [5295e2e](https://github.com/HafiziRuslan/RasPiAPRS/commit/5295e2e975146a49b4b288802fea6e41638c9243) refactor(main): fix header formatting in send_header method *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-28T00:35:25+08:00*
 - [42e0a27](https://github.com/HafiziRuslan/RasPiAPRS/commit/42e0a27b105da8c6c9d41f9f066bd309f8c36f7c) refactor(all): cleanup code and update ruff configuration *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-25T07:56:17+08:00*
 
 ### 🚜 Refactor in beta16
@@ -1654,4 +1655,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-10-28T00:20:35.003369848+08:00
+generated using git-cliff on 2026-10-28T00:37:01.839225824+08:00
