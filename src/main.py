@@ -1976,7 +1976,7 @@ class APRSSender:
 					message_text = parsed_packet.get('message_text', '')
 					msg_no = parsed_packet.get('msgNo')
 					path = parsed_packet.get('path', [])
-					logging.info('Received APRS message from %s: [%s]', from_call, packet)
+					logging.getLogger('aprs.traffic').info('Received APRS message from %s: [%s]', from_call, packet)
 					if addresse == self.cfg.from_call and msg_no:
 						if self.cfg.from_call in path:
 							logging.getLogger('aprs.traffic').debug('Skipping ACK for message %s from %s: sender already in path', msg_no, from_call)
