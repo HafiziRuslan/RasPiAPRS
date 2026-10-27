@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta16] - (2026-10-25T07:56:17+08:00)
+## [beta16] - (2026-10-27T23:44:10+08:00)
 
-- 16 commit(s) contributed to the release.
-- 13 day(s) passed between releases.
+- 17 commit(s) contributed to the release.
+- 16 day(s) passed between releases.
 
 ### 🚀 Features in beta16
 
@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta16
 
+- [009136d](https://github.com/HafiziRuslan/RasPiAPRS/commit/009136d4a800fb1ce2733fc21403f634b1b19595) refactor(aprs.traffic): use named logger for APRS *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-27T23:44:10+08:00*
 - [d826208](https://github.com/HafiziRuslan/RasPiAPRS/commit/d8262083f218c750683a5a57b0ddd004b74fb54c) refactor(gitignore): add .git* and remove .github *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T00:47:11+08:00*
 - [77b6fab](https://github.com/HafiziRuslan/RasPiAPRS/commit/77b6fabc2524105c333c30e50422fcc9aa02769e) refactor(misc): reorganize images to img directory *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T00:39:35+08:00*
 
@@ -1652,4 +1653,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-10-25T07:57:39.198730774+08:00
+generated using git-cliff on 2026-10-27T23:47:15.766016612+08:00
