@@ -2,17 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta16] - (2026-10-28T00:35:25+08:00)
+## [beta16] - (2026-11-03T04:02:31+08:00)
 
-- 19 commit(s) contributed to the release.
-- 16 day(s) passed between releases.
+- 22 commit(s) contributed to the release.
+- 22 day(s) passed between releases.
 
 ### 🚀 Features in beta16
 
+- [e16fff2](https://github.com/HafiziRuslan/RasPiAPRS/commit/e16fff2b52dfcf0dd0217ad401c72ffa426282d6) feat(config): add PKTNet configuration option *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-11-03T04:02:31+08:00*
 - [e2a87ca](https://github.com/HafiziRuslan/RasPiAPRS/commit/e2a87cab684756eb89608ecf7ecaca3017189cba) feat(.gitmodules): add aprs-spec submodule *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T00:47:59+08:00*
 
 ### 🐛 Bug Fixes in beta16
 
+- [d7e6983](https://github.com/HafiziRuslan/RasPiAPRS/commit/d7e6983ca226dee4100fde83685cab7691f810ce) refactor(main): simplify log file naming convention *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-11-03T02:38:05+08:00*
 - [5295e2e](https://github.com/HafiziRuslan/RasPiAPRS/commit/5295e2e975146a49b4b288802fea6e41638c9243) refactor(main): fix header formatting in send_header method *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-28T00:35:25+08:00*
 - [42e0a27](https://github.com/HafiziRuslan/RasPiAPRS/commit/42e0a27b105da8c6c9d41f9f066bd309f8c36f7c) refactor(all): cleanup code and update ruff configuration *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-25T07:56:17+08:00*
 
@@ -33,6 +35,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚙️ Miscellaneous Tasks in beta16
 
+- [e027173](https://github.com/HafiziRuslan/RasPiAPRS/commit/e027173f8689b83380811e563041c99ca8acd08f) chore(deps): update dependencies and reformat lock files *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-11-03T03:21:37+08:00*
 - [c6931bf](https://github.com/HafiziRuslan/RasPiAPRS/commit/c6931bf2ea80dbadfb32783c21c3e0a94413cbce) chore(deps): update certifi and multidict *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-25T04:22:57+08:00*
 - [0b14e25](https://github.com/HafiziRuslan/RasPiAPRS/commit/0b14e25b9cbd75b7a0284ebd328b9af44527d48e) build(deps): upgrade python-dateutil to 3.0.0 and add python 3.16 support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-22T21:50:07+08:00*
 - [b4060f9](https://github.com/HafiziRuslan/RasPiAPRS/commit/b4060f9ba5f1d91fa420fb022131769828409b66) chore(dependencies): update certifi to v2026.10.19 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T01:01:10+08:00*
@@ -1655,4 +1658,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-10-28T00:37:01.839225824+08:00
+generated using git-cliff on 2026-11-03T04:04:07.298724990+08:00
