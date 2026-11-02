@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta16] - (2026-11-03T04:02:31+08:00)
+## [beta16] - (2026-11-03T05:37:09+08:00)
 
-- 22 commit(s) contributed to the release.
+- 23 commit(s) contributed to the release.
 - 22 day(s) passed between releases.
 
 ### 🚀 Features in beta16
@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 
 ### 📚 Documentation in beta16
 
+- [257307a](https://github.com/HafiziRuslan/RasPiAPRS/commit/257307ac348a31d5e619dbd55e63e8f790a6ed23) docs(README): update systemd service setup *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-11-03T05:37:09+08:00*
 - [dde1301](https://github.com/HafiziRuslan/RasPiAPRS/commit/dde1301f621f7a0a44bc16bb0593c2c3d28d1e58) chore(docs): remove deprecated APRS SSID recommendations *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T01:00:13+08:00*
 - [57a8865](https://github.com/HafiziRuslan/RasPiAPRS/commit/57a8865d0d4563e637fa9f789cee25ad2f1a7c63) docs(symbols): switch to APRS-Symbols.pdf *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T00:58:46+08:00*
 - [3f1cfaa](https://github.com/HafiziRuslan/RasPiAPRS/commit/3f1cfaa60a10119a2ecb3a6425139d4b6481af1f) docs(APRS101.pdf): remove obsolete PDF *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T00:47:40+08:00*
@@ -1658,4 +1659,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-11-03T04:04:07.298724990+08:00
+generated using git-cliff on 2026-11-03T05:38:40.592722852+08:00
