@@ -501,11 +501,11 @@ def configure_logging(cfg: Config):
 				self.stream = self._open()
 
 	log_files = {
-		logging.DEBUG: '1-debug.log',
-		logging.INFO: '2-info.log',
-		logging.WARNING: '3-warning.log',
-		logging.ERROR: '4-error.log',
-		logging.CRITICAL: '5-critical.log',
+		logging.DEBUG: 'debug.log',
+		logging.INFO: 'info.log',
+		logging.WARNING: 'warning.log',
+		logging.ERROR: 'error.log',
+		logging.CRITICAL: 'critical.log',
 	}
 	max_size = cfg.log_max_size * 1024 * 1024
 	max_count = cfg.log_max_count
