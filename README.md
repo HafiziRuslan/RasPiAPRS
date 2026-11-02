@@ -77,6 +77,13 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="https://aprs.ph">aprs.ph</a></td>
     </tr>
     <tr>
+      <td><b>PKTNet</b></td>
+      <td>Daily</td>
+      <td>UTC</td>
+      <td>PKTNET</td>
+      <td><a href="https://pp5pk.net/aprsnet_participants.php">pp5pk.net</a></td>
+    </tr>
+    <tr>
       <td><b>SARES APRS CommCheck</b></td>
       <td>Tuesday</td>
       <td>UTC</td>
