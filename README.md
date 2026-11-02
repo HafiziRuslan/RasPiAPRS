@@ -200,7 +200,7 @@ To run the bot automatically on system boot, it is recommended to use a systemd 
 1. Copy the service file to the systemd directory:
 
     ```bash
-    sudo cp raspiaprs.service /etc/systemd/system/
+    sudo ln -sf $(pwd)/raspiaprs.service /etc/systemd/system
     ```
 
 2. Adjust the *'WorkingDirectory'* and *'ExecStart'* parameters to match your installation path:
