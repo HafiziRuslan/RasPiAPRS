@@ -224,7 +224,7 @@ class Config:
 		self.log_max_size = self._env_get_float('LOG_MAX_SIZE', 1.0)
 		self.log_max_count = self._env_get_int('LOG_MAX_COUNT', 3)
 		self.call = os.getenv('APRS_CALL', 'N0CALL')
-		self.ssid = self._env_get_int('APRS_SSID', 0, 'SSID value error')
+		self.ssid = os.getenv('APRS_SSID', '0')
 		self.symbol_table = os.getenv('APRS_SYMBOL_TABLE', '/')
 		self.symbol = os.getenv('APRS_SYMBOL', 'n')
 		self.latitude = self._env_get_float('APRS_LATITUDE', 0.0)
@@ -309,8 +309,22 @@ class Config:
 
 	def validate(self):
 		"""Validate and normalize configuration values."""
-		if not (1 <= self.ssid <= 15):
-			self.ssid = 0
+		ssid_raw = self.ssid
+		try:
+			if isinstance(ssid_raw, str) and ssid_raw.isalpha() and len(ssid_raw) == 1:
+				ssid_upper = ssid_raw.upper()
+				if 'A' <= ssid_upper <= 'Z':
+					self.ssid = ssid_upper
+				else:
+					logging.warning("Invalid SSID '%s' provided. SSID must be a single letter from A-Z or a number 0-15.", ssid_raw)
+			else:
+				self.ssid = int(ssid_raw)
+				if not (0 <= self.ssid <= 15):
+					logging.warning("Invalid SSID '%s' provided. SSID must be a number between 0 and 15.", ssid_raw)
+		except ValueError:
+			logging.warning("Invalid SSID '%s' provided. SSID must be a number or a single letter.", ssid_raw)
+		except Exception as e:
+			logging.warning("Error processing SSID '%s': %s", ssid_raw, e)
 		self.from_call = self.call if self.ssid == 0 else f'{self.call}-{self.ssid}'
 		if self.symbol_table not in ['/', '\\']:
 			self.symbol_overlay = self.symbol_table
