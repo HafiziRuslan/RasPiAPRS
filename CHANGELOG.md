@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta16] - (2026-11-05T20:48:13+08:00)
+## [beta16] - (2026-11-05T21:17:04+08:00)
 
-- 24 commit(s) contributed to the release.
+- 25 commit(s) contributed to the release.
 - 25 day(s) passed between releases.
 
 ### 🚀 Features in beta16
 
+- [6e74496](https://github.com/HafiziRuslan/RasPiAPRS/commit/6e74496fdd3736bdf89ecab00d346a20ffa8b975) feat(main): enhance ssid validation and support alphanumeric values *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-11-05T21:17:04+08:00*
 - [e16fff2](https://github.com/HafiziRuslan/RasPiAPRS/commit/e16fff2b52dfcf0dd0217ad401c72ffa426282d6) feat(config): add PKTNet configuration option *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-11-03T04:02:31+08:00*
 - [e2a87ca](https://github.com/HafiziRuslan/RasPiAPRS/commit/e2a87cab684756eb89608ecf7ecaca3017189cba) feat(.gitmodules): add aprs-spec submodule *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T00:47:59+08:00*
 
@@ -1660,4 +1661,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-11-05T20:49:41.535815683+08:00
+generated using git-cliff on 2026-11-05T21:18:12.226794938+08:00
