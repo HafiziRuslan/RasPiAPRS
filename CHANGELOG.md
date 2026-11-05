@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta16] - (2026-11-03T05:37:09+08:00)
+## [beta16] - (2026-11-05T20:48:13+08:00)
 
-- 23 commit(s) contributed to the release.
-- 22 day(s) passed between releases.
+- 24 commit(s) contributed to the release.
+- 25 day(s) passed between releases.
 
 ### 🚀 Features in beta16
 
@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta16
 
+- [6214e9f](https://github.com/HafiziRuslan/RasPiAPRS/commit/6214e9f0fb3f3822fb13942df190340e51e6017b) fix(src): fix eqns list and telemetry calc, update uv *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-11-05T20:48:13+08:00*
 - [d7e6983](https://github.com/HafiziRuslan/RasPiAPRS/commit/d7e6983ca226dee4100fde83685cab7691f810ce) refactor(main): simplify log file naming convention *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-11-03T02:38:05+08:00*
 - [5295e2e](https://github.com/HafiziRuslan/RasPiAPRS/commit/5295e2e975146a49b4b288802fea6e41638c9243) refactor(main): fix header formatting in send_header method *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-28T00:35:25+08:00*
 - [42e0a27](https://github.com/HafiziRuslan/RasPiAPRS/commit/42e0a27b105da8c6c9d41f9f066bd309f8c36f7c) refactor(all): cleanup code and update ruff configuration *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-25T07:56:17+08:00*
@@ -1659,4 +1660,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-11-03T05:38:40.592722852+08:00
+generated using git-cliff on 2026-11-05T20:49:41.535815683+08:00
