@@ -1,380 +1,380 @@
 {
-	"bomFormat": "CycloneDX",
-	"specVersion": "1.5",
-	"version": 1,
-	"serialNumber": "urn:uuid:df67faab-51fd-4b02-83ee-e0c44ce556be",
-	"metadata": {
-		"timestamp": "2026-11-02T18:43:56.224769500Z",
-		"tools": [
-			{
-				"vendor": "Astral Software Inc.",
-				"name": "uv",
-				"version": "0.13.6"
-			}
-		],
-		"component": {
-			"type": "library",
-			"bom-ref": "raspiaprs-1@0.1b16",
-			"name": "raspiaprs",
-			"version": "0.1b16",
-			"properties": [
-				{
-					"name": "uv:package:is_project_root",
-					"value": "true"
-				}
-			]
-		}
-	},
-	"components": [
-		{
-			"type": "library",
-			"bom-ref": "aiohappyeyeballs-2@2.7.1",
-			"name": "aiohappyeyeballs",
-			"version": "2.7.1",
-			"purl": "pkg:pypi/aiohappyeyeballs@2.7.1"
-		},
-		{
-			"type": "library",
-			"bom-ref": "aiohttp-3@3.14.5",
-			"name": "aiohttp",
-			"version": "3.14.5",
-			"purl": "pkg:pypi/aiohttp@3.14.5"
-		},
-		{
-			"type": "library",
-			"bom-ref": "aiosignal-4@1.4.0",
-			"name": "aiosignal",
-			"version": "1.4.0",
-			"purl": "pkg:pypi/aiosignal@1.4.0"
-		},
-		{
-			"type": "library",
-			"bom-ref": "anyio-5@4.16.0",
-			"name": "anyio",
-			"version": "4.16.0",
-			"purl": "pkg:pypi/anyio@4.16.0"
-		},
-		{
-			"type": "library",
-			"bom-ref": "aprslib-6@0.7.2",
-			"name": "aprslib",
-			"version": "0.7.2",
-			"purl": "pkg:pypi/aprslib@0.7.2?vcs_url=https://github.com/rossengeorgiev/aprs-python%23c2a0f18ce028a4cced582567a73d57f0d03cd00f"
-		},
-		{
-			"type": "library",
-			"bom-ref": "attrs-7@26.1.0",
-			"name": "attrs",
-			"version": "26.1.0",
-			"purl": "pkg:pypi/attrs@26.1.0"
-		},
-		{
-			"type": "library",
-			"bom-ref": "callsign-regex-8@0.7.1",
-			"name": "callsign-regex",
-			"version": "0.7.1",
-			"purl": "pkg:pypi/callsign-regex@0.7.1"
-		},
-		{
-			"type": "library",
-			"bom-ref": "certifi-9@2026.10.23",
-			"name": "certifi",
-			"version": "2026.10.23",
-			"purl": "pkg:pypi/certifi@2026.10.23"
-		},
-		{
-			"type": "library",
-			"bom-ref": "et-xmlfile-10@2.0.0",
-			"name": "et-xmlfile",
-			"version": "2.0.0",
-			"purl": "pkg:pypi/et-xmlfile@2.0.0"
-		},
-		{
-			"type": "library",
-			"bom-ref": "frozenlist-11@1.8.0",
-			"name": "frozenlist",
-			"version": "1.8.0",
-			"purl": "pkg:pypi/frozenlist@1.8.0"
-		},
-		{
-			"type": "library",
-			"bom-ref": "geographiclib-12@2.1",
-			"name": "geographiclib",
-			"version": "2.1",
-			"purl": "pkg:pypi/geographiclib@2.1"
-		},
-		{
-			"type": "library",
-			"bom-ref": "geopy-13@2.5.0",
-			"name": "geopy",
-			"version": "2.5.0",
-			"purl": "pkg:pypi/geopy@2.5.0"
-		},
-		{
-			"type": "library",
-			"bom-ref": "gpsdclient-14@1.3.2",
-			"name": "gpsdclient",
-			"version": "1.3.2",
-			"purl": "pkg:pypi/gpsdclient@1.3.2"
-		},
-		{
-			"type": "library",
-			"bom-ref": "h11-15@0.16.0",
-			"name": "h11",
-			"version": "0.16.0",
-			"purl": "pkg:pypi/h11@0.16.0"
-		},
-		{
-			"type": "library",
-			"bom-ref": "httpcore-16@1.0.9",
-			"name": "httpcore",
-			"version": "1.0.9",
-			"purl": "pkg:pypi/httpcore@1.0.9"
-		},
-		{
-			"type": "library",
-			"bom-ref": "httpx-17@0.28.1",
-			"name": "httpx",
-			"version": "0.28.1",
-			"purl": "pkg:pypi/httpx@0.28.1"
-		},
-		{
-			"type": "library",
-			"bom-ref": "humanize-18@4.16.0",
-			"name": "humanize",
-			"version": "4.16.0",
-			"purl": "pkg:pypi/humanize@4.16.0"
-		},
-		{
-			"type": "library",
-			"bom-ref": "idna-19@3.20",
-			"name": "idna",
-			"version": "3.20",
-			"purl": "pkg:pypi/idna@3.20"
-		},
-		{
-			"type": "library",
-			"bom-ref": "multidict-20@7.2.1",
-			"name": "multidict",
-			"version": "7.2.1",
-			"purl": "pkg:pypi/multidict@7.2.1"
-		},
-		{
-			"type": "library",
-			"bom-ref": "openpyxl-21@3.1.5",
-			"name": "openpyxl",
-			"version": "3.1.5",
-			"purl": "pkg:pypi/openpyxl@3.1.5"
-		},
-		{
-			"type": "library",
-			"bom-ref": "propcache-22@0.5.4",
-			"name": "propcache",
-			"version": "0.5.4",
-			"purl": "pkg:pypi/propcache@0.5.4"
-		},
-		{
-			"type": "library",
-			"bom-ref": "psutil-23@7.2.2",
-			"name": "psutil",
-			"version": "7.2.2",
-			"purl": "pkg:pypi/psutil@7.2.2"
-		},
-		{
-			"type": "library",
-			"bom-ref": "python-dateutil-24@4.0.0",
-			"name": "python-dateutil",
-			"version": "4.0.0",
-			"purl": "pkg:pypi/python-dateutil@4.0.0"
-		},
-		{
-			"type": "library",
-			"bom-ref": "python-dotenv-25@1.2.4",
-			"name": "python-dotenv",
-			"version": "1.2.4",
-			"purl": "pkg:pypi/python-dotenv@1.2.4"
-		},
-		{
-			"type": "library",
-			"bom-ref": "python-telegram-bot-26@22.8",
-			"name": "python-telegram-bot",
-			"version": "22.8",
-			"purl": "pkg:pypi/python-telegram-bot@22.8"
-		},
-		{
-			"type": "library",
-			"bom-ref": "typing-extensions-27@4.16.0",
-			"name": "typing-extensions",
-			"version": "4.16.0",
-			"purl": "pkg:pypi/typing-extensions@4.16.0",
-			"properties": [
-				{
-					"name": "uv:package:marker",
-					"value": "python_full_version < '3.15'"
-				}
-			]
-		},
-		{
-			"type": "library",
-			"bom-ref": "tzdata-28@2026.6",
-			"name": "tzdata",
-			"version": "2026.6",
-			"purl": "pkg:pypi/tzdata@2026.6"
-		},
-		{
-			"type": "library",
-			"bom-ref": "yarl-29@1.25.1",
-			"name": "yarl",
-			"version": "1.25.1",
-			"purl": "pkg:pypi/yarl@1.25.1"
-		}
-	],
-	"dependencies": [
-		{
-			"ref": "aiohappyeyeballs-2@2.7.1"
-		},
-		{
-			"ref": "aiohttp-3@3.14.5",
-			"dependsOn": [
-				"aiohappyeyeballs-2@2.7.1",
-				"aiosignal-4@1.4.0",
-				"attrs-7@26.1.0",
-				"frozenlist-11@1.8.0",
-				"multidict-20@7.2.1",
-				"propcache-22@0.5.4",
-				"yarl-29@1.25.1"
-			]
-		},
-		{
-			"ref": "aiosignal-4@1.4.0",
-			"dependsOn": [
-				"frozenlist-11@1.8.0"
-			]
-		},
-		{
-			"ref": "anyio-5@4.16.0",
-			"dependsOn": [
-				"idna-19@3.20",
-				"typing-extensions-27@4.16.0"
-			]
-		},
-		{
-			"ref": "aprslib-6@0.7.2"
-		},
-		{
-			"ref": "attrs-7@26.1.0"
-		},
-		{
-			"ref": "callsign-regex-8@0.7.1",
-			"dependsOn": [
-				"openpyxl-21@3.1.5"
-			]
-		},
-		{
-			"ref": "certifi-9@2026.10.23"
-		},
-		{
-			"ref": "et-xmlfile-10@2.0.0"
-		},
-		{
-			"ref": "frozenlist-11@1.8.0"
-		},
-		{
-			"ref": "geographiclib-12@2.1"
-		},
-		{
-			"ref": "geopy-13@2.5.0",
-			"dependsOn": [
-				"geographiclib-12@2.1"
-			]
-		},
-		{
-			"ref": "gpsdclient-14@1.3.2"
-		},
-		{
-			"ref": "h11-15@0.16.0"
-		},
-		{
-			"ref": "httpcore-16@1.0.9",
-			"dependsOn": [
-				"certifi-9@2026.10.23",
-				"h11-15@0.16.0"
-			]
-		},
-		{
-			"ref": "httpx-17@0.28.1",
-			"dependsOn": [
-				"anyio-5@4.16.0",
-				"certifi-9@2026.10.23",
-				"httpcore-16@1.0.9",
-				"idna-19@3.20"
-			]
-		},
-		{
-			"ref": "humanize-18@4.16.0"
-		},
-		{
-			"ref": "idna-19@3.20"
-		},
-		{
-			"ref": "multidict-20@7.2.1"
-		},
-		{
-			"ref": "openpyxl-21@3.1.5",
-			"dependsOn": [
-				"et-xmlfile-10@2.0.0"
-			]
-		},
-		{
-			"ref": "propcache-22@0.5.4"
-		},
-		{
-			"ref": "psutil-23@7.2.2"
-		},
-		{
-			"ref": "python-dateutil-24@4.0.0",
-			"dependsOn": [
-				"tzdata-28@2026.6"
-			]
-		},
-		{
-			"ref": "python-dotenv-25@1.2.4"
-		},
-		{
-			"ref": "python-telegram-bot-26@22.8",
-			"dependsOn": [
-				"httpcore-16@1.0.9",
-				"httpx-17@0.28.1"
-			]
-		},
-		{
-			"ref": "raspiaprs-1@0.1b16",
-			"dependsOn": [
-				"aiohttp-3@3.14.5",
-				"aprslib-6@0.7.2",
-				"callsign-regex-8@0.7.1",
-				"geopy-13@2.5.0",
-				"gpsdclient-14@1.3.2",
-				"humanize-18@4.16.0",
-				"psutil-23@7.2.2",
-				"python-dateutil-24@4.0.0",
-				"python-dotenv-25@1.2.4",
-				"python-telegram-bot-26@22.8"
-			]
-		},
-		{
-			"ref": "typing-extensions-27@4.16.0"
-		},
-		{
-			"ref": "tzdata-28@2026.6"
-		},
-		{
-			"ref": "yarl-29@1.25.1",
-			"dependsOn": [
-				"idna-19@3.20",
-				"multidict-20@7.2.1",
-				"propcache-22@0.5.4"
-			]
-		}
-	]
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "version": 1,
+  "serialNumber": "urn:uuid:a9db20d6-6353-4cf5-8a9d-fb25bd43446d",
+  "metadata": {
+    "timestamp": "2026-11-05T12:46:03.093906700Z",
+    "tools": [
+      {
+        "vendor": "Astral Software Inc.",
+        "name": "uv",
+        "version": "0.13.7"
+      }
+    ],
+    "component": {
+      "type": "library",
+      "bom-ref": "raspiaprs-1@0.1b16",
+      "name": "raspiaprs",
+      "version": "0.1b16",
+      "properties": [
+        {
+          "name": "uv:package:is_project_root",
+          "value": "true"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "aiohappyeyeballs-2@2.7.1",
+      "name": "aiohappyeyeballs",
+      "version": "2.7.1",
+      "purl": "pkg:pypi/aiohappyeyeballs@2.7.1"
+    },
+    {
+      "type": "library",
+      "bom-ref": "aiohttp-3@3.14.5",
+      "name": "aiohttp",
+      "version": "3.14.5",
+      "purl": "pkg:pypi/aiohttp@3.14.5"
+    },
+    {
+      "type": "library",
+      "bom-ref": "aiosignal-4@1.4.0",
+      "name": "aiosignal",
+      "version": "1.4.0",
+      "purl": "pkg:pypi/aiosignal@1.4.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "anyio-5@4.16.0",
+      "name": "anyio",
+      "version": "4.16.0",
+      "purl": "pkg:pypi/anyio@4.16.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "aprslib-6@0.7.2",
+      "name": "aprslib",
+      "version": "0.7.2",
+      "purl": "pkg:pypi/aprslib@0.7.2?vcs_url=https://github.com/rossengeorgiev/aprs-python%23c2a0f18ce028a4cced582567a73d57f0d03cd00f"
+    },
+    {
+      "type": "library",
+      "bom-ref": "attrs-7@26.1.0",
+      "name": "attrs",
+      "version": "26.1.0",
+      "purl": "pkg:pypi/attrs@26.1.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "callsign-regex-8@0.7.1",
+      "name": "callsign-regex",
+      "version": "0.7.1",
+      "purl": "pkg:pypi/callsign-regex@0.7.1"
+    },
+    {
+      "type": "library",
+      "bom-ref": "certifi-9@2026.10.23",
+      "name": "certifi",
+      "version": "2026.10.23",
+      "purl": "pkg:pypi/certifi@2026.10.23"
+    },
+    {
+      "type": "library",
+      "bom-ref": "et-xmlfile-10@2.0.0",
+      "name": "et-xmlfile",
+      "version": "2.0.0",
+      "purl": "pkg:pypi/et-xmlfile@2.0.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "frozenlist-11@1.8.0",
+      "name": "frozenlist",
+      "version": "1.8.0",
+      "purl": "pkg:pypi/frozenlist@1.8.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "geographiclib-12@2.1",
+      "name": "geographiclib",
+      "version": "2.1",
+      "purl": "pkg:pypi/geographiclib@2.1"
+    },
+    {
+      "type": "library",
+      "bom-ref": "geopy-13@2.5.0",
+      "name": "geopy",
+      "version": "2.5.0",
+      "purl": "pkg:pypi/geopy@2.5.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "gpsdclient-14@1.3.2",
+      "name": "gpsdclient",
+      "version": "1.3.2",
+      "purl": "pkg:pypi/gpsdclient@1.3.2"
+    },
+    {
+      "type": "library",
+      "bom-ref": "h11-15@0.16.0",
+      "name": "h11",
+      "version": "0.16.0",
+      "purl": "pkg:pypi/h11@0.16.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "httpcore-16@1.0.9",
+      "name": "httpcore",
+      "version": "1.0.9",
+      "purl": "pkg:pypi/httpcore@1.0.9"
+    },
+    {
+      "type": "library",
+      "bom-ref": "httpx-17@0.28.1",
+      "name": "httpx",
+      "version": "0.28.1",
+      "purl": "pkg:pypi/httpx@0.28.1"
+    },
+    {
+      "type": "library",
+      "bom-ref": "humanize-18@4.16.0",
+      "name": "humanize",
+      "version": "4.16.0",
+      "purl": "pkg:pypi/humanize@4.16.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "idna-19@3.20",
+      "name": "idna",
+      "version": "3.20",
+      "purl": "pkg:pypi/idna@3.20"
+    },
+    {
+      "type": "library",
+      "bom-ref": "multidict-20@7.2.1",
+      "name": "multidict",
+      "version": "7.2.1",
+      "purl": "pkg:pypi/multidict@7.2.1"
+    },
+    {
+      "type": "library",
+      "bom-ref": "openpyxl-21@3.1.5",
+      "name": "openpyxl",
+      "version": "3.1.5",
+      "purl": "pkg:pypi/openpyxl@3.1.5"
+    },
+    {
+      "type": "library",
+      "bom-ref": "propcache-22@0.5.4",
+      "name": "propcache",
+      "version": "0.5.4",
+      "purl": "pkg:pypi/propcache@0.5.4"
+    },
+    {
+      "type": "library",
+      "bom-ref": "psutil-23@7.2.2",
+      "name": "psutil",
+      "version": "7.2.2",
+      "purl": "pkg:pypi/psutil@7.2.2"
+    },
+    {
+      "type": "library",
+      "bom-ref": "python-dateutil-24@4.0.0",
+      "name": "python-dateutil",
+      "version": "4.0.0",
+      "purl": "pkg:pypi/python-dateutil@4.0.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "python-dotenv-25@1.2.4",
+      "name": "python-dotenv",
+      "version": "1.2.4",
+      "purl": "pkg:pypi/python-dotenv@1.2.4"
+    },
+    {
+      "type": "library",
+      "bom-ref": "python-telegram-bot-26@22.8",
+      "name": "python-telegram-bot",
+      "version": "22.8",
+      "purl": "pkg:pypi/python-telegram-bot@22.8"
+    },
+    {
+      "type": "library",
+      "bom-ref": "typing-extensions-27@4.16.0",
+      "name": "typing-extensions",
+      "version": "4.16.0",
+      "purl": "pkg:pypi/typing-extensions@4.16.0",
+      "properties": [
+        {
+          "name": "uv:package:marker",
+          "value": "python_full_version < '3.15'"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "tzdata-28@2026.6",
+      "name": "tzdata",
+      "version": "2026.6",
+      "purl": "pkg:pypi/tzdata@2026.6"
+    },
+    {
+      "type": "library",
+      "bom-ref": "yarl-29@1.25.1",
+      "name": "yarl",
+      "version": "1.25.1",
+      "purl": "pkg:pypi/yarl@1.25.1"
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "aiohappyeyeballs-2@2.7.1"
+    },
+    {
+      "ref": "aiohttp-3@3.14.5",
+      "dependsOn": [
+        "aiohappyeyeballs-2@2.7.1",
+        "aiosignal-4@1.4.0",
+        "attrs-7@26.1.0",
+        "frozenlist-11@1.8.0",
+        "multidict-20@7.2.1",
+        "propcache-22@0.5.4",
+        "yarl-29@1.25.1"
+      ]
+    },
+    {
+      "ref": "aiosignal-4@1.4.0",
+      "dependsOn": [
+        "frozenlist-11@1.8.0"
+      ]
+    },
+    {
+      "ref": "anyio-5@4.16.0",
+      "dependsOn": [
+        "idna-19@3.20",
+        "typing-extensions-27@4.16.0"
+      ]
+    },
+    {
+      "ref": "aprslib-6@0.7.2"
+    },
+    {
+      "ref": "attrs-7@26.1.0"
+    },
+    {
+      "ref": "callsign-regex-8@0.7.1",
+      "dependsOn": [
+        "openpyxl-21@3.1.5"
+      ]
+    },
+    {
+      "ref": "certifi-9@2026.10.23"
+    },
+    {
+      "ref": "et-xmlfile-10@2.0.0"
+    },
+    {
+      "ref": "frozenlist-11@1.8.0"
+    },
+    {
+      "ref": "geographiclib-12@2.1"
+    },
+    {
+      "ref": "geopy-13@2.5.0",
+      "dependsOn": [
+        "geographiclib-12@2.1"
+      ]
+    },
+    {
+      "ref": "gpsdclient-14@1.3.2"
+    },
+    {
+      "ref": "h11-15@0.16.0"
+    },
+    {
+      "ref": "httpcore-16@1.0.9",
+      "dependsOn": [
+        "certifi-9@2026.10.23",
+        "h11-15@0.16.0"
+      ]
+    },
+    {
+      "ref": "httpx-17@0.28.1",
+      "dependsOn": [
+        "anyio-5@4.16.0",
+        "certifi-9@2026.10.23",
+        "httpcore-16@1.0.9",
+        "idna-19@3.20"
+      ]
+    },
+    {
+      "ref": "humanize-18@4.16.0"
+    },
+    {
+      "ref": "idna-19@3.20"
+    },
+    {
+      "ref": "multidict-20@7.2.1"
+    },
+    {
+      "ref": "openpyxl-21@3.1.5",
+      "dependsOn": [
+        "et-xmlfile-10@2.0.0"
+      ]
+    },
+    {
+      "ref": "propcache-22@0.5.4"
+    },
+    {
+      "ref": "psutil-23@7.2.2"
+    },
+    {
+      "ref": "python-dateutil-24@4.0.0",
+      "dependsOn": [
+        "tzdata-28@2026.6"
+      ]
+    },
+    {
+      "ref": "python-dotenv-25@1.2.4"
+    },
+    {
+      "ref": "python-telegram-bot-26@22.8",
+      "dependsOn": [
+        "httpcore-16@1.0.9",
+        "httpx-17@0.28.1"
+      ]
+    },
+    {
+      "ref": "raspiaprs-1@0.1b16",
+      "dependsOn": [
+        "aiohttp-3@3.14.5",
+        "aprslib-6@0.7.2",
+        "callsign-regex-8@0.7.1",
+        "geopy-13@2.5.0",
+        "gpsdclient-14@1.3.2",
+        "humanize-18@4.16.0",
+        "psutil-23@7.2.2",
+        "python-dateutil-24@4.0.0",
+        "python-dotenv-25@1.2.4",
+        "python-telegram-bot-26@22.8"
+      ]
+    },
+    {
+      "ref": "typing-extensions-27@4.16.0"
+    },
+    {
+      "ref": "tzdata-28@2026.6"
+    },
+    {
+      "ref": "yarl-29@1.25.1",
+      "dependsOn": [
+        "idna-19@3.20",
+        "multidict-20@7.2.1",
+        "propcache-22@0.5.4"
+      ]
+    }
+  ]
 }

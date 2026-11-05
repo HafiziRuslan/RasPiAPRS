@@ -2174,7 +2174,7 @@ class APRSSender:
 		caller = f'{self.cfg.from_call}>{self.cfg.to_call}::{self.cfg.from_call:9s}:'
 		params = ['Temp', 'Load', 'RAM', 'ROM']
 		units = ['deg.C', '%', 'MB', 'GB']
-		eqns = ['0,0.1,0', '0,0.1,0', '0,1,0', '0,0.001,0']
+		eqns = ['0,0.1,0', '0,0.1,0', '0,1,0', '0,0.1,0']
 		if self.cfg.gpsd_enabled:
 			params.append('GPS')
 			units.append('sats')
@@ -2217,8 +2217,8 @@ class APRSSender:
 		cpuload = self.sys_stats.avg_cpu
 		memused = self.sys_stats.avg_vram
 		diskused = self.sys_stats.storage_used
-		telemmemused = int(memused / 1.0000e6)
-		telemdiskused = int(diskused / 1.0000e6)
+		telemmemused = int(memused / 1.0e6)
+		telemdiskused = int(diskused / 1.0e8)
 		payload = f'{self.cfg.from_call}>{self.cfg.to_call}:T#{seq:03d},{cputemp:d},{cpuload:d},{telemmemused:d},{telemdiskused:d}'
 		tg_tlm = (
 			f'<u>{self.cfg.from_call} Telemetry</u>\n\n'
