@@ -83,6 +83,14 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td>PKTNET</td>
       <td><a href="https://pp5pk.net/aprsnet_participants.php">pp5pk.net</a></td>
     </tr>
+    </tr>
+    <tr>
+      <td><b>M7COV APRS Check-In</b></td>
+      <td>Daily</td>
+      <td>UTC</td>
+      <td>M7COV</td>
+      <td><a href="https://m7cov.co.uk/aprs-checkin.php">m7cov.co.uk</a></td>
+    </tr>
     <tr>
       <td><b>SARES APRS CommCheck</b></td>
       <td>Tuesday</td>

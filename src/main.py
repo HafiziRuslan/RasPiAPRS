@@ -114,6 +114,7 @@ class Config:
 	signal_apikey: str | None = None
 	aprsphnet_enabled: bool = False
 	aprspktnet_enabled: bool = False
+	aprsm7cov_enabled: bool = False
 	aprssares_enabled: bool = False
 	aprsmx_enabled: bool = False
 	aprsthursday_enabled: bool = False
@@ -295,6 +296,7 @@ class Config:
 			self.signal_apikey = os.getenv('SIGNAL_API_KEY')
 		self.aprsphnet_enabled = self._env_get_bool('APRSPHNET_ENABLE')
 		self.aprspktnet_enabled = self._env_get_bool('APRSPKTNET_ENABLE')
+		self.aprsm7cov_enabled = self._env_get_bool('APRSM7COV_ENABLE')
 		self.aprssares_enabled = self._env_get_bool('APRSSARES_ENABLE')
 		self.aprsmx_enabled = self._env_get_bool('APRSMX_ENABLE')
 		self.aprsthursday_enabled = self._env_get_bool('APRSTHURSDAY_ENABLE')
@@ -338,6 +340,7 @@ class Config:
 			[
 				self.aprsphnet_enabled,
 				self.aprspktnet_enabled,
+				self.aprsm7cov_enabled,
 				self.aprssares_enabled,
 				self.aprsmx_enabled,
 				self.aprsthursday_enabled,
@@ -1473,6 +1476,7 @@ class ScheduledMessageHandler:
 		definitions = [
 			('aprsphnet_enabled', 'APRSPHNet', None, None, 'APRSPH', 'NET', '#{}', tz_utc),
 			('aprspktnet_enabled', 'PKTNet', None, None, 'PKTNET', 'CHECK', None, tz_utc),
+			('aprsm7cov_enabled', 'M7COVWWAPRSCI', None, None, 'M7COV', 'M7COV-CHECKIN', '#{}', tz_utc),
 			('aprssares_enabled', 'APRSTuesday', 1, None, '9M4CSR', 'CQ SARES', '#{}', tz_utc),
 			('aprsmx_enabled', 'APRSWednesday', 2, None, 'XE1JMB-10', 'CQ APRSMX', '#{}', tz_utc),
 			('aprsthursday_enabled', 'APRSThursday', 3, None, 'APRSPH', 'HOTG', '#{}', tz_utc),
