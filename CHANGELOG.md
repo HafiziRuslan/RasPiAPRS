@@ -2,13 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta16] - (2026-11-05T21:17:04+08:00)
+## [beta16] - (2026-11-10T01:50:26+08:00)
 
-- 25 commit(s) contributed to the release.
-- 25 day(s) passed between releases.
+- 27 commit(s) contributed to the release.
+- 29 day(s) passed between releases.
 
 ### 🚀 Features in beta16
 
+- [7dda386](https://github.com/HafiziRuslan/RasPiAPRS/commit/7dda3867658391658257dff0eb070d45044e3855) feat(aprs): add m7cov worldwide aprs check-in support *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-11-10T01:50:26+08:00*
 - [6e74496](https://github.com/HafiziRuslan/RasPiAPRS/commit/6e74496fdd3736bdf89ecab00d346a20ffa8b975) feat(main): enhance ssid validation and support alphanumeric values *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-11-05T21:17:04+08:00*
 - [e16fff2](https://github.com/HafiziRuslan/RasPiAPRS/commit/e16fff2b52dfcf0dd0217ad401c72ffa426282d6) feat(config): add PKTNet configuration option *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-11-03T04:02:31+08:00*
 - [e2a87ca](https://github.com/HafiziRuslan/RasPiAPRS/commit/e2a87cab684756eb89608ecf7ecaca3017189cba) feat(.gitmodules): add aprs-spec submodule *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T00:47:59+08:00*
@@ -35,6 +36,10 @@ All notable changes to this project will be documented in this file.
 - [3f1cfaa](https://github.com/HafiziRuslan/RasPiAPRS/commit/3f1cfaa60a10119a2ecb3a6425139d4b6481af1f) docs(APRS101.pdf): remove obsolete PDF *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T00:47:40+08:00*
 - [269ab84](https://github.com/HafiziRuslan/RasPiAPRS/commit/269ab842e139fc4355bc4d4b8c88de2ed554340a) docs(misc): move documentation files to docs directory *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T00:42:05+08:00*
 - [45f772a](https://github.com/HafiziRuslan/RasPiAPRS/commit/45f772a938a36538bf9518feb9637d163f37219e) docs(README): update repository URL *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-12T23:09:34+08:00*
+
+### 🧪 Testing in beta16
+
+- [a9b148f](https://github.com/HafiziRuslan/RasPiAPRS/commit/a9b148f52aabc9f93806b06a3c64063fc5efb176) chore(aprsspec): update submodule to latest commit *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-11-10T01:28:41+08:00*
 
 ### ⚙️ Miscellaneous Tasks in beta16
 
@@ -1661,4 +1666,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-11-05T21:18:12.226794938+08:00
+generated using git-cliff on 2026-11-10T01:54:59.028176059+08:00
