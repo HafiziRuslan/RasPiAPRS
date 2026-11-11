@@ -34,11 +34,9 @@ import sys
 import tempfile
 import time
 import tomllib
-from collections import UserDict
-from collections import deque
+from collections import UserDict, deque
 from collections.abc import Callable
-from dataclasses import dataclass
-from dataclasses import field
+from dataclasses import dataclass, field
 from typing import NamedTuple
 from zoneinfo import ZoneInfo
 
@@ -46,13 +44,14 @@ import aiohttp
 import aprslib
 import aprslib.util
 import dotenv
-import mic_e
 import psutil
-import symbols
 from aprslib.exceptions import ConnectionError as APRSConnectionError
 from aprslib.exceptions import ParseError as APRSParseError
 from gpsdclient import GPSDClient
 from itu_appendix42 import ItuAppendix42
+
+import mic_e
+import symbols
 
 
 @dataclass
@@ -62,17 +61,17 @@ class Config:
 	lib_dir: str = '/var/lib/RasPiAPRS'
 	mmdvmhost_file: str = ''
 	gps_file: str = f'{lib_dir}/gps.json'
-	location_id_file: str = f'{tmp_dir}/location_id.tmp'
-	status_file: str = f'{tmp_dir}/status.tmp'
+	geoloc_cache_file: str = f'{lib_dir}/geoloc_cache.pkl'
 	msg_tracking_file: str = f'{lib_dir}/msg_tracking.pkl'
-	nominatim_cache_file: str = f'{lib_dir}/nominatim_cache.pkl'
+	tg_loc_id_file: str = f'{tmp_dir}/tg_loc_id.tmp'
+	status_file: str = f'{tmp_dir}/status.tmp'
 	app_name: str = 'RasPiAPRS'
 	project_url: str = 'https://git.new/RasPiAPRS'
 	call: str = 'N0CALL'
 	aprs_passcode: str | int = -1
 	ssid: int = 0
 	from_call: str = call
-	to_call: str = 'APPRSP'
+	to_call: str = 'APZRSP'
 	altitude: float = 0.0
 	latitude: float = 0.0
 	longitude: float = 0.0
@@ -1670,12 +1669,12 @@ class TelegramLogger:
 		except Exception as e:
 			self.logger.error('Failed to send message to Telegram: %s', e)
 
-	def _read_location_id(self):
+	def _read_tg_loc_id(self):
 		"""Reads location message ID and start time from file."""
-		if not os.path.exists(self.cfg.location_id_file):
+		if not os.path.exists(self.cfg.tg_loc_id_file):
 			return None, None
 		try:
-			with open(self.cfg.location_id_file, 'r') as f:
+			with open(self.cfg.tg_loc_id_file, 'r') as f:
 				parts = f.read().split(':')
 				msg_id = int(parts[0])
 				start_time = float(parts[1]) if len(parts) > 1 else time.time()
@@ -1684,25 +1683,25 @@ class TelegramLogger:
 			self.logger.warning('Could not read or parse location ID file: %s', e)
 			return None, None
 
-	def _write_location_id(self, msg_id, start_time):
+	def _write_tg_loc_id(self, msg_id, start_time):
 		"""Writes location message ID and start time to file."""
 		try:
-			with open(self.cfg.location_id_file, 'w') as f:
+			with open(self.cfg.tg_loc_id_file, 'w') as f:
 				f.write(f'{msg_id}:{start_time}')
 		except OSError as e:
 			self.logger.error('Failed to save location ID: %s', e)
 
-	def _remove_location_id_file(self):
+	def _remove_tg_loc_id_file(self):
 		"""Removes the location ID file."""
-		if os.path.exists(self.cfg.location_id_file):
+		if os.path.exists(self.cfg.tg_loc_id_file):
 			try:
-				os.remove(self.cfg.location_id_file)
+				os.remove(self.cfg.tg_loc_id_file)
 			except OSError as e:
 				self.logger.error('Failed to remove location ID file: %s', e)
 
 	async def _update_location(self, lat, lon, cse):
 		"""Update or send live location."""
-		loc_msg_id, start_time = self._read_location_id()
+		loc_msg_id, start_time = self._read_tg_loc_id()
 		if loc_msg_id and start_time and await self._try_edit_live_location(loc_msg_id, start_time, lat, lon, cse):
 			return
 		await self._send_new_live_location(lat, lon, cse)
@@ -1738,7 +1737,7 @@ class TelegramLogger:
 				loc_kwargs['message_thread_id'] = self.tid
 			loc = await self._call_with_retry(self.bot.send_location, **loc_kwargs)
 			self.logger.info('Sent location to Telegram: %s/%s/%s', loc.chat_id, loc.message_thread_id, loc.message_id)
-			self._write_location_id(loc.message_id, time.time())
+			self._write_tg_loc_id(loc.message_id, time.time())
 		except Exception as e:
 			self.logger.error('Failed to send new location to Telegram: %s', e)
 
@@ -1746,16 +1745,16 @@ class TelegramLogger:
 		"""Stop live location sharing."""
 		if not self.enabled or not self.bot:
 			return
-		location_id, _ = self._read_location_id()
-		if not location_id:
+		tg_loc_id, _ = self._read_tg_loc_id()
+		if not tg_loc_id:
 			return
 		try:
-			await self._call_with_retry(self.bot.stop_message_live_location, chat_id=self.chat_id, message_id=location_id)
-			self.logger.info('Stopped live location in Telegram: %s/%s', self.chat_id, location_id)
+			await self._call_with_retry(self.bot.stop_message_live_location, chat_id=self.chat_id, message_id=tg_loc_id)
+			self.logger.info('Stopped live location in Telegram: %s/%s', self.chat_id, tg_loc_id)
 		except Exception as e:
 			self.logger.warning('Failed to stop live location in Telegram: %s', e)
 		finally:
-			self._remove_location_id_file()
+			self._remove_tg_loc_id_file()
 
 
 class WhatsAppLogger:
@@ -2364,8 +2363,7 @@ def aprs_consumer_worker(call, passcode, servers, port, aprs_filter, queue, out_
 	import time
 
 	import aprslib
-	from aprslib.exceptions import ConnectionError
-	from aprslib.exceptions import LoginError
+	from aprslib.exceptions import ConnectionError, LoginError
 
 	logging.basicConfig(level=logging.INFO, format='%(asctime)s | (Worker) %(levelname)-8s | %(name)s.%(funcName)s:%(lineno)d | %(message)s')
 	c_svr_idx = 0
@@ -2450,7 +2448,7 @@ async def initialize_session(cfg):
 	sg_logger = SignalLogger(cfg)
 	sys_stats = SystemStats(cfg)
 	sys_stats.update_metrics()
-	geolocation = Geolocation(cfg.app_name, cfg.project_url, cfg.nominatim_cache_file)
+	geolocation = Geolocation(cfg.app_name, cfg.project_url, cfg.geoloc_cache_file)
 	telem_seq = Sequence(cfg.lib_dir, name='telem_sequence', modulo=1000)
 	aprs_sender = APRSSender(cfg, tg_logger, wa_logger, sg_logger, sys_stats, gps_handler, geolocation, telem_seq)
 	timer = Timer(cfg.tmp_dir)
