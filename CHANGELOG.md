@@ -2,10 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta16] - (2026-11-11T23:04:29+08:00)
+## [beta16] - (2026-11-17T01:59:46+08:00)
 
-- 28 commit(s) contributed to the release.
-- 31 day(s) passed between releases.
+- 29 commit(s) contributed to the release.
+- 36 day(s) passed between releases.
 
 ### 🚀 Features in beta16
 
@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor in beta16
 
+- [c225ae2](https://github.com/HafiziRuslan/RasPiAPRS/commit/c225ae2ee1704d0c53b923b3819783688e5e17ab) refactor(config): reorganize PKTNet configuration *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-11-17T01:59:46+08:00*
 - [87a69c1](https://github.com/HafiziRuslan/RasPiAPRS/commit/87a69c18a3e87dd6675c39ceb6da196a4897ec2c) refactor(aprs): shorten variable names and optimize sender thread startup *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-28T00:19:10+08:00*
 - [009136d](https://github.com/HafiziRuslan/RasPiAPRS/commit/009136d4a800fb1ce2733fc21403f634b1b19595) refactor(aprs.traffic): use named logger for APRS *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-27T23:44:10+08:00*
 - [d826208](https://github.com/HafiziRuslan/RasPiAPRS/commit/d8262083f218c750683a5a57b0ddd004b74fb54c) refactor(gitignore): add .git* and remove .github *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-10-21T00:47:11+08:00*
@@ -1667,4 +1668,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-11-11T23:05:46.321938415+08:00
+generated using git-cliff on 2026-11-17T02:01:10.929409416+08:00
