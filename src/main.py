@@ -112,7 +112,6 @@ class Config:
 	signal_number: str | None = None
 	signal_apikey: str | None = None
 	aprsphnet_enabled: bool = False
-	aprspktnet_enabled: bool = False
 	aprsm7cov_enabled: bool = False
 	aprssares_enabled: bool = False
 	aprsmx_enabled: bool = False
@@ -122,6 +121,7 @@ class Config:
 	aprsaturday_enabled: bool = False
 	aprsmysunday_enabled: bool = False
 	aprshamfinity_enabled: bool = False
+	aprspktnet_enabled: bool = False
 	aprsmatutina_enabled: bool = False
 	additional_sender: list[str] | None = None
 	additional_sender_raw: str | None = None
@@ -294,7 +294,6 @@ class Config:
 			self.signal_number = os.getenv('SIGNAL_NUMBER')
 			self.signal_apikey = os.getenv('SIGNAL_API_KEY')
 		self.aprsphnet_enabled = self._env_get_bool('APRSPHNET_ENABLE')
-		self.aprspktnet_enabled = self._env_get_bool('APRSPKTNET_ENABLE')
 		self.aprsm7cov_enabled = self._env_get_bool('APRSM7COV_ENABLE')
 		self.aprssares_enabled = self._env_get_bool('APRSSARES_ENABLE')
 		self.aprsmx_enabled = self._env_get_bool('APRSMX_ENABLE')
@@ -304,6 +303,7 @@ class Config:
 		self.aprsaturday_enabled = self._env_get_bool('APRSATURDAY_ENABLE')
 		self.aprsmysunday_enabled = self._env_get_bool('APRSMYSUNDAY_ENABLE')
 		self.aprshamfinity_enabled = self._env_get_bool('APRSHAMFINITY_ENABLE')
+		self.aprspktnet_enabled = self._env_get_bool('APRSPKTNET_ENABLE')
 		self.aprsmatutina_enabled = self._env_get_bool('APRSMATUTINA_ENABLE')
 		self.additional_sender_raw = os.getenv('ADDITIONAL_SENDER')
 		self.validate()
@@ -338,7 +338,6 @@ class Config:
 		events_active = any(
 			[
 				self.aprsphnet_enabled,
-				self.aprspktnet_enabled,
 				self.aprsm7cov_enabled,
 				self.aprssares_enabled,
 				self.aprsmx_enabled,
@@ -348,6 +347,7 @@ class Config:
 				self.aprsaturday_enabled,
 				self.aprsmysunday_enabled,
 				self.aprshamfinity_enabled,
+				self.aprspktnet_enabled,
 				self.aprsmatutina_enabled,
 			]
 		)
@@ -1474,7 +1474,6 @@ class ScheduledMessageHandler:
 		tz_cst = ZoneInfo('America/Costa_Rica')
 		definitions = [
 			('aprsphnet_enabled', 'APRSPHNet', None, None, 'APRSPH', 'NET', '#{}', tz_utc),
-			('aprspktnet_enabled', 'PKTNet', None, None, 'PKTNET', 'CHECK', None, tz_utc),
 			('aprsm7cov_enabled', 'M7COVWWAPRSCI', None, None, 'M7COV', 'M7COV-CHECKIN', '#{}', tz_utc),
 			('aprssares_enabled', 'APRSTuesday', 1, None, '9M4CSR', 'CQ SARES', '#{}', tz_utc),
 			('aprsmx_enabled', 'APRSWednesday', 2, None, 'XE1JMB-10', 'CQ APRSMX', '#{}', tz_utc),
@@ -1484,6 +1483,7 @@ class ScheduledMessageHandler:
 			('aprsaturday_enabled', 'APRSaturday', 5, None, '9M4GHZ', 'CQ DXMY', '#{}', tz_utc),
 			('aprsmysunday_enabled', 'APRSMYSunday', 6, None, 'APRSMY', 'CHECK', '#{}', tz_myt),
 			('aprshamfinity_enabled', 'APRSunday', 6, None, '9M4GKS', 'CQ HAMFINITY', '#{}', tz_utc),
+			('aprspktnet_enabled', 'PKTNet', 6, None, 'PKTNET', 'CHECK', None, tz_utc),
 			('aprsmatutina_enabled', 'RevistaMatutina', 6, 2, 'TICANET', 'CQ MATUTINA', None, tz_cst),
 		]
 		for attr, name, weekday, weekmonth, addrcall, command, message, tz in definitions:

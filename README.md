@@ -77,14 +77,6 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="https://aprs.ph">aprs.ph</a></td>
     </tr>
     <tr>
-      <td><b>PKTNet</b></td>
-      <td>Daily</td>
-      <td>UTC</td>
-      <td>PKTNET</td>
-      <td><a href="https://pp5pk.net/aprsnet_participants.php">pp5pk.net</a></td>
-    </tr>
-    </tr>
-    <tr>
       <td><b>M7COV APRS Check-In</b></td>
       <td>Daily</td>
       <td>UTC</td>
@@ -146,6 +138,13 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td>UTC</td>
       <td>9M4GKS</td>
       <td><a href="https://aprs.hamfinity.com">aprs.hamfinity.com</a></td>
+    </tr>
+    <tr>
+      <td><b>PKTNet</b></td>
+      <td>Sunday</td>
+      <td>UTC</td>
+      <td>PKTNET</td>
+      <td><a href="https://pp5pk.net/aprsnet_participants.php">pp5pk.net</a></td>
     </tr>
     <tr>
       <td><b>Morning Magazine</b></td>
