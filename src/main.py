@@ -115,13 +115,13 @@ class Config:
 	aprsm7cov_enabled: bool = False
 	aprssares_enabled: bool = False
 	aprsmx_enabled: bool = False
-	aprsthursday_enabled: bool = False
 	aprsthursdaycr_enabled: bool = False
+	aprsthursday_enabled: bool = False
 	aprsfridaykv50s_enabled: bool = False
 	aprsaturday_enabled: bool = False
-	aprsmysunday_enabled: bool = False
 	aprshamfinity_enabled: bool = False
 	aprspktnet_enabled: bool = False
+	aprsmysunday_enabled: bool = False
 	aprsmatutina_enabled: bool = False
 	additional_sender: list[str] | None = None
 	additional_sender_raw: str | None = None
@@ -297,13 +297,13 @@ class Config:
 		self.aprsm7cov_enabled = self._env_get_bool('APRSM7COV_ENABLE')
 		self.aprssares_enabled = self._env_get_bool('APRSSARES_ENABLE')
 		self.aprsmx_enabled = self._env_get_bool('APRSMX_ENABLE')
-		self.aprsthursday_enabled = self._env_get_bool('APRSTHURSDAY_ENABLE')
 		self.aprsthursdaycr_enabled = self._env_get_bool('APRSTHURSDAYCR_ENABLE')
+		self.aprsthursday_enabled = self._env_get_bool('APRSTHURSDAY_ENABLE')
 		self.aprsfridaykv50s_enabled = self._env_get_bool('APRSFRIDAYKV50S_ENABLE')
 		self.aprsaturday_enabled = self._env_get_bool('APRSATURDAY_ENABLE')
-		self.aprsmysunday_enabled = self._env_get_bool('APRSMYSUNDAY_ENABLE')
 		self.aprshamfinity_enabled = self._env_get_bool('APRSHAMFINITY_ENABLE')
 		self.aprspktnet_enabled = self._env_get_bool('APRSPKTNET_ENABLE')
+		self.aprsmysunday_enabled = self._env_get_bool('APRSMYSUNDAY_ENABLE')
 		self.aprsmatutina_enabled = self._env_get_bool('APRSMATUTINA_ENABLE')
 		self.additional_sender_raw = os.getenv('ADDITIONAL_SENDER')
 		self.validate()
@@ -341,13 +341,13 @@ class Config:
 				self.aprsm7cov_enabled,
 				self.aprssares_enabled,
 				self.aprsmx_enabled,
-				self.aprsthursday_enabled,
 				self.aprsthursdaycr_enabled,
+				self.aprsthursday_enabled,
 				self.aprsfridaykv50s_enabled,
 				self.aprsaturday_enabled,
-				self.aprsmysunday_enabled,
 				self.aprshamfinity_enabled,
 				self.aprspktnet_enabled,
+				self.aprsmysunday_enabled,
 				self.aprsmatutina_enabled,
 			]
 		)
@@ -1469,21 +1469,21 @@ class ScheduledMessageHandler:
 	def _init_messages(self):
 		"""Initialize scheduled messages."""
 		self.messages = []
+		tz_cst = ZoneInfo('America/Costa_Rica')
 		tz_utc = ZoneInfo('UTC')
 		tz_myt = ZoneInfo('Asia/Kuala_Lumpur')
-		tz_cst = ZoneInfo('America/Costa_Rica')
 		definitions = [
 			('aprsphnet_enabled', 'APRSPHNet', None, None, 'APRSPH', 'NET', '#{}', tz_utc),
 			('aprsm7cov_enabled', 'M7COVWWAPRSCI', None, None, 'M7COV', 'M7COV-CHECKIN', '#{}', tz_utc),
 			('aprssares_enabled', 'APRSTuesday', 1, None, '9M4CSR', 'CQ SARES', '#{}', tz_utc),
 			('aprsmx_enabled', 'APRSWednesday', 2, None, 'XE1JMB-10', 'CQ APRSMX', '#{}', tz_utc),
-			('aprsthursday_enabled', 'APRSThursday', 3, None, 'APRSPH', 'HOTG', '#{}', tz_utc),
 			('aprsthursdaycr_enabled', 'APRSThursdayCR', 3, None, 'TICANET', 'APRSDAY', None, tz_cst),
+			('aprsthursday_enabled', 'APRSThursday', 3, None, 'APRSPH', 'HOTG', '#{}', tz_utc),
 			('aprsfridaykv50s_enabled', 'APRSFridayKV50S', 4, None, '9W4GTS', 'CQ KV50S', '#{}', tz_utc),
 			('aprsaturday_enabled', 'APRSaturday', 5, None, '9M4GHZ', 'CQ DXMY', '#{}', tz_utc),
-			('aprsmysunday_enabled', 'APRSMYSunday', 6, None, 'APRSMY', 'CHECK', '#{}', tz_myt),
 			('aprshamfinity_enabled', 'APRSunday', 6, None, '9M4GKS', 'CQ HAMFINITY', '#{}', tz_utc),
 			('aprspktnet_enabled', 'PKTNet', 6, None, 'PKTNET', 'CHECK', None, tz_utc),
+			('aprsmysunday_enabled', 'APRSMYSunday', 6, None, 'APRSMY', 'CHECK', '#{}', tz_myt),
 			('aprsmatutina_enabled', 'RevistaMatutina', 6, 2, 'TICANET', 'CQ MATUTINA', None, tz_cst),
 		]
 		for attr, name, weekday, weekmonth, addrcall, command, message, tz in definitions:

@@ -98,18 +98,18 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="http://xe1jmb.duckdns.org:5000">xe1jmb.duckdns.org</a></td>
     </tr>
     <tr>
-      <td><b>APRSThursday</b></td>
-      <td>Thursday</td>
-      <td>UTC</td>
-      <td>APRSPH</td>
-      <td><a href="https://aprsph.net/aprsthursday">aprsph.net</a></td>
-    </tr>
-    <tr>
       <td><b>APRS Thursday Costa Rica</b></td>
       <td>Thursday</td>
       <td>UTC-6</td>
       <td>TICANET</td>
       <td><a href="https://github.com/ti3wti/TICANET?tab=readme-ov-file#eventos-soportados">ti3wti/TICANET</a></td>
+    </tr>
+    <tr>
+      <td><b>APRSThursday</b></td>
+      <td>Thursday</td>
+      <td>UTC</td>
+      <td>APRSPH</td>
+      <td><a href="https://aprsph.net/aprsthursday">aprsph.net</a></td>
     </tr>
     <tr>
       <td><b>Komuniti V50 Samarahan APRS Friday</b></td>
@@ -126,13 +126,6 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td><a href="https://cqdx.my/aprs">cqdx.my</a></td>
     </tr>
     <tr>
-      <td><b>APRSMYSunday</b></td>
-      <td>Sunday</td>
-      <td>UTC+8</td>
-      <td>APRSMY</td>
-      <td><a href="https://aprsmy.hamradio.my">aprsmy.hamradio.my</a></td>
-    </tr>
-    <tr>
       <td><b>APRSHamfinity</b></td>
       <td>Sunday</td>
       <td>UTC</td>
@@ -145,6 +138,13 @@ RasPiAPRS supports participation in several optional APRS network events by enab
       <td>UTC</td>
       <td>PKTNET</td>
       <td><a href="https://pp5pk.net/aprsnet_participants.php">pp5pk.net</a></td>
+    </tr>
+    <tr>
+      <td><b>APRSMYSunday</b></td>
+      <td>Sunday</td>
+      <td>UTC+8</td>
+      <td>APRSMY</td>
+      <td><a href="https://aprsmy.hamradio.my">aprsmy.hamradio.my</a></td>
     </tr>
     <tr>
       <td><b>Morning Magazine</b></td>
