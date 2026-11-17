@@ -2,21 +2,21 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
   "version": 1,
-  "serialNumber": "urn:uuid:a9db20d6-6353-4cf5-8a9d-fb25bd43446d",
+  "serialNumber": "urn:uuid:415b4d2b-6e2a-4331-8588-9c96c5cf3828",
   "metadata": {
-    "timestamp": "2026-11-05T12:46:03.093906700Z",
+    "timestamp": "2026-11-17T03:15:37.389980000Z",
     "tools": [
       {
         "vendor": "Astral Software Inc.",
         "name": "uv",
-        "version": "0.13.7"
+        "version": "0.13.8"
       }
     ],
     "component": {
       "type": "library",
-      "bom-ref": "raspiaprs-1@0.1b16",
+      "bom-ref": "raspiaprs-1@0.1b17",
       "name": "raspiaprs",
-      "version": "0.1b16",
+      "version": "0.1b17",
       "properties": [
         {
           "name": "uv:package:is_project_root",
@@ -140,10 +140,10 @@
     },
     {
       "type": "library",
-      "bom-ref": "humanize-18@4.16.0",
+      "bom-ref": "humanize-18@4.17.0",
       "name": "humanize",
-      "version": "4.16.0",
-      "purl": "pkg:pypi/humanize@4.16.0"
+      "version": "4.17.0",
+      "purl": "pkg:pypi/humanize@4.17.0"
     },
     {
       "type": "library",
@@ -311,7 +311,7 @@
       ]
     },
     {
-      "ref": "humanize-18@4.16.0"
+      "ref": "humanize-18@4.17.0"
     },
     {
       "ref": "idna-19@3.20"
@@ -348,14 +348,14 @@
       ]
     },
     {
-      "ref": "raspiaprs-1@0.1b16",
+      "ref": "raspiaprs-1@0.1b17",
       "dependsOn": [
         "aiohttp-3@3.14.5",
         "aprslib-6@0.7.2",
         "callsign-regex-8@0.7.1",
         "geopy-13@2.5.0",
         "gpsdclient-14@1.3.2",
-        "humanize-18@4.16.0",
+        "humanize-18@4.17.0",
         "psutil-23@7.2.2",
         "python-dateutil-24@4.0.0",
         "python-dotenv-25@1.2.4",
