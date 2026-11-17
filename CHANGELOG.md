@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [beta17] - (2026-11-17T11:23:31+08:00)
+
+- 2 commit(s) contributed to the release.
+- 1 day(s) passed between releases.
+
+### 🐛 Bug Fixes in beta17
+
+- [4f018d5](https://github.com/HafiziRuslan/RasPiAPRS/commit/4f018d5f6da692aa0884320139eafd63c24827a3) fix(config): update default to_call *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-11-17T11:23:31+08:00*
+- [bc36b8e](https://github.com/HafiziRuslan/RasPiAPRS/commit/bc36b8ec389cbc3bed8dad0ad3dee7c3b6b6047f) build(release): bump version to 0.1b17 and update dependencies *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-11-17T11:16:47+08:00*
+
+---
+
 ## [beta16] - (2026-11-17T01:59:46+08:00)
 
 - 29 commit(s) contributed to the release.
@@ -1668,4 +1680,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-11-17T02:01:10.929409416+08:00
+generated using git-cliff on 2026-11-17T11:24:46.576600575+08:00
