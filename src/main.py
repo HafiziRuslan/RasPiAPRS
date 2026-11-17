@@ -71,7 +71,7 @@ class Config:
 	aprs_passcode: str | int = -1
 	ssid: int = 0
 	from_call: str = call
-	to_call: str = 'APZRSP'
+	to_call: str = 'APRASP'
 	altitude: float = 0.0
 	latitude: float = 0.0
 	longitude: float = 0.0
