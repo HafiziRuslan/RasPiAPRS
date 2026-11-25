@@ -1424,8 +1424,8 @@ class SystemStats:
 		if conf.get('FM:Enable') == '1':
 			fm_ct = conf.get('FM:CTCSSFrequency', 0)
 			mmode_parts.append(f'NFM_CT{fm_ct}Hz')
-		if conf.get('System Fusion:Enable') == '1':
-			if conf.get('System Fusion:SelfOnly') == '0':
+		if conf.get('"System Fusion":Enable') == '1':
+			if conf.get('"System Fusion":SelfOnly') == '0':
 				mmode_parts.append('C4FM_PUBLIC')
 			else:
 				mmode_parts.append('C4FM_PRIVATE')
@@ -1438,8 +1438,8 @@ class SystemStats:
 		if conf.get('DMR:Enable') == '1':
 			if conf.get('DMR:SelfOnly') == '0':
 				cc = f'C{conf.get("DMR:ColorCode")}'
-				t1 = conf.get('DMR Network:Slot1') == '1'
-				t2 = conf.get('DMR Network:Slot2') == '1'
+				t1 = conf.get('"DMR Network":Slot1') == '1'
+				t2 = conf.get('"DMR Network":Slot2') == '1'
 				ts = 'T1T2' if t1 and t2 else ('T1' if t1 else ('T2' if t2 else ''))
 				mmode_parts.append(f'DMR_{cc}{ts}')
 			else:
