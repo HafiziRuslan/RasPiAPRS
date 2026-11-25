@@ -1421,36 +1421,53 @@ class SystemStats:
 		except (ValueError, TypeError):
 			tx_str, shift = '', None
 		mmode_parts = []
-		if conf.get('DMR:Enable', conf.get('Enable')) == '1':
-			cc = f'C{conf.get("DMR:ColorCode", conf.get("ColorCode", "0"))}'
-			s1 = conf.get('DMR Network:Slot1', conf.get('Slot1', '0')) == '1'
-			s2 = conf.get('DMR Network:Slot2', conf.get('Slot2', '0')) == '1'
-			ts = 'S1S2' if s1 and s2 else ('S1' if s1 else ('S2' if s2 else ''))
-			mmode_parts.append(f'DMR_{cc}{ts}')
-		if conf.get('D-Star:Enable') == '1' or conf.get('D-STAR:Enable') == '1':
-			ds_module = conf.get('D-Star:Module', conf.get('Module', '')) or conf.get('D-STAR:Module', conf.get('Module', ''))
-			mmode_parts.append(f'D-STAR_{ds_module}')
-		if conf.get('System Fusion:Enable') == '1':
-			mmode_parts.append('C4FM')
-		if conf.get('P25:Enable') == '1':
-			p25_nac = conf.get('P25:NAC')
-			mmode_parts.append(f'P25_{p25_nac}')
-		if conf.get('NXDN:Enable') == '1':
-			nx_ran = conf.get('NXDN:RAN')
-			mmode_parts.append(f'NXDN_{nx_ran}')
-		if conf.get('POCSAG:Enable') == '1':
-			mmode_parts.append('PAGER')
 		if conf.get('FM:Enable') == '1':
-			fm_ct = conf.get('FM:CTCSSFrequency', conf.get('CTCSSFrequency', 0.0))
-			mmode_parts.append(f'NFM_C{fm_ct}')
+			fm_ct = conf.get('FM:CTCSSFrequency', 0)
+			mmode_parts.append(f'NFM_CT{fm_ct}Hz')
+		if conf.get('System Fusion:Enable') == '1':
+			if conf.get('System Fusion:SelfOnly') == '0':
+				mmode_parts.append('C4FM_PUBLIC')
+			else:
+				mmode_parts.append('C4FM_PRIVATE')
+		if conf.get('D-Star:Enable') == '1' or conf.get('D-STAR:Enable') == '1':
+			if conf.get('D-Star:SelfOnly') == '0' or conf.get('D-STAR:SelfOnly') == '1':
+				ds_module = conf.get('D-Star:Module') or conf.get('D-STAR:Module')
+				mmode_parts.append(f'D*_{ds_module}')
+			else:
+				mmode_parts.append('D*_PRIVATE')
+		if conf.get('DMR:Enable') == '1':
+			if conf.get('DMR:SelfOnly') == '0':
+				cc = f'C{conf.get("DMR:ColorCode")}'
+				t1 = conf.get('DMR Network:Slot1') == '1'
+				t2 = conf.get('DMR Network:Slot2') == '1'
+				ts = 'T1T2' if t1 and t2 else ('T1' if t1 else ('T2' if t2 else ''))
+				mmode_parts.append(f'DMR_{cc}{ts}')
+			else:
+				mmode_parts.append('DMR_PRIVATE')
+		if conf.get('P25:Enable') == '1':
+			if conf.get('P25:SelfOnly') == '0':
+				p25_nac = conf.get('P25:NAC')
+				mmode_parts.append(f'P25_{p25_nac}')
+			else:
+				mmode_parts.append('P25_PRIVATE')
+		if conf.get('NXDN:Enable') == '1':
+			if conf.get('NXDN:SelfOnly') == '0':
+				nx_ran = conf.get('NXDN:RAN')
+				mmode_parts.append(f'NXDN_{nx_ran}')
+			else:
+				mmode_parts.append('NXDN_PRIVATE')
+		if conf.get('POCSAG:Enable') == '1':
+			po_freq = int(conf.get('POCSAG:Frequency', 0))
+			po_tx = humanize.metric(po_freq, 'Hz', precision=len(str(po_freq).rstrip('0')) or 1)
+			mmode_parts.append(f'PAGER_{po_tx}')
 		mmode = ', '.join(filter(None, mmode_parts))
 		info_str = ' '.join(filter(None, [tx_str, shift, mmode]))
 		if not phg_str:
 			phg_str = self._calc_phg(
-				conf.get('INFO:Power', conf.get('Power', 0)),
-				conf.get('INFO:Height', conf.get('Height', 0)),
-				conf.get('INFO:Gain', conf.get('Gain', 3)),
-				conf.get('INFO:Direction', conf.get('Direction', 0)),
+				conf.get('INFO:Power', 0),
+				conf.get('INFO:Height', 0),
+				conf.get('INFO:Gain', 3),
+				conf.get('INFO:Direction', 0),
 			)
 		return {'info': info_str, 'phg': phg_str}
 
