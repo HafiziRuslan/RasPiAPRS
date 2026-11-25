@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta17] - (2026-11-25T21:23:21+08:00)
+## [beta17] - (2026-11-25T22:48:36+08:00)
 
-- 5 commit(s) contributed to the release.
+- 6 commit(s) contributed to the release.
 - 9 day(s) passed between releases.
 
 ### 🚀 Features in beta17
@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes in beta17
 
+- [35a4048](https://github.com/HafiziRuslan/RasPiAPRS/commit/35a4048fad1ee80efcfd0da4a7ea4c53f09b1fcf) fix(config): quote system fusion and dmr network config keys *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-11-25T22:48:36+08:00*
 - [4f018d5](https://github.com/HafiziRuslan/RasPiAPRS/commit/4f018d5f6da692aa0884320139eafd63c24827a3) fix(config): update default to_call *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-11-17T11:23:31+08:00*
 - [bc36b8e](https://github.com/HafiziRuslan/RasPiAPRS/commit/bc36b8ec389cbc3bed8dad0ad3dee7c3b6b6047f) build(release): bump version to 0.1b17 and update dependencies *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-11-17T11:16:47+08:00*
 
@@ -1692,4 +1693,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-11-25T21:25:01.172406051+08:00
+generated using git-cliff on 2026-11-25T22:49:52.564907861+08:00
