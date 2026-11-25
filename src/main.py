@@ -1413,8 +1413,8 @@ class SystemStats:
 			logging.debug('Could not read MMDVMHost file %s: %s', self.cfg.mmdvmhost_file, e)
 			return {'info': '', 'phg': phg_str}
 		try:
-			rx_f = int(conf.get('RXFrequency', 0))
-			tx_f = int(conf.get('TXFrequency', 0))
+			rx_f = int(conf.get('Info:RXFrequency', 0))
+			tx_f = int(conf.get('Info:TXFrequency', 0))
 			tx_str = humanize.metric(tx_f, 'Hz', precision=len(str(tx_f).rstrip('0')) or 1)
 			offset = rx_f - tx_f
 			shift = f'({"+" if offset > 0 else ""}{humanize.metric(offset, "Hz", precision=2)})' if offset != 0 else None
@@ -1424,38 +1424,23 @@ class SystemStats:
 		if conf.get('FM:Enable') == '1':
 			fm_ct = conf.get('FM:CTCSSFrequency', 0)
 			mmode_parts.append(f'NFM_CT{fm_ct}Hz')
-		if conf.get('"System Fusion":Enable') == '1':
-			if conf.get('"System Fusion":SelfOnly') == '0':
-				mmode_parts.append('C4FM_PUBLIC')
-			else:
-				mmode_parts.append('C4FM_PRIVATE')
-		if conf.get('D-Star:Enable') == '1' or conf.get('D-STAR:Enable') == '1':
-			if conf.get('D-Star:SelfOnly') == '0' or conf.get('D-STAR:SelfOnly') == '1':
-				ds_module = conf.get('D-Star:Module') or conf.get('D-STAR:Module')
-				mmode_parts.append(f'D*_{ds_module}')
-			else:
-				mmode_parts.append('D*_PRIVATE')
-		if conf.get('DMR:Enable') == '1':
-			if conf.get('DMR:SelfOnly') == '0':
-				cc = f'C{conf.get("DMR:ColorCode")}'
-				t1 = conf.get('"DMR Network":Slot1') == '1'
-				t2 = conf.get('"DMR Network":Slot2') == '1'
-				ts = 'T1T2' if t1 and t2 else ('T1' if t1 else ('T2' if t2 else ''))
-				mmode_parts.append(f'DMR_{cc}{ts}')
-			else:
-				mmode_parts.append('DMR_PRIVATE')
-		if conf.get('P25:Enable') == '1':
-			if conf.get('P25:SelfOnly') == '0':
-				p25_nac = conf.get('P25:NAC')
-				mmode_parts.append(f'P25_{p25_nac}')
-			else:
-				mmode_parts.append('P25_PRIVATE')
-		if conf.get('NXDN:Enable') == '1':
-			if conf.get('NXDN:SelfOnly') == '0':
-				nx_ran = conf.get('NXDN:RAN')
-				mmode_parts.append(f'NXDN_{nx_ran}')
-			else:
-				mmode_parts.append('NXDN_PRIVATE')
+		if conf.get('D-Star:Enable') == '1' and conf.get('D-Star:SelfOnly') == '0':
+			ds_module = conf.get('D-Star:Module')
+			mmode_parts.append(f'D*_{ds_module}')
+		if conf.get('DMR:Enable') == '1' and conf.get('DMR:SelfOnly') == '0':
+			cc = f'C{conf.get("DMR:ColorCode")}'
+			s1 = conf.get('DMR Network:Slot1', 0) == '1'
+			s2 = conf.get('DMR Network:Slot2', 1) == '1'
+			ts = 'T1T2' if s1 and s2 else ('T1' if s1 else ('T2' if s2 else ''))
+			mmode_parts.append(f'DMR_{cc}{ts}')
+		if conf.get('NXDN:Enable') == '1' and conf.get('NXDN:SelfOnly') == '0':
+			nx_ran = conf.get('NXDN:RAN')
+			mmode_parts.append(f'NXDN_{nx_ran}')
+		if conf.get('P25:Enable') == '1' and conf.get('P25:SelfOnly') == '0':
+			p25_nac = conf.get('P25:NAC')
+			mmode_parts.append(f'P25_{p25_nac}')
+		if conf.get('System Fusion:Enable') == '1' and conf.get('System Fusion:SelfOnly') == '0':
+			mmode_parts.append('YSF_PUB')
 		if conf.get('POCSAG:Enable') == '1':
 			po_freq = int(conf.get('POCSAG:Frequency', 0))
 			po_tx = humanize.metric(po_freq, 'Hz', precision=len(str(po_freq).rstrip('0')) or 1)
@@ -1464,10 +1449,10 @@ class SystemStats:
 		info_str = ' '.join(filter(None, [tx_str, shift, mmode]))
 		if not phg_str:
 			phg_str = self._calc_phg(
-				conf.get('INFO:Power', 0),
-				conf.get('INFO:Height', 0),
-				conf.get('INFO:Gain', 3),
-				conf.get('INFO:Direction', 0),
+				conf.get('Info:Power', 0),
+				conf.get('Info:Height', 0),
+				conf.get('Info:Gain', 3),
+				conf.get('Info:Direction', 0),
 			)
 		return {'info': info_str, 'phg': phg_str}
 
