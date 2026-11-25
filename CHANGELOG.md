@@ -2,10 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [beta17] - (2026-11-17T11:33:29+08:00)
+## [beta17] - (2026-11-25T21:23:21+08:00)
 
-- 3 commit(s) contributed to the release.
-- 1 day(s) passed between releases.
+- 5 commit(s) contributed to the release.
+- 9 day(s) passed between releases.
+
+### 🚀 Features in beta17
+
+- [c3e183a](https://github.com/HafiziRuslan/RasPiAPRS/commit/c3e183ad457c3d2d9cad57a0b36496c1d2a7799a) feat(mmdvm): add private/public mode support for digital modes *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-11-25T21:23:21+08:00*
 
 ### 🐛 Bug Fixes in beta17
 
@@ -15,6 +19,10 @@ All notable changes to this project will be documented in this file.
 ### 🚜 Refactor in beta17
 
 - [de26539](https://github.com/HafiziRuslan/RasPiAPRS/commit/de26539972fcbd3c1de7af4437097bc46bb1721a) refactor(core): reorganize aprsthursday aprmysunday config *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-11-17T11:33:29+08:00*
+
+### ⚙️ Miscellaneous Tasks in beta17
+
+- [3fac30d](https://github.com/HafiziRuslan/RasPiAPRS/commit/3fac30dbce52cb547aa8cbde3f9977f25dc1a40d) chore(deps): bump certifi to 2026.11.20 *by [@HafiziRuslan](https://github.com/HafiziRuslan) on 2026-11-25T21:03:21+08:00*
 
 ---
 
@@ -1684,4 +1692,4 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-generated using git-cliff on 2026-11-17T11:34:35.158849013+08:00
+generated using git-cliff on 2026-11-25T21:25:01.172406051+08:00
